@@ -8,9 +8,9 @@
     --color-secondary: #4C1594;
     --color-tertiary: #C2BCC3;
     --color-background: #EFEFEF;
-    --color-primary-75: rgba(8, 2, 28, 0.75);
+    --color-background-dark: rgba(187, 187, 195, 0.75);--color-primary-75: rgba(8, 2, 28, 0.75);
     --color-secondary-75: rgba(76, 21, 148, 0.75);
-    --color-tertiary-75: rgba(194, 188, 195, 0.75);
+    --color-tertiary-90: rgba(194, 188, 195, 0.90);
 
     --fw-thin: 100;
     --fw-light: 300;
@@ -179,7 +179,7 @@ body {
 
 /* 메인 배너 스타일 */
 .main-banner {
-    background-color: var(--color-background);
+    background-color: var(--color-background-dark);
     padding: 120px 20px;
     text-align: center;
 }
