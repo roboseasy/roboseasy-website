@@ -11,7 +11,7 @@ class MainHeader extends HTMLElement {
               <li><a href="index.html">Home</a></li>
               <li><a href="documents.html">Documents</a></li>
               <li><a href="products.html">Products</a></li>
-              <li><a href="education.html">Education</a></li>
+              <li><a target="_blank" href="https://forms.gle/r1A5JYj4dYZQJNoq8">Education</a></li>
               <li><a href="news.html">News</a></li>
             </ul>
           </nav>
