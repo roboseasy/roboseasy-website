@@ -1,13 +1,6 @@
 /* Pretendard 웹폰트 */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
-/* 이사만루 폰트 */
-@font-face {
-    font-family: 'Isamanru';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicMedium.woff') format('woff');
-    font-display: swap;
-}
-
 /* 변수 지정 */
 :root {
     --color-logo: #2E0068;
@@ -76,7 +69,6 @@ body {
     text-decoration: none;
     font-size: 17px;
     font-weight: var(--fw-medium);
-    font-family: 'Isamanru', sans-serif;
     position: relative;
     padding: 8px 12px;
 }
