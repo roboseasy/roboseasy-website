@@ -9,7 +9,8 @@ class MainFooter extends HTMLElement {
                     <ul class="footer-items">
                         <li>Robot is Easy, 이게 로보시지</li>
                         <li><span>이메일</span>roboseasy@gmail.com</li>
-                        <li><span>주소</span>대한민국 서울특별시 동작구</li>
+                        <li><span>주소</span>대한민국 서울특별시 동작구 상도로15길 143,</li>
+                        <li><span></span>창건빌딩 403-404호
                         <li><span>사업자등록번호</span>173-44-01316</li>
                     </ul>
                 </div>
