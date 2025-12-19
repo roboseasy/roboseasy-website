@@ -1,25 +1,25 @@
-/**********************/
-/*** Section Common ***/
-/**********************/
+/******************************/
+/*** Content Section Common ***/
+/******************************/
 
-.section {
+.content-section {
     padding-top: 200px ;
     text-align: center;
 }
 
-.section .container {
+.content-section__container {
     max-width: 1280px;
     margin: 0 auto;
 }
 
-.section-dots {
+.content-section__decorators {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-bottom: 30px;
 }
 
-.section-dots .dot {
+.content-section__decorator {
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -27,37 +27,37 @@
     transition: all 0.3s ease;
 }
 
-.section-dots .dot:nth-child(2) {
+.content-section__decorator:nth-child(2) {
     background-color: var(--color-tertiary);
 }
 
-.section-dots .dot:nth-child(1),
-.section-dots .dot:nth-child(3) {
+.content-section__decorator:nth-child(1),
+.content-section__decorator:nth-child(3) {
     background-color: var(--color-secondary);
 }
 
-.section-title {
+.content-section__heading {
     font-size: 45px;
     font-weight: var(--fw-black);
     color: var(--color-secondary);
     margin-bottom: 100px;
 }
 
-.section-text {
+.content-section__description {
     font-size: 17px;
     color: var(--color-primary);
     line-height: 40px;
 }
 
-.section-text-bold {
+.content-section__description--emphasis {
     font-weight: var(--fw-bold);
 }
 
 /**************************/
-/*** Trusted By Section ***/
+/*** Trusted-By Section ***/
 /**************************/
 
-.partners-grid {
+.trusted-by {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,7 +67,7 @@
     margin: 0 auto;
 }
 
-.partner-logo {
+.trusted-by__item {
     width: 180px;
     flex: 0 1 auto;
     display: flex;
@@ -80,12 +80,12 @@
     transition: all 0.3s ease;
 }
 
-.partner-logo:hover {
+.trusted-by__item:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
-.partner-logo img {
+.trusted-by__logo {
     height: 30px;
     width: auto;
     object-fit: contain;
@@ -93,22 +93,22 @@
     transition: all 0.3s ease;
 }
 
-.partner-logo:hover img {
+.trusted-by__item:hover .trusted-by__logo {
     filter: grayscale(0%) brightness(1.1);
 }
 
-/********************/
-/*** Venn Diagram ***/
-/********************/
+/************************/
+/*** About-Us Section ***/
+/************************/
 
-.venn-diagram {
+.about-us {
     position: relative;
     width: 630px;
     height: 600px;
     margin: 100px auto 0;
 }
 
-.venn-circle {
+.about-us__item {
     position: absolute;
     width: 330px;
     height: 330px;
@@ -119,26 +119,26 @@
     align-items: center;
 }
 
-.venn-accessibility {
+.about-us__item--accessibility {
     background-color: var(--color-primary-75);
     top: 0;
     left: 0;
 }
 
-.venn-innovation {
+.about-us__item--innovation {
     background-color: var(--color-secondary-75);
     top: 0;
     right: 0;
 }
 
-.venn-sovereignty {
+.about-us__item--sovereignty {
     background-color: var(--color-tertiary-90);
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.venn-title {
+.about-us__title {
     font-size: 25px;
     font-weight: var(--fw-medium);
     color: white;
@@ -147,7 +147,7 @@
     text-align: center;
 }
 
-.venn-text {
+.about-us__description {
     font-size: 17px;
     font-weight: var(--fw-light);
     color: white;
@@ -155,63 +155,11 @@
     text-align: center;
 }
 
-/********************/
-/*** Team Circles ***/
-/********************/
+/**************************/
+/*** What-We-Do Section ***/
+/**************************/
 
-.team-circles {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 25px;
-    margin: 100px auto 0;
-}
-
-.team-circle {
-    width: 380px;
-    height: 380px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.team-ai {
-    background-color: var(--color-primary-75);
-}
-
-.team-hardware {
-    background-color: var(--color-tertiary-90);
-}
-
-.team-software {
-    background-color: var(--color-secondary-75);
-}
-
-.team-title {
-    font-size: 25px;
-    font-weight: var(--fw-medium);
-    color: white;
-    margin: 15px 0 20px;
-    line-height: 35px;
-    text-align: center;
-}
-
-.team-text {
-    font-size: 17px;
-    font-weight: var(--fw-light);
-    color: white;
-    line-height: 25px;
-    text-align: center;
-    margin: 10px 0;
-}
-
-/**********************/
-/*** Business Grid ***/
-/**********************/
-
-.business-grid {
+.what-we-do {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -220,7 +168,7 @@
     padding: 0 10px;
 }
 
-.business-card {
+.what-we-do__card {
     background-color: white;
     border-radius: 15px;
     padding: 0 0 20px 0;
@@ -232,12 +180,12 @@
     text-align: center;
 }
 
-.business-card:hover {
+.what-we-do__card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
-.business-image {
+.what-we-do__thumbnail {
     position: relative;
     height: 180px;
     background-color: white;
@@ -248,18 +196,18 @@
     padding: 40px 20px 20px;
 }
 
-.business-image img {
+.what-we-do__image {
     width: 100%;
     height: 100%;
     object-fit: contain;
     opacity: 0.5;
 }
 
-.business-number {
+.what-we-do__number {
     display: none;
 }
 
-.business-title {
+.what-we-do__title {
     font-size: 25px;
     font-weight: var(--fw-bold);
     color: var(--color-primary);
@@ -267,7 +215,7 @@
     text-align: center;
 }
 
-.business-desc {
+.what-we-do__description {
     font-size: 17px;
     color: var(--color-primary);
     line-height: 25px;
@@ -275,13 +223,61 @@
     text-align: center;
 }
 
-.business-card {
-    padding-bottom: 20px;
+/**************************/
+/*** Who-We-Are Section ***/
+/**************************/
+
+.who-we-are {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 25px;
+    margin: 100px auto 0;
 }
 
-/************************/
-/*** Instagram Feed ***/
-/************************/
+.who-we-are__member {
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.who-we-are__member--ai {
+    background-color: var(--color-primary-75);
+}
+
+.who-we-are__member--hardware {
+    background-color: var(--color-tertiary-90);
+}
+
+.who-we-are__member--software {
+    background-color: var(--color-secondary-75);
+}
+
+.who-we-are__role {
+    font-size: 25px;
+    font-weight: var(--fw-medium);
+    color: white;
+    margin: 15px 0 20px;
+    line-height: 35px;
+    text-align: center;
+}
+
+.who-we-are__expertise {
+    font-size: 17px;
+    font-weight: var(--fw-light);
+    color: white;
+    line-height: 25px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/*********************************/
+/*** Latest Activities Section ***/
+/*********************************/
 
 .instagram-feed {
     display: grid;
@@ -292,7 +288,7 @@
     padding: 0 20px;
 }
 
-.instagram-post {
+.instagram-feed__post {
     background-color: white;
     border-radius: 15px;
     overflow: hidden;
@@ -302,7 +298,7 @@
     position: relative;
 }
 
-.instagram-post::after {
+.instagram-feed__post::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -314,22 +310,22 @@
     border-radius: 0 0 15px 15px;
 }
 
-.instagram-post:hover {
+.instagram-feed__post:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
-.instagram-media {
+.instagram-feed__embed {
     margin: 0 !important;
     min-width: 100% !important;
     max-width: 100% !important;
 }
 
-/********************/
-/*** Social Icons ***/
-/********************/
+/*************************/
+/*** Community Section ***/
+/*************************/
 
-.social-icons {
+.community {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -337,7 +333,7 @@
     margin-top: 100px;
 }
 
-.social-icon {
+.community__link {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -350,17 +346,17 @@
     transition: all 0.3s ease;
 }
 
-.social-icon:hover {
+.community__link:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
-.social-icon i {
+.community__icon {
     font-size: 60px;
     color: var(--color-primary);
     transition: all 0.3s ease;
 }
 
-.social-icon:hover i {
+.community__link:hover .community__icon {
     color: var(--color-secondary-75);
 }
