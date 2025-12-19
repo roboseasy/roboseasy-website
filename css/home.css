@@ -1,0 +1,366 @@
+/**********************/
+/*** Section Common ***/
+/**********************/
+
+.section {
+    padding-top: 200px ;
+    text-align: center;
+}
+
+.section .container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.section-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.section-dots .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+.section-dots .dot:nth-child(2) {
+    background-color: var(--color-tertiary);
+}
+
+.section-dots .dot:nth-child(1),
+.section-dots .dot:nth-child(3) {
+    background-color: var(--color-secondary);
+}
+
+.section-title {
+    font-size: 45px;
+    font-weight: var(--fw-black);
+    color: var(--color-secondary);
+    margin-bottom: 100px;
+}
+
+.section-text {
+    font-size: 17px;
+    color: var(--color-primary);
+    line-height: 40px;
+}
+
+.section-text-bold {
+    font-weight: var(--fw-bold);
+}
+
+/**************************/
+/*** Trusted By Section ***/
+/**************************/
+
+.partners-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.partner-logo {
+    width: 180px;
+    flex: 0 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 35px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.partner-logo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.partner-logo img {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(0%);
+    transition: all 0.3s ease;
+}
+
+.partner-logo:hover img {
+    filter: grayscale(0%) brightness(1.1);
+}
+
+/********************/
+/*** Venn Diagram ***/
+/********************/
+
+.venn-diagram {
+    position: relative;
+    width: 630px;
+    height: 600px;
+    margin: 100px auto 0;
+}
+
+.venn-circle {
+    position: absolute;
+    width: 330px;
+    height: 330px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.venn-accessibility {
+    background-color: var(--color-primary-75);
+    top: 0;
+    left: 0;
+}
+
+.venn-innovation {
+    background-color: var(--color-secondary-75);
+    top: 0;
+    right: 0;
+}
+
+.venn-sovereignty {
+    background-color: var(--color-tertiary-90);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.venn-title {
+    font-size: 25px;
+    font-weight: var(--fw-medium);
+    color: white;
+    margin-bottom: 30px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.venn-text {
+    font-size: 17px;
+    font-weight: var(--fw-light);
+    color: white;
+    line-height: 30px;
+    text-align: center;
+}
+
+/********************/
+/*** Team Circles ***/
+/********************/
+
+.team-circles {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 25px;
+    margin: 100px auto 0;
+}
+
+.team-circle {
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.team-ai {
+    background-color: var(--color-primary-75);
+}
+
+.team-hardware {
+    background-color: var(--color-tertiary-90);
+}
+
+.team-software {
+    background-color: var(--color-secondary-75);
+}
+
+.team-title {
+    font-size: 25px;
+    font-weight: var(--fw-medium);
+    color: white;
+    margin: 15px 0 20px;
+    line-height: 35px;
+    text-align: center;
+}
+
+.team-text {
+    font-size: 17px;
+    font-weight: var(--fw-light);
+    color: white;
+    line-height: 25px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/**********************/
+/*** Business Grid ***/
+/**********************/
+
+.business-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.business-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 0 0 20px 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.business-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.business-image {
+    position: relative;
+    height: 180px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 40px 20px 20px;
+}
+
+.business-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.5;
+}
+
+.business-number {
+    display: none;
+}
+
+.business-title {
+    font-size: 25px;
+    font-weight: var(--fw-bold);
+    color: var(--color-primary);
+    margin: 25px 20px;
+    text-align: center;
+}
+
+.business-desc {
+    font-size: 17px;
+    color: var(--color-primary);
+    line-height: 25px;
+    margin: 10px 15px;
+    text-align: center;
+}
+
+.business-card {
+    padding-bottom: 20px;
+}
+
+/************************/
+/*** Instagram Feed ***/
+/************************/
+
+.instagram-feed {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.instagram-post {
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    max-height: 800px;
+    position: relative;
+}
+
+.instagram-post::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 1) 100%);
+    pointer-events: none;
+    border-radius: 0 0 15px 15px;
+}
+
+.instagram-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.instagram-media {
+    margin: 0 !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+}
+
+/********************/
+/*** Social Icons ***/
+/********************/
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 100px;
+}
+
+.social-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.social-icon i {
+    font-size: 60px;
+    color: var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover i {
+    color: var(--color-secondary-75);
+}
