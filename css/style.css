@@ -8,7 +8,8 @@
     --color-secondary: #4C1594;
     --color-tertiary: #C2BCC3;
     --color-background: #EFEFEF;
-    --color-background-dark: rgba(187, 187, 195, 0.75);--color-primary-75: rgba(8, 2, 28, 0.75);
+    --color-background-dark: rgba(187, 187, 195, 0.75);
+    --color-primary-75: rgba(8, 2, 28, 0.75);
     --color-secondary-75: rgba(76, 21, 148, 0.75);
     --color-tertiary-90: rgba(194, 188, 195, 0.90);
 
@@ -29,13 +30,13 @@ body {
 }
 
 /* 헤더 스타일 */
-.main-header {
+.header {
     background-color: var(--color-logo);
     padding: 0;
     position: relative;
 }
 
-.header-container {
+.header__container {
     max-width: 1280px;
     margin: 0 auto;
     display: flex;
@@ -44,19 +45,19 @@ body {
 }
 
 /* 로고 스타일 */
-.logo {
+.header__logo {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.logo img {
+.header__logo-image {
     height: 80px;
     width: auto;
 }
 
 /* 네비게이션 스타일 */
-.main-nav ul {
+.header__nav-list {
     display: flex;
     list-style: none;
     margin: 0;
@@ -64,7 +65,7 @@ body {
     gap: 40px;
 }
 
-.main-nav a {
+.header__nav-link {
     color: white;
     text-decoration: none;
     font-size: 17px;
@@ -74,7 +75,7 @@ body {
 }
 
 /* 밑줄 애니메이션 효과 */
-.main-nav a::before {
+.header__nav-link::before {
     content: '';
     position: absolute;
     bottom: 0;
@@ -86,25 +87,25 @@ body {
     transform: translateX(-50%);
 }
 
-.main-nav a:hover::before {
+.header__nav-link:hover::before {
     width: 100%;
 }
 
 /* 푸터 스타일 */
-.main-footer {
+.footer {
     background-color: var(--color-primary);
     color: white;
     padding: 50px 0 20px;
     margin-top: 200px;
 }
 
-.footer-container {
+.footer__container {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-.footer-content {
+.footer__content {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -112,65 +113,65 @@ body {
     margin-bottom: 40px;
 }
 
-.footer-section {
+.footer__section {
     min-width: 200px;
 }
 
-.footer-about {
+.footer__section--about {
     flex: 2;
 }
 
-.footer-social {
+.footer__section--social {
     flex: 1;
 }
 
-.footer-store {
+.footer__section--store {
     flex: 1;
 }
 
-.footer-title {
+.footer__title {
     font-size: 17px;
     font-weight: var(--fw-medium);
     margin-bottom: 20px;
     color: white;
 }
 
-.footer-items {
+.footer__list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.footer-items li {
+.footer__list-item {
     margin-bottom: 12px;
     font-size: 14px;
     line-height: 1.6;
     color: var(--color-tertiary);
 }
 
-.footer-about .footer-items li span {
+.footer__section--about .footer__list-item span {
     display: inline-block;
     min-width: 120px;
     margin-right: 8px;
 }
 
-.footer-items a {
+.footer__link {
     color: var(--color-tertiary);
     text-decoration: none;
     transition: all 0.3s ease;
     display: inline-block;
 }
 
-.footer-items a:hover {
+.footer__link:hover {
     color: white;
     transform: translateX(5px);
 }
 
-.footer-bottom {
+.footer__bottom {
     text-align: center;
 }
 
-.footer-bottom p {
+.footer__copyright {
     font-size: 12px;
     color: var(--color-tertiary);
     margin: 0;
@@ -178,18 +179,18 @@ body {
 }
 
 /* 메인 배너 스타일 */
-.main-banner {
+.banner {
     background-color: var(--color-background-dark);
     padding: 120px 20px;
     text-align: center;
 }
 
-.banner-container {
+.banner__container {
     max-width: 1280px;
     margin: 0 auto;
 }
 
-.banner-tags {
+.banner__tags {
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -197,7 +198,7 @@ body {
     flex-wrap: wrap;
 }
 
-.banner-tags .tag {
+.banner__tag {
     font-size: 14px;
     font-weight: var(--fw-medium);
     color: var(--color-primary);
@@ -207,13 +208,13 @@ body {
     transition: all 0.3s ease;
 }
 
-.banner-tags .tag:hover {
+.banner__tag:hover {
     background-color: var(--color-primary);
     color: white;
     transform: translateY(-2px);
 }
 
-.banner-title {
+.banner__title {
     font-size: 64px;
     font-weight: var(--fw-black);
     color: var(--color-primary);
@@ -222,12 +223,12 @@ body {
     letter-spacing: -1px;
 }
 
-.banner-subtitle {
+.banner__subtitle {
     max-width: 900px;
     margin: 0 auto;
 }
 
-.banner-subtitle p {
+.banner__subtitle-text {
     font-size: 20px;
     font-weight: var(--fw-regular);
     color: var(--color-primary);
