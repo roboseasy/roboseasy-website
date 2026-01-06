@@ -1,0 +1,121 @@
+/* Documents 페이지 전용 스타일 */
+
+.documents {
+    max-width: 1200px;
+    margin: 100px auto 0;
+}
+
+/* 제목 섹션 */
+.documents__container {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.documents__decorators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.documents__decorator {
+    width: 8px;
+    height: 8px;
+    background-color: #4C1594;
+    border-radius: 50%;
+}
+
+.documents__heading {
+    font-size: 48px;
+    font-weight: 700;
+    color: #2E0068;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.documents__description {
+    font-size: 18px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+/* 제품 그리드 */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* 제품 카드 */
+.product-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(46, 0, 104, 0.15);
+}
+
+/* 이미지 컨테이너 */
+.product-card__image-container {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* 제목 */
+.product-card__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #08021C;
+    margin-bottom: 15px;
+}
+
+/* 설명 */
+.product-card__description {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    flex-grow: 1;
+}
+
+/* 버튼 */
+.product-card__button {
+    display: inline-block;
+    background-color: var(--color-secondary-75);
+    color: white;
+    padding: 12px 32px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.product-card__button:hover {
+    background-color: #FB8C00;
+    transform: scale(1.05);
+}

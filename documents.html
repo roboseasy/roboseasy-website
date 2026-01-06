@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboSEasy | 로보시지 - Robot is Easy, 이게 로보시지</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/documents.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <main-header></main-header>
+
+    <section class="documents">
+        <div class="documents__container">
+            <div class="documents__decorators">
+                <span class="documents__decorator"></span>
+                <span class="documents__decorator"></span>
+                <span class="documents__decorator"></span>
+            </div>
+            <h2 class="documents__heading">Documentation</h2>
+            <p class="documents__description">제품별 상세 문서를 확인하세요</p>
+        </div>
+
+        <div class="products-grid">
+            <!-- LeRobot Library -->
+            <div class="product-card">
+                <div class="product-card__image-container">
+                    <img class="product-card__image" src="img/lerobot-library.png" alt="LeRobot Library" onerror="this.src='img/placeholder-robot.png'">
+                </div>
+                <h3 class="product-card__title">LeRobot Library</h3>
+                <p class="product-card__description">
+                    HuggingFace LeRobot 라이브러리 사용 가이드.<br>
+                    로봇 학습 알고리즘 및 데이터셋 활용 방법을 제공합니다.
+                </p>
+                <a href="docs-lerobot-library.html" target="_blank" class="product-card__button">더 알아보기</a>
+            </div>
+
+            <!-- LeRobot SO-ARM -->
+            <div class="product-card">
+                <div class="product-card__image-container">
+                    <img class="product-card__image" src="img/lerobot-so-arm.png" alt="LeRobot SO-ARM" onerror="this.src='img/placeholder-robot.png'">
+                </div>
+                <h3 class="product-card__title">LeRobot SO-ARM</h3>
+                <p class="product-card__description">
+                    오픈소스 로봇 팔 SO-ARM 조립 및 제어 가이드.<br>
+                    하드웨어 조립부터 소프트웨어 설정까지 상세 안내합니다.
+                </p>
+                <a href="docs-lerobot-so-arm.html" target="_blank" class="product-card__button">더 알아보기</a>
+            </div>
+
+            <!-- XLeRobot -->
+            <div class="product-card">
+                <div class="product-card__image-container">
+                    <img class="product-card__image" src="img/xlerobot.png" alt="XLeRobot" onerror="this.src='img/placeholder-robot.png'">
+                </div>
+                <h3 class="product-card__title">XLeRobot</h3>
+                <p class="product-card__description">
+                    확장형 로봇 플랫폼 XLeRobot 활용 가이드.<br>
+                    다양한 센서와 액추에이터를 연결하여 커스터마이징 가능합니다.
+                </p>
+                <a href="docs-xlerobot.html" target="_blank" class="product-card__button">더 알아보기</a>
+            </div>
+
+            <!-- LeKiwi -->
+            <div class="product-card">
+                <div class="product-card__image-container">
+                    <img class="product-card__image" src="img/lekiwi.png" alt="LeKiwi" onerror="this.src='img/placeholder-robot.png'">
+                </div>
+                <h3 class="product-card__title">LeKiwi</h3>
+                <p class="product-card__description">
+                    모바일 로봇 플랫폼 LeKiwi 개발 가이드.<br>
+                    자율주행 및 비전 인식 기능 구현 방법을 안내합니다.
+                </p>
+                <a href="docs-lekiwi.html" target="_blank" class="product-card__button">더 알아보기</a>
+            </div>
+        </div>
+    </section>
+
+    <main-footer></main-footer>
+
+    <!--Components-->
+    <script src="js/components/main-header.js"></script>
+    <script src="js/components/main-banner.js"></script>
+    <script src="js/components/main-footer.js"></script>
+
+    <!--Scripts-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
