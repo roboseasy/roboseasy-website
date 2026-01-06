@@ -3,9 +3,9 @@ class MainHeader extends HTMLElement {
     this.innerHTML = `
       <header class="header">
         <div class="header__container">
-          <div class="header__logo">
+          <a href="/" class="header__logo">
             <img class="header__logo-image" src="img/logo.png" alt="RobesEasy Logo">
-          </div>
+          </a>
           <nav class="header__nav">
             <ul class="header__nav-list">
               <li><a class="header__nav-link" href="index.html">Home</a></li>
