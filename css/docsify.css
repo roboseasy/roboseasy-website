@@ -1,0 +1,75 @@
+/* Docsify 공통 스타일 */
+
+/* 사이드바 커스터마이징 */
+.sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #e0e0e0;
+}
+
+.sidebar-nav a {
+    color: #08021C;
+}
+
+.sidebar-nav .active {
+    color: #2E0068;
+    font-weight: 600;
+    border-right: 3px solid #2E0068;
+}
+
+/* 컨텐츠 영역 */
+.markdown-section {
+    max-width: 900px;
+    padding: 30px;
+}
+
+.markdown-section h1 {
+    color: #2E0068;
+    border-bottom: 2px solid #2E0068;
+    padding-bottom: 0.5rem;
+}
+
+.markdown-section h2 {
+    color: #4C1594;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.3rem;
+}
+
+.markdown-section a {
+    color: #4C1594;
+    text-decoration: none;
+}
+
+.markdown-section a:hover {
+    color: #2E0068;
+    text-decoration: underline;
+}
+
+/* 코드 블록 */
+.markdown-section pre {
+    background-color: #f6f8fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+}
+
+.markdown-section code {
+    color: #c7254e;
+    background-color: #f9f2f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.markdown-section pre code {
+    color: inherit;
+    background-color: transparent;
+    padding: 0;
+}
+
+/* 검색창 */
+.search input {
+    border: 2px solid #2E0068;
+    border-radius: 20px;
+}
+
+.search input:focus {
+    box-shadow: 0 0 0 3px rgba(46, 0, 104, 0.1);
+}
