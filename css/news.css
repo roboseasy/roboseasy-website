@@ -1,8 +1,42 @@
 /* News Section */
 .news {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 60px 20px;
+    margin: 100px auto 0;
+}
+
+/* 제목 섹션 */
+.news__container {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.news__decorators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.news__decorator {
+    width: 8px;
+    height: 8px;
+    background-color: #4C1594;
+    border-radius: 50%;
+}
+
+.news__heading {
+    font-size: 48px;
+    font-weight: 700;
+    color: #2E0068;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.news__description {
+    font-size: 18px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 100px;
 }
 
 /* Tabs Navigation */
@@ -153,6 +187,14 @@
 @media (max-width: 768px) {
     .news {
         padding: 40px 15px;
+    }
+
+    .news__heading {
+        font-size: 32px;
+    }
+
+    .news__description {
+        font-size: 16px;
     }
 
     .news__tabs {
