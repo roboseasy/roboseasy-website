@@ -15,6 +15,9 @@
     justify-content: center;
     gap: 12px;
     margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.1s;
 }
 
 .news__decorator {
@@ -30,6 +33,9 @@
     color: #2E0068;
     text-align: center;
     margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.3s;
 }
 
 .news__description {
@@ -37,6 +43,9 @@
     color: #666;
     text-align: center;
     margin-bottom: 100px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.5s;
 }
 
 /* Tabs Navigation */
@@ -46,6 +55,9 @@
     gap: 10px;
     margin-bottom: 40px;
     border-bottom: 2px solid #e0e0e0;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.7s;
 }
 
 .news__tab {
@@ -89,6 +101,17 @@
     from {
         opacity: 0;
         transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
