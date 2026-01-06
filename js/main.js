@@ -1,4 +1,31 @@
 // ==========================================
+// Home Page - Scroll Animation
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('.content-section');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+});
+
+
+// ==========================================
 // News Page - Tabs Functionality
 // ==========================================
 
