@@ -49,6 +49,9 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .header__logo-image {
@@ -183,6 +186,14 @@ body {
     background-color: var(--color-background-dark);
     padding: 120px 20px;
     text-align: center;
+}
+
+.banner__link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .banner__container {
