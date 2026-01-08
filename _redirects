@@ -1,0 +1,5 @@
+# Pretty URLs - Remove .html extension
+/                  /index.html           200
+/documents         /documents.html
+/news              /news.html            200
+/hackaton          /hackaton-2026.html   200
