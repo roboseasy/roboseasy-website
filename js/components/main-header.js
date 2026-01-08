@@ -8,11 +8,11 @@ class MainHeader extends HTMLElement {
           </a>
           <nav class="header__nav">
             <ul class="header__nav-list">
-              <li><a class="header__nav-link" href="index.html">Home</a></li>
-              <li><a class="header__nav-link" href="documents.html">Documents</a></li>
+              <li><a class="header__nav-link" href="/">Home</a></li>
+              <li><a class="header__nav-link" href="/documents">Documents</a></li>
               <li><a class="header__nav-link" href="https://smartstore.naver.com/roboseasy" target="_blank">Shop</a></li>
               <li><a class="header__nav-link" target="_blank" href="https://forms.gle/r1A5JYj4dYZQJNoq8">Education</a></li>
-              <li><a class="header__nav-link" href="news.html">News</a></li>
+              <li><a class="header__nav-link" href="/news">News</a></li>
             </ul>
           </nav>
         </div>
