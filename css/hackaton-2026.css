@@ -690,18 +690,312 @@ h2::first-letter {
     z-index: 1;
 }
 
-/* 반응형 모바일 */
-@media (max-width: 768px) {
-    .main-content { padding: 40px 25px; }
-    .track-container { grid-template-columns: 1fr; }
-    h1 { font-size: 2.2em; }
+/* 반응형 유틸리티 클래스 */
+.mobile-br {
+    display: none;
+}
 
-    /* 모바일에서 일부 애니메이션 단순화 */
+.desktop-br {
+    display: inline;
+}
+
+/* 반응형 - 태블릿 */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 30px;
+    }
+
+    .main-content {
+        padding: 60px 40px;
+    }
+
+    h2 {
+        font-size: 1.8em;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+/* 반응형 - 모바일 */
+@media (max-width: 768px) {
+    .mobile-br {
+        display: inline;
+    }
+
+    .desktop-br {
+        display: none;
+    }
+
+    .container {
+        padding: 0 20px;
+    }
+
+    header {
+        padding: 60px 20px 100px;
+    }
+
+    .logo-badge {
+        font-size: 0.85em;
+        padding: 6px 16px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: clamp(1.8rem, 8vw, 2.5rem);
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
+
+    .subtitle {
+        font-size: 1.1em;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    .subtitle br {
+        display: block;
+    }
+
+    .cta-button {
+        padding: 16px 40px;
+        font-size: 1.1em;
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .main-content {
+        padding: 40px 20px;
+        margin-top: -60px;
+        border-radius: 30px;
+    }
+
+    .section {
+        margin-bottom: 50px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+
+    h2::after {
+        display: none;
+    }
+
+    /* 그리드 반응형 */
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .info-card {
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+
+    .info-card h3 {
+        font-size: 1em;
+    }
+
+    .info-card p {
+        font-size: 1em;
+    }
+
+    /* 모바일에서 특정 텍스트에 들여쓰기 클래스 */
+    .info-card p.indent-mobile {
+        padding-left: 0.6em;
+    }
+
+    /* 트랙 카드 */
+    .track-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .track-card {
+        padding: 25px 20px;
+    }
+
+    .track-card h3 {
+        font-size: 1.2em;
+    }
+
+    .track-card p {
+        font-size: 0.95em;
+    }
+
+    /* 타임라인 */
+    .timeline-item {
+        padding-left: 20px;
+        margin-left: 5px;
+        padding-bottom: 30px;
+    }
+
+    .timeline-item h4 {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+
+    .timeline-item p {
+        font-size: 0.95em;
+        line-height: 1.6;
+    }
+
+    .timeline-item::before {
+        left: -8px;
+        width: 13px;
+        height: 13px;
+    }
+
+    /* 하이라이트 박스 */
+    .highlight-box {
+        padding: 25px 20px;
+        border-radius: 20px;
+        border-left-width: 5px;
+    }
+
+    .highlight-box p {
+        font-size: 1em !important;
+        line-height: 1.6;
+    }
+
+    /* 어워드 */
+    .info-grid.award-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .award-item {
+        padding: 25px 20px;
+        min-width: auto;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .award-item h3 {
+        font-size: 1.3em;
+    }
+
+    .award-item p {
+        font-size: 0.95em;
+    }
+
+    /* CTA 하단 */
+    .cta-bottom {
+        padding: 50px 25px;
+        margin-top: 40px;
+        border-radius: 30px;
+    }
+
+    .cta-bottom h2 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .cta-bottom p {
+        font-size: 1em;
+        margin-bottom: 25px !important;
+    }
+
+    footer {
+        padding: 40px 20px;
+        font-size: 0.85em;
+    }
+
+    footer p {
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+
+    /* 모바일에서 애니메이션 단순화 */
     .info-card:hover {
-        transform: translateY(-5px) scale(1.01);
+        transform: translateY(-3px) scale(1);
+    }
+
+    .track-card:hover {
+        transform: translateY(-5px) scale(1);
     }
 
     .award-item:hover {
-        transform: translateY(-10px) scale(1.05) rotate(0deg);
+        transform: translateY(-8px) scale(1.02) rotate(0deg);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px) scale(1.02);
+    }
+
+    /* 배경 애니메이션 성능 최적화 */
+    body::before {
+        animation: none;
+    }
+
+    header::before {
+        animation: none;
+    }
+}
+
+/* 반응형 - 작은 모바일 */
+@media (max-width: 480px) {
+    header {
+        padding: 50px 15px 80px;
+    }
+
+    .logo-badge {
+        font-size: 0.75em;
+        padding: 5px 12px;
+    }
+
+    h1 {
+        font-size: clamp(1.5rem, 7vw, 2rem);
+        letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+        font-size: 1em;
+    }
+
+    .cta-button {
+        padding: 14px 30px;
+        font-size: 1em;
+    }
+
+    .main-content {
+        padding: 30px 15px;
+        margin-top: -50px;
+        border-radius: 25px;
+    }
+
+    h2 {
+        font-size: 1.3em;
+    }
+
+    .info-card,
+    .track-card,
+    .highlight-box {
+        padding: 20px 15px;
+    }
+
+    .timeline-item {
+        padding-left: 15px;
+    }
+
+    .cta-bottom {
+        padding: 40px 20px;
+    }
+
+    .cta-bottom h2 {
+        font-size: 1.3em;
+    }
+
+    footer {
+        padding: 30px 15px;
+        font-size: 0.8em;
     }
 }
