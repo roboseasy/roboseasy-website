@@ -33,15 +33,31 @@
     border-radius: 50%;
     background-color: var(--color-primary);
     transition: all 0.3s ease;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+.content-section__decorator:nth-child(1) {
+    background-color: var(--color-secondary);
+    animation-delay: 0s;
 }
 
 .content-section__decorator:nth-child(2) {
     background-color: var(--color-tertiary);
+    animation-delay: 0.2s;
 }
 
-.content-section__decorator:nth-child(1),
 .content-section__decorator:nth-child(3) {
     background-color: var(--color-secondary);
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .content-section__heading {

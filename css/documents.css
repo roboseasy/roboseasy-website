@@ -14,7 +14,7 @@
 .documents__decorators {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 30px;
     opacity: 0;
     animation: fadeInUp 0.8s ease forwards;
@@ -22,10 +22,36 @@
 }
 
 .documents__decorator {
-    width: 8px;
-    height: 8px;
-    background-color: #4C1594;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
+    background-color: var(--color-primary);
+    transition: all 0.3s ease;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+.documents__decorator:nth-child(1) {
+    background-color: var(--color-secondary);
+    animation-delay: 0s;
+}
+
+.documents__decorator:nth-child(2) {
+    background-color: var(--color-tertiary);
+    animation-delay: 0.2s;
+}
+
+.documents__decorator:nth-child(3) {
+    background-color: var(--color-secondary);
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .documents__heading {
