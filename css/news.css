@@ -2,6 +2,7 @@
 .news {
     max-width: 1200px;
     margin: 100px auto 0;
+    text-align: center;
 }
 
 /* 제목 섹션 */
@@ -76,37 +77,41 @@
 
 /* Tabs Navigation */
 .news__tabs {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 40px;
-    border-bottom: 2px solid #e0e0e0;
+    margin: 0 auto 100px;
     opacity: 0;
     animation: fadeInUp 0.8s ease forwards;
     animation-delay: 0.7s;
+    border: 2px solid #e0e0e0;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .news__tab {
-    padding: 15px 30px;
+    padding: 15px 70px;
     font-size: 17px;
     font-weight: 600;
     color: #666;
-    background: none;
+    background-color: white;
     border: none;
-    border-bottom: 3px solid transparent;
+    border-right: 2px solid #e0e0e0;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-    bottom: -2px;
+}
+
+.news__tab:last-child {
+    border-right: none;
 }
 
 .news__tab:hover {
     color: var(--color-secondary);
+    background-color: rgba(76, 21, 148, 0.05);
 }
 
 .news__tab--active {
-    color: var(--color-secondary);
-    border-bottom-color: var(--color-secondary);
+    color: white;
+    background-color: var(--color-secondary);
 }
 
 /* Tab Content */
