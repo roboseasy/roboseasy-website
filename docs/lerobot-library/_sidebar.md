@@ -1,26 +1,17 @@
-- [홈](/)
+<!-- _sidebar.md -->
 
-- 시작하기
-  - [소개](/)
-  - [설치 가이드](installation.md)
-  - [빠른 시작](quickstart.md)
+* [🏠 홈으로](https://roboseasy.netlify.app/documents)
 
-- 튜토리얼
-  - [첫 번째 프로젝트](first-project.md)
-  - [데이터 수집](data-collection.md)
-  - [정책 학습](policy-training.md)
+* **LeRobot Library**
+  * [소개](README.md)
+  * [시작하기](getting-started.md)
 
-- API 문서
-  - [API 개요](api.md)
-  - [LeRobot 클래스](api-lerobot.md)
-  - [Dataset 클래스](api-dataset.md)
+* **가이드**
+  * [로봇 선택 가이드](hardware-guide.md)
+  * [LeRobot 설치 가이드](software-installation.md)
 
-- 고급 가이드
-  - [커스텀 환경](advanced-env.md)
-  - [하이퍼파라미터 튜닝](advanced-tuning.md)
-  - [배포 가이드](advanced-deployment.md)
+---
 
-- 링크
-  - [← 문서 목록으로](../../documents.html)
-  - [GitHub](https://github.com/roboseasy)
-  - [스토어](https://smartstore.naver.com/roboseasy)
+* [GitHub](https://github.com/huggingface/lerobot)
+* [HuggingFace](https://huggingface.co/lerobot)
+* [Discord](https://discord.com/invite/s3KuuzsPFb)
