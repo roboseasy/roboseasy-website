@@ -80,7 +80,7 @@ LeRobot은 다양한 로봇 하드웨어를 지원합니다. 예산과 목적에
   </a>
 
   <div class="card">
-    <h4>✋ SO-Arm101 Max (추천)</h4>
+    <h4>✋ SO-ARM101 Max (추천)</h4>
     <p>입문자를 위한 저가형 로봇 팔</p>
   </div>
 </div>
@@ -100,7 +100,7 @@ LeRobot은 다양한 로봇 하드웨어를 지원합니다. 예산과 목적에
 
 <div class="card">
   <h4>🔧 로봇 조립 가이드</h4>
-  <p>So-Arm101 Max 로봇 조립</p>
+  <p>SO-ARM101 Max 로봇 조립</p>
 </div>
 
 ### 4. 로봇 세팅
@@ -109,7 +109,7 @@ LeRobot은 다양한 로봇 하드웨어를 지원합니다. 예산과 목적에
 
 <div class="card">
   <h4>⚙️ 로봇 자세 설정 가이드</h4>
-  <p>So-Arm101 Max 로봇 자세 설정</p>
+  <p>SO-ARM101 Max 로봇 자세 설정</p>
 </div>
 
 ### 5. 로봇 Teleoperation 설정

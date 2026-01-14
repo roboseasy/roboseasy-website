@@ -15,12 +15,12 @@ LeRobot 설치 전에 Python 3.10과 Git이 설치되어 있는지 확인하세�
 - **CUDA 지원 GPU** (학습 시에 없으면 너무 느림…)
 - **USB 가 많은 컴퓨터** (카메라, 로봇 모두 USB 인데 허브 통하면 프레임 밀리는 문제 많음)
 
-?> **필자의 추천 시스템 구성**<br>
-**입문자**: Macbook 또는 리눅스 노트북으로 시작하셔도 됩니다. 학습은 클라우드 GPU를 빌려서 하시면 됩니다.<br>
-**본격파**: 안정적으로 시도하시려면 다음 사양의 데스크탑을 추천합니다:
-- NVIDIA GPU 최소 30시리즈 이상 (ex. 3070)
-- USB 포트 4개 이상 (허브 사용 시 프레임 드롭 주의)
-- Jetson 도 좋음
+?> **필자의 추천 시스템 구성**
+<br>**입문자**: Macbook 또는 리눅스 노트북으로 시작하셔도 됩니다. 학습은 클라우드 GPU를 빌려서 하시면 됩니다.
+<br>**본격파**: 안정적으로 시도하시려면 다음 사양의 데스크탑을 추천합니다:
+<br>- NVIDIA GPU 최소 30시리즈 이상 (ex. 3070)
+<br>- USB 포트 4개 이상 (허브 사용 시 프레임 드롭 주의)
+<br>- Jetson 도 좋음
 
 ## 설치 과정
 
@@ -99,7 +99,7 @@ uv pip install -e .
 실제로 사용할 로봇의 모터에 맞게 필요한 드라이버를 설치하세요.
 
 ```bash
-# Feetech 모터 (SO-100, SO-101)
+# Feetech 모터 (SO-ARM100, SO-ARM101)
 uv pip install -e ".[feetech]"
 
 # Dynamixel 모터 (Koch, etc.)
@@ -202,8 +202,8 @@ ffmpeg -version
 
 <div class="card-grid">
   <div class="card">
-    <h3>🎮 So-Arm 101 Max</h3>
-    <p>So-Arm 101 Max로 Physical AI를 체험해보아요.</p>
+    <h3>🎮 SO-Arm 101 Max</h3>
+    <p>SO-Arm 101 Max로 Physical AI를 체험해보아요.</p>
   </div>
 </div>
 
