@@ -53,7 +53,7 @@
                     모터 제어 & 모니터링 GUI
                 </p>
                 <div class="program-card__buttons">
-                    <a href="#" class="program-card__button program-card__button--details">
+                    <a href="#" class="program-card__button program-card__button--details" onclick="openProgramModal('motor-control'); return false;">
                         <i class="fas fa-info-circle"></i> 자세히 보기
                     </a>
                     <a href="https://drive.google.com/file/d/1Z0206tEiYY2T9WQcm8-gJWm0G6NmCofJ/view" target="_blank" download class="program-card__button program-card__button--download">
@@ -63,6 +63,363 @@
             </div>
         </div>
     </section>
+
+    <!-- 프로그램 상세 모달 -->
+    <div class="program-modal-overlay" id="programModalOverlay" onclick="closeProgramModal(event)">
+        <div class="program-modal" id="programModal">
+            <button class="program-modal__close" onclick="closeProgramModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="program-modal__content">
+                <!-- 상단: 이미지 + 정보 -->
+                <div class="program-modal__header">
+                    <!-- 왼쪽: 프로그램 이미지 -->
+                    <div class="program-modal__image-section">
+                        <img src="img/motor-control-gui.png" alt="모터 제어 GUI" class="program-modal__image" id="modalImage">
+                    </div>
+
+                    <!-- 오른쪽: 프로그램 정보 -->
+                    <div class="program-modal__info-section">
+                        <span class="program-modal__badge">
+                            <i class="fas fa-robot"></i> RobosEasy
+                        </span>
+                        <h2 class="program-modal__title" id="modalTitle">모터 제어 GUI</h2>
+                        <p class="program-modal__subtitle" id="modalSubtitle">
+                            So-Arm의 Feetech 모터를 실시간으로 모니터링하고 직접 제어할 수 있는 그래픽 인터페이스입니다.
+                            모터 불량 테스트, 위치/속도/토크 제어, 온도 모니터링 등 다양한 기능을 제공합니다.
+                        </p>
+                        <a href="https://drive.google.com/file/d/1Z0206tEiYY2T9WQcm8-gJWm0G6NmCofJ/view" target="_blank" class="program-modal__download-btn" id="modalDownloadBtn">
+                            <i class="fas fa-download"></i> AppImage 다운로드
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 하단: 상세 내용 -->
+                <div class="program-modal__body">
+                    <!-- 주요 특징 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-check-double"></i> 주요 특징
+                    </h3>
+                    <div class="program-modal__highlights">
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 단일 파일 실행</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 직관적인 인터페이스</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 실시간 모니터링</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 안전한 제어</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 모든 Linux 배포판 지원</span>
+                    </div>
+
+                    <!-- 주요 기능 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-star"></i> 주요 기능
+                    </h3>
+                    <div class="program-modal__features">
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-check-circle"></i> 모터 불량 테스트
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                각 모터의 동작 상태를 개별적으로 확인하여 고장 여부를 조기에 발견할 수 있습니다.
+                            </p>
+                        </div>
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-chart-line"></i> 실시간 모니터링
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                현재 위치, 속도, 토크, 온도 등의 값을 실시간으로 확인할 수 있습니다.
+                            </p>
+                        </div>
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-sliders-h"></i> 직접 제어
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                텔레오퍼레이션 없이 슬라이더를 통해 모터를 직접 제어하여 동작 범위를 확인합니다.
+                            </p>
+                        </div>
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-bug"></i> 디버깅 지원
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                이상 동작 발생 시 원인 파악을 위한 상세 정보를 확인할 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 시스템 준비 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-tools"></i> 시스템 준비
+                    </h3>
+                    <div class="program-modal__steps">
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">1</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">FUSE 설치</div>
+                                <p class="program-modal__step-desc">AppImage를 실행하려면 FUSE가 필요합니다.</p>
+                                <div class="program-modal__code-block">
+                                    <code>sudo apt-get update && sudo apt-get install -y fuse libfuse2</code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">2</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">USB 포트 권한 설정</div>
+                                <p class="program-modal__step-desc">모터를 USB로 연결하여 제어하려면 사용자를 dialout 그룹에 추가해야 합니다.</p>
+                                <div class="program-modal__code-block">
+                                    <code>sudo chmod 666 /dev/ttyACM0<br>sudo chmod 666 /dev/ttyACM1<br>sudo usermod -aG dialout $USER</code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">3</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">실행 권한 부여 및 실행</div>
+                                <p class="program-modal__step-desc">다운로드한 AppImage 파일에 실행 권한을 부여한 후 실행합니다.</p>
+                                <div class="program-modal__code-block">
+                                    <code>chmod +x RobosEasyMotorControl.AppImage<br>./RobosEasyMotorControl.AppImage</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 재로그인 주의 -->
+                    <div class="program-modal__callout program-modal__callout--warning">
+                        <i class="fas fa-exclamation-triangle program-modal__callout-icon"></i>
+                        <div class="program-modal__callout-content">
+                            <div class="program-modal__callout-title">재로그인 필수</div>
+                            <p class="program-modal__callout-text">
+                                USB 포트 권한 설정 후에는 <strong>로그아웃했다가 다시 로그인</strong>해야 권한이 적용됩니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- GUI 사용 방법 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-desktop"></i> GUI 사용 방법
+                    </h3>
+                    <div class="program-modal__features">
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-plug"></i> 모터 연결
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                <ul class="program-modal__list">
+                                    <li>Feetech 모터를 USB-TTL 어댑터로 PC에 연결</li>
+                                    <li>GUI 상단의 Port 드롭다운에서 USB 포트 선택 (예: /dev/ttyUSB0)</li>
+                                    <li>"Connect" 버튼을 클릭하여 모터와 연결</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-gamepad"></i> 모터 제어
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                <ul class="program-modal__list">
+                                    <li><strong>모터 ID 설정</strong>: 제어할 모터의 ID 입력 (1-253)</li>
+                                    <li><strong>위치 제어</strong>: Position 슬라이더로 목표 위치 설정</li>
+                                    <li><strong>속도 제어</strong>: Speed 슬라이더로 회전 속도 조정</li>
+                                    <li><strong>토크 제어</strong>: Torque 슬라이더로 출력 토크 제한</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 실시간 모니터링 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-tachometer-alt"></i> 실시간 모니터링 항목
+                    </h3>
+                    <div class="program-modal__monitor-grid">
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-compass"></i>
+                            <div class="program-modal__monitor-label">Position</div>
+                            <div class="program-modal__monitor-value">현재 각도</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <div class="program-modal__monitor-label">Speed</div>
+                            <div class="program-modal__monitor-value">회전 속도</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-weight-hanging"></i>
+                            <div class="program-modal__monitor-label">Load</div>
+                            <div class="program-modal__monitor-value">현재 부하</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-thermometer-half"></i>
+                            <div class="program-modal__monitor-label">Temperature</div>
+                            <div class="program-modal__monitor-value">모터 온도</div>
+                        </div>
+                    </div>
+
+                    <!-- 과열 주의 -->
+                    <div class="program-modal__callout program-modal__callout--warning">
+                        <i class="fas fa-fire program-modal__callout-icon"></i>
+                        <div class="program-modal__callout-content">
+                            <div class="program-modal__callout-title">과열 주의</div>
+                            <p class="program-modal__callout-text">
+                                모터 온도가 <strong>70°C 이상</strong>으로 올라가면 과열 상태입니다. 즉시 모터를 정지시키고 냉각시켜야 합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 모터 불량 테스트 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-stethoscope"></i> 모터 불량 테스트
+                    </h3>
+                    <div class="program-modal__features">
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-list-ol"></i> 개별 모터 테스트
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                <ul class="program-modal__list">
+                                    <li>모터 ID를 1부터 순차적으로 입력</li>
+                                    <li>Position 슬라이더를 천천히 움직여 정상 반응 확인</li>
+                                    <li>이상한 소음이나 진동 발생 여부 점검</li>
+                                    <li>온도가 비정상적으로 높지 않은지 확인</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-exclamation-circle"></i> 불량 증상
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                <ul class="program-modal__list">
+                                    <li><strong>응답 없음</strong>: 명령을 보내도 모터가 전혀 움직이지 않음</li>
+                                    <li><strong>불규칙한 움직임</strong>: 모터가 떨리거나 갑자기 멈춤</li>
+                                    <li><strong>과도한 발열</strong>: 정상 작동 시에도 온도가 급격히 상승</li>
+                                    <li><strong>이상한 소음</strong>: 기어 마모나 베어링 손상으로 인한 소음</li>
+                                    <li><strong>위치 오차</strong>: 목표 위치와 실제 위치의 차이가 큼</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 불량 모터 경고 -->
+                    <div class="program-modal__callout" style="background: #fef2f2; border-left-color: #dc2626;">
+                        <i class="fas fa-times-circle program-modal__callout-icon" style="color: #dc2626;"></i>
+                        <div class="program-modal__callout-content">
+                            <div class="program-modal__callout-title">불량 모터 발견 시</div>
+                            <p class="program-modal__callout-text">
+                                불량 모터를 발견했다면 즉시 사용을 중지하고 교체해야 합니다. 불량 모터를 계속 사용하면 다른 부품까지 손상될 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 문제 해결 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-wrench"></i> 문제 해결
+                    </h3>
+                    <div class="program-modal__troubleshoot">
+                        <div class="program-modal__trouble-item">
+                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
+                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
+                                <div class="program-modal__trouble-title">FUSE 오류 발생</div>
+                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                            </div>
+                            <div class="program-modal__trouble-body">
+                                <div class="program-modal__trouble-solution">
+                                    <p><strong>증상:</strong> dlopen(): error loading libfuse.so.2 / AppImages require FUSE to run.</p>
+                                    <p><strong>해결:</strong> FUSE를 설치하세요.</p>
+                                    <div class="program-modal__code-block">
+                                        <code>sudo apt-get install -y fuse libfuse2</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="program-modal__trouble-item">
+                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
+                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
+                                <div class="program-modal__trouble-title">모터를 찾을 수 없음</div>
+                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                            </div>
+                            <div class="program-modal__trouble-body">
+                                <div class="program-modal__trouble-solution">
+                                    <p><strong>증상:</strong> "No serial ports found" 또는 "Permission denied" 오류</p>
+                                    <p><strong>해결:</strong></p>
+                                    <div class="program-modal__code-block">
+                                        <code>sudo usermod -aG dialout $USER<br># 로그아웃 후 다시 로그인<br><br># 모터 연결 확인<br>ls -l /dev/ttyUSB* /dev/ttyACM*</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="program-modal__trouble-item">
+                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
+                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
+                                <div class="program-modal__trouble-title">프로그램이 실행되지 않음</div>
+                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                            </div>
+                            <div class="program-modal__trouble-body">
+                                <div class="program-modal__trouble-solution">
+                                    <p><strong>방법 1:</strong> 추출 모드로 실행</p>
+                                    <div class="program-modal__code-block">
+                                        <code>./RobosEasyMotorControl.AppImage --appimage-extract<br>cd squashfs-root<br>./AppRun</code>
+                                    </div>
+                                    <p><strong>방법 2:</strong> 실행 권한 확인</p>
+                                    <div class="program-modal__code-block">
+                                        <code>chmod +x RobosEasyMotorControl.AppImage</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 시스템 요구사항 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-cog"></i> 시스템 요구사항
+                    </h3>
+                    <div class="program-modal__requirements">
+                        <div class="program-modal__requirements-grid">
+                            <div class="program-modal__requirement">
+                                <i class="fab fa-linux"></i>
+                                <div>
+                                    <div class="program-modal__requirement-label">운영체제</div>
+                                    <div class="program-modal__requirement-value">Linux (Ubuntu 20.04 이상 권장)</div>
+                                </div>
+                            </div>
+                            <div class="program-modal__requirement">
+                                <i class="fas fa-box"></i>
+                                <div>
+                                    <div class="program-modal__requirement-label">필수 패키지</div>
+                                    <div class="program-modal__requirement-value">FUSE 2.x (libfuse2)</div>
+                                </div>
+                            </div>
+                            <div class="program-modal__requirement">
+                                <i class="fas fa-memory"></i>
+                                <div>
+                                    <div class="program-modal__requirement-label">권장 사양</div>
+                                    <div class="program-modal__requirement-value">RAM 4GB 이상, 저장공간 5GB 이상</div>
+                                </div>
+                            </div>
+                            <div class="program-modal__requirement">
+                                <i class="fas fa-usb"></i>
+                                <div>
+                                    <div class="program-modal__requirement-label">하드웨어</div>
+                                    <div class="program-modal__requirement-value">USB 포트, Feetech 모터 및 USB-TTL 어댑터</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AppImage 안내 -->
+                    <div class="program-modal__callout program-modal__callout--info">
+                        <i class="fas fa-lightbulb program-modal__callout-icon"></i>
+                        <div class="program-modal__callout-content">
+                            <div class="program-modal__callout-title">AppImage란?</div>
+                            <p class="program-modal__callout-text">
+                                AppImage는 Linux에서 사용하는 단일 실행 파일 형식입니다. 별도의 설치 없이 파일에 실행 권한만 부여하면 바로 실행할 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <main-footer></main-footer>
 
@@ -74,5 +431,35 @@
     <!--Scripts-->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- 모달 스크립트 -->
+    <script>
+        function openProgramModal(programId) {
+            const overlay = document.getElementById('programModalOverlay');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProgramModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+
+            const overlay = document.getElementById('programModalOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeProgramModal();
+            }
+        });
+
+        // 문제 해결 아코디언 토글
+        function toggleTrouble(header) {
+            const item = header.closest('.program-modal__trouble-item');
+            item.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
