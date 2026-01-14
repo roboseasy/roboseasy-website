@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboSEasy | 로보시지 - Robot is Easy, 이게 로보시지</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Programs - RoboSEasy | 로보시지">
+    <meta property="og:description" content="로보시지에서 제공하는 프로그램을 다운로드하세요">
+    <meta property="og:image" content="https://roboseasy.netlify.app/img/banner.png">
+    <meta property="og:url" content="https://roboseasy.netlify.app/programs.html">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Programs - RoboSEasy | 로보시지">
+    <meta name="twitter:description" content="로보시지에서 제공하는 프로그램을 다운로드하세요">
+    <meta name="twitter:image" content="https://roboseasy.netlify.app/img/banner.png">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/programs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <main-header></main-header>
+
+    <section class="programs">
+        <div class="programs__container">
+            <div class="programs__decorators">
+                <span class="programs__decorator"></span>
+                <span class="programs__decorator"></span>
+                <span class="programs__decorator"></span>
+            </div>
+            <h2 class="programs__heading">Programs</h2>
+            <p class="programs__description">로보시지에서 제공하는 프로그램을 다운로드하세요</p>
+        </div>
+
+        <div class="programs-grid">
+            <!-- Program Card -->
+            <div class="program-card">
+                <div class="program-card__image-container">
+                    <img class="program-card__image" src="img/motor-control-gui.png" alt="모터 제어 GUI" onerror="this.src='img/placeholder-robot.png'">
+                </div>
+                <h3 class="program-card__title">모터 제어 GUI</h3>
+                <p class="program-card__description">
+                    SO-ARM Feetech
+                    <br>
+                    모터 제어 & 모니터링 GUI
+                </p>
+                <div class="program-card__buttons">
+                    <a href="#" class="program-card__button program-card__button--details">
+                        <i class="fas fa-info-circle"></i> 자세히 보기
+                    </a>
+                    <a href="https://drive.google.com/file/d/1Z0206tEiYY2T9WQcm8-gJWm0G6NmCofJ/view" target="_blank" download class="program-card__button program-card__button--download">
+                        <i class="fas fa-download"></i> 다운로드
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main-footer></main-footer>
+
+    <!--Components-->
+    <script src="js/components/main-header.js"></script>
+    <script src="js/components/main-banner.js"></script>
+    <script src="js/components/main-footer.js"></script>
+
+    <!--Scripts-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
