@@ -194,10 +194,12 @@
 
 /* 버튼 */
 .product-card__button {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(135deg, #2563eb, #a582dc);
     color: white;
-    padding: 12px 32px;
+    padding: 15px 32px;
     border-radius: 25px;
     text-decoration: none;
     font-weight: 600;
@@ -230,4 +232,8 @@
 .product-card__button:hover {
     transform: scale(1.1) translateY(-3px);
     box-shadow: 0 10px 30px rgba(165, 130, 220, 0.5);
+}
+
+.product-card__button i {
+    margin-right: 8px;
 }
