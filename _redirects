@@ -4,3 +4,9 @@
 /news              /news.html            200
 /programs          /programs.html        200
 /hackaton          /hackaton-2026.html   200
+
+# Documentation pages (301 redirect to preserve Docsify basePath)
+/docs-lerobot-library    /docs-lerobot-library.html    301
+/docs-lerobot-so-arm     /docs-lerobot-so-arm.html     301
+/docs-xlerobot           /docs-xlerobot.html           301
+/docs-lekiwi             /docs-lekiwi.html             301
