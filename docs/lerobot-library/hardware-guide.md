@@ -197,8 +197,8 @@ LeRobot 생태계의 로봇들을 살펴보았다면 이제 다음 단계로 진
   </a>
 
   <div class="card">
-    <h3>🎮 So-Arm 101 Max</h3>
-    <p>So-Arm 101 Max로 Physical AI를 체험해보아요.</p>
+    <h3>🎮 SO-Arm 101 Max</h3>
+    <p>SO-Arm 101 Max로 Physical AI를 체험해보아요.</p>
   </div>
 </div>
 
