@@ -612,3 +612,110 @@ body .header {
 .token.builtin {
     color: #0070c1;
 }
+
+/* 테이블 스타일 */
+.markdown-section table {
+    width: 100% !important;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 15px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e1e4e8;
+    table-layout: fixed;
+}
+
+.markdown-section table thead {
+    background: linear-gradient(135deg, #2E0068 0%, #4C1594 100%);
+}
+
+.markdown-section table thead th {
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 600;
+    color: #ffffff;
+    border: none;
+    width: 1%;
+}
+
+.markdown-section table thead th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.markdown-section table thead th:last-child {
+    border-top-right-radius: 8px;
+}
+
+.markdown-section table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.markdown-section table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.markdown-section table tbody tr:hover {
+    background-color: #f0e6f7;
+}
+
+.markdown-section table tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e9ecef;
+    color: #333;
+    vertical-align: middle;
+    text-align: center;
+    width: 1%;
+}
+
+.markdown-section table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.markdown-section table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+
+.markdown-section table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+/* 테이블 내 코드 스타일 */
+.markdown-section table code {
+    background-color: #f0e6f7;
+    color: #4C1594;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+/* 테이블 내 이미지 스타일 (이미지 갤러리용) */
+.markdown-section table img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* 테이블 내 강조 텍스트 */
+.markdown-section table strong {
+    color: #2E0068;
+    font-weight: 600;
+}
+
+/* 반응형 테이블 */
+@media screen and (max-width: 768px) {
+    .markdown-section table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .markdown-section table thead th,
+    .markdown-section table tbody td {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+}
