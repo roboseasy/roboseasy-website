@@ -255,39 +255,199 @@
     text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* 반응형 - 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
     .news {
-        padding: 40px 15px;
+        margin: 120px auto 0;
+        padding: 0 20px;
+    }
+
+    .news__container {
+        margin-bottom: 40px;
     }
 
     .news__heading {
-        font-size: 32px;
+        font-size: 40px;
     }
 
     .news__description {
-        font-size: 16px;
+        font-size: 17px;
+        margin-bottom: 60px;
     }
 
     .news__tabs {
-        gap: 5px;
+        margin-bottom: 60px;
     }
 
     .news__tab {
-        padding: 12px 20px;
-        font-size: 14px;
+        padding: 14px 40px;
+        font-size: 15px;
     }
 
-    .instagram-feed {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 0 15px;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
     .instagram-feed {
         grid-template-columns: repeat(2, 1fr);
         gap: 25px;
+    }
+
+    .youtube-video__title {
+        font-size: 13px;
+        padding: 12px 12px 5px;
+        min-height: 45px;
+    }
+}
+
+/* 모바일 (768px 이하) - 인스타그램 앱 스타일 */
+@media (max-width: 768px) {
+    .news {
+        margin: 100px auto 0;
+        padding: 0;
+    }
+
+    .news__container {
+        margin-bottom: 20px;
+        padding: 0 16px;
+    }
+
+    .news__decorators {
+        margin-bottom: 20px;
+    }
+
+    .news__decorator {
+        width: 10px;
+        height: 10px;
+    }
+
+    .news__heading {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .news__description {
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .news__tabs {
+        flex-direction: row;
+        width: 100%;
+        max-width: none;
+        margin: 30px 0 30px;
+        border: none;
+        border-radius: 0;
+        border-top: 1px solid #dbdbdb;
+        border-bottom: 1px solid #dbdbdb;
+        box-shadow: none;
+        background: white;
+    }
+
+    .news__tab {
+        flex: 1;
+        padding: 12px 8px;
+        font-size: 12px;
+        border-right: none;
+        border-bottom: none;
+        color: #8e8e8e;
+        position: relative;
+    }
+
+    .news__tab--active {
+        color: #262626;
+        background: white;
+    }
+
+    .news__tab--active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #262626;
+    }
+
+    .news__tab:last-child {
+        border-bottom: none;
+    }
+
+    .news__content {
+        min-height: auto;
+    }
+
+    /* 인스타그램 피드 스타일 */
+    .instagram-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        max-width: none;
+        padding: 0;
+    }
+
+    .instagram-feed__post {
+        border-radius: 0;
+        box-shadow: none;
+        max-height: 550px;
+        overflow: hidden;
+        border-bottom: 1px solid #dbdbdb;
+        background: white;
+    }
+
+    .instagram-feed__post:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .instagram-feed__post::after {
+        display: none;
+    }
+
+    .instagram-feed__embed {
+        transform: none;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* 유튜브 비디오 */
+    .youtube-video {
+        border-radius: 0;
+    }
+
+    .youtube-video__iframe {
+        border-radius: 0;
+        aspect-ratio: 16 / 9;
+    }
+
+    .youtube-video__title {
+        font-size: 14px;
+        padding: 12px 16px;
+        min-height: auto;
+        border-radius: 0;
+        text-align: left;
+    }
+}
+
+/* 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+    .news {
+        margin: 80px auto 0;
+    }
+
+    .news__heading {
+        font-size: 24px;
+    }
+
+    .news__description {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .news__tab {
+        padding: 10px 6px;
+        font-size: 11px;
+    }
+
+    .youtube-video__title {
+        font-size: 13px;
+        padding: 10px 12px 30px;
     }
 }
