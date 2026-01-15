@@ -548,3 +548,283 @@
     color: var(--color-secondary-75);
     transform: scale(1.1);
 }
+
+/****************************/
+/*** Responsive Design ***/
+/****************************/
+
+/* 태블릿 (1024px 이하) */
+@media screen and (max-width: 1024px) {
+    .content-section {
+        padding-top: 150px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .content-section__heading {
+        font-size: 36px;
+        margin-bottom: 60px;
+    }
+
+    .content-section__description {
+        font-size: 16px;
+        line-height: 32px;
+    }
+
+    /* What We Do - 2열 */
+    .what-we-do {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* Who We Are - 세로 배치 */
+    .who-we-are {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 60px;
+    }
+
+    .who-we-are__member {
+        width: 320px;
+        height: 320px;
+    }
+
+    /* About Us - 세로 배치 */
+    .about-us {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 60px;
+    }
+
+    .about-us__item {
+        position: static;
+        width: 300px;
+        height: 300px;
+        transform: none !important;
+    }
+
+    /* Instagram Feed - 2열 */
+    .instagram-feed {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .instagram-feed__post:nth-child(3) {
+        grid-column: span 2;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    /* Community */
+    .community {
+        margin-top: 60px;
+    }
+
+    .community__link {
+        width: 100px;
+        height: 100px;
+    }
+
+    .community__icon {
+        font-size: 50px;
+    }
+}
+
+/* 모바일 (768px 이하) */
+@media screen and (max-width: 768px) {
+    .content-section {
+        padding-top: 120px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .content-section__heading {
+        font-size: 28px;
+        margin-bottom: 40px;
+    }
+
+    .content-section__description {
+        font-size: 15px;
+        line-height: 28px;
+    }
+
+    .content-section__decorator {
+        width: 10px;
+        height: 10px;
+    }
+
+    /* Trusted By */
+    .trusted-by {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .trusted-by__item {
+        width: 160px;
+        padding: 10px 30px;
+    }
+
+    /* About Us */
+    .about-us__item {
+        width: 260px;
+        height: 260px;
+    }
+
+    .about-us__title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .about-us__description {
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    /* What We Do - 1열 */
+    .what-we-do {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .what-we-do__card {
+        padding: 0 0 15px 0;
+    }
+
+    .what-we-do__thumbnail {
+        height: 100px;
+        padding: 15px 10px 10px;
+    }
+
+    .what-we-do__title {
+        font-size: 18px;
+        margin: 12px 10px;
+    }
+
+    .what-we-do__description {
+        font-size: 13px;
+        line-height: 20px;
+        margin: 6px 10px;
+    }
+
+    /* Who We Are */
+    .who-we-are__member {
+        width: 280px;
+        height: 280px;
+    }
+
+    .who-we-are__role {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .who-we-are__expertise {
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    /* Instagram Feed - 1열 */
+    .instagram-feed {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 0 10px;
+    }
+
+    .instagram-feed__post:nth-child(3) {
+        grid-column: span 1;
+        max-width: 100%;
+    }
+
+    .instagram-feed__post {
+        overflow: hidden;
+    }
+
+    .instagram-feed__embed {
+        transform: scale(0.85);
+        transform-origin: top left;
+        width: 117.6% !important;
+        min-width: 117.6% !important;
+        max-width: 117.6% !important;
+    }
+
+    /* Community */
+    .community {
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .community__link {
+        width: 80px;
+        height: 80px;
+    }
+
+    .community__icon {
+        font-size: 40px;
+    }
+}
+
+/* 작은 모바일 (480px 이하) */
+@media screen and (max-width: 480px) {
+    .content-section {
+        padding-top: 100px;
+    }
+
+    .content-section__heading {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+
+    .content-section__description {
+        font-size: 14px;
+        line-height: 26px;
+    }
+
+    /* About Us */
+    .about-us__item {
+        width: 220px;
+        height: 220px;
+    }
+
+    .about-us__title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .about-us__description {
+        font-size: 13px;
+        line-height: 22px;
+    }
+
+    /* Who We Are */
+    .who-we-are__member {
+        width: 240px;
+        height: 240px;
+    }
+
+    .who-we-are__role {
+        font-size: 18px;
+        line-height: 26px;
+    }
+
+    .who-we-are__expertise {
+        font-size: 13px;
+        line-height: 20px;
+        margin: 8px 0;
+    }
+
+    /* Community */
+    .community__link {
+        width: 70px;
+        height: 70px;
+    }
+
+    .community__icon {
+        font-size: 35px;
+    }
+}
