@@ -5,7 +5,7 @@ class MainBanner extends HTMLElement {
         <a href="/" class="banner__link">
             <div class="banner__container">
                 <div class="banner__tags">
-                    <span class="banner__tag"># PhysicalAI</span>
+                    <span class="banner__tag"># Physical AI</span>
                     <span class="banner__tag"># 로봇 제조</span>
                     <span class="banner__tag"># 로봇 교육</span>
                     <span class="banner__tag"># 로봇 컨설팅</span>
