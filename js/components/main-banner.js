@@ -13,7 +13,7 @@ class MainBanner extends HTMLElement {
                 <h1 class="banner__title">Robot is Easy, 이게 로보시지</h1>
                 <div class="banner__subtitle">
                     <p class="banner__subtitle-text">로봇이 더 쉽고, 더 가까워지도록.</p>
-                    <p class="banner__subtitle-text">우리는 제품·교육·기술을 통해 전국민의 Physical AI 접근성 향상에 기여합니다</p>
+                    <p class="banner__subtitle-text">우리는 제품·교육·기술을 통해 <br class="mobile-br">전국민의 Physical AI 접근성 향상에 기여합니다</p>
                 </div>
             </div>
         </a>
