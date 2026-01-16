@@ -494,9 +494,7 @@ body::before {
     }
 
     .header__nav-link--hackathon {
-        display: inline-block;
-        margin-top: 10px;
-        text-align: center;
+        display: none; /* 모바일에서 헤더의 해커톤 버튼 숨김 */
     }
 
     .header__logo-image {
