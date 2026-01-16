@@ -342,6 +342,10 @@ h2::after {
     z-index: 1;
 }
 
+.info-card p.indent {
+    padding-left: 0.6em;
+}
+
 /* 하이라이트 박스 (LeRobot 설명 등) */
 .highlight-box {
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
@@ -805,11 +809,6 @@ h2::first-letter {
 
     .info-card p {
         font-size: 1em;
-    }
-
-    /* 모바일에서 특정 텍스트에 들여쓰기 클래스 */
-    .info-card p.indent-mobile {
-        padding-left: 0.6em;
     }
 
     /* 트랙 카드 */
