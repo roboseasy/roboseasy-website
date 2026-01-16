@@ -1,4 +1,16 @@
 /******************************/
+/*** Mobile Hackathon Button ***/
+/******************************/
+
+.mobile-hackathon-section {
+    display: none; /* 데스크톱에서는 숨김 */
+}
+
+.mobile-shop-button {
+    display: none; /* 데스크톱에서는 숨김 */
+}
+
+/******************************/
 /*** Content Section Common ***/
 /******************************/
 
@@ -637,6 +649,78 @@
 
 /* 모바일 (768px 이하) */
 @media screen and (max-width: 768px) {
+    /* 모바일 해커톤 버튼 표시 */
+    .mobile-hackathon-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 80px 20px 0px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .mobile-hackathon-button {
+        display: inline-block;
+        width: 280px;
+        background: linear-gradient(135deg, #87CEEB, #FF69B4);
+        color: var(--color-primary);
+        font-size: 24px;
+        font-weight: var(--fw-bold);
+        padding: 20px 0;
+        border-radius: 50px;
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(135, 206, 235, 0.5);
+        transition: all 0.3s ease;
+        animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .mobile-hackathon-button:active {
+        transform: translateY(2px);
+        box-shadow: 0 4px 12px rgba(255, 105, 180, 0.5);
+    }
+
+    .mobile-shop-button {
+        display: inline-block;
+        width: 280px;
+        background: linear-gradient(135deg, #9D50BB, #6E48AA);
+        color: white;
+        font-size: 24px;
+        font-weight: var(--fw-bold);
+        padding: 20px 0;
+        border-radius: 50px;
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(157, 80, 187, 0.5);
+        transition: all 0.3s ease;
+        animation: pulse-glow-purple 2s ease-in-out infinite;
+    }
+
+    .mobile-shop-button:active {
+        transform: translateY(2px);
+        box-shadow: 0 4px 12px rgba(110, 72, 170, 0.5);
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% {
+            box-shadow: 0 8px 20px rgba(135, 206, 235, 0.5);
+        }
+        50% {
+            box-shadow: 0 8px 30px rgba(255, 105, 180, 0.6);
+        }
+    }
+
+    @keyframes pulse-glow-purple {
+        0%, 100% {
+            box-shadow: 0 8px 20px rgba(157, 80, 187, 0.5);
+        }
+        50% {
+            box-shadow: 0 8px 30px rgba(110, 72, 170, 0.6);
+        }
+    }
+
     .content-section {
         padding-top: 120px;
         padding-left: 16px;
@@ -771,6 +855,14 @@
 
 /* 작은 모바일 (480px 이하) */
 @media screen and (max-width: 480px) {
+    /* 모바일 버튼 크기 조정 */
+    .mobile-hackathon-button,
+    .mobile-shop-button {
+        width: 240px;
+        font-size: 20px;
+        padding: 16px 0;
+    }
+
     .content-section {
         padding-top: 100px;
     }
