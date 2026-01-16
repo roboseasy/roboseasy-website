@@ -122,6 +122,26 @@ body::before {
     width: 100%;
 }
 
+/* 해커톤 버튼 스타일 */
+.header__nav-link--hackathon {
+    background: linear-gradient(135deg, #87CEEB, #FF69B4);
+    color: var(--color-primary) !important;
+    border-radius: 20px;
+    padding: 8px 20px !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(135, 206, 235, 0.4);
+}
+
+.header__nav-link--hackathon:hover {
+    background: linear-gradient(135deg, #FF69B4, #87CEEB);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+}
+
+.header__nav-link--hackathon::before {
+    display: none;
+}
+
 /* 푸터 스타일 */
 .footer {
     background-color: var(--color-primary);
@@ -471,6 +491,12 @@ body::before {
 
     .header__nav-link::before {
         display: none;
+    }
+
+    .header__nav-link--hackathon {
+        display: inline-block;
+        margin-top: 10px;
+        text-align: center;
     }
 
     .header__logo-image {
