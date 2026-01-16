@@ -23,6 +23,7 @@ class MainHeader extends HTMLElement {
               <li class="header__nav-item"><a class="header__nav-link" target="_blank" href="https://forms.gle/r1A5JYj4dYZQJNoq8">Education</a></li>
               <li class="header__nav-item"><a class="header__nav-link" href="/programs">Programs</a></li>
               <li class="header__nav-item"><a class="header__nav-link" href="/news">News</a></li>
+              <li class="header__nav-item"><a class="header__nav-link header__nav-link--hackathon" href="/hackathon">해커톤 신청하기</a></li>
             </ul>
           </nav>
         </div>
