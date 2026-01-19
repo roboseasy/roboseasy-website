@@ -627,9 +627,15 @@
     }
 
     .instagram-feed__post:nth-child(3) {
-        grid-column: span 2;
-        max-width: 400px;
-        margin: 0 auto;
+        grid-column: 1 / 2;
+        grid-row: 2;
+        justify-self: center;
+    }
+
+    .instagram-feed {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        justify-items: center;
     }
 
     /* Community */
