@@ -1000,3 +1000,128 @@ h2::first-letter {
         font-size: 0.8em;
     }
 }
+
+/* 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 30px;
+    padding: 50px 40px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-emoji {
+    font-size: 4em;
+    margin-bottom: 20px;
+    animation: modal-emoji-bounce 1s ease-in-out infinite;
+}
+
+@keyframes modal-emoji-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.modal-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.modal-message {
+    font-size: 1.1em;
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.modal-message p {
+    margin-bottom: 10px;
+}
+
+.modal-close-btn {
+    display: inline-block;
+    padding: 16px 50px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+}
+
+.modal-close-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 40px 25px;
+        border-radius: 25px;
+    }
+
+    .modal-emoji {
+        font-size: 3em;
+    }
+
+    .modal-title {
+        font-size: 1.3em;
+    }
+
+    .modal-message {
+        font-size: 1em;
+    }
+
+    .modal-close-btn {
+        padding: 14px 40px;
+        font-size: 1em;
+        width: 100%;
+    }
+}
