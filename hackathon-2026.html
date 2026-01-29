@@ -21,7 +21,7 @@
             <div class="logo-badge">한성대학교 RISE사업단.SW중심대학사업단 x 로보시지</div>
             <h1>제1회 Physical AI 해커톤</h1>
             <p class="subtitle">국내 최초, 양팔 로봇을 활용한<br>Physical AI 해커톤</p>
-            <a href="javascript:void(0)" class="cta-button" onclick="alert('성원에 힘입어 해커톤 지원이 마감되었습니다 🙌\n지원해주신 모든 분들께 진심으로 감사드립니다 🙏\n다음 대회에서는 더 많은 분들과 함께할 수 있도록 준비하겠습니다 🚀')">참가 신청하기</a>
+            <a href="javascript:void(0)" class="cta-button" onclick="openModal()">참가 신청하기</a>
         </div>
     </header>
 
@@ -173,9 +173,22 @@
             <div class="cta-bottom">
                 <h2 style="color: white; justify-content: center; border:none;">지금 바로 도전하세요!</h2>
                 <p style="margin-bottom: 30px; opacity: 0.8;">미래 로보틱스 시장을 <br class="mobile-br">선도할 주인공은 여러분입니다.</p>
-                <a href="javascript:void(0)" class="cta-button" style="background: white; color: var(--primary-purple);" onclick="alert('성원에 힘입어 해커톤 지원이 마감되었습니다 🙌\n지원해주신 모든 분들께 진심으로 감사드립니다 🙏\n다음 대회에서는 더 많은 분들과 함께할 수 있도록 준비하겠습니다 🚀')">신청 폼 작성하기</a>
+                <a href="javascript:void(0)" class="cta-button" style="background: white; color: var(--primary-purple);" onclick="openModal()">신청 폼 작성하기</a>
             </div>
 
+        </div>
+    </div>
+
+    <!-- 마감 안내 모달 -->
+    <div class="modal-overlay" id="closedModal">
+        <div class="modal-content">
+            <div class="modal-emoji">🙌</div>
+            <h3 class="modal-title">성원에 힘입어<br>해커톤 지원이 마감되었습니다</h3>
+            <div class="modal-message">
+                <p>지원해주신 모든 분들께<br>진심으로 감사드립니다 🙏</p>
+                <p>다음 대회에서는 더 많은 분들과<br>함께할 수 있도록 준비하겠습니다 🚀</p>
+            </div>
+            <button class="modal-close-btn" onclick="closeModal()">확인</button>
         </div>
     </div>
 
@@ -226,6 +239,31 @@
         // 페이지 로드 시 부드러운 페이드인
         window.addEventListener('load', () => {
             document.body.style.animation = 'page-fade-in 0.5s ease-out';
+        });
+
+        // 모달 관련 함수
+        function openModal() {
+            document.getElementById('closedModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('closedModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // 모달 바깥 클릭 시 닫기
+        document.getElementById('closedModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeModal();
+            }
+        });
+
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
         });
     </script>
 
