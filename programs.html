@@ -56,7 +56,7 @@
                     <a href="#" class="program-card__button program-card__button--details" onclick="openProgramModal('motor-control'); return false;">
                         <i class="fas fa-info-circle"></i> 자세히 보기
                     </a>
-                    <a href="https://drive.google.com/file/d/1Z0206tEiYY2T9WQcm8-gJWm0G6NmCofJ/view" target="_blank" download class="program-card__button program-card__button--download">
+                    <a href="#" class="program-card__button program-card__button--download" onclick="return handleDownload('https://drive.google.com/file/d/1Z0206tEiYY2T9WQcm8-gJWm0G6NmCofJ/view');">
                         <i class="fas fa-download"></i> 다운로드
                     </a>
                 </div>
@@ -434,10 +434,27 @@
 
     <!-- 모달 스크립트 -->
     <script>
+        function isMobileOrTablet() {
+            return window.innerWidth <= 1024;
+        }
+
         function openProgramModal(programId) {
+            if (isMobileOrTablet()) {
+                alert('PC에서만 확인 가능합니다.');
+                return;
+            }
             const overlay = document.getElementById('programModalOverlay');
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
+        }
+
+        function handleDownload(url) {
+            if (isMobileOrTablet()) {
+                alert('PC에서만 확인 가능합니다.');
+                return false;
+            }
+            window.open(url, '_blank');
+            return false;
         }
 
         function closeProgramModal(event) {
