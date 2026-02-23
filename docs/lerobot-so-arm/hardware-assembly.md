@@ -152,6 +152,10 @@ lerobot-setup-motors \
 
 ## 4. 단계별 조립 가이드
 
+조립 전 아래 PDF 가이드를 참고하세요.
+
+<iframe src="../../docs/LeRobot%20SO-ARM101%20Assembly%20Guide.pdf#navpanes=0" width="100%" height="700px" style="border: 1px solid #ddd; border-radius: 8px;"></iframe>
+
 아래는 각 관절(Joint)별 조립 방법과 참고 동영상입니다.
 
 ### Joint 1 (베이스)
