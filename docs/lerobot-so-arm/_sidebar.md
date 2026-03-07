@@ -3,22 +3,21 @@
 * **LeRobot SO-ARM**
   * [소개](README.md)
 
-* **Getting Started**
-  * [조립 가이드](hardware-assembly.md)
+* **Setup**
+  * [조립 가이드](setup-hardware-assembly.md)
+  * [소프트웨어 설치](setup-software-installation.md)
+  * [USB 포트 고정 세팅](setup-hardware-usbport.md)
+  * [카메라 포트 고정 세팅](setup-hardware-cameraport.md)
 
-* **Setup 1 (추천)**
-  * [원터치 세팅](quick-setup.md)
+* **Start**
+  * [Calibration](start-calibration.md)
+  * [Teleoperation](start-teleoperation.md)
 
-
-* **Setup 2 (단계별 진행)**
-  * [소프트웨어 설치](software-installation.md)
-  * [USB 포트 고정](hardware-usbport.md)
-  * [카메라 포트 고정](hardware-camera.md)
-
-* **Guides**
-  * [Calibration](software-calibration.md)
-  * [Teleoperation](software-teleoperation.md)
-  * [Record & Replay](software-record-replay.md)
+* **Dataset**
+  * [Record](dataset-record.md)
+  * [Replay](dataset-replay.md)
+  * [Visualization](dataset-visualization.md)
+  * [Edit](dataset-edit.md)
 
 * **Policies**
   * [ACT](policy-act.md)
