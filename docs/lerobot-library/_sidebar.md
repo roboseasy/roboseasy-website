@@ -1,7 +1,5 @@
 <!-- _sidebar.md -->
 
-* [🏠 홈으로](https://roboseasy.netlify.app/documents)
-
 * **LeRobot Library**
   * [소개](README.md)
   * [시작하기](getting-started.md)
