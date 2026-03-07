@@ -89,52 +89,56 @@ Record & Replay 페이지를 참고하여 데이터셋을 수집하세요.
 ### 2. 학습
 
 ```bash
-export TASK_NAME="pick_and_place"
-export HF_USER="Your_HuggingFace_Account"
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
 ```
 
-#### 기본 설정
+<!-- tabs:start -->
+
+#### **기본 설정**
 
 ```bash
 # ACT 모델 학습 기본 설정
 lerobot-train \
   --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-  --policy.repo_id=${HF_USER}/${TASK_NAME} \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
   --policy.type=act \
   --policy.device=cuda \
-  --job_name=act_so101 \
+  --job_name=${TASK_NAME} \
   --output_dir=outputs/train/act_so101/${TASK_NAME} \
   --wandb.enable=true
 ```
 
-#### 추가 설정
+#### **추가 설정**
 
 ```bash
 # 추가 설정
 lerobot-train \
   --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-  --policy.repo_id=${HF_USER}/${TASK_NAME} \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
   --policy.type=act \
   --policy.device=cuda \
-  --job_name=act_so101 \
+  --job_name=${TASK_NAME} \
   --output_dir=outputs/train/act_so101/${TASK_NAME} \
-  --wandb.enable=true \
-  --batch_size=8 \
-  --steps=100_000 \
+  --steps=50_000 \
   --save_checkpoint=true \
-  --save_freq=10_000
+  --save_freq=10_000 \
+  --batch_size=8 \
+  --num_workers=8 \
+  --wandb.enable=true
 ```
 
-#### 학습 재개
+#### **학습 재개**
 
 ```bash
 # 학습 재개
 lerobot-train \
-  --config_path=outputs/train/act_so101/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
+  --config_path=outputs/train/so101/act/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
   --resume=true
 ```
 
-#### Accelerate (Multi-GPU)
+#### **Accelerate (Multi-GPU)**
 
 ```bash
 # Accelerate로 multi-gpu를 사용하여 학습
@@ -154,7 +158,9 @@ accelerate launch \
   --save_freq=10_000
 ```
 
-### 3. 평가 및 실행
+<!-- tabs:end -->
+
+### 3. 평가
 
 기본으로 제공되는 평가 및 실행 코드는 기본적으로 record 코드와 같습니다.
 
@@ -169,16 +175,19 @@ accelerate launch \
 또한, 만약 매 에피소드 별로 끊어지고 저장되는게 싫다면 에피소드 타임을 아주 길게 하면 됩니다.
 
 ```bash
-export TASK_NAME="pick_and_place"
-export HF_USER="Your_HuggingFace_Account"
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
 ```
 
-#### 기본 설정
+<!-- tabs:start -->
+
+#### **기본 설정**
 
 ```bash
 # 평가 및 실행 기본 설정
 lerobot-record \
-  --policy.path=${HF_USER}/${TASK_NAME} \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
   --robot.type=so101_follower \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
@@ -194,113 +203,55 @@ lerobot-record \
   --display_data=true
 ```
 
-#### 시간 늘리기
+#### **시간 늘리기**
 
 ```bash
 # 평가 및 실행 시간 설정을 길게 해서 끊기지 않고 반복 작업 수행
 lerobot-record \
-    --policy.path=${HF_USER}/${TASK_NAME} \
-    --robot.type=so101_follower \
-    --robot.port=/dev/so101_follower \
-    --robot.id=follower \
-    --robot.cameras='{
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
+  --robot.type=so101_follower \
+  --robot.port=/dev/so101_follower \
+  --robot.id=follower \
+  --robot.cameras='{
       top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
       wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
     }' \
-    --dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \
-    --dataset.single_task=eval_${TASK_NAME} \
-    --dataset.episode_time_s=100_000 \
-    --dataset.reset_time_s=1 \
-    --display_data=true
+  --dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \
+  --dataset.single_task=${TASK_NAME} \
+  --dataset.num_episodes=1 \
+  --dataset.episode_time_s=10000 \
+  --dataset.reset_time_s=1 \
+  --display_data=true
 ```
+
+<!-- tabs:end -->
 
 ### 4. 추론 및 실행
 
-async_inference에 필요한 의존성을 설치하세요:
+모델을 추론하기 위해서 `lerobot-record` 명령어를 사용하게 되면 옵션으로 정해준 episode_time_s 안에 수행하지 못하면 마지막 포지션에서 멈추어 연속적인 데모를 보여주지 못합니다. 
+
+또한, 매 에피소드 별로 데이터셋을 저장하기 때문에 실행할 때마다 저장된 데이터셋을 삭제해주어야하는 번거로움이 있습니다.
+
+이러한 문제들을 해결하기 위해 로보시지는 추론 코드를 따로 작성하여 사용하였습니다.
+
+해당 코드는 매 에피소드 별로 데이터셋을 저장하지 않으며, 에피소드 시간에 구애받지 않습니다.
+
+아래와 같은 명령어를 통해 연속적인 추론을 실행할 수 있습니다:
 
 ```bash
-pip install --upgrade pip setuptools wheel
-pip install -e ".[async]"
+lerobot-inference \
+  --robot.type=so101_follower \
+  --robot.port=/dev/so101_follower \
+  --robot.id=follower \
+  --robot.cameras='{
+      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
+  }' \
+  --policy.path=${HF_USER}/${TASK_NAME}_act \
+  --instruction="${TASK_DESCRIPTION}" \
+  --display_data=true
 ```
 
-이 명령은 다음 패키지들을 설치합니다:
-- `grpcio==1.73.1`
-- `protobuf==6.31.0`
-- `matplotlib>=3.10.3,<4.0.0`
-
-```bash
-export TASK_NAME="pick_and_place"
-export HF_USER="Your_HuggingFace_Account"
-```
-
-#### 4.1. Policy Server 실행 (GPU가 있는 서버)
-
-```bash
-python -m lerobot.async_inference.policy_server \
-    --host=127.0.0.1 \
-    --port=8080 \
-    --fps=25 \
-    --inference_latency=0.033 \
-    --obs_queue_timeout=1
-```
-
-#### 4.2. Robot Client 실행 (로봇이 연결된 PC)
-
-robot pc에서 어떤 모델을 사용하고 어떤 gpu를 사용할것인지 지정해줍니다.
-
-```bash
-python -m lerobot.async_inference.robot_client \
-    --robot.type=so101_follower \
-    --robot.port=/dev/so101_follower \
-    --robot.id=follower \
-    --robot.cameras='{
-        top: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
-        wrist: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 25},
-    }' \
-    --task=${TASK_NAME} \
-    --server_address=127.0.0.1:8080 \
-    --policy_type=act \
-    --pretrained_name_or_path=${HF_USER}/${TASK_NAME} \
-    --policy_device=cuda \
-    --actions_per_chunk=100 \
-    --chunk_size_threshold=0.5 \
-    --aggregate_fn_name=weighted_average \
-    --debug_visualize_queue_size=True
-```
-
-**참고**
-- 서버와 클라이언트가 같은 PC라면 둘 다 같은 환경에 설치하면 됩니다. 
-- 만약 다른 PC라면 각각에 `pip install -e ".[async]"` 를 실행해야 합니다.
-
----
-
-## SmolVLA와의 비교
-
-| 특징 | ACT | SmolVLA |
-|---------|---------|---------|
-| 자연어 명령 | ❌ 미지원 | ✅ 지원 |
-| 파라미터 수 | ~80M | 450M |
-| 학습 속도 | 빠름 | 느림 |
-| 정밀도 | 매우 높음 | 높음 |
-| 작업 특화성 | 단일 작업 | 다중 작업 |
-
----
-
-## 실제 성능
-
-### 검증된 작업들 (ALOHA 기준)
-
-- **배터리 삽입**: 90% 성공률
-- **벨크로 부착**: 85% 성공률
-- **물체 집어 담기**: 95% 성공률
-- **정밀 조립**: 80% 성공률
-
-> **성공** ✨ `SUCCESS` 
-> <br>**ACT 활용 시나리오**
->
-> - **정밀 조작**: 밀리미터 단위 정확도가 필요한 작업
-> - **빠른 학습**: 제한된 데이터로 높은 성능 달성
-> - **실시간 제어**: 100Hz 제어 루프 지원
 
 ---
 
@@ -313,4 +264,3 @@ python -m lerobot.async_inference.robot_client \
 
 ---
 
-*ACT는 Stanford의 Tony Z. Zhao 등이 개발했으며, LeRobot에서 최적화된 구현을 제공합니다.*

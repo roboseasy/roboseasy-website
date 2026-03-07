@@ -95,7 +95,9 @@ Camera#1:
 
 SO-ARM 두 대를 Ubuntu에서 USB로 연결한 환경 기준 예시입니다.
 
-### 기본 텔레옵 (카메라 없이)
+<!-- tabs:start -->
+
+#### **기본 텔레옵**
 
 ```bash
 # 카메라 없이 기본 텔레옵
@@ -109,7 +111,7 @@ lerobot-teleoperate \
   --display_data=false
 ```
 
-### 카메라 추가 설정
+#### **카메라 텔레옵**
 
 ```bash
 # 카메라 추가 설정
@@ -127,7 +129,7 @@ lerobot-teleoperate \
   --display_data=true
 ```
 
-### 카메라 고정 포트 설정
+#### **카메라 고정 포트 설정**
 
 ```bash
 # 카메라 포트 고정 설정 후 사용
@@ -144,6 +146,8 @@ lerobot-teleoperate \
   }' \
   --display_data=true
 ```
+
+<!-- tabs:end -->
 
 ---
 
