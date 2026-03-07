@@ -1,7 +1,5 @@
 <!-- _sidebar.md -->
 
-* [🏠 홈으로](https://roboseasy.netlify.app/documents)
-
 * **LeRobot SO-ARM**
   * [소개](README.md)
 
