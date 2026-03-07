@@ -161,6 +161,8 @@
     overflow: hidden;
     position: relative;
     z-index: 1;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .product-card__image {
