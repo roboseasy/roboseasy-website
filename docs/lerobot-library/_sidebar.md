@@ -2,11 +2,10 @@
 
 * **LeRobot Library**
   * [소개](README.md)
-  * [시작하기](getting-started.md)
 
-* **가이드**
-  * [로봇 선택 가이드](hardware-guide.md)
-  * [LeRobot 설치 가이드](software-installation.md)
+* **시작하기**
+  * [가상환경 세팅하기](virtual-env-setup.md)
+  * [라이브러리 설치하기](library-installation.md)
 
 ---
 
