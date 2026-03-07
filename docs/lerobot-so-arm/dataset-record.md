@@ -1,4 +1,6 @@
-# Record
+# Dataset Record
+
+데이터셋 기록(수집)하기
 
 ## 개요
 
@@ -161,10 +163,10 @@ export TASK_DESCRIPTION="Pick a ball and place"
 데이터 수집이 완료 후 곧바로 HuggingFace에서 자신의 데이터셋 레파지토리에
 데이터셋이 자동으로 업로드 됩니다.
 
-`--dataset.push_to_hub=false` 를 추가하면, 로컬 저장후, HuggingFace에 자동으로 업로드하지 않습니다.
 
+<!-- tabs:start -->
 
-### 자동 업로드 비활성화
+#### **자동 업로드 비활성화**
 
 ```bash
 # 데이터 수집 후 허깅페이스에 자동 업로드 비활성화
@@ -175,9 +177,9 @@ lerobot-record \
     --robot.type=so101_follower \
     --robot.port=/dev/so101_follower \
     --robot.id=follower \
-    --robot.cameras='{ 
-        top: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
-        wrist: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 25},
+    --robot.cameras='{
+        top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+        wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
     }' \
     --dataset.single_task=${TASK_NAME} \
     --dataset.repo_id=${HF_USER}/${TASK_NAME} \
@@ -188,10 +190,10 @@ lerobot-record \
     --dataset.push_to_hub=false
 ```
 
-### 자동 업로드 활성화
+#### **자동 업로드 활성화**
 
 ```bash
-# 데이터 수집 후 허깅페이스에 자동 업로드 비활성화
+# 데이터 수집 후 허깅페이스에 자동 업로드 활성화
 lerobot-record \
     --teleop.type=so101_leader \
     --teleop.port=/dev/so101_leader \
@@ -199,9 +201,9 @@ lerobot-record \
     --robot.type=so101_follower \
     --robot.port=/dev/so101_follower \
     --robot.id=follower \
-    --robot.cameras='{ 
-        top: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
-        wrist: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 25},
+    --robot.cameras='{
+        top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+        wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
     }' \
     --dataset.single_task=${TASK_NAME} \
     --dataset.repo_id=${HF_USER}/${TASK_NAME} \
@@ -211,6 +213,8 @@ lerobot-record \
     --display_data=true \
     --dataset.push_to_hub=true
 ```
+
+<!-- tabs:end -->
 
 **주요 Record 옵션 설명**
 
@@ -226,7 +230,7 @@ lerobot-record \
     -   `--dataset.repo_id`: HuggingFace Hub 데이터셋 이름 (`username/dataset_name`)
     -   `--dataset.single_task`: 작업에 대한 명확한 설명
     -   `--dataset.fps`: 데이터 수집 주파수 (기본값: 30Hz)
-    -   `--dataset.num_episodes=5`: 수집할 에피소드 수
+    -   `--dataset.num_episodes=10`: 수집할 에피소드 수
     -   `--dataset.episode_time_s=15`: 각 에피소드 녹화 시간 (기본값: 60초)
     -   `--dataset.reset_time_s=3`: 에피소드 간 리셋 시간 (기본값: 60초)
 4.  추가 옵션
@@ -285,42 +289,17 @@ print('Upload completed!')
 
 ---
 
-## Replay (재생)
+## 데이터셋 추가로 쌓기 (Resume)
 
-수집된 데이터를 사용하여 로봇이 동일한 작업을 재생하도록 할 수 있습니다.
+위 과정을 통해 10개의 에피소드를 수행하며, 데이터셋을 성공적으로 구축하셨을 겁니다. 
+어느 정도 감을 잡으셨다면, 이제 해당 Task의 데이터셋을 총 50개까지 늘려보겠습니다.
 
-### 특정 에피소드 Replay
+이때 단순히 CLI 명령어에서 `--dataset.num_episodes=50`으로 수정하여 실행하면 될까요? 아쉽게도 위에서 배운 CLI에서 num_episodes 값을 바꿔 실행하면 아래와 같은 오류 로그가 발생합니다. 
 
-```bash
-lerobot-replay \
-    --robot.type=so101_follower \
-    --robot.port=/dev/so101_follower \
-    --robot.id=follower \
-    --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-    --dataset.episode=0
-```
+오류 로그를 살펴보면, 이미 해당 repo_id로 데이터셋 이름이 있다고 뜹니다.
+이 오류를 해결하는 가장 단순한 방법은 로컬 경로 (`~/.cache/huggingface/lerobot/roboseasy/pick_and_place_after_deletion`)에 저장된 기존 데이터셋을 삭제하고 처음부터 다시 50개를 수집하는 것입니다. 
 
-> **팁** 💡`TIP`
-> <br>**주요 Replay 옵션 설명**
->
-> - `--dataset.repo_id`: 재생할 데이터셋 이름
-> - `--dataset.episode`: 재생할 특정 에피소드 번호 (0부터 시작)
-> - `--dataset.fps`: 재생 속도 조절 (기본값: 원본 데이터의 FPS)
-> - `--dataset.root`: 로컬 데이터셋 경로 (선택사항)
-> - `--play_sounds=true`: 음성 안내 활성화 (기본값)
-
-> **경고** ⚠️ `WARN`
-> <br>**Replay 주의사항**
->
-> - 재생 전 로봇 주변 환경이 녹화 시와 유사한지 확인하세요
-> - 로봇이 장애물과 충돌하지 않도록 안전한 공간을 확보하세요
-> - 비상시 Ctrl+C로 즉시 중단할 수 있도록 준비하세요
-
----
-
-## Resume (데이터셋 추가)
-
-데이터 수집 중 불가피한 상황으로 중단되거나, 기존 데이터셋에 더 많은 에피소드를 추가하고 싶을 때 `--resume=true` 옵션을 사용할 수 있습니다.
+하지만 지금까지 공들여 쌓은 데이터를 삭제하는 것은 매우 비효율적입니다. lerobot은 이러한 상황을 위해 기존 데이터에 이어서 새로운 에피소드를 추가할 수 있는 기능을 제공합니다. `--resume=true` 옵션을 추가하면, 아래와 같이 기존에 저장된 데이터셋 이후부터 학습 데이터를 이어서 쌓을 수 있습니다. 
 
 ### Resume 기본 사용법
 
@@ -335,15 +314,16 @@ lerobot-record \
     --robot.port=/dev/so101_follower \
     --robot.id=follower \
     --robot.cameras='{
-        top: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
-        wrist: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 25},
+        top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+        wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
     }' \
     --dataset.single_task=${TASK_NAME} \
     --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-    --dataset.num_episodes=5 \
+    --dataset.num_episodes=10 \
     --dataset.episode_time_s=15 \
     --dataset.reset_time_s=3 \
     --display_data=true \
+    --dataset.push_to_hub=false \
     --resume=true
 ```
 
@@ -351,7 +331,7 @@ lerobot-record \
 > <br>**Resume 사용 시 주의사항:**
 >
 > - `--dataset.num_episodes`는 **추가로 수집할** 에피소드 수를 입력합니다
-> - 5개를 추가 수집하려면 `--dataset.num_episodes=5`로 설정
+> - 10개를 추가 수집하려면 `--dataset.num_episodes=10`로 설정
 > - 모든 다른 설정(카메라, 태스크 등)은 기존과 동일하게 유지해야 합니다
 
 ### 키보드 단축키
@@ -376,186 +356,18 @@ lerobot-record \
 
 ---
 
-## Visualization (데이터셋 확인)
+## **HuggingFace LeRobot이 공식 제공하는 데이터 수집을 위한 팁!!**
 
-수집된 데이터를 시각적으로 확인하는 것은 데이터 품질 검증과 문제 진단에 매우 중요합니다.
-<br>허깅페이스 웹페이지를 통해 확인할 수도 있고, 
-<br>앞서 설치한 **Rerun**을 사용하여 수집 완료 후 데이터를 상세히 분석할 수 있습니다.
+데이터 기록에 익숙해졌다면 학습을 위한 더 큰 데이터셋을 만들 수 있습니다. 시작하기 좋은 작업은 물체를 여러 위치에서 집어 보관함에 넣는 것입니다. 최소 50개의 에피소드를 기록하고, 위치당 10개의 에피소드를 녹화할 것을 권장합니다. 기록하는 동안 카메라는 고정된 상태를 유지하고 일관된 집기 동작을 유지하세요. 또한 조작하는 물체가 카메라에 잘 보이는지 확인해야 합니다. 좋은 기준은 카메라 이미지만 보고도 스스로 작업을 수행할 수 있어야 한다는 것입니다.
 
-### 방법 1: HuggingFace 웹 플랫폼 사용하기
+다음 섹션에서는 신경망을 훈련하게 됩니다. 신뢰할 수 있는 집기 성능을 달성한 후에는 데이터 수집 중에 추가적인 집기 위치, 다른 집기 기술, 카메라 위치 변경과 같은 더 많은 변동성을 도입하기 시작할 수 있습니다.
 
-[HuggingFace 웹 플랫폼](https://huggingface.co/spaces/lerobot/visualize_dataset)
+급격하게 많은 변동성을 부여할 경우 결과 도출에 방해가 될 수 있으므로 피하도록 합니다.
 
-여기서 데이터셋을 업로드한 허깅페이스 레파지토리 ID를 입력합니다.
-
-### 방법 2: 로컬 시각화 (기본)
-
-가장 간단한 방법으로, 로컬 머신에서 즉시 Rerun 뷰어를 띄워 데이터를 확인합니다
-
-```bash
-lerobot-dataset-viz \
-    --repo-id=${HF_USER}/${TASK_NAME} \
-    --episode-index=0
-```
-
-이 명령어를 실행하면:
-1. 지정된 에피소드의 데이터를 로드
-2. 자동으로 Rerun 뷰어 창이 열림
-3. 카메라 영상, 로봇 액션, 상태 정보를 실시간으로 시각화
-
-> **팁** 💡`TIP`
-> <br>**로컬 시각화 권장 상황**
->
-> - 데이터가 로컬 머신에 저장되어 있을 때
-> - 빠른 확인이 필요할 때
-> - GUI 환경에서 작업할 때
-
-### 방법 3: 원격 시각화 (Distant Mode)
-
-서버에 데이터가 있고 로컬에서 확인하고 싶을 때 유용합니다:
-
-#### Step 1: 서버에서 시각화 서버 실행
-
-```bash
-lerobot-dataset-viz \
-    --repo-id=${HF_USER}/${TASK_NAME} \
-    --episode-index=0 \
-    --mode=distant \
-    --web-port=9090 \
-    --ws-port=9087
-```
-
-서버가 실행되면 다음과 같은 메시지가 표시됩니다:
-
-```plaintext
-100%|████████████████████| 12/12 [00:05<00:00,  2.06it/s]
-Serving at http://0.0.0.0:9090 (WebSocket at ws://0.0.0.0:9087)
-```
-
-#### Step 2: 로컬에서 Rerun 뷰어로 접속
-
-**같은 네트워크에 있는 경우:**
-
-```bash
-rerun ws://localhost:9087
-```
-
-**SSH 포트 포워딩을 사용하는 경우:**
-
-```bash
-# 1. SSH 터널 생성 (로컬 머신에서)
-ssh -L 9087:localhost:9087 username@remote-server
-
-# 2. 새 터미널에서 Rerun 실행
-rerun ws://localhost:9087
-```
-
-> **경고** ⚠️ `WARN`
-> <br>**Rerun 프로세스 충돌 해결**
->
-> 다음과 같은 오류가 발생하면:
-> ```plaintext
-> [WARN] The following URLs can't be passed to already open viewers yet
-> ```
->
-> 기존 Rerun 프로세스를 종료하고 다시 시도하세요:
-> ```bash
-> pkill -f rerun
-> rerun ws://localhost:9087
-> ```
-
-### 방법 4: 파일로 저장하여 시각화
-
-데이터를 `.rrd` 파일로 저장하여 나중에 확인하거나 공유할 수 있습니다:
-
-#### Step 1: .rrd 파일 생성
-
-```bash
-lerobot-dataset-viz \
-    --repo-id=${HF_USER}/${TASK_NAME} \
-    --episode-index=0 \
-    --save=1 \
-    --output-dir=./visualizations
-```
-
-이 명령어는 다음 경로에 파일을 생성합니다:
-
-```plaintext
-./visualizations/${HF_USER}_${TASK_NAME}_episode_0.rrd
-```
-
-#### Step 2: .rrd 파일 열기
-
-```bash
-rerun ./visualizations/${HF_USER}_${TASK_NAME}_episode_0.rrd
-```
-
-> **팁** 💡`TIP`
-> <br>**.rrd 파일의 장점**
->
-> - 네트워크 연결 없이 오프라인으로 확인 가능
-> - 다른 팀원과 파일 공유 가능
-> - 데이터 아카이빙 및 문서화에 유용
-
-### 주요 옵션 설명
-
-#### 필수 옵션
-- `--repo-id`: 시각화할 데이터셋의 HuggingFace 레포지토리 이름
-- `--episode-index`: 시각화할 에피소드 번호 (0부터 시작)
-
-#### 시각화 모드
-- `--mode`: 시각화 모드 선택
-  - `local` (기본값): 로컬에서 즉시 뷰어 실행
-  - `distant`: 원격 서버 모드로 실행
-
-#### 네트워크 포트
-- `--web-port`: 웹 브라우저 접속용 HTTP 포트 (기본값: 9090)
-- `--ws-port`: Rerun 뷰어 접속용 WebSocket 포트 (기본값: 9087)
-
-#### 파일 저장
-- `--save`: .rrd 파일로 저장 (0: 비활성화, 1: 활성화)
-- `--output-dir`: .rrd 파일 저장 경로
-
-#### 성능 조정
-- `--batch-size`: DataLoader 배치 크기 (기본값: 32)
-- `--num-workers`: DataLoader 워커 프로세스 수 (기본값: 4)
-- `--tolerance-s`: 타임스탬프 허용 오차 (기본값: 1e-4)
-
-### 로컬 데이터셋 시각화
-
-HuggingFace Hub 대신 로컬에 저장된 데이터셋을 시각화:
-
-```bash
-lerobot-dataset-viz \
-    --repo-id=${HF_USER}/${TASK_NAME} \
-    --root=./local_datasets \
-    --episode-index=0
-```
-
-### 데이터 품질 검증 체크리스트
-
-시각화를 통해 다음 사항들을 확인하세요:
-
-> **성공** ✨ `SUCCESS` 
-> <br>**확인해야 할 항목:**
->
-> - ✅ 카메라 영상이 선명하고 조명이 적절한가?
-> - ✅ 중요한 객체가 카메라 시야에 잘 들어오는가?
-> - ✅ 로봇 동작이 부드럽고 자연스러운가?
-> - ✅ 액션과 상태가 동기화되어 있는가?
-> - ✅ 에피소드가 성공적으로 완료되었는가?
-> - ✅ 비디오 압축 아티팩트가 학습에 영향을 줄 정도로 심한가?
-
-> **경고** ⚠️ `WARN`
-> <br>**주의해야 할 신호:**
->
-> - ❌ 블러(blur)가 심한 이미지
-> - ❌ 급격한 로봇 동작 변화
-> - ❌ 카메라 시야에서 벗어난 중요 객체
-> - ❌ 타임스탬프 불일치
-> - ❌ 노이즈가 많은 센서 데이터
+이 중요한 주제에 대해 더 자세히 알아보고 싶다면, 무엇이 좋은 데이터셋을 만드는지에 대해 저희가 작성한 블로그 포스트를 확인하실 수 있습니다.
 
 ---
+
 
 ## 일반적인 오류 해결
 

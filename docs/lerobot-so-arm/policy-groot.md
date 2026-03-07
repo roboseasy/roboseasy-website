@@ -46,45 +46,31 @@ GR00T N1.5는 Vision-Language-Action (VLA) 아키텍처를 기반으로:
 
 ## 프로세스
 
-### 1. 설치
+### 1. 환경 설정
 
-> **경고** ⚠️ `WARN`
-> <br>**Flash Attention 필수**
->
-> GR00T N1.5는 Flash Attention이 **필수**입니다.
->
-> **중요**: 반드시 아래 순서대로 설치해야 합니다:
-> 1. PyTorch 설치
-> 2. Flash Attention 설치
-> 3. LeRobot 설치
+현재 GR00T N1.5는 내부 작동을 위해 Flash Attention이 필요합니다.
 
-#### PyTorch 설치
+1.  [설치 가이드](https://notebooklm.google.com/notebook/installation)의 환경 설정을 따르십시오. 
+	- **[주의]** 이 단계에서 `lerobot`을 설치하지 마십시오.
+2.  다음을 실행하여 [Flash Attention](https://github.com/Dao-AILab/flash-attention)을 설치하십시오:
 
 ```bash
-# CUDA 12.1 기준
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# Check <https://pytorch.org/get-started/locally/> for your system
+
+pip install "torch>=2.2.1,<2.8.0" "torchvision>=0.21.0,<0.23.0" # --index-url <https://download.pytorch.org/whl/cu1XX>
+pip install ninja "packaging>=24.2,<26.0" # flash attention dependencies
+pip install "flash-attn>=2.5.9,<3.0.0" --no-build-isolation
+
+python -c "import flash_attn; print(f'Flash Attention {flash_attn.__version__} imported successfully')"
+
 ```
 
-#### Flash Attention 설치
+1.  [설치 가이드](https://notebooklm.google.com/notebook/installation)에 따라 LeRobot을 설치합니다.
+2.  다음 명령어를 실행하여 GR00T N1.5 의존성을 설치합니다:
 
 ```bash
-# Flash Attention 빌드 (시간이 오래 걸릴 수 있음)
-pip install flash-attn --no-build-isolation
-```
-
-> **팁** 💡`TIP`
-> <br>**Flash Attention 설치 팁**
->
-> - 빌드 시간: 약 10-30분 소요
-> - CUDA 11.8 이상 필요
-> - gcc 7 이상 필요
-> - 빌드 실패 시 CUDA 버전 확인
-
-#### LeRobot 설치
-
-```bash
-# GR00T N1.5 의존성 설치
-uv pip install -e ".[groot]"
+pip install lerobot[groot]
 ```
 
 ---
@@ -116,15 +102,18 @@ GR00T N1.5는 SmolVLA와 유사하게 자연어 명령 레이블링이 필요합
 GR00T N1.5는 사전 학습된 기반 모델을 파인튜닝하여 사용합니다.
 
 ```bash
-export TASK_NAME="pick_and_place"
-export HF_USER="Your_HuggingFace_Account"
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
 ```
 
-#### 기본 설정 (Single GPU)
+<!-- tabs:start -->
+
+#### **기본 설정 (Single GPU)**
 
 ```bash
 # GR00T N1.5 모델 학습 기본 설정
-CUDA_VISIBLE_DEVICES=0 lerobot-train \
+lerobot-train \
   --dataset.repo_id=${HF_USER}/${TASK_NAME} \
   --policy.repo_id=${HF_USER}/${TASK_NAME}_groot \
   --policy.path=nvidia/groot-n1.5-base \
@@ -135,11 +124,11 @@ CUDA_VISIBLE_DEVICES=0 lerobot-train \
   --rename_map='{"observation.images.top": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
 ```
 
-#### 추가 설정 (커스터마이징)
+#### **추가 설정 (커스터마이징)**
 
 ```bash
 # 추가 설정
-CUDA_VISIBLE_DEVICES=0 lerobot-train \
+lerobot-train \
   --dataset.repo_id=${HF_USER}/${TASK_NAME} \
   --policy.repo_id=${HF_USER}/${TASK_NAME}_groot \
   --policy.path=nvidia/groot-n1.5-base \
@@ -156,113 +145,112 @@ CUDA_VISIBLE_DEVICES=0 lerobot-train \
   --rename_map='{"observation.images.top": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
 ```
 
-> **경고** ⚠️ `WARN`
-> <br>**메모리 주의**
->
-> - GR00T N1.5는 3B 파라미터로 메모리 사용량이 큽니다
-> - 배치 크기 4 기준 약 24GB VRAM 필요
-> - 메모리 부족 시 배치 크기를 2로 줄이세요
 
-#### Multi-GPU 학습
-
-```bash
-# Accelerate로 multi-gpu 학습
-accelerate launch \
-  --num_processes=4 \
-  --multi_gpu \
-  $(which lerobot-train) \
-  --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-  --policy.repo_id=${HF_USER}/${TASK_NAME}_groot \
-  --policy.path=nvidia/groot-n1.5-base \
-  --job_name=groot_so101 \
-  --output_dir=outputs/train/groot_so101/${TASK_NAME} \
-  --wandb.enable=true \
-  --batch_size=16 \
-  --steps=50_000 \
-  --save_checkpoint=true \
-  --save_freq=5_000 \
-  --rename_map='{"observation.images.top": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
-```
-
-#### 학습 재개
+#### **학습 재개**
 
 ```bash
 # 학습 재개
-CUDA_VISIBLE_DEVICES=0 lerobot-train \
+lerobot-train \
   --config_path=outputs/train/groot_so101/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
   --resume=true
 ```
+
+<!-- tabs:end -->
 
 ---
 
 ### 4. 평가 및 실행
 
-#### 단일 팔 로봇
+기본으로 제공되는 평가 및 실행 코드는 기본적으로 record 코드와 같습니다.
+
+따라서 평가 에피소드를 실행하면 해당 에피소드는 데이터셋 record와 같이 저장됩니다.
+
+이때, 코드 자체에서 훈련 데이터셋과 평가 데이터셋을 구분하기 위해, 
+
+반드시 `--dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \` 이 옵션에서 `eval_` 을 붙여줘야 합니다.
+
+그렇지 않으면, 오류가 발생합니다.
+
+또한, 만약 매 에피소드 별로 끊어지고 저장되는게 싫다면 에피소드 타임을 아주 길게 하면 됩니다.
+
+```bash
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
+```
+
+<!-- tabs:start -->
+
+#### **기본 설정**
 
 ```bash
 # 평가 및 실행 기본 설정
 lerobot-record \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
   --robot.type=so101_follower \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
-  --robot.cameras='{\
-      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},\
-      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},\
-  }' \
-  --policy.path=${HF_USER}/groot_${TASK_NAME} \
+  --robot.cameras='{
+      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
+    }' \
   --dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \
-  --dataset.single_task="Pick up the red pen and place it in the pencil case" \
-  --dataset.num_episodes=10 \
-  --dataset.episode_time_s=30 \
-  --dataset.reset_time_s=5 \
+  --dataset.single_task=${TASK_NAME} \
+  --dataset.num_episodes=50 \
+  --dataset.episode_time_s=15 \
+  --dataset.reset_time_s=1 \
   --display_data=true
 ```
 
-#### 양팔 로봇 (Bimanual)
+#### **시간 늘리기**
 
 ```bash
-# 양팔 로봇 실행
+# 평가 및 실행 시간 설정을 길게 해서 끊기지 않고 반복 작업 수행
 lerobot-record \
-  --robot.type=so101_follower \
-  --robot.port=/dev/so101_follower_left \
-  --robot.id=follower_left \
-  --robot.type=so101_follower \
-  --robot.port=/dev/so101_follower_right \
-  --robot.id=follower_right \
-  --robot.cameras='{\
-      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},\
-      left_wrist: {type: opencv, index_or_path: /dev/cam_wrist_left, width: 640, height: 480, fps: 25},\
-      right_wrist: {type: opencv, index_or_path: /dev/cam_wrist_right, width: 640, height: 480, fps: 25},\
-  }' \
-  --policy.path=${HF_USER}/groot_${TASK_NAME}_bimanual \
-  --dataset.repo_id=${HF_USER}/eval_${TASK_NAME}_bimanual \
-  --dataset.single_task="Pick up the box with both hands and place it on the shelf" \
-  --dataset.num_episodes=10 \
-  --dataset.episode_time_s=30 \
-  --dataset.reset_time_s=5 \
-  --display_data=true
-```
-
-#### 연속 실행 모드
-
-```bash
-# 에피소드 타임을 길게 설정하여 연속 실행
-lerobot-record \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
   --robot.type=so101_follower \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
-  --robot.cameras='{\
-      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},\
-      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},\
-  }' \
-  --policy.path=${HF_USER}/groot_${TASK_NAME} \
+  --robot.cameras='{
+      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
+    }' \
   --dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \
-  --dataset.single_task="Continuously organize objects on the table" \
+  --dataset.single_task=${TASK_NAME} \
   --dataset.num_episodes=1 \
   --dataset.episode_time_s=10000 \
   --dataset.reset_time_s=1 \
   --display_data=true
 ```
+
+<!-- tabs:end -->
+
+### 4. 추론 및 실행
+
+모델을 추론하기 위해서 `lerobot-record` 명령어를 사용하게 되면 옵션으로 정해준 episode_time_s 안에 수행하지 못하면 마지막 포지션에서 멈추어 연속적인 데모를 보여주지 못합니다. 
+
+또한, 매 에피소드 별로 데이터셋을 저장하기 때문에 실행할 때마다 저장된 데이터셋을 삭제해주어야하는 번거로움이 있습니다.
+
+이러한 문제들을 해결하기 위해 로보시지는 추론 코드를 따로 작성하여 사용하였습니다.
+
+해당 코드는 매 에피소드 별로 데이터셋을 저장하지 않으며, 에피소드 시간에 구애받지 않습니다.
+
+아래와 같은 명령어를 통해 연속적인 추론을 실행할 수 있습니다:
+
+```bash
+lerobot-inference \
+  --robot.type=so101_follower \
+  --robot.port=/dev/so101_follower \
+  --robot.id=follower \
+  --robot.cameras='{
+      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
+  }' \
+  --policy.path=${HF_USER}/${TASK_NAME}_act \
+  --instruction="${TASK_DESCRIPTION}" \
+  --display_data=true
+```
+
 
 ---
 
@@ -329,83 +317,82 @@ lerobot-train \
 
 ---
 
-## 실제 성능
+### Google Colab을 사용하여 훈련하기
 
-### Libero 벤치마크 결과
+로컬 컴퓨터에 강력한 GPU가 없는 경우, [GR00T N1.5 학습 노트북](https://colab.research.google.com/github/huggingface/notebooks/blob/main/lerobot/training-smolvla.ipynb)을 따라 Google Colab을 활용하여 모델을 학습할 수 있습니다.
 
-> **성공** ✨ `SUCCESS` 
-> <br>**GR00T N1.5 성능 (NVIDIA 공식 결과)**
->
-> - **Libero-Spatial**: 92% 성공률
-> - **Libero-Object**: 88% 성공률
-> - **Libero-Goal**: 85% 성공률
-> - **Libero-Long**: 78% 성공률 (10단계 이상 작업)
+### 파인 튜닝 옵션
 
-### 복잡한 명령 처리 예시
+다음을 실행하여 파인 튜닝 옵션에 대한 전체 개요를 볼 수 있습니다:
 
-```python
-# 조건부 작업
-"If there is a red block, pick it up and place it in the basket. If not, pick up the blue one instead."
-
-# 순차적 다단계 작업
-"First, pick up the cup and fill it with water. Then, place it on the tray and move the tray to the table."
-
-# 상대적 위치 및 공간 추론
-"Stack the blocks in order of size, with the largest at the bottom and smallest on top."
-
-# 물체 속성 기반 작업
-"Find the heaviest object on the table and move it to the left corner."
+```bash
+lerobot-train --help
 ```
 
----
+## GR00T N1.5 평가
 
-## 문제 해결
+학습이 완료되면 `lerobot-record` 명령어를 사용하여 학습된 GR00T N1.5 모델의 정책을 평가할 수 있습니다. 이렇게 하면 추론이 실행되고 평가 에피소드가 기록됩니다:
 
-### 일반적인 이슈
+```bash
+lerobot-record \
+  --robot.type=so101_follower  \
+  --robot.port=/dev/so101_follower \
+  --robot.id=follower \
+  --robot.cameras='{
+  front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 25},
+  side: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
+  }' \
+  --policy.path=${HF_USER}/${TASK_NAME}_groot15 \
+  --dataset.repo_id=${HF_USER}/${TASK_NAME}_eval \
+  --dataset.single_task=${TASK_NAME}
+  --dataset.num_episodes=10 \
+  --dataset.episode_time_s=15 \
+  --dataset.reset_time_s=1 \
+  --display_data=true \
+```
 
-> **Flash Attention 설치 실패**
->
-> **증상**: `ModuleNotFoundError: No module named 'flash_attn'`
->
-> **해결책**:
-> ```bash
-> # CUDA 버전 확인
-> nvcc --version
->
-> # gcc 버전 확인 (7 이상 필요)
-> gcc --version
->
-> # Flash Attention 재설치
-> pip uninstall flash-attn
-> pip install flash-attn --no-build-isolation
-> ```
+## GR00T N1.5 추론
 
-> **CUDA Out of Memory**
->
-> **해결책**:
-> - 배치 크기를 4 → 2로 감소
-> - Gradient checkpointing 활성화
-> - Mixed precision training 사용 (자동 활성화됨)
-> - 더 적은 GPU 사용 또는 더 큰 GPU로 업그레이드
+모델을 추론하기 위해서 `lerobot-record` 명령어를 사용하게 되면 옵션으로 정해준 episode_time_s 안에 수행하지 못하면 마지막 포지션에서 멈추어 연속적인 데모를 보여주지 못합니다. 
 
-> **낮은 명령 이해도**
->
-> **해결책**:
-> - 더 다양한 자연어 표현으로 데이터 증강
-> - Instruction template 일관성 유지
-> - 파인튜닝 스텝을 50,000 → 100,000으로 증가
-> - Learning rate를 1e-5 → 5e-6으로 감소
+또한, 매 에피소드 별로 데이터셋을 저장하기 때문에 실행할 때마다 저장된 데이터셋을 삭제해주어야하는 번거로움이 있습니다.
 
-> **모델 다운로드 실패**
->
-> **해결책**:
-> ```bash
-> # HuggingFace 토큰 설정
-> huggingface-cli login
->
-> # 모델 수동 다운로드
-> huggingface-cli download nvidia/groot-n1.5-base
-> ```
+이러한 문제들을 해결하기 위해 로보시지는 추론 코드를 따로 작성하여 사용하였습니다.
+
+해당 코드는 매 에피소드 별로 데이터셋을 저장하지 않으며, 에피소드 시간에 구애받지 않습니다.
+
+아래와 같은 명령어를 통해 연속적인 추론을 실행할 수 있습니다:
+
+```bash
+lerobot-inference \
+  --robot.type=so101_follower \
+  --robot.port=/dev/so101_follower \
+  --robot.id=follower \
+  --robot.cameras='{
+  front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 25},
+  side: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
+  }' \
+  --policy.path=${HF_USER}/${TASK_NAME}_grootn15 \
+  --instruction="${TASK_DESCRIPTION}" \
+  --display_data=true
+```
+
+## **Performance Results**
+
+### **Libero Benchmark Results**
+
+[!참고] Libero 사용 지침을 따르십시오: [Libero](https://notebooklm.google.com/libero)
+
+GR00T는 Libero 벤치마크 제품군에서 강력한 성능을 입증했습니다. LeRobot 구현을 비교하고 테스트하기 위해, 우리는 GR00T N1.5 모델을 Libero 데이터세트에서 3만(30k) 스텝 동안 미세 조정하고 그 결과를 GR00T 참조 결과와 비교했습니다.
+
+| 벤치마크 | LeRobot 구현 | GR00T 참조 |
+| -- | -- | -- |
+| Libero Spatial | 82.0% | 92.0% |
+| Libero Object | 99.0% | 92.0% |
+| Libero Long | 82.0% | 76.0% |
+| 평균 | 87.0% | 87.0% |
+
+이러한 결과는 다양한 로봇 조작 작업 전반에 걸친 GR00T의 강력한 일반화 능력을 입증합니다. 이 결과를 재현하려면 [Libero](https://huggingface.co/docs/lerobot/libero) 섹션의 지침을 따를 수 있습니다.
 
 ---
 

@@ -49,7 +49,7 @@ SmolVLA는 다음과 같은 입력을 통합하여 처리합니다:
 
 ```bash
 # SmolVLA 의존성 설치
-uv pip install -e ".[smolvla]"
+pip install -e ".[smolvla]"
 ```
 
 ### 2. 데이터셋 준비
@@ -58,7 +58,7 @@ act 모델 학습을 위해 수집한 데이터셋과 달리,
 <br>` --dataset.single_task`에피소드를 명확한 자연어 명령 레이블링을 해주어야 합니다.
 
 <div class="card-grid">
-  <a href="#/software-record-replay" class="card">
+  <a href="#/dataset-record" class="card">
     <h3>📹 Record & Replay</h3>
     <p>SmolVLA 모델을 훈련시키기 위해 데이터셋을 수집합니다</p>
   </a>
@@ -72,62 +72,77 @@ act 모델 학습을 위해 수집한 데이터셋과 달리,
 > - 다양한 물체 위치와 상황 포함
 > - **명확한 자연어 명령 레이블링**
 
+### 학습 환경 설정
+학습을 위해서는 몇 가지 환경을 설정해주어야 합니다. 먼저, 학습의 결과물인 모델을 허깅페이스에 업로드하기 위해 허깅페이스에 로그인해줍니다:
+
+```bash
+hf auth login
+```
+
+다음은 학습할 모델에 대한 환경 변수를 설정해주어야 합니다:
+
+```bash
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
+```
+
+
 ### 3. 파인튜닝
 
 act 모델과 달리 사전 학습된 모델을 load해서 파인튜닝하기 때문에, 사전 학습된 모델이 필요합니다.
 
 해당 위치에 사전 학습된 모델이 없다면, 코드에서 자동으로 허깅페이스의 사전 학습된 모델을 다운로드 합니다.
 
-```bash
-export TASK_NAME="pick_and_place"
-export HF_USER="Your_HuggingFace_Account"
-```
+<!-- tabs:start -->
 
-#### 기본 설정
+#### **기본 설정**
 
 ```bash
 # SmolVLA 모델 학습 기본 설정
-CUDA_VISIBLE_DEVICES=0 lerobot-train \
-  --dataset.repo_id=${HF_USER}/${TASK_NAME}_aug \
+lerobot-train \
+  --dataset.repo_id=${HF_USER}/${TASK_NAME} \
   --policy.repo_id=${HF_USER}/${TASK_NAME}_smolvla \
-  --policy.path=roboseasy/smolvla_base \
+  --policy.type=smolvla \
+  --policy.pretrained_path=lerobot/smolvla_base \
   --policy.device=cuda \
-  --job_name=smolvla_so101 \
-  --output_dir=outputs/train/smolvla_so101/${TASK_NAME} \
-  --wandb.enable=true \
-  --rename_map='{"observation.images.top": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
+  --job_name=smolvla_so101  \
+  --output_dir=outputs/train/so101/smolvla/${TASK_NAME}
 ```
 
-#### 추가 설정
+#### **추가 설정**
 
 ```bash
 # 추가 설정
-CUDA_VISIBLE_DEVICES=0 lerobot-train \
+lerobot-train \
   --dataset.repo_id=${HF_USER}/${TASK_NAME} \
   --policy.repo_id=${HF_USER}/${TASK_NAME}_smolvla \
-  --policy.path=roboseasy/smolvla_base \
+  --policy.type=smolvla \
+  --policy.pretrained_path=lerobot/smolvla_base \
   --policy.device=cuda \
-  --policy.freeze_vision_encoder=false \
-  --job_name=smolvla_so101 \
-  --output_dir=outputs/train/smolvla_so101/${TASK_NAME} \
-  --wandb.enable=true \
-  --batch_size=8 \
-  --steps=100_000 \
+  --job_name=smolvla_so101  \
+  --output_dir=outputs/train/so101/smolvla/${TASK_NAME} \
+  --steps=50_000 \
   --save_checkpoint=true \
-  --save_freq=10_000 \
-  --rename_map='{"observation.images.top": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
+  --save_freq=5_000 \
+  --batch_size=8 \
+  --num_workers=8 \
+  --wandb.enable=true
 ```
 
-#### 학습 재개
+#### **학습 재개**
 
 ```bash
 # 학습 재개
-CUDA_VISIBLE_DEVICES=0 lerobot-train \
-  --config_path=outputs/train/smolvla_so101/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
+lerobot-train \
+  --config_path=outputs/train/so101/smolvla/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
   --resume=true
 ```
 
+<!-- tabs:end -->
+
 ### 4. 평가 및 실행
+
 
 기본으로 제공되는 평가 및 실행 코드는 기본적으로 record 코드와 같습니다.
 
@@ -142,11 +157,14 @@ CUDA_VISIBLE_DEVICES=0 lerobot-train \
 또한, 만약 매 에피소드 별로 끊어지고 저장되는게 싫다면 에피소드 타임을 아주 길게 하면 됩니다.
 
 ```bash
-export TASK_NAME="pick_and_place"
-export HF_USER="Your_HuggingFace_Account"
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
 ```
 
-#### 기본 설정
+<!-- tabs:start -->
+
+#### **기본 설정**
 
 ```bash
 # 평가 및 실행 기본 설정
@@ -160,14 +178,14 @@ lerobot-record \
   }' \
   --policy.path=${HF_USER}/smolvla_${TASK_NAME} \
   --dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \
-  --dataset.single_task="Pick up the red pen and place it in the pencil case" \
-  --dataset.num_episodes=10 \
+  --dataset.single_task=${TASK_NAME} \
+  --dataset.num_episodes=50 \
   --dataset.episode_time_s=15 \
   --dataset.reset_time_s=1 \
   --display_data=true
 ```
 
-#### 시간 늘리기
+#### **시간 늘리기**
 
 ```bash
 # 평가 및 실행 시간 설정을 길게 해서 끊기지 않고 반복 작업 수행
@@ -176,42 +194,48 @@ lerobot-record \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
   --robot.cameras='{
-      camera1: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
-      camera2: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 25},
-  }' \
+      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
+    }' \
   --policy.path=${HF_USER}/smolvla_${TASK_NAME} \
   --dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \
-  --dataset.single_task="Pick up the red pen and place it in the pencil case" \
+  --dataset.single_task=${TASK_NAME} \
   --dataset.num_episodes=1 \
   --dataset.episode_time_s=10000 \
   --dataset.reset_time_s=1 \
   --display_data=true
 ```
 
+<!-- tabs:end -->
+
 ---
+### 4. 추론 및 실행
 
-## 성능 최적화
+모델을 추론하기 위해서 `lerobot-record` 명령어를 사용하게 되면 옵션으로 정해준 episode_time_s 안에 수행하지 못하면 마지막 포지션에서 멈추어 연속적인 데모를 보여주지 못합니다. 
 
-### 학습 팁
+또한, 매 에피소드 별로 데이터셋을 저장하기 때문에 실행할 때마다 저장된 데이터셋을 삭제해주어야하는 번거로움이 있습니다.
 
-> **팁** 💡`TIP`
-> <br>**학습 시간 단축**
->
-> - **A100 GPU**: ~4시간 (20,000 steps)
-> - **RTX 3090**: ~8시간
-> - **배치 크기**: GPU 메모리에 따라 조정
+이러한 문제들을 해결하기 위해 로보시지는 추론 코드를 따로 작성하여 사용하였습니다.
 
-### 데이터 증강
+해당 코드는 매 에피소드 별로 데이터셋을 저장하지 않으며, 에피소드 시간에 구애받지 않습니다.
 
-```python
-# 다양한 자연어 표현 사용
-instructions = [
-    "Pick up the red block",
-    "Grab the red cube",
-    "Get the red object and put it in the basket",
-    "Move the red block to the container"
-]
+아래와 같은 명령어를 통해 연속적인 추론을 실행할 수 있습니다:
+
+```bash
+lerobot-inference \
+  --robot.type=so101_follower \
+  --robot.port=/dev/so101_follower \
+  --robot.id=follower \
+  --robot.cameras='{
+      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
+  }' \
+  --policy.path=${HF_USER}/smolvla_${TASK_NAME} \
+  --instruction="${TASK_DESCRIPTION}" \
+  --display_data=true
 ```
+
+
 
 ---
 
@@ -227,29 +251,6 @@ instructions = [
 
 ---
 
-## 실제 활용 예시
-
-### 복잡한 명령 처리
-
-```python
-# 조건부 작업
-"If there is a red block, pick it up, otherwise pick the blue one"
-
-# 순차적 작업
-"First pick up the cup, then place it on the shelf"
-
-# 상대적 위치
-"Move the object to the left of the basket"
-```
-
-> **성공** ✨ `SUCCESS` 
-> <br>**SmolVLA 활용 시나리오**
->
-> - **다양한 물체 조작**: 자연어로 유연한 작업 지시
-> - **멀티태스크 로봇**: 하나의 모델로 여러 작업 수행
-> - **인간-로봇 협업**: 직관적인 음성/텍스트 명령
-
----
 
 ## 문제 해결
 
@@ -279,5 +280,3 @@ instructions = [
 - [예제 노트북](https://github.com/huggingface/notebooks/blob/main/lerobot/smolvla_examples.ipynb)
 
 ---
-
-*SmolVLA는 지속적으로 개선되고 있습니다. 최신 업데이트는 [HuggingFace LeRobot](https://github.com/huggingface/lerobot) 저장소를 확인하세요.*
