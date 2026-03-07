@@ -1,13 +1,15 @@
-# Record & Replay
+# Record
 
 ## 개요
 
-Record & Replay는 로봇 학습의 핵심 과정으로, 
-<br>**텔레오퍼레이션을 통해 데이터를 수집(Record)** 하고 **수집된 데이터를 로봇이 재생(Replay)** 하는 기능입니다.
+Record 는 로봇 학습의 핵심 과정으로, 
+<br>**텔레오퍼레이션을 통해 데이터를 수집(Record)** 하는 기능입니다.
+
+데이터셋 구축은 로봇 학습의 핵심 과정으로, 텔레오퍼레이션을 통해 데이터(궤적 + 영상)를 수집(Record) 합니다.
 
 > **정보** ℹ️ `INFO`
 >
-> Record & Replay 과정을 통해 로봇은 인간의 시연을 학습하여 동일한 작업을 자율적으로 수행할 수 있게 됩니다.
+> Record 과정을 통해 로봇은 인간의 시연을 학습하여 동일한 작업을 자율적으로 수행할 수 있게 됩니다.
 
 ### 전체 워크플로우
 
@@ -28,7 +30,7 @@ Record & Replay는 로봇 학습의 핵심 과정으로,
 
 ## 준비 사항
 
-Record & Replay를 시작하기 전에 다음 사항들을 확인해주세요:
+`Record` 를 시작하기 전에 다음 사항들을 확인해주세요:
 
 ### 하드웨어 준비
 
@@ -46,7 +48,7 @@ Record & Replay를 시작하기 전에 다음 사항들을 확인해주세요:
 ```bash
 # 1. HuggingFace CLI 토큰으로 로그인
 hf auth login --add-to-git-credential --token YOUR_TOKEN_HERE
-# 예시: hf auth login --add-to-git-credential --token YOUR_HUGGINGFACE_TOKEN_HERE
+
 
 # 2. 로그인 확인 및 환경 변수 설정
 HF_USER=$(hf auth whoami | head -n 1)
@@ -125,14 +127,35 @@ pip install rerun-sdk
 
 ## Record (데이터 수집)
 
-### 카메라를 포함한 데이터 수집
+원격조작(Teleoperation)이 익숙해졌다면 데이터셋을 기록할 차례입니다
+
+고품질의 인공지능 모델을 만들기 위해서는 무턱대고 기록하기보다 아래와 같은 체계적인 계획을 세우는 것이 중요합니다.
+
+1. **Task 정의:** 로봇이 수행할 구체적인 목표를 정합니다. (예: 물건 들어 옮기기, 물체 박스에 넣기 등)
+2. **궤적 최적화 및 연습:** 정의한 Task를 가장 일관되고 효율적으로 수행할 수 있는 이동 경로(궤적)을 고민하고 충분히 연습합니다.
+3. **수행 시간 측정:** 일관된 동작으로 Task를 한 번 완료하는 데 소요되는 평균 시간을 확인합니다.
+4. **에피소드 간 준비 시간 확인:** 한 번의 Task를 마친 뒤, 다음 에피소드(데이터 수집)를 시작하기 위해 로봇과 환경을 초기 상태로 되돌리는 데 걸리는 시간을 체크합니다.
+
+이번 시간에는 인터넷 클라우드 업로드 없이, 아주 간단하게 에피소드 별 데이터셋을 쌓아보겠습니다.
+
+하나의 Task를 위해 최소 약 50개의 에피소드를 쌓아야 하지만, 우선 이번 시간에는 10개의 에피소드만 쌓아보겠습니다.
+
+시작하기 전 터미널에 아래와 같이 정보를 각각 입력하여 설정합니다. 
+- '허깅페이스 유저 이름'
+- '쌓을 데이터셋의 Task 이름 (=데이터셋 레포 이름)' 
+- '쌓을 데이터셋의 Task 설명'
+
+```bash
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
+```
+
+
+### CLI 사용법
 
 다음 데이터셋을 수집하는 코드입니다.
 
-```bash
-export TASK_NAME="pick_and_place"
-export HF_USER="your_username"
-```
 
 따로 HuggingFace 자동 업로드를 비활성화하지 않았다면,
 데이터 수집이 완료 후 곧바로 HuggingFace에서 자신의 데이터셋 레파지토리에
@@ -140,28 +163,6 @@ export HF_USER="your_username"
 
 `--dataset.push_to_hub=false` 를 추가하면, 로컬 저장후, HuggingFace에 자동으로 업로드하지 않습니다.
 
-### 자동 업로드
-
-```bash
-# 데이터 수집 후 허깅페이스에 자동 업로드
-lerobot-record \
-    --teleop.type=so101_leader \
-    --teleop.port=/dev/so101_leader \
-    --teleop.id=leader \
-    --robot.type=so101_follower \
-    --robot.port=/dev/so101_follower \
-    --robot.id=follower \
-    --robot.cameras='{
-        top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
-        wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
-    }' \
-    --dataset.single_task=${TASK_NAME} \
-    --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-    --dataset.num_episodes=45 \
-    --dataset.episode_time_s=15 \
-    --dataset.reset_time_s=3 \
-    --display_data=true
-```
 
 ### 자동 업로드 비활성화
 
@@ -174,41 +175,64 @@ lerobot-record \
     --robot.type=so101_follower \
     --robot.port=/dev/so101_follower \
     --robot.id=follower \
-    --robot.cameras='{
+    --robot.cameras='{ 
         top: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
         wrist: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 25},
     }' \
     --dataset.single_task=${TASK_NAME} \
     --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-    --dataset.num_episodes=45 \
+    --dataset.num_episodes=10 \
     --dataset.episode_time_s=15 \
     --dataset.reset_time_s=3 \
     --display_data=true \
     --dataset.push_to_hub=false
 ```
 
-> **팁** 💡`TIP`
-> <br>**주요 Record 옵션 설명**
->
-> 1. 로봇 설정
->    - `--robot.type=so101_follower`: 팔로워 로봇 타입
->    - `--robot.port=/dev/so101_follower`: 팔로워 로봇 포트
->    - `--robot.id=follower`: 팔로워 로봇 고유 ID
-> 2. 텔레오퍼레이션 설정
->    - `--teleop.type=so101_leader`: 리더 로봇 타입
->    - `--teleop.port=/dev/so101_leader`: 리더 로봇 포트
->    - `--teleop.id=leader`: 리더 로봇 고유 ID
-> 3. 데이터셋 설정
->    - `--dataset.repo_id`: HuggingFace Hub 데이터셋 이름 (`username/dataset_name`)
->    - `--dataset.num_episodes`: 수집할 에피소드 수
->    - `--dataset.single_task`: 작업에 대한 명확한 설명
->    - `--dataset.fps`: 데이터 수집 주파수 (기본값: 30Hz)
->    - `--dataset.episode_time_s`: 각 에피소드 녹화 시간 (기본값: 60초)
->    - `--dataset.reset_time_s`: 에피소드 간 리셋 시간 (기본값: 60초)
-> 4. 추가 옵션
->    - `--display_data=true`: 실시간 데이터 시각화
->    - `--dataset.push_to_hub=true`: HuggingFace Hub에 자동 업로드 (기본값)
->    - `--dataset.video=true`: 비디오 인코딩 활성화 (기본값)
+### 자동 업로드 활성화
+
+```bash
+# 데이터 수집 후 허깅페이스에 자동 업로드 비활성화
+lerobot-record \
+    --teleop.type=so101_leader \
+    --teleop.port=/dev/so101_leader \
+    --teleop.id=leader \
+    --robot.type=so101_follower \
+    --robot.port=/dev/so101_follower \
+    --robot.id=follower \
+    --robot.cameras='{ 
+        top: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
+        wrist: {type: opencv, index_or_path: 4, width: 640, height: 480, fps: 25},
+    }' \
+    --dataset.single_task=${TASK_NAME} \
+    --dataset.repo_id=${HF_USER}/${TASK_NAME} \
+    --dataset.num_episodes=10 \
+    --dataset.episode_time_s=15 \
+    --dataset.reset_time_s=3 \
+    --display_data=true \
+    --dataset.push_to_hub=true
+```
+
+**주요 Record 옵션 설명**
+
+1.  로봇 설정
+    -   `--robot.type=so101_follower`: 팔로워 로봇 타입
+    -   `--robot.port=/dev/so101_follower`: 팔로워 로봇 포트
+    -   `--robot.id=follower`: 팔로워 로봇 고유 ID
+2.  텔레오퍼레이션 설정
+    -   `--teleop.type=so101_leader`: 리더 로봇 타입
+    -   `--teleop.port=/dev/so101_leader`: 리더 로봇 포트
+    -   `--teleop.id=leader`: 리더 로봇 고유 ID
+3.  데이터셋 설정
+    -   `--dataset.repo_id`: HuggingFace Hub 데이터셋 이름 (`username/dataset_name`)
+    -   `--dataset.single_task`: 작업에 대한 명확한 설명
+    -   `--dataset.fps`: 데이터 수집 주파수 (기본값: 30Hz)
+    -   `--dataset.num_episodes=5`: 수집할 에피소드 수
+    -   `--dataset.episode_time_s=15`: 각 에피소드 녹화 시간 (기본값: 60초)
+    -   `--dataset.reset_time_s=3`: 에피소드 간 리셋 시간 (기본값: 60초)
+4.  추가 옵션
+    -   `--display_data=true`: 실시간 데이터 시각화 (기본값: false)
+    -  `--dataset.video=true`: 비디오 인코딩 활성화 (기본값: true)
+    -   `--dataset.push_to_hub=true`: HuggingFace Hub에 자동 업로드 (기본값: true)
 
 ### Record 과정
 
