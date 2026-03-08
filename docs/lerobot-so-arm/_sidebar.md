@@ -4,8 +4,8 @@
   * [소개](README.md)
 
 * **Setup**
-  * [조립 가이드](setup-hardware-assembly.md)
   * [소프트웨어 설치](setup-software-installation.md)
+  * [조립 가이드](setup-hardware-assembly.md)
   * [USB 포트 고정 세팅](setup-hardware-usbport.md)
   * [카메라 포트 고정 세팅](setup-hardware-cameraport.md)
 
