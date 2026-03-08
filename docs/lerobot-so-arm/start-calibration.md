@@ -45,7 +45,7 @@ Calibration을 시작하기 전에 다음 사항들을 확인해주세요:
 cd lerobot
 
 # 가상환경 활성화
-source .venv/bin/activate
+conda activate lerobot
 ```
 
 ## 1. Leader Arm Calibration

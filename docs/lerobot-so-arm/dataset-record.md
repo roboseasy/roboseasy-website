@@ -43,6 +43,15 @@ Record 는 로봇 학습의 핵심 과정으로,
 
 ### 소프트웨어 준비
 
+#### 0. 가상환경 활성화
+
+```bash
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
+```
+
 #### 1. HuggingFace 계정 설정
 
 먼저 HuggingFace 계정 설정과 환경 변수를 구성합니다:
@@ -147,10 +156,13 @@ pip install rerun-sdk
 - '쌓을 데이터셋의 Task 이름 (=데이터셋 레포 이름)' 
 - '쌓을 데이터셋의 Task 설명'
 
+### 가상환경 활성화
+
 ```bash
-export HF_USER="roboseasy" 
-export TASK_NAME="pick_and_place" 
-export TASK_DESCRIPTION="Pick a ball and place"
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
 ```
 
 
@@ -162,6 +174,12 @@ export TASK_DESCRIPTION="Pick a ball and place"
 따로 HuggingFace 자동 업로드를 비활성화하지 않았다면,
 데이터 수집이 완료 후 곧바로 HuggingFace에서 자신의 데이터셋 레파지토리에
 데이터셋이 자동으로 업로드 됩니다.
+
+```bash
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
+```
 
 
 <!-- tabs:start -->

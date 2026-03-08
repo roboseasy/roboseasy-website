@@ -44,6 +44,15 @@ export TASK_NAME="pick_and_place"
 export TASK_DESCRIPTION="Pick a ball and place"
 ```
 
+### 가상환경 활성화
+
+```bash
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
+```
+
 ### 1. 에피소드 삭제
 
 데이터셋에서 특정 에피소드를 제거합니다. 이는 원치 않는 데이터를 필터링하는 데 유용합니다.
