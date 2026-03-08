@@ -122,13 +122,13 @@ export TASK_DESCRIPTION="Pick a ball and place"
 # GR00T N1.5 모델 학습 기본 설정
 lerobot-train \
   --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-  --policy.repo_id=${HF_USER}/${TASK_NAME}_groot \
-  --policy.path=nvidia/groot-n1.5-base \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_grootn1.5 \
+  --policy.type=groot \
+  --policy.pretrained_path=
+  --policy.tune_diffusion_model=false \
   --policy.device=cuda \
-  --job_name=groot_so101 \
-  --output_dir=outputs/train/groot_so101/${TASK_NAME} \
-  --wandb.enable=true \
-  --rename_map='{"observation.images.top": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
+  --job_name=grootn15_so101 \
+  --output_dir=outputs/train/so101/grootn1.5/${TASK_NAME}
 ```
 
 #### **추가 설정 (커스터마이징)**
@@ -137,19 +137,19 @@ lerobot-train \
 # 추가 설정
 lerobot-train \
   --dataset.repo_id=${HF_USER}/${TASK_NAME} \
-  --policy.repo_id=${HF_USER}/${TASK_NAME}_groot \
-  --policy.path=nvidia/groot-n1.5-base \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_grootn1.5 \
+  --policy.type=groot \
+  --policy.pretrained_path=
+  --policy.tune_diffusion_model=false \
   --policy.device=cuda \
-  --policy.freeze_vision_encoder=false \
-  --job_name=groot_so101 \
-  --output_dir=outputs/train/groot_so101/${TASK_NAME} \
-  --wandb.enable=true \
-  --batch_size=4 \
-  --steps=50_000 \
+  --job_name=grootn15_so101 \
+  --output_dir=outputs/train/so101/grootn1.5/${TASK_NAME} \
+  --steps=100_000 \
   --save_checkpoint=true \
   --save_freq=5_000 \
-  --learning_rate=1e-5 \
-  --rename_map='{"observation.images.top": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
+  --batch_size=8 \
+  --num_workers=8 \
+  --wandb.enable=true
 ```
 
 
@@ -158,7 +158,7 @@ lerobot-train \
 ```bash
 # 학습 재개
 lerobot-train \
-  --config_path=outputs/train/groot_so101/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
+  --config_path=outputs/train/so101/grootn1.5/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
   --resume=true
 ```
 
@@ -193,7 +193,7 @@ export TASK_DESCRIPTION="Pick a ball and place"
 ```bash
 # 평가 및 실행 기본 설정
 lerobot-record \
-  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_grootn1.5 \
   --robot.type=so101_follower \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
@@ -214,7 +214,7 @@ lerobot-record \
 ```bash
 # 평가 및 실행 시간 설정을 길게 해서 끊기지 않고 반복 작업 수행
 lerobot-record \
-  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
+  --policy.repo_id=${HF_USER}/${TASK_NAME}_grootn1.5 \
   --robot.type=so101_follower \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
@@ -253,7 +253,7 @@ lerobot-inference \
       top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
       wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
   }' \
-  --policy.path=${HF_USER}/${TASK_NAME}_act \
+  --policy.path=${HF_USER}/${TASK_NAME}_grootn1.5 \
   --instruction="${TASK_DESCRIPTION}" \
   --display_data=true
 ```
@@ -349,7 +349,7 @@ lerobot-record \
   front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 25},
   side: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
   }' \
-  --policy.path=${HF_USER}/${TASK_NAME}_groot15 \
+  --policy.path=${HF_USER}/${TASK_NAME}_groot1.5 \
   --dataset.repo_id=${HF_USER}/${TASK_NAME}_eval \
   --dataset.single_task=${TASK_NAME}
   --dataset.num_episodes=10 \
@@ -379,7 +379,7 @@ lerobot-inference \
       top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
       wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
     }' \
-  --policy.path=${HF_USER}/${TASK_NAME}_grootn15 \
+  --policy.path=${HF_USER}/${TASK_NAME}_grootn1.5 \
   --instruction="${TASK_DESCRIPTION}" \
   --display_data=true
 ```

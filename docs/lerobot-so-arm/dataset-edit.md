@@ -35,22 +35,23 @@ lerobot-edit-dataset --help
 > `lerobot-edit-dataset` 는 매우 민감한 명령어이기 때문에 
 > `lerobot-edit-dataset` 에서  `--push_to_hub` 기본값은 `false` 입니다.
 
+
 ## 사용 예시
 
-```bash
-
-export HF_USER="roboseasy" 
-export TASK_NAME="pick_and_place" 
-export TASK_DESCRIPTION="Pick a ball and place"
-```
-
-### 가상환경 활성화
 
 ```bash
 cd lerobot
 
 # 가상환경 활성화
 conda activate lerobot
+```
+
+
+```bash
+
+export HF_USER="roboseasy" 
+export TASK_NAME="pick_and_place" 
+export TASK_DESCRIPTION="Pick a ball and place"
 ```
 
 ### 1. 에피소드 삭제

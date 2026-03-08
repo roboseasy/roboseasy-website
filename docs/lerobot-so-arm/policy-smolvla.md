@@ -132,7 +132,7 @@ lerobot-train \
   --output_dir=outputs/train/so101/smolvla/${TASK_NAME} \
   --steps=50_000 \
   --save_checkpoint=true \
-  --save_freq=5_000 \
+  --save_freq=10_000 \
   --batch_size=8 \
   --num_workers=8 \
   --wandb.enable=true
