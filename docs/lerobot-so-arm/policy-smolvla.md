@@ -48,6 +48,14 @@ SmolVLA는 다음과 같은 입력을 통합하여 처리합니다:
 ### 1. 설치
 
 ```bash
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
+```
+
+
+```bash
 # SmolVLA 의존성 설치
 pip install -e ".[smolvla]"
 ```

@@ -46,6 +46,13 @@ GR00T N1.5는 Vision-Language-Action (VLA) 아키텍처를 기반으로:
 
 ## 프로세스
 
+```bash
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
+```
+
 ### 1. 환경 설정
 
 현재 GR00T N1.5는 내부 작동을 위해 Flash Attention이 필요합니다.
@@ -369,9 +376,9 @@ lerobot-inference \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
   --robot.cameras='{
-  front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 25},
-  side: {type: opencv, index_or_path: 2, width: 640, height: 480, fps: 25},
-  }' \
+      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
+      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
+    }' \
   --policy.path=${HF_USER}/${TASK_NAME}_grootn15 \
   --instruction="${TASK_DESCRIPTION}" \
   --display_data=true

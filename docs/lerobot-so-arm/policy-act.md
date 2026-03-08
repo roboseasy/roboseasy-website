@@ -88,6 +88,14 @@ Record & Replay 페이지를 참고하여 데이터셋을 수집하세요.
 
 ### 2. 학습
 
+
+```bash
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
+```
+
 ```bash
 export HF_USER="roboseasy" 
 export TASK_NAME="pick_and_place" 
@@ -246,7 +254,7 @@ lerobot-inference \
   --robot.cameras='{
       top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
       wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
-  }' \
+    }' \
   --policy.path=${HF_USER}/${TASK_NAME}_act \
   --instruction="${TASK_DESCRIPTION}" \
   --display_data=true

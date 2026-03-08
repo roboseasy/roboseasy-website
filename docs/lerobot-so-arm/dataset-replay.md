@@ -8,6 +8,15 @@
 
 수집된 데이터를 사용하여 로봇이 동일한 작업을 재생하도록 할 수 있습니다.
 
+### 가상환경 활성화
+
+```bash
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
+```
+
 ### CLI 사용법
 
 ```bash

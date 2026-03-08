@@ -22,6 +22,14 @@
 
 명령줄 도구를 사용하여 로컬에서 데이터셋의 에피소드를 시각화할 수도 있습니다:
 
+
+```bash
+cd lerobot
+
+# 가상환경 활성화
+conda activate lerobot
+```
+
 ```bash
 
 export HF_USER="roboseasy" 
