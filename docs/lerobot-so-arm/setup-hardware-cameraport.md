@@ -98,7 +98,7 @@ KERNELS=="1-2:1.0"
 이제 확인한 KERNELS 값을 기반으로, 고정된 심볼릭 링크(/dev/cam_top, /dev/cam_wrist)를 생성합니다.
 
 ```bash
-sudo nano /etc/udev/rules.d/99-camera.rules
+sudo nano /etc/udev/rules.d/99-serial.rules
 ```
 
 다음 내용을 추가합니다:
