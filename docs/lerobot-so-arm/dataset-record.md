@@ -256,6 +256,32 @@ lerobot-record \
     -  `--dataset.video=true`: 비디오 인코딩 활성화 (기본값: true)
     -   `--dataset.push_to_hub=true`: HuggingFace Hub에 자동 업로드 (기본값: true)
 
+
+### Rerun 캐쉬 삭제 
+
+종종 카메라 이름이 바뀌거나 관절의 이름이 바뀌었음에도 rerun.io에서 즉시 적용되지 않아, 해당 데이터 시각화가 안보이는 경우가 있습니다.
+
+그런 경우 rerun.io관한 캐시를 삭제해주세요.
+
+1. 녹화 폴더의 캐시 삭제 
+
+```bash
+rm -rf outputs/recordings/*
+
+```
+
+또는
+
+2. 캐시 초기화 
+
+```bash
+rm -rf ~/.cache/rerun
+
+```
+
+둘 중 하나만 하면 됩니다.
+
+
 ### Record 과정
 
 1. **명령어 실행**
