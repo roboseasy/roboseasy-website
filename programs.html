@@ -85,343 +85,230 @@
         </div>
     </section>
 
-    <!-- 프로그램 상세 모달 -->
+    <!-- 프로그램 상세 모달 — Motor Control GUI -->
     <div class="program-modal-overlay" id="programModalOverlay" onclick="closeProgramModal(event, 'motor-control')">
         <div class="program-modal" id="programModal">
             <button class="program-modal__close" onclick="closeProgramModal(null, 'motor-control')">
                 <i class="fas fa-times"></i>
             </button>
-
             <div class="program-modal__content">
-                <!-- 상단: 이미지 + 정보 -->
                 <div class="program-modal__header">
-                    <!-- 왼쪽: 프로그램 이미지 -->
                     <div class="program-modal__image-section">
                         <img src="img/motor-control-gui.png" alt="모터 제어 GUI" class="program-modal__image" id="modalImage">
                     </div>
-
-                    <!-- 오른쪽: 프로그램 정보 -->
                     <div class="program-modal__info-section">
-                        <span class="program-modal__badge">
-                            <i class="fas fa-robot"></i> RobosEasy
-                        </span>
-                        <h2 class="program-modal__title" id="modalTitle">모터 제어 GUI</h2>
-                        <p class="program-modal__subtitle" id="modalSubtitle">
-                            So-Arm의 Feetech 모터를 실시간으로 모니터링하고 직접 제어할 수 있는 그래픽 인터페이스입니다.
-                            모터 불량 테스트, 위치/속도/토크 제어, 온도 모니터링 등 다양한 기능을 제공합니다.
-                        </p>
+                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
+                        <h2 class="program-modal__title" id="modalTitle">Motor Control GUI</h2>
+                        <p class="program-modal__subtitle" id="modalSubtitle">Feetech STS3215 모터를 실시간 모니터링하고 직접 제어하는 그래픽 인터페이스. 모터 불량 테스트, 위치·속도·토크 제어, 온도 모니터링을 지원합니다.</p>
                         <a href="https://drive.google.com/file/d/1Z0206tEiYY2T9WQcm8-gJWm0G6NmCofJ/view" target="_blank" class="program-modal__download-btn" id="modalDownloadBtn">
                             <i class="fas fa-download"></i> AppImage 다운로드
                         </a>
                     </div>
                 </div>
-
-                <!-- 하단: 상세 내용 -->
-                <div class="program-modal__body">
-                    <!-- 주요 특징 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-check-double"></i> 주요 특징
-                    </h3>
-                    <div class="program-modal__highlights">
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 단일 파일 실행</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 직관적인 인터페이스</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 실시간 모니터링</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 안전한 제어</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 모든 Linux 배포판 지원</span>
-                    </div>
-
-                    <!-- 주요 기능 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-star"></i> 주요 기능
-                    </h3>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-check-circle"></i> 모터 불량 테스트
+                <!-- 탭 네비게이션 -->
+                <div class="modal-tabs">
+                    <button class="modal-tab modal-tab--active" onclick="switchModalTab(this, '기능')">주요 기능</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '설정')">시스템 설정</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '사용법')">GUI 사용법</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '문제해결')">문제 해결</button>
+                </div>
+                <div class="modal-tab-panels">
+                    <!-- 탭 1: 주요 기능 -->
+                    <div class="modal-tab-panel modal-tab-panel--active" data-tab="기능">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-badge-row">
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 직관적인 인터페이스</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 모니터링</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 안전한 제어</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 모든 Linux 배포판 지원</span>
                             </div>
-                            <p class="program-modal__feature-desc">
-                                각 모터의 동작 상태를 개별적으로 확인하여 고장 여부를 조기에 발견할 수 있습니다.
-                            </p>
                         </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-chart-line"></i> 실시간 모니터링
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                현재 위치, 속도, 토크, 온도 등의 값을 실시간으로 확인할 수 있습니다.
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-sliders-h"></i> 직접 제어
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                텔레오퍼레이션 없이 슬라이더를 통해 모터를 직접 제어하여 동작 범위를 확인합니다.
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-bug"></i> 디버깅 지원
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                이상 동작 발생 시 원인 파악을 위한 상세 정보를 확인할 수 있습니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 시스템 준비 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-tools"></i> 시스템 준비
-                    </h3>
-                    <div class="program-modal__steps">
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">1</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">FUSE 설치</div>
-                                <p class="program-modal__step-desc">AppImage를 실행하려면 FUSE가 필요합니다.</p>
-                                <div class="program-modal__code-block">
-                                    <code>sudo apt-get update && sudo apt-get install -y fuse libfuse2</code>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-bolt"></i> 핵심 기능</div>
+                            <div class="modal-feature-grid">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-check-circle"></i></div>
+                                    <div class="modal-feature-card__title">모터 불량 테스트</div>
+                                    <div class="modal-feature-card__desc">각 모터를 개별 점검하여 고장 여부를 조기에 발견합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-line"></i></div>
+                                    <div class="modal-feature-card__title">실시간 모니터링</div>
+                                    <div class="modal-feature-card__desc">위치·속도·토크·온도 값을 실시간으로 확인합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-sliders-h"></i></div>
+                                    <div class="modal-feature-card__title">직접 제어</div>
+                                    <div class="modal-feature-card__desc">슬라이더로 모터를 직접 제어하여 동작 범위를 확인합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-bug"></i></div>
+                                    <div class="modal-feature-card__title">디버깅 지원</div>
+                                    <div class="modal-feature-card__desc">이상 동작 발생 시 원인 파악을 위한 상세 정보를 제공합니다.</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">2</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">USB 포트 권한 설정</div>
-                                <p class="program-modal__step-desc">모터를 USB로 연결하여 제어하려면 사용자를 dialout 그룹에 추가해야 합니다.</p>
-                                <div class="program-modal__code-block">
-                                    <code>sudo chmod 666 /dev/ttyACM0<br>sudo chmod 666 /dev/ttyACM1<br>sudo usermod -aG dialout $USER</code>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-tachometer-alt"></i> 실시간 모니터링 항목</div>
+                            <div class="modal-kv-grid">
+                                <div class="modal-kv"><i class="fas fa-compass"></i><div class="modal-kv__label">Position</div><div class="modal-kv__value">현재 각도</div></div>
+                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label">Speed</div><div class="modal-kv__value">회전 속도</div></div>
+                                <div class="modal-kv"><i class="fas fa-weight-hanging"></i><div class="modal-kv__label">Load</div><div class="modal-kv__value">현재 부하</div></div>
+                                <div class="modal-kv"><i class="fas fa-thermometer-half"></i><div class="modal-kv__label">Temperature</div><div class="modal-kv__value">모터 온도</div></div>
+                            </div>
+                        </div>
+                        <div class="modal-callout modal-callout--warning">
+                            <i class="fas fa-fire modal-callout__icon"></i>
+                            <div><div class="modal-callout__title">과열 주의</div><p class="modal-callout__text">모터 온도가 <strong>70°C 이상</strong>이면 즉시 정지 후 냉각하세요.</p></div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 2: 시스템 설정 -->
+                    <div class="modal-tab-panel" data-tab="설정">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-terminal"></i> 실행 전 설정</div>
+                            <div class="modal-timeline">
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">1</div>
+                                    <div class="modal-timeline__body">
+                                        <div class="modal-timeline__title">FUSE 설치</div>
+                                        <div class="modal-timeline__desc">AppImage 실행에 필요한 FUSE를 설치합니다.</div>
+                                        <div class="modal-code"><code>sudo apt-get update && sudo apt-get install -y fuse libfuse2</code></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">3</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">실행 권한 부여 및 실행</div>
-                                <p class="program-modal__step-desc">다운로드한 AppImage 파일에 실행 권한을 부여한 후 실행합니다.</p>
-                                <div class="program-modal__code-block">
-                                    <code>chmod +x RobosEasyMotorControl.AppImage<br>./RobosEasyMotorControl.AppImage</code>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">2</div>
+                                    <div class="modal-timeline__body">
+                                        <div class="modal-timeline__title">USB 포트 권한 설정</div>
+                                        <div class="modal-timeline__desc">사용자를 dialout 그룹에 추가합니다.</div>
+                                        <div class="modal-code"><code>sudo chmod 666 /dev/ttyACM0
+sudo chmod 666 /dev/ttyACM1
+sudo usermod -aG dialout $USER</code></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 재로그인 주의 -->
-                    <div class="program-modal__callout program-modal__callout--warning">
-                        <i class="fas fa-exclamation-triangle program-modal__callout-icon"></i>
-                        <div class="program-modal__callout-content">
-                            <div class="program-modal__callout-title">재로그인 필수</div>
-                            <p class="program-modal__callout-text">
-                                USB 포트 권한 설정 후에는 <strong>로그아웃했다가 다시 로그인</strong>해야 권한이 적용됩니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- GUI 사용 방법 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-desktop"></i> GUI 사용 방법
-                    </h3>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-plug"></i> 모터 연결
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li>Feetech 모터를 USB-TTL 어댑터로 PC에 연결</li>
-                                    <li>GUI 상단의 Port 드롭다운에서 USB 포트 선택 (예: /dev/ttyUSB0)</li>
-                                    <li>"Connect" 버튼을 클릭하여 모터와 연결</li>
-                                </ul>
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-gamepad"></i> 모터 제어
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li><strong>모터 ID 설정</strong>: 제어할 모터의 ID 입력 (1-253)</li>
-                                    <li><strong>위치 제어</strong>: Position 슬라이더로 목표 위치 설정</li>
-                                    <li><strong>속도 제어</strong>: Speed 슬라이더로 회전 속도 조정</li>
-                                    <li><strong>토크 제어</strong>: Torque 슬라이더로 출력 토크 제한</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 실시간 모니터링 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-tachometer-alt"></i> 실시간 모니터링 항목
-                    </h3>
-                    <div class="program-modal__monitor-grid">
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-compass"></i>
-                            <div class="program-modal__monitor-label">Position</div>
-                            <div class="program-modal__monitor-value">현재 각도</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <div class="program-modal__monitor-label">Speed</div>
-                            <div class="program-modal__monitor-value">회전 속도</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-weight-hanging"></i>
-                            <div class="program-modal__monitor-label">Load</div>
-                            <div class="program-modal__monitor-value">현재 부하</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-thermometer-half"></i>
-                            <div class="program-modal__monitor-label">Temperature</div>
-                            <div class="program-modal__monitor-value">모터 온도</div>
-                        </div>
-                    </div>
-
-                    <!-- 과열 주의 -->
-                    <div class="program-modal__callout program-modal__callout--warning">
-                        <i class="fas fa-fire program-modal__callout-icon"></i>
-                        <div class="program-modal__callout-content">
-                            <div class="program-modal__callout-title">과열 주의</div>
-                            <p class="program-modal__callout-text">
-                                모터 온도가 <strong>70°C 이상</strong>으로 올라가면 과열 상태입니다. 즉시 모터를 정지시키고 냉각시켜야 합니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 모터 불량 테스트 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-stethoscope"></i> 모터 불량 테스트
-                    </h3>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-list-ol"></i> 개별 모터 테스트
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li>모터 ID를 1부터 순차적으로 입력</li>
-                                    <li>Position 슬라이더를 천천히 움직여 정상 반응 확인</li>
-                                    <li>이상한 소음이나 진동 발생 여부 점검</li>
-                                    <li>온도가 비정상적으로 높지 않은지 확인</li>
-                                </ul>
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-exclamation-circle"></i> 불량 증상
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li><strong>응답 없음</strong>: 명령을 보내도 모터가 전혀 움직이지 않음</li>
-                                    <li><strong>불규칙한 움직임</strong>: 모터가 떨리거나 갑자기 멈춤</li>
-                                    <li><strong>과도한 발열</strong>: 정상 작동 시에도 온도가 급격히 상승</li>
-                                    <li><strong>이상한 소음</strong>: 기어 마모나 베어링 손상으로 인한 소음</li>
-                                    <li><strong>위치 오차</strong>: 목표 위치와 실제 위치의 차이가 큼</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 불량 모터 경고 -->
-                    <div class="program-modal__callout" style="background: #fef2f2; border-left-color: #dc2626;">
-                        <i class="fas fa-times-circle program-modal__callout-icon" style="color: #dc2626;"></i>
-                        <div class="program-modal__callout-content">
-                            <div class="program-modal__callout-title">불량 모터 발견 시</div>
-                            <p class="program-modal__callout-text">
-                                불량 모터를 발견했다면 즉시 사용을 중지하고 교체해야 합니다. 불량 모터를 계속 사용하면 다른 부품까지 손상될 수 있습니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 문제 해결 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-wrench"></i> 문제 해결
-                    </h3>
-                    <div class="program-modal__troubleshoot">
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">FUSE 오류 발생</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p><strong>증상:</strong> dlopen(): error loading libfuse.so.2 / AppImages require FUSE to run.</p>
-                                    <p><strong>해결:</strong> FUSE를 설치하세요.</p>
-                                    <div class="program-modal__code-block">
-                                        <code>sudo apt-get install -y fuse libfuse2</code>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">3</div>
+                                    <div class="modal-timeline__body">
+                                        <div class="modal-timeline__title">실행 권한 부여 및 실행</div>
+                                        <div class="modal-timeline__desc">AppImage 파일에 실행 권한을 주고 실행합니다.</div>
+                                        <div class="modal-code"><code>chmod +x RobosEasyMotorControl.AppImage
+./RobosEasyMotorControl.AppImage</code></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">모터를 찾을 수 없음</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p><strong>증상:</strong> "No serial ports found" 또는 "Permission denied" 오류</p>
-                                    <p><strong>해결:</strong></p>
-                                    <div class="program-modal__code-block">
-                                        <code>sudo usermod -aG dialout $USER<br># 로그아웃 후 다시 로그인<br><br># 모터 연결 확인<br>ls -l /dev/ttyUSB* /dev/ttyACM*</code>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="modal-callout modal-callout--warning">
+                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <div><div class="modal-callout__title">재로그인 필수</div><p class="modal-callout__text">USB 포트 권한 설정 후 <strong>로그아웃 → 재로그인</strong>해야 권한이 적용됩니다.</p></div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">프로그램이 실행되지 않음</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p><strong>방법 1:</strong> 추출 모드로 실행</p>
-                                    <div class="program-modal__code-block">
-                                        <code>./RobosEasyMotorControl.AppImage --appimage-extract<br>cd squashfs-root<br>./AppRun</code>
-                                    </div>
-                                    <p><strong>방법 2:</strong> 실행 권한 확인</p>
-                                    <div class="program-modal__code-block">
-                                        <code>chmod +x RobosEasyMotorControl.AppImage</code>
-                                    </div>
-                                </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-spec-list">
+                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-box"></i><span class="modal-spec-item__label">필수 패키지</span><span class="modal-spec-item__value">FUSE 2.x (libfuse2)</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상, 저장공간 5GB 이상</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, Feetech 모터 및 USB-TTL 어댑터</span></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 시스템 요구사항 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-cog"></i> 시스템 요구사항
-                    </h3>
-                    <div class="program-modal__requirements">
-                        <div class="program-modal__requirements-grid">
-                            <div class="program-modal__requirement">
-                                <i class="fab fa-linux"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">운영체제</div>
-                                    <div class="program-modal__requirement-value">Linux (Ubuntu 20.04 이상 권장)</div>
+                    <!-- 탭 3: GUI 사용법 -->
+                    <div class="modal-tab-panel" data-tab="사용법">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-plug"></i> 모터 연결</div>
+                            <ul class="modal-list">
+                                <li>Feetech 모터를 USB-TTL 어댑터로 PC에 연결합니다.</li>
+                                <li>GUI 상단 Port 드롭다운에서 USB 포트를 선택합니다 (예: /dev/ttyUSB0).</li>
+                                <li>Connect 버튼 클릭 → 연결 성공 시 LED 표시기가 초록색으로 변합니다.</li>
+                            </ul>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-sliders-h"></i> 모터 제어 파라미터</div>
+                            <div class="modal-kv-grid modal-kv-grid--3">
+                                <div class="modal-kv"><i class="fas fa-crosshairs"></i><div class="modal-kv__label">Position</div><div class="modal-kv__value">0 ~ 4095</div></div>
+                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label">Speed</div><div class="modal-kv__value">슬라이더 조절</div></div>
+                                <div class="modal-kv"><i class="fas fa-bolt"></i><div class="modal-kv__label">Torque</div><div class="modal-kv__value">ON / OFF</div></div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-stethoscope"></i> 모터 불량 테스트</div>
+                            <div class="modal-feature-grid">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-list-ol"></i></div>
+                                    <div class="modal-feature-card__title">개별 테스트</div>
+                                    <ul class="modal-list" style="margin-top:5px">
+                                        <li>모터 ID를 1부터 순차 입력</li>
+                                        <li>Position 슬라이더를 천천히 움직여 정상 반응 확인</li>
+                                        <li>소음·진동·온도 이상 여부 점검</li>
+                                    </ul>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-exclamation-circle"></i></div>
+                                    <div class="modal-feature-card__title">불량 증상</div>
+                                    <ul class="modal-list" style="margin-top:5px">
+                                        <li><strong>응답 없음</strong>: 명령에 무반응</li>
+                                        <li><strong>불규칙 움직임</strong>: 떨림·급정지</li>
+                                        <li><strong>과도한 발열</strong>: 급격한 온도 상승</li>
+                                        <li><strong>이상 소음</strong>: 기어·베어링 손상</li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="program-modal__requirement">
-                                <i class="fas fa-box"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">필수 패키지</div>
-                                    <div class="program-modal__requirement-value">FUSE 2.x (libfuse2)</div>
+                        </div>
+                        <div class="modal-callout modal-callout--danger">
+                            <i class="fas fa-times-circle modal-callout__icon"></i>
+                            <div><div class="modal-callout__title">불량 모터 발견 시</div><p class="modal-callout__text">즉시 사용 중단 후 교체하세요. 계속 사용하면 주변 부품까지 손상됩니다.</p></div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 4: 문제 해결 -->
+                    <div class="modal-tab-panel" data-tab="문제해결">
+                        <div class="modal-accordion">
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">FUSE 오류 발생</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><strong>증상:</strong> dlopen(): error loading libfuse.so.2</p>
+                                        <p><strong>해결:</strong></p>
+                                        <div class="modal-code"><code>sudo apt-get install -y fuse libfuse2</code></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="program-modal__requirement">
-                                <i class="fas fa-memory"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">권장 사양</div>
-                                    <div class="program-modal__requirement-value">RAM 4GB 이상, 저장공간 5GB 이상</div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">모터를 찾을 수 없음</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><strong>증상:</strong> "No serial ports found" 또는 "Permission denied"</p>
+                                        <div class="modal-code"><code>sudo usermod -aG dialout $USER
+# 로그아웃 후 다시 로그인
+
+ls -l /dev/ttyUSB* /dev/ttyACM*</code></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="program-modal__requirement">
-                                <i class="fas fa-usb"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">하드웨어</div>
-                                    <div class="program-modal__requirement-value">USB 포트, Feetech 모터 및 USB-TTL 어댑터</div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">프로그램이 실행되지 않음</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><strong>방법 1:</strong> 추출 모드로 실행</p>
+                                        <div class="modal-code"><code>./RobosEasyMotorControl.AppImage --appimage-extract
+cd squashfs-root && ./AppRun</code></div>
+                                        <p><strong>방법 2:</strong> 실행 권한 확인</p>
+                                        <div class="modal-code"><code>chmod +x RobosEasyMotorControl.AppImage</code></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -437,631 +324,321 @@
             <button class="program-modal__close" onclick="closeProgramModal(null, 'sts3215')">
                 <i class="fas fa-times"></i>
             </button>
-
             <div class="program-modal__content">
-                <!-- 상단: 이미지 + 정보 -->
                 <div class="program-modal__header">
-                    <!-- 왼쪽: 프로그램 이미지 -->
                     <div class="program-modal__image-section">
                         <img src="img/sts3215-motor-test.png" alt="STS3215 Motor Test & ID Setup" class="program-modal__image">
                     </div>
-
-                    <!-- 오른쪽: 프로그램 정보 -->
                     <div class="program-modal__info-section">
-                        <span class="program-modal__badge">
-                            <i class="fas fa-robot"></i> RobosEasy
-                        </span>
+                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
                         <h2 class="program-modal__title">Motor Test & ID Setup</h2>
-                        <p class="program-modal__subtitle">
-                            Feetech STS3215 서보 모터를 제어하고 테스트하기 위한 애플리케이션입니다.
-                            직관적인 인터페이스를 통해 모터 연결, 제어, 실시간 모니터링, 모터 ID 설정을 쉽게 수행할 수 있습니다.
-                        </p>
-                        <a href="#" target="_blank" class="program-modal__download-btn" onclick="return handleDownload('https://drive.google.com/file/d/15tKCtkd2pcynmDJRcnbhutiWKotM1D19/view?usp=sharing');">
+                        <p class="program-modal__subtitle">Feetech STS3215 서보 모터 제어·테스트 애플리케이션. 단일 모터 세부 제어(모드 1)와 SO-ARM 101 전체 모터 동시 제어(모드 2)를 지원합니다.</p>
+                        <a href="#" class="program-modal__download-btn" onclick="return handleDownload('https://drive.google.com/file/d/15tKCtkd2pcynmDJRcnbhutiWKotM1D19/view?usp=sharing');">
                             <i class="fas fa-download"></i> AppImage 다운로드
                         </a>
                     </div>
                 </div>
+                <!-- 탭 네비게이션 -->
+                <div class="modal-tabs">
+                    <button class="modal-tab modal-tab--active" onclick="switchModalTab(this, '개요')">개요</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '모드1')">모드 1 — 단일 모터</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '모드2')">모드 2 — SO-ARM 전체</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '문제해결')">문제 해결</button>
+                </div>
+                <div class="modal-tab-panels">
 
-                <!-- 하단: 상세 내용 -->
-                <div class="program-modal__body">
-                    <!-- 주요 특징 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-check-double"></i> 주요 특징
-                    </h3>
-                    <div class="program-modal__highlights">
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 단일 파일 실행</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 두 가지 테스트 모드</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 실시간 모니터링</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 충돌 감지 기능</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 모터 ID 설정</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 모든 Linux 배포판 지원</span>
-                    </div>
-
-                    <!-- 실행 방법 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-play-circle"></i> 실행 방법
-                    </h3>
-                    <div class="program-modal__code-block" style="margin-bottom: 24px;">
-                        <code>chmod +x motor-test-id-setup.AppImage
-                        <br>./motor-test-id-setup.AppImage</code>
-                    </div>
-
-                    <!-- 시작 화면 — 모드 선택 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-th-large"></i> 시작 화면 — 모드 선택
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 12px;">프로그램을 실행하면 먼저 테스트 모드를 선택하는 화면이 나타납니다.</p>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-microchip"></i> 단일 모터 테스트
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                하나의 모터를 선택해 세부 제어 및 모니터링합니다.
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-robot"></i> SO-ARM 101 전체 모터 테스트
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                SO-ARM 101 로봇암의 6개 모터를 동시에 모니터링 및 제어합니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- ===== 모드 1 ===== -->
-                    <h3 class="program-modal__section-title" style="margin-top: 32px;">
-                        <i class="fas fa-microchip"></i> 모드 1 — 단일 모터 테스트
-                    </h3>
-
-                    <!-- 화면 구성 (Mode 1) -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-layer-group"></i> 화면 구성
-                    </h3>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-plug"></i> 연결
-                            </div>
-                            <p class="program-modal__feature-desc">포트 선택 및 연결/해제</p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-search"></i> 모터 선택
-                            </div>
-                            <p class="program-modal__feature-desc">모터 스캔 및 선택</p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-edit"></i> 모터 ID 설정
-                            </div>
-                            <p class="program-modal__feature-desc">모터 ID 변경</p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-sliders-h"></i> 모터 제어
-                            </div>
-                            <p class="program-modal__feature-desc">위치, 속도, 가속도, 토크 제어</p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-chart-line"></i> 상태 모니터
-                            </div>
-                            <p class="program-modal__feature-desc">실시간 모터 상태 확인</p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-list-alt"></i> 로그
-                            </div>
-                            <p class="program-modal__feature-desc">작업 기록 및 오류 메시지</p>
-                        </div>
-                    </div>
-
-                    <!-- 기본 사용 흐름 (Mode 1) -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-route"></i> 기본 사용 흐름
-                    </h3>
-                    <div class="program-modal__steps">
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">1</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">하드웨어 연결</div>
-                                <p class="program-modal__step-desc">USB-시리얼 어댑터 + 모터 전원 연결</p>
+                    <!-- 탭 1: 개요 -->
+                    <div class="modal-tab-panel modal-tab-panel--active" data-tab="개요">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-badge-row">
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 두 가지 테스트 모드</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 모니터링</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 충돌 감지 기능</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 모터 ID 설정</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 모든 Linux 배포판 지원</span>
                             </div>
                         </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">2</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">프로그램에서 포트 연결</div>
-                                <p class="program-modal__step-desc">포트 선택 → 연결 버튼</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">3</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">모터 스캔</div>
-                                <p class="program-modal__step-desc">스캔 버튼 → 모터 선택</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">4</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">모터 제어</div>
-                                <p class="program-modal__step-desc">위치/속도/가속도 설정 → 이동</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">5</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">상태 확인</div>
-                                <p class="program-modal__step-desc">모니터링 시작으로 실시간 확인</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 기능별 사용법: 연결 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-plug"></i> 1. 연결
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 6px;">모터와 통신하기 위해 먼저 시리얼 포트에 연결해야 합니다.</p>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-info-circle"></i> 사용 방법
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li>USB 케이블을 컴퓨터에 연결합니다</li>
-                                    <li>포트 선택 드롭다운에서 연결할 포트를 선택합니다 (USB 포트가 자동으로 상단에 표시됩니다)</li>
-                                    <li>새로고침 버튼으로 포트 목록을 갱신할 수 있습니다</li>
-                                    <li>연결 버튼을 클릭합니다</li>
-                                    <li>연결 성공 시 LED 표시기가 초록색으로 변합니다</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 기능별 사용법: 모터 선택 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-search"></i> 2. 모터 선택
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 6px;">연결된 모터를 검색하고 제어할 모터를 선택합니다.</p>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-info-circle"></i> 사용 방법
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li>스캔 버튼을 클릭합니다</li>
-                                    <li>프로그램이 ID 1~29 범위에서 모터를 자동으로 검색합니다</li>
-                                    <li>진행률 창이 표시되며, 완료 시 발견된 모터 수가 표시됩니다</li>
-                                    <li>모터 드롭다운에서 제어할 모터를 선택합니다</li>
-                                    <li>핑 테스트 버튼으로 선택한 모터와의 통신을 확인할 수 있습니다</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 기능별 사용법: 모터 ID 설정 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-edit"></i> 3. 모터 ID 설정
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 6px;">모터의 ID를 변경할 수 있습니다.</p>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-info-circle"></i> 사용 방법
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li>변경할 모터를 선택합니다 (현재 ID가 표시됩니다)</li>
-                                    <li>새 ID 입력란에 변경할 ID를 입력합니다 (0~253)</li>
-                                    <li>ID 변경 버튼을 클릭합니다</li>
-                                    <li>확인 창에서 Yes를 선택합니다</li>
-                                    <li>변경 완료 후 스캔을 다시 실행하여 목록을 갱신합니다</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- ID 변경 주의 -->
-                    <div class="program-modal__callout program-modal__callout--warning">
-                        <i class="fas fa-exclamation-triangle program-modal__callout-icon"></i>
-                        <div class="program-modal__callout-content">
-                            <div class="program-modal__callout-title">주의</div>
-                            <p class="program-modal__callout-text">
-                                ID 변경 후에는 반드시 모터를 <strong>다시 스캔</strong>해야 합니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 기능별 사용법: 모터 제어 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-sliders-h"></i> 4. 모터 제어
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 6px;">모터의 위치, 속도, 가속도를 조절하고 이동 명령을 내립니다.</p>
-
-                    <!-- 제어 파라미터 -->
-                    <div class="program-modal__monitor-grid">
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-crosshairs"></i>
-                            <div class="program-modal__monitor-label">위치</div>
-                            <div class="program-modal__monitor-value">0 ~ 4095</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <div class="program-modal__monitor-label">속도</div>
-                            <div class="program-modal__monitor-value">0 ~ 3400</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-rocket"></i>
-                            <div class="program-modal__monitor-label">가속도</div>
-                            <div class="program-modal__monitor-value">0 ~ 254</div>
-                        </div>
-                    </div>
-
-                    <div class="program-modal__features" style="margin-top: 10px;">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-info-circle"></i> 사용 방법
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li>슬라이더를 드래그하거나 숫자를 직접 입력하여 값을 설정합니다</li>
-                                    <li>이동 버튼을 클릭하면 설정된 값으로 모터가 이동합니다</li>
-                                    <li>정지 버튼으로 이동 중인 모터를 즉시 정지시킵니다</li>
-                                </ul>
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-bolt"></i> 토크 제어
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li><strong>토크 ON</strong>: 모터에 토크를 활성화합니다 (모터가 힘을 유지)</li>
-                                    <li><strong>토크 OFF</strong>: 토크를 비활성화합니다 (모터가 자유롭게 회전)</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 기능별 사용법: 상태 모니터 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-chart-line"></i> 5. 상태 모니터
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 6px;">모터의 현재 상태를 실시간으로 확인합니다.</p>
-
-                    <!-- 실시간 모니터링 항목 -->
-                    <div class="program-modal__monitor-grid">
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-compass"></i>
-                            <div class="program-modal__monitor-label">위치</div>
-                            <div class="program-modal__monitor-value">0~4095</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <div class="program-modal__monitor-label">속도</div>
-                            <div class="program-modal__monitor-value">회전 속도</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-thermometer-half"></i>
-                            <div class="program-modal__monitor-label">온도</div>
-                            <div class="program-modal__monitor-value">°C</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-car-battery"></i>
-                            <div class="program-modal__monitor-label">전압</div>
-                            <div class="program-modal__monitor-value">V</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-bolt"></i>
-                            <div class="program-modal__monitor-label">전류</div>
-                            <div class="program-modal__monitor-value">mA</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-weight-hanging"></i>
-                            <div class="program-modal__monitor-label">부하</div>
-                            <div class="program-modal__monitor-value">%</div>
-                        </div>
-                    </div>
-
-                    <div class="program-modal__features" style="margin-top: 10px;">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-info-circle"></i> 사용 방법
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li><strong>모니터링 시작</strong>: 자동으로 상태를 계속 갱신합니다</li>
-                                    <li><strong>1회 읽기</strong>: 현재 상태를 한 번만 읽습니다</li>
-                                    <li>모니터링 중에 다시 버튼을 클릭하면 모니터링이 중지됩니다</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 기능별 사용법: 로그 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-list-alt"></i> 6. 로그
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 6px;">모든 작업 내역과 오류 메시지가 기록됩니다.</p>
-                    <div class="program-modal__highlights">
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 연결/해제 상태</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 모터 스캔 결과</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 제어 명령 실행 결과</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 오류 발생 시 상세 메시지</span>
-                    </div>
-
-                    <!-- ===== 모드 2 ===== -->
-                    <h3 class="program-modal__section-title" style="margin-top: 32px;">
-                        <i class="fas fa-robot"></i> 모드 2 — SO-ARM 101 전체 모터 테스트
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 16px;">SO-ARM 101 로봇암에 장착된 여러 STS3215 모터를 동시에 모니터링하고 제어하는 모드입니다.</p>
-
-                    <!-- 기본 사용 흐름 (Mode 2) -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-route"></i> 기본 사용 흐름
-                    </h3>
-                    <div class="program-modal__steps">
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">1</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">하드웨어 연결</div>
-                                <p class="program-modal__step-desc">USB-시리얼 어댑터 + SO-ARM 101 전원 연결</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">2</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">연결 설정</div>
-                                <p class="program-modal__step-desc">포트 선택 → ID 목록 확인 (기본: 1,2,3,4,5,6) → 연결 버튼</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">3</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">충돌 감지 설정</div>
-                                <p class="program-modal__step-desc">임계값 조정 (선택 사항)</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">4</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">모터 제어</div>
-                                <p class="program-modal__step-desc">각 모터 카드의 슬라이더를 조작하여 목표 위치 설정</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">5</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">실시간 모니터링</div>
-                                <p class="program-modal__step-desc">부하/전류 수치를 확인하며 안전하게 운용</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 연결 설정 (Mode 2) -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-plug"></i> 1. 연결 설정
-                    </h3>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-info-circle"></i> 사용 방법
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                <ul class="program-modal__list">
-                                    <li>포트 드롭다운에서 연결할 포트를 선택합니다</li>
-                                    <li>새로고침 버튼으로 포트 목록을 갱신합니다</li>
-                                    <li>ID 목록 입력란에 제어할 모터 ID를 쉼표로 구분하여 입력합니다 (기본값: <code>1,2,3,4,5,6</code>)</li>
-                                    <li>연결 버튼을 클릭합니다</li>
-                                    <li>연결 성공 시 LED 표시기가 초록색으로 변하고 각 모터 카드가 표시됩니다</li>
-                                </ul>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 충돌 감지 설정 (Mode 2) -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-shield-alt"></i> 2. 충돌 감지 설정
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 12px;">모터에 과부하 또는 과전류가 발생하면 자동으로 토크를 차단하여 모터와 로봇을 보호합니다.</p>
-                    <div class="program-modal__monitor-grid">
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-toggle-on"></i>
-                            <div class="program-modal__monitor-label">충돌 감지 활성화</div>
-                            <div class="program-modal__monitor-value">기본 ON</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-weight-hanging"></i>
-                            <div class="program-modal__monitor-label">부하 임계값</div>
-                            <div class="program-modal__monitor-value">1300 / 1300</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-bolt"></i>
-                            <div class="program-modal__monitor-label">전류 임계값</div>
-                            <div class="program-modal__monitor-value">800 mA</div>
-                        </div>
-                    </div>
-
-                    <!-- 충돌 감지 동작 설명 -->
-                    <div class="program-modal__callout program-modal__callout--warning" style="margin-top: 12px;">
-                        <i class="fas fa-exclamation-triangle program-modal__callout-icon"></i>
-                        <div class="program-modal__callout-content">
-                            <div class="program-modal__callout-title">임계값 초과 시 동작</div>
-                            <p class="program-modal__callout-text">
-                                해당 모터의 토크가 자동으로 차단되며, 모터 카드에 <strong>충돌 감지!</strong> 경고가 표시되고 카드 테두리가 빨간색으로 변합니다.
-                                슬라이더를 움직이면 충돌 상태가 해제되고 토크가 다시 활성화됩니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 모터 카드 모니터링 (Mode 2) -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-th"></i> 3. 모터 카드 — 모니터링 및 제어
-                    </h3>
-                    <p class="program-modal__feature-desc" style="margin-bottom: 12px;">연결된 각 모터마다 개별 카드가 표시되며, 100ms 주기로 자동 업데이트됩니다.</p>
-                    <div class="program-modal__monitor-grid">
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-compass"></i>
-                            <div class="program-modal__monitor-label">현재 위치</div>
-                            <div class="program-modal__monitor-value">0~4095</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-weight-hanging"></i>
-                            <div class="program-modal__monitor-label">부하</div>
-                            <div class="program-modal__monitor-value">70% 초과 시 주황색</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-bolt"></i>
-                            <div class="program-modal__monitor-label">전류</div>
-                            <div class="program-modal__monitor-value">70% 초과 시 주황색</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-sliders-h"></i>
-                            <div class="program-modal__monitor-label">슬라이더</div>
-                            <div class="program-modal__monitor-value">목표 위치 설정</div>
-                        </div>
-                    </div>
-
-                    <!-- 문제 해결 -->
-                    <h3 class="program-modal__section-title" style="margin-top: 32px;">
-                        <i class="fas fa-wrench"></i> 문제 해결
-                    </h3>
-                    <div class="program-modal__troubleshoot">
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">포트가 목록에 나타나지 않음</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <ul class="program-modal__list">
-                                        <li>USB-시리얼 어댑터가 제대로 연결되었는지 확인하세요</li>
-                                        <li>새로고침 버튼을 클릭하세요</li>
-                                        <li>어댑터를 다른 USB 포트에 연결해 보세요</li>
-                                        <li>Linux의 경우: 로그아웃 후 다시 로그인하거나 컴퓨터를 재시작하세요</li>
-                                    </ul>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-th-large"></i> 모드 선택</div>
+                            <div class="modal-feature-grid">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-microchip"></i></div>
+                                    <div class="modal-feature-card__title">모드 1 — 단일 모터 테스트</div>
+                                    <div class="modal-feature-card__desc">하나의 모터를 선택해 세부 제어(위치·속도·가속도·토크) 및 실시간 모니터링을 수행합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-robot"></i></div>
+                                    <div class="modal-feature-card__title">모드 2 — SO-ARM 101 전체</div>
+                                    <div class="modal-feature-card__desc">SO-ARM 101의 6개 모터를 동시에 모니터링·제어하며 충돌 감지로 안전하게 운용합니다.</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">모터가 스캔되지 않음 (단일 모드)</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-play-circle"></i> 실행 방법</div>
+                            <div class="modal-code"><code>chmod +x motor-test-id-setup.AppImage
+./motor-test-id-setup.AppImage</code></div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-spec-list">
+                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, STS3215 모터 및 USB-TTL 어댑터</span></div>
                             </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <ul class="program-modal__list">
-                                        <li>모터에 전원이 공급되고 있는지 확인하세요</li>
-                                        <li>시리얼 케이블 연결 상태를 확인하세요</li>
-                                        <li>모터 ID가 1~29 범위 내에 있는지 확인하세요</li>
-                                    </ul>
+                        </div>
+                    </div>
+
+                    <!-- 탭 2: 모드 1 -->
+                    <div class="modal-tab-panel" data-tab="모드1">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-layer-group"></i> 화면 구성</div>
+                            <div class="modal-feature-grid modal-feature-grid--3">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-plug"></i></div>
+                                    <div class="modal-feature-card__title">연결</div>
+                                    <div class="modal-feature-card__desc">포트 선택 및 연결/해제</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-search"></i></div>
+                                    <div class="modal-feature-card__title">모터 선택</div>
+                                    <div class="modal-feature-card__desc">모터 스캔 및 선택 (ID 1~29)</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-edit"></i></div>
+                                    <div class="modal-feature-card__title">모터 ID 설정</div>
+                                    <div class="modal-feature-card__desc">모터 ID 변경 (0~253)</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-sliders-h"></i></div>
+                                    <div class="modal-feature-card__title">모터 제어</div>
+                                    <div class="modal-feature-card__desc">위치·속도·가속도·토크 제어</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-line"></i></div>
+                                    <div class="modal-feature-card__title">상태 모니터</div>
+                                    <div class="modal-feature-card__desc">위치·속도·온도·전압·전류·부하 실시간 확인</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-list-alt"></i></div>
+                                    <div class="modal-feature-card__title">로그</div>
+                                    <div class="modal-feature-card__desc">작업 기록 및 오류 메시지</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">모터가 움직이지 않음</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <ul class="program-modal__list">
-                                        <li>토크 ON 상태인지 확인하세요</li>
-                                        <li>속도 값이 0이 아닌지 확인하세요 (단일 모드)</li>
-                                        <li>모터 전원 공급 상태를 확인하세요</li>
-                                        <li>SO-ARM 101 모드: 충돌 감지로 토크가 꺼졌을 수 있습니다 — 슬라이더를 움직여 재활성화하세요</li>
-                                    </ul>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-timeline">
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">1</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">하드웨어 연결</div><div class="modal-timeline__desc">USB-시리얼 어댑터 + 모터 전원 연결</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">2</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">포트 연결</div><div class="modal-timeline__desc">포트 드롭다운 선택 → 연결 버튼 클릭 → LED 초록색 확인</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">3</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">모터 스캔</div><div class="modal-timeline__desc">스캔 버튼 → 모터 드롭다운에서 제어할 모터 선택</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">4</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">모터 제어</div><div class="modal-timeline__desc">슬라이더로 위치/속도/가속도 설정 → 이동 버튼 클릭</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">5</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">상태 확인</div><div class="modal-timeline__desc">모니터링 시작 버튼으로 실시간 상태 확인</div></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">SO-ARM 101 연결 후 카드가 표시되지 않음</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-sliders-h"></i> 모터 제어 파라미터</div>
+                            <div class="modal-kv-grid modal-kv-grid--3">
+                                <div class="modal-kv"><i class="fas fa-crosshairs"></i><div class="modal-kv__label">위치</div><div class="modal-kv__value">0 ~ 4095</div></div>
+                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label">속도</div><div class="modal-kv__value">0 ~ 3400</div></div>
+                                <div class="modal-kv"><i class="fas fa-rocket"></i><div class="modal-kv__label">가속도</div><div class="modal-kv__value">0 ~ 254</div></div>
                             </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <ul class="program-modal__list">
-                                        <li>ID 목록이 올바르게 입력되었는지 확인하세요 (예: <code>1,2,3,4,5,6</code>)</li>
-                                        <li>모터 전원과 시리얼 케이블 연결 상태를 확인하세요</li>
-                                    </ul>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-chart-bar"></i> 실시간 모니터링 항목</div>
+                            <div class="modal-kv-grid">
+                                <div class="modal-kv"><i class="fas fa-compass"></i><div class="modal-kv__label">위치</div><div class="modal-kv__value">0~4095</div></div>
+                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label">속도</div><div class="modal-kv__value">rpm</div></div>
+                                <div class="modal-kv"><i class="fas fa-thermometer-half"></i><div class="modal-kv__label">온도</div><div class="modal-kv__value">°C</div></div>
+                                <div class="modal-kv"><i class="fas fa-car-battery"></i><div class="modal-kv__label">전압</div><div class="modal-kv__value">V</div></div>
+                                <div class="modal-kv"><i class="fas fa-bolt"></i><div class="modal-kv__label">전류</div><div class="modal-kv__value">mA</div></div>
+                                <div class="modal-kv"><i class="fas fa-weight-hanging"></i><div class="modal-kv__label">부하</div><div class="modal-kv__value">%</div></div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-edit"></i> ID 변경 방법</div>
+                            <ul class="modal-list">
+                                <li>변경할 모터를 선택합니다 (현재 ID 표시됨).</li>
+                                <li>새 ID 입력란에 변경할 ID를 입력합니다 (0~253).</li>
+                                <li>ID 변경 버튼 클릭 → 확인 창에서 Yes를 선택합니다.</li>
+                                <li>변경 완료 후 스캔을 다시 실행하여 목록을 갱신합니다.</li>
+                            </ul>
+                        </div>
+                        <div class="modal-callout modal-callout--warning">
+                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <div><div class="modal-callout__title">ID 변경 후 재스캔 필수</div><p class="modal-callout__text">ID 변경 후에는 반드시 모터를 <strong>다시 스캔</strong>해야 목록이 갱신됩니다.</p></div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 3: 모드 2 -->
+                    <div class="modal-tab-panel" data-tab="모드2">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-timeline">
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">1</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">하드웨어 연결</div><div class="modal-timeline__desc">USB-시리얼 어댑터 + SO-ARM 101 전원 연결</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">2</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">연결 설정</div><div class="modal-timeline__desc">포트 선택 → ID 목록 확인 (기본: <code>1,2,3,4,5,6</code>) → 연결 버튼</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">3</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">충돌 감지 설정</div><div class="modal-timeline__desc">임계값 조정 (선택 사항, 기본값으로 사용 권장)</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">4</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">모터 제어</div><div class="modal-timeline__desc">각 모터 카드의 슬라이더를 조작하여 목표 위치 설정</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">5</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">실시간 모니터링</div><div class="modal-timeline__desc">부하·전류 수치를 확인하며 안전하게 운용</div></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">연결이 불안정함</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <ul class="program-modal__list">
-                                        <li>USB 케이블을 교체해 보세요</li>
-                                        <li>다른 USB 포트에 연결해 보세요</li>
-                                        <li>시리얼 통신 케이블 접촉 불량을 확인하세요</li>
-                                    </ul>
-                                </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-shield-alt"></i> 충돌 감지 설정</div>
+                            <div class="modal-kv-grid modal-kv-grid--3">
+                                <div class="modal-kv"><i class="fas fa-toggle-on"></i><div class="modal-kv__label">충돌 감지</div><div class="modal-kv__value">기본 ON</div></div>
+                                <div class="modal-kv"><i class="fas fa-weight-hanging"></i><div class="modal-kv__label">부하 임계값</div><div class="modal-kv__value">1300 / 1300</div></div>
+                                <div class="modal-kv"><i class="fas fa-bolt"></i><div class="modal-kv__label">전류 임계값</div><div class="modal-kv__value">800 mA</div></div>
                             </div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">프로그램이 실행되지 않음 (Linux)</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                        <div class="modal-callout modal-callout--warning">
+                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <div>
+                                <div class="modal-callout__title">임계값 초과 시 동작</div>
+                                <p class="modal-callout__text">해당 모터 토크가 자동 차단되고 카드 테두리가 빨간색으로 변합니다. 슬라이더를 움직이면 충돌 상태가 해제되고 토크가 재활성화됩니다.</p>
                             </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <ul class="program-modal__list">
-                                        <li>AppImage 파일에 실행 권한이 있는지 확인하세요</li>
-                                        <li>터미널에서 직접 실행하여 오류 메시지를 확인하세요</li>
-                                    </ul>
-                                    <div class="program-modal__code-block">
-                                        <code>chmod +x motor-test-id-setup.AppImage</code>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-th"></i> 모터 카드 — 모니터링 항목</div>
+                            <p style="font-size:12px;color:#666;margin-bottom:10px;">연결된 각 모터마다 개별 카드가 표시되며, 100ms 주기로 자동 업데이트됩니다.</p>
+                            <div class="modal-kv-grid">
+                                <div class="modal-kv"><i class="fas fa-compass"></i><div class="modal-kv__label">현재 위치</div><div class="modal-kv__value">0~4095</div></div>
+                                <div class="modal-kv"><i class="fas fa-weight-hanging"></i><div class="modal-kv__label">부하</div><div class="modal-kv__value">70% 초과 → 주황</div></div>
+                                <div class="modal-kv"><i class="fas fa-bolt"></i><div class="modal-kv__label">전류</div><div class="modal-kv__value">70% 초과 → 주황</div></div>
+                                <div class="modal-kv"><i class="fas fa-sliders-h"></i><div class="modal-kv__label">슬라이더</div><div class="modal-kv__value">목표 위치 설정</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 4: 문제 해결 -->
+                    <div class="modal-tab-panel" data-tab="문제해결">
+                        <div class="modal-accordion">
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">포트가 목록에 나타나지 않음</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <ul class="modal-list">
+                                            <li>USB-시리얼 어댑터가 제대로 연결되었는지 확인하세요.</li>
+                                            <li>새로고침 버튼을 클릭하세요.</li>
+                                            <li>어댑터를 다른 USB 포트에 연결해 보세요.</li>
+                                            <li>로그아웃 후 다시 로그인하거나 컴퓨터를 재시작하세요.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">모터가 스캔되지 않음 (모드 1)</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <ul class="modal-list">
+                                            <li>모터에 전원이 공급되고 있는지 확인하세요.</li>
+                                            <li>시리얼 케이블 연결 상태를 확인하세요.</li>
+                                            <li>모터 ID가 1~29 범위 내에 있는지 확인하세요.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">모터가 움직이지 않음</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <ul class="modal-list">
+                                            <li>토크 ON 상태인지 확인하세요.</li>
+                                            <li>속도 값이 0이 아닌지 확인하세요 (모드 1).</li>
+                                            <li>모드 2: 충돌 감지로 토크가 꺼졌을 수 있습니다 — 슬라이더를 움직여 재활성화하세요.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">SO-ARM 101 연결 후 카드가 표시되지 않음</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <ul class="modal-list">
+                                            <li>ID 목록이 올바르게 입력되었는지 확인하세요 (예: <code>1,2,3,4,5,6</code>).</li>
+                                            <li>모터 전원과 시리얼 케이블 연결 상태를 확인하세요.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">연결이 불안정함</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <ul class="modal-list">
+                                            <li>USB 케이블을 교체해 보세요.</li>
+                                            <li>다른 USB 포트에 연결해 보세요.</li>
+                                            <li>시리얼 통신 케이블 접촉 불량을 확인하세요.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">프로그램이 실행되지 않음 (Linux)</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>AppImage 파일에 실행 권한이 있는지 확인하세요.</p>
+                                        <div class="modal-code"><code>chmod +x motor-test-id-setup.AppImage</code></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 시스템 요구사항 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-cog"></i> 시스템 요구사항
-                    </h3>
-                    <div class="program-modal__requirements">
-                        <div class="program-modal__requirements-grid">
-                            <div class="program-modal__requirement">
-                                <i class="fab fa-linux"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">운영체제</div>
-                                    <div class="program-modal__requirement-value">Linux (Ubuntu 20.04 이상 권장)</div>
-                                </div>
-                            </div>
-                            <div class="program-modal__requirement">
-                                <i class="fas fa-memory"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">권장 사양</div>
-                                    <div class="program-modal__requirement-value">RAM 4GB 이상</div>
-                                </div>
-                            </div>
-                            <div class="program-modal__requirement">
-                                <i class="fas fa-usb"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">하드웨어</div>
-                                    <div class="program-modal__requirement-value">USB 포트, STS3215 모터 및 USB-TTL 어댑터</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1073,291 +650,197 @@
             <button class="program-modal__close" onclick="closeProgramModal(null, 'keyboard-teleop')">
                 <i class="fas fa-times"></i>
             </button>
-
             <div class="program-modal__content">
-                <!-- 상단: 이미지 + 정보 -->
                 <div class="program-modal__header">
                     <div class="program-modal__image-section">
                         <img src="img/keyboard-teleop-gui.png" alt="SO-ARM Keyboard Teleop GUI" class="program-modal__image" onerror="this.src='img/placeholder-robot.png'">
                     </div>
                     <div class="program-modal__info-section">
-                        <span class="program-modal__badge">
-                            <i class="fas fa-robot"></i> RobosEasy
-                        </span>
+                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
                         <h2 class="program-modal__title">Keyboard Teleop GUI</h2>
-                        <p class="program-modal__subtitle">
-                            SO-ARM 로봇 팔을 키보드로 직접 조작할 수 있는 데스크탑 GUI 프로그램입니다.
-                            연결된 카메라 피드를 실시간으로 보면서 각 관절을 키보드로 제어하고, 관절 상태를 화면에서 바로 확인할 수 있습니다.
-                        </p>
+                        <p class="program-modal__subtitle">SO-ARM 로봇 팔을 키보드로 직접 조작하는 데스크탑 GUI. 실시간 카메라 피드를 보면서 각 관절을 제어하고 관절 상태를 화면에서 바로 확인할 수 있습니다.</p>
                         <a href="https://drive.google.com/file/d/1YkyZgD2pH8bYAVkHUgAy7rjMjtyFHiVC/view?usp=sharing" target="_blank" class="program-modal__download-btn">
                             <i class="fas fa-download"></i> AppImage 다운로드
                         </a>
                     </div>
                 </div>
+                <!-- 탭 네비게이션 -->
+                <div class="modal-tabs">
+                    <button class="modal-tab modal-tab--active" onclick="switchModalTab(this, '개요')">개요</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '조작법')">키보드 조작법</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '문제해결')">문제 해결</button>
+                </div>
+                <div class="modal-tab-panels">
 
-                <!-- 하단: 상세 내용 -->
-                <div class="program-modal__body">
-                    <!-- 주요 특징 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-check-double"></i> 주요 특징
-                    </h3>
-                    <div class="program-modal__highlights">
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 단일 파일 실행</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 실시간 카메라 피드</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 관절 상태 모니터링</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 비상 정지 기능</span>
-                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 직관적인 키보드 제어</span>
-                    </div>
-
-                    <!-- 실행 방법 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-play-circle"></i> 실행 방법
-                    </h3>
-                    <div class="program-modal__code-block" style="margin-bottom: 24px;">
-                        <code>chmod +x keyboard-teleop-gui.AppImage<br>./keyboard-teleop-gui.AppImage</code>
-                    </div>
-
-                    <!-- 화면 구성 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-layer-group"></i> 화면 구성
-                    </h3>
-                    <div class="program-modal__features">
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-plug"></i> 연결 (Connection)
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                포트 드롭다운에서 로봇의 시리얼 포트를 선택하고 Connect/Disconnect로 연결을 제어합니다.
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-video"></i> 카메라 피드 (Camera Feeds)
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                연결된 카메라를 자동 감지해 실시간으로 표시합니다. 체크박스로 카메라별 on/off가 가능하며 Refresh로 목록을 다시 스캔합니다.
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-chart-bar"></i> 관절 상태 (Joint Status)
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                6개 관절(shoulder_pan, shoulder_lift, elbow_flex, wrist_flex, wrist_roll, gripper)의 현재 위치를 바 차트와 수치로 실시간 확인합니다.
-                            </p>
-                        </div>
-                        <div class="program-modal__feature">
-                            <div class="program-modal__feature-title">
-                                <i class="fas fa-keyboard"></i> 컨트롤 패드 (Control Pad)
-                            </div>
-                            <p class="program-modal__feature-desc">
-                                키보드 레이아웃을 시각화한 패드입니다. 현재 누르고 있는 키가 하이라이트됩니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 키보드 조작법 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-keyboard"></i> 키보드 조작법
-                    </h3>
-                    <div class="program-modal__monitor-grid">
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-arrows-alt-h"></i>
-                            <div class="program-modal__monitor-label"><code>A</code> / <code>D</code></div>
-                            <div class="program-modal__monitor-value">shoulder_pan 좌/우</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-arrows-alt-v"></i>
-                            <div class="program-modal__monitor-label"><code>W</code> / <code>S</code></div>
-                            <div class="program-modal__monitor-value">shoulder_lift 위/아래</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-redo"></i>
-                            <div class="program-modal__monitor-label"><code>Q</code> / <code>E</code></div>
-                            <div class="program-modal__monitor-value">elbow_flex 굽힘/폄</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-arrows-alt-v"></i>
-                            <div class="program-modal__monitor-label"><code>↑</code> / <code>↓</code></div>
-                            <div class="program-modal__monitor-value">wrist_flex 위/아래</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-arrows-alt-h"></i>
-                            <div class="program-modal__monitor-label"><code>←</code> / <code>→</code></div>
-                            <div class="program-modal__monitor-value">wrist_roll 좌/우</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-hand-paper"></i>
-                            <div class="program-modal__monitor-label"><code>Z</code> / <code>C</code></div>
-                            <div class="program-modal__monitor-value">gripper 열기/닫기</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <div class="program-modal__monitor-label"><code>Shift</code> (홀드)</div>
-                            <div class="program-modal__monitor-value">빠른 이동 (스텝 2×)</div>
-                        </div>
-                        <div class="program-modal__monitor-item">
-                            <i class="fas fa-stop-circle"></i>
-                            <div class="program-modal__monitor-label"><code>Space</code></div>
-                            <div class="program-modal__monitor-value">비상 정지 (즉시 연결 해제)</div>
-                        </div>
-                    </div>
-
-                    <!-- 비상 정지 경고 -->
-                    <div class="program-modal__callout program-modal__callout--warning" style="margin-top: 16px;">
-                        <i class="fas fa-exclamation-triangle program-modal__callout-icon"></i>
-                        <div class="program-modal__callout-content">
-                            <div class="program-modal__callout-title">비상 정지</div>
-                            <p class="program-modal__callout-text">
-                                <strong>Space</strong> 키를 누르면 즉시 연결이 해제됩니다. 로봇이 의도치 않게 움직일 경우 즉시 Space 키를 누르세요.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 기본 사용 흐름 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-route"></i> 기본 사용 흐름
-                    </h3>
-                    <div class="program-modal__steps">
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">1</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">포트 선택</div>
-                                <p class="program-modal__step-desc">Port 드롭다운에서 로봇이 연결된 포트를 선택합니다. 목록이 비어 있으면 Refresh를 눌러 다시 스캔합니다.</p>
+                    <!-- 탭 1: 개요 -->
+                    <div class="modal-tab-panel modal-tab-panel--active" data-tab="개요">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-badge-row">
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 카메라 피드</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 관절 상태 모니터링</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 비상 정지 기능</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 직관적인 키보드 제어</span>
                             </div>
                         </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">2</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">연결</div>
-                                <p class="program-modal__step-desc">Connect 버튼을 클릭합니다. 성공하면 상태가 ● Connected로 바뀌고 포트 선택이 비활성화됩니다.</p>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-layer-group"></i> 화면 구성</div>
+                            <div class="modal-feature-grid">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-plug"></i></div>
+                                    <div class="modal-feature-card__title">연결 (Connection)</div>
+                                    <div class="modal-feature-card__desc">포트 드롭다운에서 로봇의 시리얼 포트를 선택하고 Connect/Disconnect로 연결을 제어합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-video"></i></div>
+                                    <div class="modal-feature-card__title">카메라 피드</div>
+                                    <div class="modal-feature-card__desc">연결된 카메라를 자동 감지해 실시간 표시. 체크박스로 카메라별 on/off가 가능합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-bar"></i></div>
+                                    <div class="modal-feature-card__title">관절 상태</div>
+                                    <div class="modal-feature-card__desc">6개 관절의 현재 위치를 바 차트와 수치로 실시간 확인합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-keyboard"></i></div>
+                                    <div class="modal-feature-card__title">컨트롤 패드</div>
+                                    <div class="modal-feature-card__desc">키보드 레이아웃을 시각화. 현재 누른 키가 하이라이트됩니다.</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">3</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">조작</div>
-                                <p class="program-modal__step-desc">키보드로 로봇 관절을 제어합니다. Shift를 함께 누르면 이동 속도가 2배로 빨라집니다.</p>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-timeline">
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">1</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">포트 선택</div><div class="modal-timeline__desc">Port 드롭다운에서 로봇이 연결된 포트를 선택합니다. 목록이 비면 Refresh를 눌러 스캔합니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">2</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">연결</div><div class="modal-timeline__desc">Connect 클릭 → 상태가 ● Connected로 바뀌고 포트 선택이 비활성화됩니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">3</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">조작</div><div class="modal-timeline__desc">키보드로 로봇 관절을 제어합니다. Shift를 함께 누르면 이동 속도가 2배로 빨라집니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">4</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">모니터링</div><div class="modal-timeline__desc">Joint Status 바에서 각 관절의 현재 위치를 실시간으로 확인합니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">5</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">종료</div><div class="modal-timeline__desc">정상: Disconnect → Quit / 비상: Space 키 → 즉시 연결 해제</div></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">4</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">모니터링</div>
-                                <p class="program-modal__step-desc">좌측 하단의 Joint Status 바에서 각 관절의 현재 위치를 실시간으로 확인합니다.</p>
-                            </div>
-                        </div>
-                        <div class="program-modal__step">
-                            <div class="program-modal__step-number">5</div>
-                            <div class="program-modal__step-content">
-                                <div class="program-modal__step-title">종료</div>
-                                <p class="program-modal__step-desc">정상 종료: Disconnect 버튼 → Quit / 비상 정지: Space 키 → 즉시 연결 해제</p>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-spec-list">
+                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux x86_64 (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, SO-ARM 로봇, 웹캠 (선택)</span></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 문제 해결 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-wrench"></i> 문제 해결
-                    </h3>
-                    <div class="program-modal__troubleshoot">
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">AppImage가 실행되지 않는다</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                    <!-- 탭 2: 키보드 조작법 -->
+                    <div class="modal-tab-panel" data-tab="조작법">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-keyboard"></i> 키 매핑</div>
+                            <div class="modal-kv-grid">
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>A</code> / <code>D</code></div><div class="modal-kv__value">shoulder_pan 좌/우</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>W</code> / <code>S</code></div><div class="modal-kv__value">shoulder_lift 위/아래</div></div>
+                                <div class="modal-kv"><i class="fas fa-redo"></i><div class="modal-kv__label"><code>Q</code> / <code>E</code></div><div class="modal-kv__value">elbow_flex 굽힘/폄</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>↑</code> / <code>↓</code></div><div class="modal-kv__value">wrist_flex 위/아래</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>←</code> / <code>→</code></div><div class="modal-kv__value">wrist_roll 좌/우</div></div>
+                                <div class="modal-kv"><i class="fas fa-hand-paper"></i><div class="modal-kv__label"><code>Z</code> / <code>C</code></div><div class="modal-kv__value">gripper 열기/닫기</div></div>
+                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label"><code>Shift</code> 홀드</div><div class="modal-kv__value">빠른 이동 (스텝 2×)</div></div>
+                                <div class="modal-kv"><i class="fas fa-stop-circle"></i><div class="modal-kv__label"><code>Space</code></div><div class="modal-kv__value">비상 정지</div></div>
                             </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p><code>chmod +x</code>를 먼저 실행했는지 확인합니다. 그래도 안 되면 FUSE가 없는 환경일 수 있습니다.</p>
-                                    <div class="program-modal__code-block">
-                                        <code>./keyboard-teleop-gui-x86_64.AppImage --appimage-extract-and-run</code>
+                        </div>
+                        <div class="modal-callout modal-callout--danger">
+                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <div>
+                                <div class="modal-callout__title">비상 정지</div>
+                                <p class="modal-callout__text"><strong>Space</strong> 키를 누르면 즉시 연결이 해제됩니다. 로봇이 의도치 않게 움직일 경우 Space 키를 누르세요.</p>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-play-circle"></i> 실행 명령</div>
+                            <div class="modal-code"><code>chmod +x keyboard-teleop-gui.AppImage
+./keyboard-teleop-gui.AppImage</code></div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 3: 문제 해결 -->
+                    <div class="modal-tab-panel" data-tab="문제해결">
+                        <div class="modal-accordion">
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">AppImage가 실행되지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><code>chmod +x</code>를 실행했는지 확인합니다. FUSE가 없는 환경이라면 아래 명령을 사용하세요.</p>
+                                        <div class="modal-code"><code>./keyboard-teleop-gui-x86_64.AppImage --appimage-extract-and-run</code></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">포트 목록이 비어 있다 (no ports found)</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>로봇이 USB로 연결되어 있는지 확인하고 Refresh를 누릅니다. 그래도 안 보이면 시리얼 포트 접근 권한 문제입니다. 아래 명령 실행 후 <strong>재로그인</strong>하세요.</p>
+                                        <div class="modal-code"><code>sudo usermod -aG dialout $USER</code></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">Connect를 눌렀는데 연결에 실패한다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>다른 프로그램(터미널, ROS 노드 등)이 같은 포트를 점유 중일 수 있습니다. 해당 프로세스를 종료한 뒤 다시 시도합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">카메라가 감지되지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>카메라 USB 연결을 확인한 뒤 Camera Feeds 패널의 Refresh를 누릅니다. Cheese, OBS 등 다른 앱이 카메라를 점유 중이라면 먼저 종료합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">키보드 입력이 반응하지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>GUI 창을 한 번 클릭해 포커스를 맞춥니다. 연결(Connect)을 완료하지 않은 상태에서는 키 입력이 로봇에 전달되지 않습니다.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">포트 목록이 비어 있다 (no ports found)</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p>로봇이 USB로 연결되어 있는지 확인하고 Refresh를 누릅니다. 그래도 안 보이면 시리얼 포트 접근 권한이 없는 것입니다. 아래 명령 실행 후 <strong>재로그인</strong>합니다.</p>
-                                    <div class="program-modal__code-block">
-                                        <code>sudo usermod -aG dialout $USER</code>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">Connect를 눌렀는데 연결에 실패한다</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p>다른 프로그램(터미널, ROS 노드 등)이 같은 포트를 점유하고 있을 수 있습니다. 해당 프로세스를 종료한 뒤 다시 시도합니다.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">카메라가 감지되지 않는다</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p>카메라 USB 연결을 확인한 뒤 Camera Feeds 패널의 Refresh를 누릅니다. 다른 앱(Cheese, OBS 등)이 카메라를 점유 중이라면 해당 앱을 먼저 종료합니다.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="program-modal__trouble-item">
-                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
-                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">키보드 입력이 반응하지 않는다</div>
-                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
-                            </div>
-                            <div class="program-modal__trouble-body">
-                                <div class="program-modal__trouble-solution">
-                                    <p>GUI 창을 한 번 클릭해 포커스를 맞춥니다. 연결되지 않은 상태에서는 키 입력이 로봇에 전달되지 않으므로 먼저 Connect를 완료해야 합니다.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- 시스템 요구사항 -->
-                    <h3 class="program-modal__section-title">
-                        <i class="fas fa-cog"></i> 시스템 요구사항
-                    </h3>
-                    <div class="program-modal__requirements">
-                        <div class="program-modal__requirements-grid">
-                            <div class="program-modal__requirement">
-                                <i class="fab fa-linux"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">운영체제</div>
-                                    <div class="program-modal__requirement-value">Linux x86_64 (Ubuntu 20.04 이상 권장)</div>
-                                </div>
-                            </div>
-                            <div class="program-modal__requirement">
-                                <i class="fas fa-memory"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">권장 사양</div>
-                                    <div class="program-modal__requirement-value">RAM 4GB 이상</div>
-                                </div>
-                            </div>
-                            <div class="program-modal__requirement">
-                                <i class="fas fa-usb"></i>
-                                <div>
-                                    <div class="program-modal__requirement-label">하드웨어</div>
-                                    <div class="program-modal__requirement-value">USB 포트, SO-ARM 로봇, 웹캠 (선택)</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1437,10 +920,31 @@
             }
         });
 
-        // 문제 해결 아코디언 토글
+        // 문제 해결 아코디언 토글 (구버전 호환)
         function toggleTrouble(header) {
             const item = header.closest('.program-modal__trouble-item');
             item.classList.toggle('active');
+        }
+
+        // 새 아코디언 토글
+        function toggleAccordion(header) {
+            const item = header.closest('.modal-accordion__item');
+            item.classList.toggle('active');
+        }
+
+        // 탭 전환
+        function switchModalTab(btn, tabId) {
+            const tabs = btn.closest('.modal-tabs');
+            tabs.querySelectorAll('.modal-tab').forEach(function(t) {
+                t.classList.remove('modal-tab--active');
+            });
+            btn.classList.add('modal-tab--active');
+            const panels = btn.closest('.program-modal__content').querySelectorAll('.modal-tab-panel');
+            panels.forEach(function(p) {
+                p.classList.remove('modal-tab-panel--active');
+            });
+            const target = btn.closest('.program-modal__content').querySelector('[data-tab="' + tabId + '"]');
+            if (target) target.classList.add('modal-tab-panel--active');
         }
     </script>
 </body>
