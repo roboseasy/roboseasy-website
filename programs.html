@@ -41,27 +41,6 @@
         </div>
 
         <div class="programs-grid">
-            <!-- Program Card -->
-            <div class="program-card">
-                <div class="program-card__image-container">
-                    <img class="program-card__image" src="img/motor-control-gui.png" alt="모터 제어 GUI" onerror="this.src='img/placeholder-robot.png'">
-                </div>
-                <h3 class="program-card__title">모터 제어 GUI</h3>
-                <p class="program-card__description">
-                    SO-ARM Feetech
-                    <br>
-                    모터 제어 & 모니터링 GUI
-                </p>
-                <div class="program-card__buttons">
-                    <a href="#" class="program-card__button program-card__button--details" onclick="openProgramModal('motor-control'); return false;">
-                        <i class="fas fa-info-circle"></i> 자세히 보기
-                    </a>
-                    <a href="#" class="program-card__button program-card__button--download" onclick="return handleDownload('https://drive.google.com/file/d/1Z0206tEiYY2T9WQcm8-gJWm0G6NmCofJ/view');">
-                        <i class="fas fa-download"></i> 다운로드
-                    </a>
-                </div>
-            </div>
-
             <!-- Program Card - STS3215 Motor Test & ID Setup -->
             <div class="program-card">
                 <div class="program-card__image-container">
@@ -71,7 +50,7 @@
                 <p class="program-card__description">
                     Feetech STS3215
                     <br>
-                    모터 테스트 & ID 설정 GUI
+                    단일 모터 & SO-ARM 101 테스트 GUI
                 </p>
                 <div class="program-card__buttons">
                     <a href="#" class="program-card__button program-card__button--details" onclick="openProgramModal('sts3215-motor-test'); return false;">
@@ -485,6 +464,19 @@
 
                 <!-- 하단: 상세 내용 -->
                 <div class="program-modal__body">
+                    <!-- 주요 특징 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-check-double"></i> 주요 특징
+                    </h3>
+                    <div class="program-modal__highlights">
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 단일 파일 실행</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 두 가지 테스트 모드</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 실시간 모니터링</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 충돌 감지 기능</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 모터 ID 설정</span>
+                        <span class="program-modal__highlight"><i class="fas fa-check"></i> 모든 Linux 배포판 지원</span>
+                    </div>
+
                     <!-- 실행 방법 -->
                     <h3 class="program-modal__section-title">
                         <i class="fas fa-play-circle"></i> 실행 방법
@@ -494,7 +486,36 @@
                         <br>./motor-test-id-setup.AppImage</code>
                     </div>
 
-                    <!-- 화면 구성 -->
+                    <!-- 시작 화면 — 모드 선택 -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-th-large"></i> 시작 화면 — 모드 선택
+                    </h3>
+                    <p class="program-modal__feature-desc" style="margin-bottom: 12px;">프로그램을 실행하면 먼저 테스트 모드를 선택하는 화면이 나타납니다.</p>
+                    <div class="program-modal__features">
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-microchip"></i> 단일 모터 테스트
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                하나의 모터를 선택해 세부 제어 및 모니터링합니다.
+                            </p>
+                        </div>
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-robot"></i> SO-ARM 101 전체 모터 테스트
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                SO-ARM 101 로봇암의 6개 모터를 동시에 모니터링 및 제어합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ===== 모드 1 ===== -->
+                    <h3 class="program-modal__section-title" style="margin-top: 32px;">
+                        <i class="fas fa-microchip"></i> 모드 1 — 단일 모터 테스트
+                    </h3>
+
+                    <!-- 화면 구성 (Mode 1) -->
                     <h3 class="program-modal__section-title">
                         <i class="fas fa-layer-group"></i> 화면 구성
                     </h3>
@@ -503,53 +524,41 @@
                             <div class="program-modal__feature-title">
                                 <i class="fas fa-plug"></i> 연결
                             </div>
-                            <p class="program-modal__feature-desc">
-                                포트 선택 및 연결/해제
-                            </p>
+                            <p class="program-modal__feature-desc">포트 선택 및 연결/해제</p>
                         </div>
                         <div class="program-modal__feature">
                             <div class="program-modal__feature-title">
                                 <i class="fas fa-search"></i> 모터 선택
                             </div>
-                            <p class="program-modal__feature-desc">
-                                모터 스캔 및 선택
-                            </p>
+                            <p class="program-modal__feature-desc">모터 스캔 및 선택</p>
                         </div>
                         <div class="program-modal__feature">
                             <div class="program-modal__feature-title">
                                 <i class="fas fa-edit"></i> 모터 ID 설정
                             </div>
-                            <p class="program-modal__feature-desc">
-                                모터 ID 변경
-                            </p>
+                            <p class="program-modal__feature-desc">모터 ID 변경</p>
                         </div>
                         <div class="program-modal__feature">
                             <div class="program-modal__feature-title">
                                 <i class="fas fa-sliders-h"></i> 모터 제어
                             </div>
-                            <p class="program-modal__feature-desc">
-                                위치, 속도, 가속도, 토크 제어
-                            </p>
+                            <p class="program-modal__feature-desc">위치, 속도, 가속도, 토크 제어</p>
                         </div>
                         <div class="program-modal__feature">
                             <div class="program-modal__feature-title">
                                 <i class="fas fa-chart-line"></i> 상태 모니터
                             </div>
-                            <p class="program-modal__feature-desc">
-                                실시간 모터 상태 확인
-                            </p>
+                            <p class="program-modal__feature-desc">실시간 모터 상태 확인</p>
                         </div>
                         <div class="program-modal__feature">
                             <div class="program-modal__feature-title">
                                 <i class="fas fa-list-alt"></i> 로그
                             </div>
-                            <p class="program-modal__feature-desc">
-                                작업 기록 및 오류 메시지
-                            </p>
+                            <p class="program-modal__feature-desc">작업 기록 및 오류 메시지</p>
                         </div>
                     </div>
 
-                    <!-- 기본 사용 흐름 -->
+                    <!-- 기본 사용 흐름 (Mode 1) -->
                     <h3 class="program-modal__section-title">
                         <i class="fas fa-route"></i> 기본 사용 흐름
                     </h3>
@@ -604,7 +613,7 @@
                             <p class="program-modal__feature-desc">
                                 <ul class="program-modal__list">
                                     <li>USB 케이블을 컴퓨터에 연결합니다</li>
-                                    <li>포트 선택 드롭다운에서 연결할 포트를 선택합니다</li>
+                                    <li>포트 선택 드롭다운에서 연결할 포트를 선택합니다 (USB 포트가 자동으로 상단에 표시됩니다)</li>
                                     <li>새로고침 버튼으로 포트 목록을 갱신할 수 있습니다</li>
                                     <li>연결 버튼을 클릭합니다</li>
                                     <li>연결 성공 시 LED 표시기가 초록색으로 변합니다</li>
@@ -786,8 +795,140 @@
                         <span class="program-modal__highlight"><i class="fas fa-check"></i> 오류 발생 시 상세 메시지</span>
                     </div>
 
-                    <!-- 문제 해결 -->
+                    <!-- ===== 모드 2 ===== -->
+                    <h3 class="program-modal__section-title" style="margin-top: 32px;">
+                        <i class="fas fa-robot"></i> 모드 2 — SO-ARM 101 전체 모터 테스트
+                    </h3>
+                    <p class="program-modal__feature-desc" style="margin-bottom: 16px;">SO-ARM 101 로봇암에 장착된 여러 STS3215 모터를 동시에 모니터링하고 제어하는 모드입니다.</p>
+
+                    <!-- 기본 사용 흐름 (Mode 2) -->
                     <h3 class="program-modal__section-title">
+                        <i class="fas fa-route"></i> 기본 사용 흐름
+                    </h3>
+                    <div class="program-modal__steps">
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">1</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">하드웨어 연결</div>
+                                <p class="program-modal__step-desc">USB-시리얼 어댑터 + SO-ARM 101 전원 연결</p>
+                            </div>
+                        </div>
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">2</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">연결 설정</div>
+                                <p class="program-modal__step-desc">포트 선택 → ID 목록 확인 (기본: 1,2,3,4,5,6) → 연결 버튼</p>
+                            </div>
+                        </div>
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">3</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">충돌 감지 설정</div>
+                                <p class="program-modal__step-desc">임계값 조정 (선택 사항)</p>
+                            </div>
+                        </div>
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">4</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">모터 제어</div>
+                                <p class="program-modal__step-desc">각 모터 카드의 슬라이더를 조작하여 목표 위치 설정</p>
+                            </div>
+                        </div>
+                        <div class="program-modal__step">
+                            <div class="program-modal__step-number">5</div>
+                            <div class="program-modal__step-content">
+                                <div class="program-modal__step-title">실시간 모니터링</div>
+                                <p class="program-modal__step-desc">부하/전류 수치를 확인하며 안전하게 운용</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 연결 설정 (Mode 2) -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-plug"></i> 1. 연결 설정
+                    </h3>
+                    <div class="program-modal__features">
+                        <div class="program-modal__feature">
+                            <div class="program-modal__feature-title">
+                                <i class="fas fa-info-circle"></i> 사용 방법
+                            </div>
+                            <p class="program-modal__feature-desc">
+                                <ul class="program-modal__list">
+                                    <li>포트 드롭다운에서 연결할 포트를 선택합니다</li>
+                                    <li>새로고침 버튼으로 포트 목록을 갱신합니다</li>
+                                    <li>ID 목록 입력란에 제어할 모터 ID를 쉼표로 구분하여 입력합니다 (기본값: <code>1,2,3,4,5,6</code>)</li>
+                                    <li>연결 버튼을 클릭합니다</li>
+                                    <li>연결 성공 시 LED 표시기가 초록색으로 변하고 각 모터 카드가 표시됩니다</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 충돌 감지 설정 (Mode 2) -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-shield-alt"></i> 2. 충돌 감지 설정
+                    </h3>
+                    <p class="program-modal__feature-desc" style="margin-bottom: 12px;">모터에 과부하 또는 과전류가 발생하면 자동으로 토크를 차단하여 모터와 로봇을 보호합니다.</p>
+                    <div class="program-modal__monitor-grid">
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-toggle-on"></i>
+                            <div class="program-modal__monitor-label">충돌 감지 활성화</div>
+                            <div class="program-modal__monitor-value">기본 ON</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-weight-hanging"></i>
+                            <div class="program-modal__monitor-label">부하 임계값</div>
+                            <div class="program-modal__monitor-value">1300 / 1300</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-bolt"></i>
+                            <div class="program-modal__monitor-label">전류 임계값</div>
+                            <div class="program-modal__monitor-value">800 mA</div>
+                        </div>
+                    </div>
+
+                    <!-- 충돌 감지 동작 설명 -->
+                    <div class="program-modal__callout program-modal__callout--warning" style="margin-top: 12px;">
+                        <i class="fas fa-exclamation-triangle program-modal__callout-icon"></i>
+                        <div class="program-modal__callout-content">
+                            <div class="program-modal__callout-title">임계값 초과 시 동작</div>
+                            <p class="program-modal__callout-text">
+                                해당 모터의 토크가 자동으로 차단되며, 모터 카드에 <strong>충돌 감지!</strong> 경고가 표시되고 카드 테두리가 빨간색으로 변합니다.
+                                슬라이더를 움직이면 충돌 상태가 해제되고 토크가 다시 활성화됩니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 모터 카드 모니터링 (Mode 2) -->
+                    <h3 class="program-modal__section-title">
+                        <i class="fas fa-th"></i> 3. 모터 카드 — 모니터링 및 제어
+                    </h3>
+                    <p class="program-modal__feature-desc" style="margin-bottom: 12px;">연결된 각 모터마다 개별 카드가 표시되며, 100ms 주기로 자동 업데이트됩니다.</p>
+                    <div class="program-modal__monitor-grid">
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-compass"></i>
+                            <div class="program-modal__monitor-label">현재 위치</div>
+                            <div class="program-modal__monitor-value">0~4095</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-weight-hanging"></i>
+                            <div class="program-modal__monitor-label">부하</div>
+                            <div class="program-modal__monitor-value">70% 초과 시 주황색</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-bolt"></i>
+                            <div class="program-modal__monitor-label">전류</div>
+                            <div class="program-modal__monitor-value">70% 초과 시 주황색</div>
+                        </div>
+                        <div class="program-modal__monitor-item">
+                            <i class="fas fa-sliders-h"></i>
+                            <div class="program-modal__monitor-label">슬라이더</div>
+                            <div class="program-modal__monitor-value">목표 위치 설정</div>
+                        </div>
+                    </div>
+
+                    <!-- 문제 해결 -->
+                    <h3 class="program-modal__section-title" style="margin-top: 32px;">
                         <i class="fas fa-wrench"></i> 문제 해결
                     </h3>
                     <div class="program-modal__troubleshoot">
@@ -811,7 +952,7 @@
                         <div class="program-modal__trouble-item">
                             <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
                                 <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
-                                <div class="program-modal__trouble-title">모터가 스캔되지 않음</div>
+                                <div class="program-modal__trouble-title">모터가 스캔되지 않음 (단일 모드)</div>
                                 <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
                             </div>
                             <div class="program-modal__trouble-body">
@@ -834,8 +975,24 @@
                                 <div class="program-modal__trouble-solution">
                                     <ul class="program-modal__list">
                                         <li>토크 ON 상태인지 확인하세요</li>
-                                        <li>속도 값이 0이 아닌지 확인하세요</li>
+                                        <li>속도 값이 0이 아닌지 확인하세요 (단일 모드)</li>
                                         <li>모터 전원 공급 상태를 확인하세요</li>
+                                        <li>SO-ARM 101 모드: 충돌 감지로 토크가 꺼졌을 수 있습니다 — 슬라이더를 움직여 재활성화하세요</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="program-modal__trouble-item">
+                            <div class="program-modal__trouble-header" onclick="toggleTrouble(this)">
+                                <div class="program-modal__trouble-icon"><i class="fas fa-exclamation"></i></div>
+                                <div class="program-modal__trouble-title">SO-ARM 101 연결 후 카드가 표시되지 않음</div>
+                                <i class="fas fa-chevron-down program-modal__trouble-toggle"></i>
+                            </div>
+                            <div class="program-modal__trouble-body">
+                                <div class="program-modal__trouble-solution">
+                                    <ul class="program-modal__list">
+                                        <li>ID 목록이 올바르게 입력되었는지 확인하세요 (예: <code>1,2,3,4,5,6</code>)</li>
+                                        <li>모터 전원과 시리얼 케이블 연결 상태를 확인하세요</li>
                                     </ul>
                                 </div>
                             </div>
