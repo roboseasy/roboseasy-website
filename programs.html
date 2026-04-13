@@ -69,7 +69,7 @@
                 </div>
                 <h3 class="program-card__title">Keyboard Teleop GUI</h3>
                 <p class="program-card__description">
-                    SO-ARM 로봇 팔
+                    SO-ARM 101
                     <br>
                     키보드 원격 조작 GUI
                 </p>
@@ -78,6 +78,27 @@
                         <i class="fas fa-info-circle"></i> 자세히 보기
                     </a>
                     <a href="#" class="program-card__button program-card__button--download" onclick="return handleDownload('https://drive.google.com/file/d/1YkyZgD2pH8bYAVkHUgAy7rjMjtyFHiVC/view?usp=sharing');">
+                        <i class="fas fa-download"></i> 다운로드
+                    </a>
+                </div>
+            </div>
+
+            <!-- Program Card - SO-ARM End-Effector Teleop GUI -->
+            <div class="program-card">
+                <div class="program-card__image-container">
+                    <img class="program-card__image" src="img/endeffector-teleop-gui.png" alt="SO-ARM End-Effector Teleop GUI" onerror="this.src='img/placeholder-robot.png'">
+                </div>
+                <h3 class="program-card__title">End-Effector Teleop GUI</h3>
+                <p class="program-card__description">
+                    SO-ARM 101
+                    <br>
+                    엔드이펙터 키보드 제어 GUI
+                </p>
+                <div class="program-card__buttons">
+                    <a href="#" class="program-card__button program-card__button--details" onclick="openProgramModal('endeffector-teleop'); return false;">
+                        <i class="fas fa-info-circle"></i> 자세히 보기
+                    </a>
+                    <a href="#" class="program-card__button program-card__button--download" onclick="return handleDownload('https://drive.google.com/file/d/1lAFLX7U60FygCjQlVMCf3TUf3wz3cC14/view?usp=sharing');">
                         <i class="fas fa-download"></i> 다운로드
                     </a>
                 </div>
@@ -846,6 +867,258 @@ cd squashfs-root && ./AppRun</code></div>
         </div>
     </div>
 
+    <!-- 프로그램 상세 모달 — End-Effector Teleop GUI -->
+    <div class="program-modal-overlay" id="endeffectorTeleopModalOverlay" onclick="closeProgramModal(event, 'endeffector-teleop')">
+        <div class="program-modal" id="endeffectorTeleopModal">
+            <button class="program-modal__close" onclick="closeProgramModal(null, 'endeffector-teleop')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="program-modal__content">
+                <div class="program-modal__header">
+                    <div class="program-modal__image-section">
+                        <img src="img/endeffector-teleop-gui.png" alt="End-Effector Teleop GUI" class="program-modal__image" onerror="this.src='img/placeholder-robot.png'">
+                    </div>
+                    <div class="program-modal__info-section">
+                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
+                        <h2 class="program-modal__title">End-Effector Teleop GUI</h2>
+                        <p class="program-modal__subtitle">SO-ARM 로봇 팔의 엔드이펙터를 키보드로 직접 제어하는 GUI. P-제어와 2D 역기구학(IK)을 기반으로 동작하며, 실시간 카메라 피드와 관절 상태 모니터링을 지원합니다.</p>
+                        <a href="https://drive.google.com/file/d/1lAFLX7U60FygCjQlVMCf3TUf3wz3cC14/view?usp=sharing" target="_blank" class="program-modal__download-btn">
+                            <i class="fas fa-download"></i> AppImage 다운로드
+                        </a>
+                    </div>
+                </div>
+                <!-- 탭 네비게이션 -->
+                <div class="modal-tabs">
+                    <button class="modal-tab modal-tab--active" onclick="switchModalTab(this, 'eef-개요')">개요</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, 'eef-조작법')">키보드 조작법</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, 'eef-웨이포인트')">Waypoints</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, 'eef-문제해결')">문제 해결</button>
+                </div>
+                <div class="modal-tab-panels">
+
+                    <!-- 탭 1: 개요 -->
+                    <div class="modal-tab-panel modal-tab-panel--active" data-tab="eef-개요">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-badge-row">
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 카메라 피드</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 엔드이펙터 상태 모니터링</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> Waypoints 저장·재현</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> Excel 내보내기/불러오기</span>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-layer-group"></i> 화면 구성</div>
+                            <div class="modal-feature-grid">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-plug"></i></div>
+                                    <div class="modal-feature-card__title">연결 (Connection)</div>
+                                    <div class="modal-feature-card__desc">포트 드롭다운에서 로봇의 시리얼 포트를 선택하고 Connect/Stop으로 연결을 제어합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-video"></i></div>
+                                    <div class="modal-feature-card__title">카메라 피드</div>
+                                    <div class="modal-feature-card__desc">연결된 카메라를 자동 감지해 실시간 표시. 체크박스로 카메라별 on/off가 가능합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-bar"></i></div>
+                                    <div class="modal-feature-card__title">엔드이펙터 상태</div>
+                                    <div class="modal-feature-card__desc">EEF X/Y 좌표와 각 관절 각도를 미니 바와 수치로 실시간 확인합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-keyboard"></i></div>
+                                    <div class="modal-feature-card__title">키보드 제어</div>
+                                    <div class="modal-feature-card__desc">키보드 단축키로 EEF XY 좌표를 이동하면 역기구학이 자동으로 관절각을 계산합니다.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-timeline">
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">1</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">캘리브레이션 파일 확인</div><div class="modal-timeline__desc"><code>~/calibration/robots/so_follower/</code> 경로에 캘리브레이션 파일이 있어야 합니다. lerobot 캘리브레이션을 먼저 완료하세요.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">2</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">포트 선택 및 연결</div><div class="modal-timeline__desc">Port 드롭다운에서 포트를 선택하고 Connect 클릭 → 로봇이 초기 위치(Zero Position)로 이동합니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">3</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">키보드로 제어</div><div class="modal-timeline__desc">W/S/E/D 키로 EEF XY 좌표를 이동합니다. 역기구학이 자동 계산되어 관절이 움직입니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">4</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">종료</div><div class="modal-timeline__desc">Stop 버튼으로 초기 위치 복귀 후 연결 해제, 또는 X 키로 즉시 복귀합니다.</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-spec-list">
+                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux x86_64 (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, SO-ARM 101, 웹캠 (선택)</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-file-alt"></i><span class="modal-spec-item__label">캘리브레이션</span><span class="modal-spec-item__value">lerobot 캘리브레이션 파일 필요</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 2: 키보드 조작법 -->
+                    <div class="modal-tab-panel" data-tab="eef-조작법">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-keyboard"></i> 키 매핑</div>
+                            <div class="modal-kv-grid">
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>Q</code> / <code>A</code></div><div class="modal-kv__value">shoulder_pan 감소/증가</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>W</code> / <code>S</code></div><div class="modal-kv__value">EEF X 감소/증가 (IK 자동)</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>E</code> / <code>D</code></div><div class="modal-kv__value">EEF Y 감소/증가 (IK 자동)</div></div>
+                                <div class="modal-kv"><i class="fas fa-redo"></i><div class="modal-kv__label"><code>R</code> / <code>F</code></div><div class="modal-kv__value">Pitch 증가/감소</div></div>
+                                <div class="modal-kv"><i class="fas fa-sync-alt"></i><div class="modal-kv__label"><code>T</code> / <code>G</code></div><div class="modal-kv__value">Roll 감소/증가</div></div>
+                                <div class="modal-kv"><i class="fas fa-hand-paper"></i><div class="modal-kv__label"><code>Y</code> / <code>H</code></div><div class="modal-kv__value">그리퍼 열기/닫기</div></div>
+                                <div class="modal-kv"><i class="fas fa-stop-circle"></i><div class="modal-kv__label"><code>X</code></div><div class="modal-kv__value">정지 및 초기 위치 복귀</div></div>
+                            </div>
+                        </div>
+                        <div class="modal-callout modal-callout--warning">
+                            <i class="fas fa-info-circle modal-callout__icon"></i>
+                            <div>
+                                <div class="modal-callout__title">키 홀드 동작</div>
+                                <p class="modal-callout__text">키를 <strong>누르고 있으면</strong> 해당 방향으로 계속 이동합니다 (50Hz 제어 루프). GUI 창에 포커스가 있어야 키 입력이 동작합니다.</p>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-tachometer-alt"></i> 엔드이펙터 상태 모니터</div>
+                            <div class="modal-kv-grid">
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label">EEF X</div><div class="modal-kv__value">말단 X 좌표 (m)</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label">EEF Y</div><div class="modal-kv__value">말단 Y 좌표 (m)</div></div>
+                                <div class="modal-kv"><i class="fas fa-compass"></i><div class="modal-kv__label">Pan / Lift / Elbow</div><div class="modal-kv__value">각 관절각 (°)</div></div>
+                                <div class="modal-kv"><i class="fas fa-sync-alt"></i><div class="modal-kv__label">W.Flex / W.Roll</div><div class="modal-kv__value">손목 관절각 (°)</div></div>
+                                <div class="modal-kv"><i class="fas fa-hand-paper"></i><div class="modal-kv__label">Gripper</div><div class="modal-kv__value">그리퍼 개폐율 (%)</div></div>
+                                <div class="modal-kv"><i class="fas fa-redo"></i><div class="modal-kv__label">Pitch</div><div class="modal-kv__value">피치 오프셋 (°)</div></div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-play-circle"></i> 실행 명령</div>
+                            <div class="modal-code"><code>chmod +x endeffector-teleop-gui-x86_64.AppImage
+./endeffector-teleop-gui-x86_64.AppImage</code></div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 3: Waypoints -->
+                    <div class="modal-tab-panel" data-tab="eef-웨이포인트">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-map-marker-alt"></i> Waypoints 모드란</div>
+                            <p style="color:var(--text-secondary,#b0b8c1);margin-bottom:12px">주요 위치를 슬롯(1~20)에 저장하고, 저장된 위치로 즉시 이동하거나 순서대로 자동 실행할 수 있습니다.</p>
+                            <div class="modal-timeline">
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">1</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">모드 전환</div><div class="modal-timeline__desc">상단 바의 <strong>📍 Waypoints 모드</strong> 버튼을 클릭합니다. 돌아오려면 <strong>◀ Teleop 모드</strong> 버튼을 누릅니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">2</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">위치 저장</div><div class="modal-timeline__desc">슬롯 번호를 선택한 뒤 <strong>현재 위치 저장</strong> 버튼을 클릭합니다. X, Y, Pan, Pitch, Roll, Gripper 값이 저장됩니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">3</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">이동 및 자동 실행</div><div class="modal-timeline__desc"><strong>이동</strong> 버튼으로 해당 슬롯으로 즉시 이동하거나, <strong>▶ 전체 순차 실행</strong>으로 저장된 슬롯을 순서대로 자동 실행합니다 (각 포인트 간 약 2초 대기).</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-file-excel"></i> Excel 내보내기 / 불러오기</div>
+                            <div class="modal-feature-grid">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-upload"></i></div>
+                                    <div class="modal-feature-card__title">📤 Excel 내보내기</div>
+                                    <div class="modal-feature-card__desc">현재 저장된 모든 Waypoints를 <code>.xlsx</code> 파일로 저장합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-download"></i></div>
+                                    <div class="modal-feature-card__title">📥 Excel 불러오기</div>
+                                    <div class="modal-feature-card__desc">저장된 <code>.xlsx</code> 파일에서 Waypoints를 불러옵니다.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-callout modal-callout--warning">
+                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <div><div class="modal-callout__title">연결 필요</div><p class="modal-callout__text">이동 버튼과 전체 순차 실행은 로봇이 <strong>Connected</strong> 상태에서만 동작합니다.</p></div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 4: 문제 해결 -->
+                    <div class="modal-tab-panel" data-tab="eef-문제해결">
+                        <div class="modal-accordion">
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">포트가 목록에 나타나지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>USB-시리얼 어댑터 연결을 확인하고 <strong>⟳ Refresh</strong>를 누릅니다. 그래도 안 보이면 시리얼 포트 권한 문제입니다.</p>
+                                        <div class="modal-code"><code>sudo usermod -aG dialout $USER
+# 로그아웃 후 재로그인</code></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">연결 시 캘리브레이션 오류 발생</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><code>~/calibration/robots/so_follower/</code> 경로에 캘리브레이션 파일이 있는지 확인하세요. lerobot 캘리브레이션을 먼저 완료해야 합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">키보드 입력이 동작하지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>프로그램 창을 마우스로 클릭해 포커스를 맞춥니다. 버튼이나 드롭다운에 포커스가 있으면 키 입력이 차단됩니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">카메라가 감지되지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><strong>⟳ Detect cameras</strong> 버튼을 다시 클릭합니다. <code>/dev/video*</code> 장치가 존재하는지 확인하고, 다른 앱이 카메라를 점유 중이라면 먼저 종료합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">AppImage가 실행되지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><code>chmod +x</code>를 실행했는지 확인합니다. FUSE가 없는 환경이라면 아래 명령을 사용하세요.</p>
+                                        <div class="modal-code"><code>./endeffector-teleop-gui-x86_64.AppImage --appimage-extract-and-run</code></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main-footer></main-footer>
 
     <!--Components-->
@@ -873,6 +1146,8 @@ cd squashfs-root && ./AppRun</code></div>
                 overlay = document.getElementById('sts3215ModalOverlay');
             } else if (programId === 'keyboard-teleop') {
                 overlay = document.getElementById('keyboardTeleopModalOverlay');
+            } else if (programId === 'endeffector-teleop') {
+                overlay = document.getElementById('endeffectorTeleopModalOverlay');
             } else {
                 overlay = document.getElementById('programModalOverlay');
             }
@@ -899,11 +1174,14 @@ cd squashfs-root && ./AppRun</code></div>
                 overlay = document.getElementById('programModalOverlay');
             } else if (modalType === 'keyboard-teleop') {
                 overlay = document.getElementById('keyboardTeleopModalOverlay');
+            } else if (modalType === 'endeffector-teleop') {
+                overlay = document.getElementById('endeffectorTeleopModalOverlay');
             } else {
                 // 모든 모달 닫기
                 document.getElementById('programModalOverlay').classList.remove('active');
                 document.getElementById('sts3215ModalOverlay').classList.remove('active');
                 document.getElementById('keyboardTeleopModalOverlay').classList.remove('active');
+                document.getElementById('endeffectorTeleopModalOverlay').classList.remove('active');
                 document.body.style.overflow = '';
                 return;
             }
@@ -917,6 +1195,7 @@ cd squashfs-root && ./AppRun</code></div>
                 closeProgramModal(null, 'motor-control');
                 closeProgramModal(null, 'sts3215');
                 closeProgramModal(null, 'keyboard-teleop');
+                closeProgramModal(null, 'endeffector-teleop');
             }
         });
 
