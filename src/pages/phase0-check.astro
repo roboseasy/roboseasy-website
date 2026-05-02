@@ -1,0 +1,21 @@
+---
+// Phase 0 빌드 파이프라인 검증용 임시 페이지.
+// Astro 설치/빌드/타입체크가 정상 동작하는지 확인하는 용도이며,
+// Phase 1에서 BaseLayout + 정식 index.astro 도입과 함께 제거 예정.
+const buildTime = new Date().toISOString();
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>Astro Phase 0 Check — RoboSEasy</title>
+  </head>
+  <body>
+    <main>
+      <h1>Astro 빌드 파이프라인 OK</h1>
+      <p>Built at: {buildTime}</p>
+      <p>이 페이지는 Phase 1에서 제거됩니다.</p>
+    </main>
+  </body>
+</html>
