@@ -1,0 +1,8 @@
+{
+  "slug": "endeffector-teleop",
+  "order": 3,
+  "title": "End-Effector Teleop GUI",
+  "description": "SO-ARM 101\n엔드이펙터 키보드 제어 GUI",
+  "thumbnail": "/img/endeffector-teleop-gui.png",
+  "downloadUrl": "https://drive.google.com/file/d/1lAFLX7U60FygCjQlVMCf3TUf3wz3cC14/view?usp=sharing"
+}

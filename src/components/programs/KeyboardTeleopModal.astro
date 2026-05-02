@@ -1,0 +1,205 @@
+---
+// programs.astro에서 추출한 모달 본체. 모달 트리거/스크립트는 페이지에 유지.
+---
+    <div class="program-modal-overlay" id="keyboardTeleopModalOverlay" onclick="closeProgramModal(event, 'keyboard-teleop')">
+        <div class="program-modal" id="keyboardTeleopModal">
+            <button class="program-modal__close" onclick="closeProgramModal(null, 'keyboard-teleop')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="program-modal__content">
+                <div class="program-modal__header">
+                    <div class="program-modal__image-section">
+                        <img src="/img/keyboard-teleop-gui.png" alt="SO-ARM Keyboard Teleop GUI" class="program-modal__image" >
+                    </div>
+                    <div class="program-modal__info-section">
+                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
+                        <h2 class="program-modal__title">Keyboard Teleop GUI</h2>
+                        <p class="program-modal__subtitle">SO-ARM 로봇 팔을 키보드로 직접 조작하는 데스크탑 GUI. 실시간 카메라 피드를 보면서 각 관절을 제어하고 관절 상태를 화면에서 바로 확인할 수 있습니다.</p>
+                        <a href="https://drive.google.com/file/d/1YkyZgD2pH8bYAVkHUgAy7rjMjtyFHiVC/view?usp=sharing" target="_blank" class="program-modal__download-btn">
+                            <i class="fas fa-download"></i> AppImage 다운로드
+                        </a>
+                    </div>
+                </div>
+                <!-- 탭 네비게이션 -->
+                <div class="modal-tabs">
+                    <button class="modal-tab modal-tab--active" onclick="switchModalTab(this, '개요')">개요</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '조작법')">키보드 조작법</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '문제해결')">문제 해결</button>
+                </div>
+                <div class="modal-tab-panels">
+
+                    <!-- 탭 1: 개요 -->
+                    <div class="modal-tab-panel modal-tab-panel--active" data-tab="개요">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-badge-row">
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 카메라 피드</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 관절 상태 모니터링</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 비상 정지 기능</span>
+                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 직관적인 키보드 제어</span>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-layer-group"></i> 화면 구성</div>
+                            <div class="modal-feature-grid">
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-plug"></i></div>
+                                    <div class="modal-feature-card__title">연결 (Connection)</div>
+                                    <div class="modal-feature-card__desc">포트 드롭다운에서 로봇의 시리얼 포트를 선택하고 Connect/Disconnect로 연결을 제어합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-video"></i></div>
+                                    <div class="modal-feature-card__title">카메라 피드</div>
+                                    <div class="modal-feature-card__desc">연결된 카메라를 자동 감지해 실시간 표시. 체크박스로 카메라별 on/off가 가능합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-bar"></i></div>
+                                    <div class="modal-feature-card__title">관절 상태</div>
+                                    <div class="modal-feature-card__desc">6개 관절의 현재 위치를 바 차트와 수치로 실시간 확인합니다.</div>
+                                </div>
+                                <div class="modal-feature-card">
+                                    <div class="modal-feature-card__icon"><i class="fas fa-keyboard"></i></div>
+                                    <div class="modal-feature-card__title">컨트롤 패드</div>
+                                    <div class="modal-feature-card__desc">키보드 레이아웃을 시각화. 현재 누른 키가 하이라이트됩니다.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-timeline">
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">1</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">포트 선택</div><div class="modal-timeline__desc">Port 드롭다운에서 로봇이 연결된 포트를 선택합니다. 목록이 비면 Refresh를 눌러 스캔합니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">2</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">연결</div><div class="modal-timeline__desc">Connect 클릭 → 상태가 ● Connected로 바뀌고 포트 선택이 비활성화됩니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">3</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">조작</div><div class="modal-timeline__desc">키보드로 로봇 관절을 제어합니다. Shift를 함께 누르면 이동 속도가 2배로 빨라집니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">4</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">모니터링</div><div class="modal-timeline__desc">Joint Status 바에서 각 관절의 현재 위치를 실시간으로 확인합니다.</div></div>
+                                </div>
+                                <div class="modal-timeline__item">
+                                    <div class="modal-timeline__num">5</div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">종료</div><div class="modal-timeline__desc">정상: Disconnect → Quit / 비상: Space 키 → 즉시 연결 해제</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-spec-list">
+                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux x86_64 (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
+                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, SO-ARM 로봇, 웹캠 (선택)</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 2: 키보드 조작법 -->
+                    <div class="modal-tab-panel" data-tab="조작법">
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-keyboard"></i> 키 매핑</div>
+                            <div class="modal-kv-grid">
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>A</code> / <code>D</code></div><div class="modal-kv__value">shoulder_pan 좌/우</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>W</code> / <code>S</code></div><div class="modal-kv__value">shoulder_lift 위/아래</div></div>
+                                <div class="modal-kv"><i class="fas fa-redo"></i><div class="modal-kv__label"><code>Q</code> / <code>E</code></div><div class="modal-kv__value">elbow_flex 굽힘/폄</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>↑</code> / <code>↓</code></div><div class="modal-kv__value">wrist_flex 위/아래</div></div>
+                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>←</code> / <code>→</code></div><div class="modal-kv__value">wrist_roll 좌/우</div></div>
+                                <div class="modal-kv"><i class="fas fa-hand-paper"></i><div class="modal-kv__label"><code>Z</code> / <code>C</code></div><div class="modal-kv__value">gripper 열기/닫기</div></div>
+                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label"><code>Shift</code> 홀드</div><div class="modal-kv__value">빠른 이동 (스텝 2×)</div></div>
+                                <div class="modal-kv"><i class="fas fa-stop-circle"></i><div class="modal-kv__label"><code>Space</code></div><div class="modal-kv__value">비상 정지</div></div>
+                            </div>
+                        </div>
+                        <div class="modal-callout modal-callout--danger">
+                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <div>
+                                <div class="modal-callout__title">비상 정지</div>
+                                <p class="modal-callout__text"><strong>Space</strong> 키를 누르면 즉시 연결이 해제됩니다. 로봇이 의도치 않게 움직일 경우 Space 키를 누르세요.</p>
+                            </div>
+                        </div>
+                        <div class="modal-section">
+                            <div class="modal-section__title"><i class="fas fa-play-circle"></i> 실행 명령</div>
+                            <div class="modal-code"><code>chmod +x keyboard-teleop-gui.AppImage
+./keyboard-teleop-gui.AppImage</code></div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 3: 문제 해결 -->
+                    <div class="modal-tab-panel" data-tab="문제해결">
+                        <div class="modal-accordion">
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">AppImage가 실행되지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p><code>chmod +x</code>를 실행했는지 확인합니다. FUSE가 없는 환경이라면 아래 명령을 사용하세요.</p>
+                                        <div class="modal-code"><code>./keyboard-teleop-gui-x86_64.AppImage --appimage-extract-and-run</code></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">포트 목록이 비어 있다 (no ports found)</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>로봇이 USB로 연결되어 있는지 확인하고 Refresh를 누릅니다. 그래도 안 보이면 시리얼 포트 접근 권한 문제입니다. 아래 명령 실행 후 <strong>재로그인</strong>하세요.</p>
+                                        <div class="modal-code"><code>sudo usermod -aG dialout $USER</code></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">Connect를 눌렀는데 연결에 실패한다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>다른 프로그램(터미널, ROS 노드 등)이 같은 포트를 점유 중일 수 있습니다. 해당 프로세스를 종료한 뒤 다시 시도합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">카메라가 감지되지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>카메라 USB 연결을 확인한 뒤 Camera Feeds 패널의 Refresh를 누릅니다. Cheese, OBS 등 다른 앱이 카메라를 점유 중이라면 먼저 종료합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-accordion__item">
+                                <div class="modal-accordion__header" onclick="toggleAccordion(this)">
+                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__title">키보드 입력이 반응하지 않는다</div>
+                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                </div>
+                                <div class="modal-accordion__body">
+                                    <div class="modal-accordion__solution">
+                                        <p>GUI 창을 한 번 클릭해 포커스를 맞춥니다. 연결(Connect)을 완료하지 않은 상태에서는 키 입력이 로봇에 전달되지 않습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 프로그램 상세 모달 — End-Effector Teleop GUI -->
