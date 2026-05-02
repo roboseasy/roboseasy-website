@@ -1,0 +1,40 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  /** 페이지 path. 사이트 절대 URL로 자동 합성됨 (예: '/programs') */
+  path?: string;
+  /** OG/Twitter 이미지 절대/상대 URL. 기본값은 사이트 배너 */
+  image?: string;
+  /** og:type. 기본 'website' */
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description,
+  path = '',
+  image = '/img/banner.png',
+  type = 'website',
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://roboseasy.netlify.app';
+const canonical = `${siteUrl}${path}`;
+const absoluteImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={absoluteImage} />
+<meta property="og:url" content={canonical} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={absoluteImage} />
