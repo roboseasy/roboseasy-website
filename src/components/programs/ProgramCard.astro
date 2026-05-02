@@ -27,10 +27,8 @@ const descriptionLines = description.split('\n');
   </p>
   <div class="program-card__buttons">
     <a
-      href="#"
+      href={`/programs/${slug}`}
       class="program-card__button program-card__button--details"
-      data-program-slug={slug}
-      onclick={`openProgramModal('${slug}'); return false;`}
     >
       <i class="fas fa-info-circle"></i> 자세히 보기
     </a>

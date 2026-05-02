@@ -2,9 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProgramCard from '../components/programs/ProgramCard.astro';
-import Sts3215Modal from '../components/programs/Sts3215Modal.astro';
-import KeyboardTeleopModal from '../components/programs/KeyboardTeleopModal.astro';
-import EndeffectorTeleopModal from '../components/programs/EndeffectorTeleopModal.astro';
 import '../styles/pages/programs.css';
 
 const title = 'Programs - RoboSEasy | 로보시지';
@@ -28,83 +25,12 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
       {programs.map(({ data }) => <ProgramCard {...data} />)}
     </div>
   </section>
-
-  <Sts3215Modal />
-  <KeyboardTeleopModal />
-  <EndeffectorTeleopModal />
 </BaseLayout>
 
 <script is:inline>
-  // 모달 스크립트 — 슬러그를 모달 overlay id에 매핑.
-  // 기존 onclick="..." 어트리뷰트와 호환되도록 전역 함수로 노출.
-  const modalOverlayIdBySlug = {
-    'sts3215-motor-test': 'sts3215ModalOverlay',
-    'keyboard-teleop': 'keyboardTeleopModalOverlay',
-    'endeffector-teleop': 'endeffectorTeleopModalOverlay',
-  };
-
-  function isMobileOrTablet() {
-    return window.innerWidth <= 1024;
-  }
-
-  function openProgramModal(slug) {
-    if (isMobileOrTablet()) {
-      alert('PC에서만 확인 가능합니다.');
-      return;
-    }
-    const overlayId = modalOverlayIdBySlug[slug];
-    const overlay = overlayId && document.getElementById(overlayId);
-    if (!overlay) return;
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
+  // 카드 다운로드 버튼 — onclick="return handleDownload(...)" 어트리뷰트 호환을 위해 전역 함수로 노출
   function handleDownload(url) {
-    if (isMobileOrTablet()) {
-      alert('PC에서만 확인 가능합니다.');
-      return false;
-    }
     window.open(url, '_blank');
     return false;
-  }
-
-  function closeAllModals() {
-    Object.values(modalOverlayIdBySlug).forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('active');
-    });
-    document.body.style.overflow = '';
-  }
-
-  // 모달 overlay 본인 클릭 시 닫기 (위임). 기존 onclick="closeProgramModal(...)" 어트리뷰트와 호환.
-  function closeProgramModal(event) {
-    if (event && event.target !== event.currentTarget) return;
-    closeAllModals();
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeAllModals();
-  });
-
-  function toggleTrouble(header) {
-    const item = header.closest('.program-modal__trouble-item');
-    item.classList.toggle('active');
-  }
-
-  function toggleAccordion(header) {
-    const item = header.closest('.modal-accordion__item');
-    item.classList.toggle('active');
-  }
-
-  function switchModalTab(btn, tabId) {
-    const tabs = btn.closest('.modal-tabs');
-    tabs.querySelectorAll('.modal-tab').forEach((t) => {
-      t.classList.remove('modal-tab--active');
-    });
-    btn.classList.add('modal-tab--active');
-    const panels = btn.closest('.program-modal__content').querySelectorAll('.modal-tab-panel');
-    panels.forEach((p) => p.classList.remove('modal-tab-panel--active'));
-    const target = btn.closest('.program-modal__content').querySelector('[data-tab="' + tabId + '"]');
-    if (target) target.classList.add('modal-tab-panel--active');
   }
 </script>

@@ -1,11 +1,6 @@
 ---
-// programs.astro에서 추출한 모달 본체. 모달 트리거/스크립트는 페이지에 유지.
+// /programs/keyboard-teleop 라우트의 본문. [slug].astro가 BaseLayout으로 감싸 렌더.
 ---
-    <div class="program-modal-overlay" id="keyboardTeleopModalOverlay" onclick="closeProgramModal(event, 'keyboard-teleop')">
-        <div class="program-modal" id="keyboardTeleopModal">
-            <button class="program-modal__close" onclick="closeProgramModal(null, 'keyboard-teleop')">
-                <i class="fas fa-times"></i>
-            </button>
             <div class="program-modal__content">
                 <div class="program-modal__header">
                     <div class="program-modal__image-section">
@@ -199,7 +194,3 @@
 
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 프로그램 상세 모달 — End-Effector Teleop GUI -->

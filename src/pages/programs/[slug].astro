@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sts3215Detail from '../../components/programs/Sts3215Detail.astro';
+import KeyboardTeleopDetail from '../../components/programs/KeyboardTeleopDetail.astro';
+import EndeffectorTeleopDetail from '../../components/programs/EndeffectorTeleopDetail.astro';
+import '../../styles/pages/programs.css';
+
+export async function getStaticPaths() {
+  const programs = await getCollection('programs');
+  return programs.map(({ data }) => ({
+    params: { slug: data.slug },
+    props: { data },
+  }));
+}
+
+// 슬러그 → 본문 컴포넌트 매핑
+const detailBySlug = {
+  'sts3215-motor-test': Sts3215Detail,
+  'keyboard-teleop': KeyboardTeleopDetail,
+  'endeffector-teleop': EndeffectorTeleopDetail,
+};
+
+const { data } = Astro.props;
+const Detail = detailBySlug[data.slug];
+
+const title = `${data.title} - RoboSEasy | 로보시지`;
+---
+<BaseLayout title={title} description={data.description.replace(/\n/g, ' ')} path={`/programs/${data.slug}`} image={data.thumbnail}>
+  <section class="program-detail">
+    <div class="program-detail__container">
+      <a href="/programs" class="program-detail__back"><i class="fas fa-arrow-left"></i> 프로그램 목록으로</a>
+      <Detail />
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  /* 모달 → 라우트 전환에 따라 program-modal__content를 페이지 내부에서 사용.
+     모달 전용 제약(max-height, overflow)을 페이지 컨텍스트에서 해제. */
+  .program-detail {
+    padding: 40px 20px 80px;
+  }
+  .program-detail__container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .program-detail__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-weight: var(--fw-medium);
+    margin-bottom: 24px;
+    transition: transform 0.2s ease;
+  }
+  .program-detail__back:hover {
+    transform: translateX(-4px);
+  }
+  .program-detail .program-modal__content {
+    max-height: none;
+    overflow: visible;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+</style>
+
+<script is:inline>
+  // 탭/아코디언 토글 — 기존 onclick="..." 어트리뷰트 호환을 위해 전역 함수로 노출
+  function switchModalTab(btn, tabId) {
+    const tabs = btn.closest('.modal-tabs');
+    tabs.querySelectorAll('.modal-tab').forEach((t) => {
+      t.classList.remove('modal-tab--active');
+    });
+    btn.classList.add('modal-tab--active');
+    const panels = btn.closest('.program-modal__content').querySelectorAll('.modal-tab-panel');
+    panels.forEach((p) => p.classList.remove('modal-tab-panel--active'));
+    const target = btn.closest('.program-modal__content').querySelector('[data-tab="' + tabId + '"]');
+    if (target) target.classList.add('modal-tab-panel--active');
+  }
+
+  function toggleAccordion(header) {
+    const item = header.closest('.modal-accordion__item');
+    item.classList.toggle('active');
+  }
+
+  // 구버전 호환 (programs.html의 toggleTrouble)
+  function toggleTrouble(header) {
+    const item = header.closest('.program-modal__trouble-item');
+    item.classList.toggle('active');
+  }
+
+  // 다운로드 버튼 — Detail 본문에 onclick="return handleDownload(...)" 호출이 있으므로
+  // 라우트 페이지에서도 전역 함수가 있어야 함. PC/모바일 가드 없이 새 탭 오픈.
+  function handleDownload(url) {
+    window.open(url, '_blank');
+    return false;
+  }
+</script>

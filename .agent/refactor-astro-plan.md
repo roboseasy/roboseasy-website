@@ -168,23 +168,63 @@ roboseasy-website/
 - 이미지를 `src/assets/img/...`로 이동하면서 `<Image>` 컴포넌트로 교체
 
 ### Phase 3 — Content Collections: programs (1.5d)
-- `src/content/config.ts`에 `programs` 컬렉션 스키마 정의
-  ```ts
-  programs: defineCollection({
-    type: 'content',
-    schema: z.object({
-      title: z.string(),
-      slug: z.string(),
-      thumbnail: z.string(),       // src/assets/... 경로
-      tagline: z.string(),
-      tabs: z.array(z.object({ id: z.string(), label: z.string() })).optional(),
-    })
-  })
-  ```
-- `programs.html`의 4개 모달을 4개 MDX 파일로 분해
-- `src/pages/programs/index.astro`: 카드 그리드 (컬렉션 쿼리)
-- `src/pages/programs/[slug].astro`: 상세 페이지. 기존 모달 UX를 라우트로 승격 (뒤로가기/공유 가능)
-- 모달 형태를 유지하고 싶다면 `index.astro`에 `<ProgramModal>`을 4개 렌더하고 `client:idle`로 인터랙션 hydrate
+
+#### Phase 3a — 분해 ✅ 완료 (commit c03749b)
+- `src/content/config.ts`에 `programs` 컬렉션 스키마 정의 (`type: 'data'`, JSON)
+- 카드 메타데이터 3개를 JSON으로 추출 (sts3215-motor-test, keyboard-teleop, endeffector-teleop)
+- 카드 그리드 → `<ProgramCard {...data} />` 데이터 드리븐
+- 모달 본체 3개를 별도 .astro 컴포넌트로 추출 (`Sts3215Modal`, `KeyboardTeleopModal`, `EndeffectorTeleopModal`)
+- `src/pages/programs.astro` 1,191줄 → 110줄
+- 고아 motor-control 모달 (어떤 카드에서도 호출 안 됨) 제거
+- **이 시점까지 모달 UX 유지**
+
+#### Phase 3b — 모달 → 라우트 전환 (이번 작업)
+
+**목표**: 모달 UX를 별도 라우트(`/programs/<slug>`)로 승격하여 뒤로가기·URL 공유 가능하게.
+
+**작업 단계**:
+1. **모달 컴포넌트 → Detail 컴포넌트 리팩터** (3개)
+   - 외곽 `.program-modal-overlay` + `.program-modal` + `.program-modal__close` 래퍼 제거
+   - 남은 `.program-modal__content` 내부(header + tabs + panels)만 렌더
+   - 파일명: `*Modal.astro` → `*Detail.astro`
+
+2. **동적 라우트 신규**: `src/pages/programs/[slug].astro`
+   - `getStaticPaths`: `getCollection('programs')`로 3개 경로 생성
+   - 슬러그 → 적절한 Detail 컴포넌트 매핑 (object lookup)
+   - `BaseLayout` 사용 (chrome=true)
+
+3. **`src/components/programs/ProgramCard.astro` 수정**
+   - 자세히 보기: `href="/programs/${slug}"` (정상 anchor)
+   - `onclick="openProgramModal(...)"` 제거
+   - **모바일 가드 제거** (사용자 결정): 카드 클릭 시 alert 차단 없음 → 모바일도 페이지 진입 가능. 페이지 자체는 PC 기반 CSS라 약간 어긋날 수 있으나 후속 디자인에서 보강.
+
+4. **`src/pages/programs.astro` 슬림화**
+   - `*Modal` 임포트/렌더 제거
+   - 모달 트리거 스크립트 제거 (`openProgramModal`, `closeAllModals`, ESC, 오버레이 클릭 위임)
+   - **유지**: `handleDownload` (다운로드 버튼 PC 가드)
+   - 탭/아코디언 스크립트는 [slug].astro로 이동
+
+5. **탭/아코디언 스크립트 위치**: `[slug].astro`의 `<script is:inline>`로 옮김
+   - `switchModalTab(btn, tabId)`, `toggleAccordion(header)`, `toggleTrouble(header)`
+   - 기존 `onclick="switchModalTab(this, '...')"` 어트리뷰트 호환 위해 전역 함수 유지
+
+**Out of scope (Phase 3b에서 안 함)**:
+- `.program-modal__*` CSS 클래스명 재명명 (Phase 6에서 dead CSS 정리와 함께)
+- 모바일 반응형 보강
+- 페이지에 backdrop/modal box 시각적 효과 옮기기 (페이지에선 불필요)
+
+**Files**:
+- New: `src/pages/programs/[slug].astro`
+- Rename + 수정: `src/components/programs/Sts3215Modal.astro` → `Sts3215Detail.astro` 외 2개
+- Modify: `src/pages/programs.astro`
+- Modify: `src/components/programs/ProgramCard.astro`
+
+**Verification**:
+- `npm run build` → `/programs/sts3215-motor-test`, `/programs/keyboard-teleop`, `/programs/endeffector-teleop` 라우트 생성
+- Dev: 카드 클릭 → 새 페이지 이동, 뒤로가기 동작
+- URL 직접 진입 가능
+- 탭 전환, 아코디언 토글 정상
+- 다운로드 버튼은 PC에서만 새 탭 열기
 
 ### Phase 4 — Content Collections: docs (1d)
 - `docs/lerobot-library/`, `docs/lerobot-so-arm/`의 마크다운을 `src/content/docs/`로 이동
