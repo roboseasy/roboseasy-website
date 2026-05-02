@@ -1,0 +1,225 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MainBanner from '../components/MainBanner.astro';
+import '../styles/pages/home.css';
+
+const title = 'RoboSEasy | 로보시지 - Robot is Easy, 이게 로보시지';
+const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제품·교육·기술을 통해 전국민의 Physical AI 접근성 향상에 기여합니다';
+---
+<BaseLayout title={title} description={description} path="/">
+  <MainBanner />
+
+  <section class="mobile-hackathon-section">
+    <a href="/hackathon" class="mobile-hackathon-button">해커톤 신청하기</a>
+    <a href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener" class="mobile-shop-button">로봇 구매하기</a>
+  </section>
+
+  <section class="content-section">
+    <div class="content-section__container">
+      <div class="content-section__decorators">
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+      </div>
+      <h2 class="content-section__heading">Trusted By</h2>
+      <div class="trusted-by">
+        <div class="trusted-by__item">
+          <img class="trusted-by__logo" src="/img/opengraph.png" alt="OpenGraph" />
+        </div>
+        <div class="trusted-by__item">
+          <img class="trusted-by__logo" src="/img/hyundai.png" alt="현대자동차" />
+        </div>
+        <div class="trusted-by__item">
+          <img class="trusted-by__logo" src="/img/hansung.png" alt="한성대학교" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="content-section__container">
+      <div class="content-section__decorators">
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+      </div>
+      <h2 class="content-section__heading">About Us</h2>
+      <p class="content-section__description">
+        로보시지(RoboSEasy)는 <br class="mobile-br" />AI·로봇 기술의 진입장벽을 낮추고, <br class="mobile-br" />누구나 로봇을 조립하고 학습하며 <br class="mobile-br" />활용할 수 있는 환경을 만드는 <br class="mobile-br" /><span class="content-section__description--emphasis">기술·교육 전문 기업</span>입니다.
+      </p>
+      <p class="content-section__description">
+        <br class="mobile-br" />
+        Physical AI는 더 이상 <br class="mobile-br" />소수 전문가나 대기업만의 영역이 아닙니다.
+      </p>
+      <p class="content-section__description">
+        <br class="mobile-br" />
+        개인 메이커, 학생, 연구자, 중소기업 모두가 <br class="mobile-br" />로봇 기술에 쉽게 접근할 수 있도록, <br class="mobile-br" /><span class="content-section__description--emphasis">대한민국 Physical AI 생태계 구축에 기여</span>합니다.
+      </p>
+
+      <div class="about-us">
+        <div class="about-us__item about-us__item--accessibility">
+          <h3 class="about-us__title">Accessibility</h3>
+          <p class="about-us__description">누구나 쉽게 로봇을 만들고<br />배울 수 있는 환경 제공</p>
+        </div>
+        <div class="about-us__item about-us__item--innovation">
+          <h3 class="about-us__title">Innovation</h3>
+          <p class="about-us__description">제조업과 로봇 산업의<br />발전을 선도하는 기술 보급</p>
+        </div>
+        <div class="about-us__item about-us__item--sovereignty">
+          <h3 class="about-us__title">Sovereignty</h3>
+          <p class="about-us__description">해외 기술 의존도를 낮추며<br />대한민국 고유의<br />Physical AI 역량 강화</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="content-section__container">
+      <div class="content-section__decorators">
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+      </div>
+      <h2 class="content-section__heading">What We Do</h2>
+      <div class="what-we-do">
+        <div class="what-we-do__card">
+          <div class="what-we-do__thumbnail">
+            <img class="what-we-do__image" src="/img/business-product.png" alt="제품 사업" />
+            <div class="what-we-do__number">01</div>
+          </div>
+          <h3 class="what-we-do__title">제품 사업</h3>
+          <p class="what-we-do__description">오픈소스 로봇 조립 키트 판매</p>
+          <p class="what-we-do__description">한글 매뉴얼 및 기술 지원 포함</p>
+          <p class="what-we-do__description">로봇 및 3D 프린팅 설계·개발</p>
+        </div>
+
+        <div class="what-we-do__card">
+          <div class="what-we-do__thumbnail">
+            <img class="what-we-do__image" src="/img/business-education.png" alt="교육 사업" />
+            <div class="what-we-do__number">02</div>
+          </div>
+          <h3 class="what-we-do__title">교육 사업</h3>
+          <p class="what-we-do__description">LeRobot 교육 콘텐츠 및 강의 제작</p>
+          <p class="what-we-do__description">기업·학교·기관 대상 오프라인 교육</p>
+          <p class="what-we-do__description">Physical AI 및 자동화 시스템 교육</p>
+        </div>
+
+        <div class="what-we-do__card">
+          <div class="what-we-do__thumbnail">
+            <img class="what-we-do__image" src="/img/business-tech.png" alt="기술 사업" />
+            <div class="what-we-do__number">03</div>
+          </div>
+          <h3 class="what-we-do__title">기술 사업</h3>
+          <p class="what-we-do__description">Physical AI 도입 컨설팅 및 개발</p>
+          <p class="what-we-do__description">AI Vision 기반 제조 자동화 PoC 구축</p>
+          <p class="what-we-do__description">산업 현장 맞춤형 로봇 솔루션 개발</p>
+        </div>
+
+        <div class="what-we-do__card">
+          <div class="what-we-do__thumbnail">
+            <img class="what-we-do__image" src="/img/business-contents.png" alt="콘텐츠 사업" />
+            <div class="what-we-do__number">04</div>
+          </div>
+          <h3 class="what-we-do__title">콘텐츠 사업</h3>
+          <p class="what-we-do__description">YouTube 기술 채널 운영</p>
+          <p class="what-we-do__description">오픈소스 기여 및 기술 문서화</p>
+          <p class="what-we-do__description">Physical AI 개발자 커뮤니티 활성화</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="content-section__container">
+      <div class="content-section__decorators">
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+      </div>
+      <h2 class="content-section__heading">Who We Are</h2>
+      <p class="content-section__description">서로 다른 전문성을 가진 3명의 창업자가 모였습니다</p>
+      <p class="content-section__description"><span class="content-section__description--emphasis">AI + 하드웨어 + 소프트웨어의 통합 역량</span>으로 <br class="mobile-br" />완성도 높은 로봇 솔루션을 제공합니다</p>
+
+      <div class="who-we-are">
+        <div class="who-we-are__member who-we-are__member--ai">
+          <h3 class="who-we-are__role">AI / 로보틱스 총괄</h3>
+          <p class="who-we-are__expertise">로봇 학습 알고리즘 및<br />강화학습 시스템 설계 경험</p>
+          <p class="who-we-are__expertise">Physical AI 연구 및<br />모방학습 기반 시스템 개발</p>
+        </div>
+        <div class="who-we-are__member who-we-are__member--hardware">
+          <h3 class="who-we-are__role">하드웨어 / 시스템 총괄</h3>
+          <p class="who-we-are__expertise">로봇 메카니즘 및 구동계 설계,<br />센서 통합 시스템 설계</p>
+          <p class="who-we-are__expertise">협동로봇 및 산업용 로봇<br />자동화 시스템 개발 경력</p>
+        </div>
+        <div class="who-we-are__member who-we-are__member--software">
+          <h3 class="who-we-are__role">소프트웨어 / 플랫폼 총괄</h3>
+          <p class="who-we-are__expertise">로봇 통합 제어 시스템 및<br />비전 인식 솔루션 개발</p>
+          <p class="who-we-are__expertise">제조 현장 최적화 및<br />양산 프로세스 구축 경험</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="content-section__container">
+      <div class="content-section__decorators">
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+      </div>
+      <h2 class="content-section__heading">Latest Activity</h2>
+      <div class="instagram-feed">
+        <div class="instagram-feed__post">
+          <blockquote class="instagram-media instagram-feed__embed" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DRXkNIsErNk/?img_index=1/" data-instgrm-version="14"></blockquote>
+        </div>
+        <div class="instagram-feed__post">
+          <blockquote class="instagram-media instagram-feed__embed" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DRXj_ZlEnUx/?img_index=1/" data-instgrm-version="14"></blockquote>
+        </div>
+        <div class="instagram-feed__post">
+          <blockquote class="instagram-media instagram-feed__embed" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DRXjv7okkvd/?img_index=1/" data-instgrm-version="14"></blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="content-section__container">
+      <div class="content-section__decorators">
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+        <span class="content-section__decorator"></span>
+      </div>
+      <h2 class="content-section__heading">Join Our Community</h2>
+      <div class="community">
+        <a target="_blank" rel="noopener" href="https://github.com/roboseasy" class="community__link" aria-label="GitHub">
+          <i class="community__icon fa-brands fa-github"></i>
+        </a>
+        <a target="_blank" rel="noopener" href="https://www.instagram.com/robo_seasy/" class="community__link" aria-label="Instagram">
+          <i class="community__icon fa-brands fa-instagram"></i>
+        </a>
+        <a target="_blank" rel="noopener" href="https://www.youtube.com/@RoboSEasy" class="community__link" aria-label="YouTube">
+          <i class="community__icon fa-brands fa-youtube"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // 스크롤 시 .content-section 노출 애니메이션 (기존 js/main.js에서 포팅)
+  const sections = document.querySelectorAll('.content-section');
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    },
+    { root: null, rootMargin: '0px', threshold: 0.1 }
+  );
+  sections.forEach((section) => observer.observe(section));
+</script>
+
+<!-- Instagram embed -->
+<script async src="https://www.instagram.com/embed.js" is:inline></script>
