@@ -1,0 +1,64 @@
+---
+// 모든 페이지 상단의 공통 네비게이션.
+// 마크업·인터랙션은 기존 js/components/main-header.js에서 1:1 포팅.
+---
+<header class="header">
+  <div class="header__container">
+    <a href="/" class="header__logo">
+      <img class="header__logo-image" src="/img/logo.png" alt="RoboSEasy Logo" />
+    </a>
+    <button class="header__menu-toggle" aria-label="메뉴 열기">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="header__overlay"></div>
+    <nav class="header__nav">
+      <button class="header__nav-close" aria-label="메뉴 닫기">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <ul class="header__nav-list">
+        <li class="header__nav-item"><a class="header__nav-link" href="/">Home</a></li>
+        <li class="header__nav-item"><a class="header__nav-link" href="/documents">Documents</a></li>
+        <li class="header__nav-item"><a class="header__nav-link" href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener">Shop</a></li>
+        <li class="header__nav-item"><a class="header__nav-link" href="https://forms.gle/r1A5JYj4dYZQJNoq8" target="_blank" rel="noopener">Education</a></li>
+        <li class="header__nav-item"><a class="header__nav-link" href="/programs">Programs</a></li>
+        <li class="header__nav-item"><a class="header__nav-link" href="/news">News</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // 모바일 메뉴 토글 — 한 번만 바인딩 (페이지 이동 시 Astro가 새로 로드)
+  const header = document.querySelector('.header');
+  if (header) {
+    const menuToggle = header.querySelector('.header__menu-toggle');
+    const nav = header.querySelector('.header__nav');
+    const overlay = header.querySelector('.header__overlay');
+    const closeBtn = header.querySelector('.header__nav-close');
+
+    const closeMenu = () => {
+      menuToggle?.classList.remove('is-active');
+      nav?.classList.remove('is-open');
+      overlay?.classList.remove('is-visible');
+      document.body.style.overflow = '';
+    };
+
+    if (menuToggle && nav && overlay) {
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('is-active');
+        nav.classList.toggle('is-open');
+        overlay.classList.toggle('is-visible');
+        document.body.style.overflow = nav.classList.contains('is-open') ? 'hidden' : '';
+      });
+
+      overlay.addEventListener('click', closeMenu);
+      closeBtn?.addEventListener('click', closeMenu);
+
+      header.querySelectorAll('.header__nav-link').forEach((link) => {
+        link.addEventListener('click', closeMenu);
+      });
+    }
+  }
+</script>

@@ -1,21 +1,24 @@
 ---
-// Phase 0 빌드 파이프라인 검증용 임시 페이지.
-// Astro 설치/빌드/타입체크가 정상 동작하는지 확인하는 용도이며,
-// Phase 1에서 BaseLayout + 정식 index.astro 도입과 함께 제거 예정.
-const buildTime = new Date().toISOString();
----
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MainBanner from '../components/MainBanner.astro';
 
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <title>Astro Phase 0 Check — RoboSEasy</title>
-  </head>
-  <body>
-    <main>
-      <h1>Astro 빌드 파이프라인 OK</h1>
-      <p>Built at: {buildTime}</p>
-      <p>이 페이지는 Phase 1에서 제거됩니다.</p>
-    </main>
-  </body>
-</html>
+// Phase 1 검증용 임시 페이지 — BaseLayout + 공통 컴포넌트 + 글로벌 스타일이
+// 정상 결합되는지 확인. Phase 2에서 정식 index.astro 도입과 함께 제거 예정.
+---
+<BaseLayout
+  title="Phase 1 Check — RoboSEasy"
+  description="Astro 마이그레이션 Phase 1 검증용 페이지"
+  path="/phase0-check"
+>
+  <MainBanner />
+  <main style="max-width: 800px; margin: 60px auto; padding: 0 20px;">
+    <h2 style="font-size: 28px; margin-bottom: 16px;">레이아웃 검증</h2>
+    <p>BaseLayout / MainHeader / MainFooter / MainBanner / SeoMeta + 글로벌 CSS가 정상 결합되면 OK.</p>
+    <ul style="margin-top: 16px; line-height: 1.8;">
+      <li>헤더 모바일 메뉴 토글 (768px 이하)</li>
+      <li>배너 페이드인 애니메이션</li>
+      <li>푸터 3컬럼 레이아웃</li>
+      <li>OG/Twitter 메타 태그 (페이지 소스 보기로 확인)</li>
+    </ul>
+  </main>
+</BaseLayout>
