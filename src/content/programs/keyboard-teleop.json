@@ -1,0 +1,8 @@
+{
+  "slug": "keyboard-teleop",
+  "order": 2,
+  "title": "Keyboard Teleop GUI",
+  "description": "SO-ARM 101\n키보드 원격 조작 GUI",
+  "thumbnail": "/img/keyboard-teleop-gui.png",
+  "downloadUrl": "https://drive.google.com/file/d/1YkyZgD2pH8bYAVkHUgAy7rjMjtyFHiVC/view?usp=sharing"
+}

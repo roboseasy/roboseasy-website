@@ -1,0 +1,48 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  downloadUrl?: string;
+}
+
+const { slug, title, description, thumbnail, downloadUrl } = Astro.props;
+
+// 줄바꿈을 <br />로 변환
+const descriptionLines = description.split('\n');
+---
+<div class="program-card">
+  <div class="program-card__image-container">
+    <img class="program-card__image" src={thumbnail} alt={title} />
+  </div>
+  <h3 class="program-card__title">{title}</h3>
+  <p class="program-card__description">
+    {descriptionLines.map((line, i) => (
+      <>
+        {line}
+        {i < descriptionLines.length - 1 && <br />}
+      </>
+    ))}
+  </p>
+  <div class="program-card__buttons">
+    <a
+      href="#"
+      class="program-card__button program-card__button--details"
+      data-program-slug={slug}
+      onclick={`openProgramModal('${slug}'); return false;`}
+    >
+      <i class="fas fa-info-circle"></i> 자세히 보기
+    </a>
+    {downloadUrl && (
+      <a
+        href="#"
+        class="program-card__button program-card__button--download"
+        data-program-download={downloadUrl}
+        onclick={`return handleDownload('${downloadUrl}');`}
+      >
+        <i class="fas fa-download"></i> 다운로드
+      </a>
+    )}
+  </div>
+</div>
