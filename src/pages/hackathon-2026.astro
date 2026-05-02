@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/hackaton-2026.css';
+
+const title = '제1회 Physical AI 해커톤';
+const description = 'HuggingFace LeRobot과 함께하는 로보틱스 제어 실무 경험';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  path="/hackathon-2026"
+  image="/img/hackaton-2026.png"
+  chrome={false}
+>
+  <header>
+    <div class="container">
+      <div class="logo-badge">한성대학교 RISE사업단.SW중심대학사업단 x 로보시지</div>
+      <h1>제1회 Physical AI 해커톤</h1>
+      <p class="subtitle">국내 최초, 양팔 로봇을 활용한<br />Physical AI 해커톤</p>
+      <a href="javascript:void(0)" class="cta-button" onclick="openModal()">참가 신청하기</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <section class="section">
+        <h2>행사 개요</h2>
+        <div class="info-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto;">
+          <div class="info-card">
+            <h3>일정</h3>
+            <p>2026. 02. 07(토)<br class="mobile-br" /> - 08(일), <br class="desktop-br" />무박 2일</p>
+          </div>
+          <div class="info-card">
+            <h3>모집인원</h3>
+            <p>최대 80명 모집<br />(선착순 모집)</p>
+          </div>
+          <div class="info-card">
+            <h3>장소</h3>
+            <p>한성대학교 상상관<br />12층 컨퍼런스홀</p>
+          </div>
+          <div class="info-card">
+            <h3>참가비</h3>
+            <p>참가비 무료<br />식사 및 간식 제공</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Physical AI란?</h2>
+        <div class="highlight-box">
+          <p style="font-size: 1.2em; font-weight: 600; color: #0f172a; margin-bottom: 20px;">
+            실제 세계를 움직이는 지능,<br class="mobile-br" /> Physical AI의 시대를 엽니다.
+          </p>
+          <p style="color: #475569; font-size: 1.1em;">
+            이번 해커톤은 <strong>HuggingFace LeRobot</strong> <br class="mobile-br" />오픈소스 프레임워크를 기반으로 합니다.
+            <br class="mobile-br" /><br class="desktop-br" />로봇이 실제 세계와 상호작용하며 <br class="mobile-br" />다양한 과제를 수행하는 기술을
+            <br class="mobile-br" />직접 구현하고 체험해보세요.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>대회 형식</h2>
+        <div class="highlight-box" style="text-align: center;">
+          <h3 style="font-size: 1.4em; color: var(--primary-blue); margin-bottom: 15px;">🤖 로봇 올림픽</h3>
+          <p style="color: #475569; font-size: 1.1em;">로봇 올림픽 형식으로 진행되며,<br class="mobile-br" /> 달성해야 할 과제 종목은 <strong><br class="mobile-br" />대회 당일 공개</strong>됩니다.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>진행 일정</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4 style="color: var(--primary-blue)">Day 1 - 02.07 (Sat)</h4>
+            <p><strong>09:00 - 10:00</strong> <br class="mobile-br" />대회장 입장 및 오리엔테이션 진행</p>
+            <p><strong>10:00</strong> <br class="mobile-br" />미션 공개 및 데이터 수집 개시</p>
+            <p><strong>10:00 - 익일</strong> <br class="mobile-br" />무박 2일 집중 해커톤</p>
+          </div>
+          <div class="timeline-item">
+            <h4 style="color: var(--primary-purple)">Day 2 - 02.08 (Sun)</h4>
+            <p><strong>09:00 - 10:00</strong> <br class="mobile-br" />최종 모델 튜닝 완료</p>
+            <p><strong>10:00 - 12:00</strong> <br class="mobile-br" />라이브 데모 및 발표</p>
+            <p><strong>13:00</strong> <br class="mobile-br" />시상식 및 네트워킹</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>참가 조건</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>팀 구성</h3>
+            <p style="margin-top: 15px;">• 2~4인/팀</p>
+            <p>• 총 약 20팀 내외</p>
+          </div>
+          <div class="info-card">
+            <h3>필수 준비물</h3>
+            <p style="margin-top: 15px;">• 개인 노트북</p>
+            <p>• 팀당 LeRobot SO-ARM 100/101</p>
+            <p class="indent"><strong>최소 2대 필요</strong></p>
+            <p>• 그리퍼 형태 제한 없음</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>필수 제출물</h2>
+        <div class="highlight-box" style="text-align: center;">
+          <h3 style="font-size: 1.4em; color: var(--primary-blue); margin-bottom: 15px;">📦 기술 구현</h3>
+          <p style="color: #475569; font-size: 1.1em;">
+            프로젝트 리포지토리 • 데이터셋 <br class="mobile-br" />• 학습 모델 • 데모 영상
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>기대효과</h2>
+        <div class="info-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto;">
+          <div class="info-card">
+            <h3>실전 경험</h3>
+            <p>데이터 수집부터 학습, 배포까지 <br />Physical AI 전 과정 체험</p>
+          </div>
+          <div class="info-card">
+            <h3>네트워킹</h3>
+            <p>Physical AI 관심자, <br class="descktop-br" />산학협력 파트너와 교류</p>
+          </div>
+          <div class="info-card">
+            <h3>포트폴리오</h3>
+            <p>GitHub, HuggingFace에 <br />공개되는 실전 프로젝트</p>
+          </div>
+          <div class="info-card">
+            <h3>산학협력</h3>
+            <p>로보시지와의 협업 경험 및 <br class="descktop-br" />우수사례 구축</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>참가 혜택</h2>
+        <div class="highlight-box" style="text-align: center; margin-bottom: 40px;">
+          <h3 style="font-size: 1.5em; color: var(--primary-purple); margin-bottom: 15px;">🎁 참가자 전원 <br class="mobile-br" />웰컴 키트 제공</h3>
+          <p style="font-size: 1.2em; color: #0f172a;">
+            <strong>Physical AI Hackathon 기념 <br class="mobile-br" /> 티셔츠</strong> 및 <strong>특별 굿즈</strong>
+          </p>
+          <p style="margin-top: 15px; color: #64748b;">
+            모든 참가자에게 <br class="mobile-br" />한정판 해커톤 기념품을 드립니다
+          </p>
+        </div>
+        <div style="padding-top: 30px; border-top: 2px solid #e2e8f0;">
+          <h3 style="text-align: center; color: #475569; margin-bottom: 20px;">우수팀 시상</h3>
+          <div class="info-grid award-container" style="display: flex; flex-wrap: wrap;">
+            <div class="award-item gold">
+              <h3>Blackwell 상</h3>
+              <p>🥇 금상</p>
+            </div>
+            <div class="award-item silver">
+              <h3>Hopper 상</h3>
+              <p>🥈 은상</p>
+            </div>
+            <div class="award-item bronze">
+              <h3>Ampere 상</h3>
+              <p>🥉 동상</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="cta-bottom">
+        <h2 style="color: white; justify-content: center; border:none;">지금 바로 도전하세요!</h2>
+        <p style="margin-bottom: 30px; opacity: 0.8;">미래 로보틱스 시장을 <br class="mobile-br" />선도할 주인공은 여러분입니다.</p>
+        <a href="javascript:void(0)" class="cta-button" style="background: white; color: var(--primary-purple);" onclick="openModal()">신청 폼 작성하기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 마감 안내 모달 -->
+  <div class="modal-overlay" id="closedModal">
+    <div class="modal-content">
+      <div class="modal-emoji">🙌</div>
+      <h3 class="modal-title">성원에 힘입어<br />해커톤 지원이 마감되었습니다</h3>
+      <div class="modal-message">
+        <p>지원해주신 모든 분들께<br />진심으로 감사드립니다 🙏</p>
+        <p>다음 대회에서는 더 많은 분들과<br />함께할 수 있도록 준비하겠습니다 🚀</p>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal()">확인</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p><strong>주관:</strong> <br class="mobile-br" />한성대학교 RISE사업단.SW중심대학사업단 <br class="mobile-br" />x 로보시지(RoboSEasy)</p>
+      <p style="margin-top: 20px; opacity: 0.5;">© 2026 The First Physical AI Hackathon.</p>
+    </div>
+  </footer>
+</BaseLayout>
+
+<script is:inline>
+  // 스크롤 인터섹션 페이드인 + 마우스 파티클 + 모달 토글 — 기존 인라인 스크립트에서 1:1 포팅
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = entry.target.style.animation || 'fade-in-up 0.8s ease-out forwards';
+        entry.target.style.opacity = '1';
+      }
+    });
+  }, observerOptions);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach((section) => {
+      section.style.opacity = '0';
+      observer.observe(section);
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      document.body.style.setProperty('--mouse-x', mouseX);
+      document.body.style.setProperty('--mouse-y', mouseY);
+    });
+  });
+
+  window.addEventListener('load', () => {
+    document.body.style.animation = 'page-fade-in 0.5s ease-out';
+  });
+
+  function openModal() {
+    document.getElementById('closedModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('closedModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('closedModal').addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+</script>
