@@ -1,2 +1,12 @@
 # Local Netlify folder
 .netlify
+
+# Node / Astro
+node_modules
+dist
+.astro
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
