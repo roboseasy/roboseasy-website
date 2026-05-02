@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/news.css';
+
+const title = 'News - RoboSEasy | 로보시지';
+const description = '로보시지의 최신 소식을 확인하세요. Instagram 포스트, 릴스, YouTube 영상을 한눈에 볼 수 있습니다';
+
+const instagramPosts = [
+  'DRXkNIsErNk', 'DRXj_ZlEnUx', 'DRXjv7okkvd', 'DRXjGDdEkDZ',
+  'DO6CDqlkhOX', 'DO58UVyEmag', 'DO56jIpErDt', 'DO52PySkhjF',
+];
+
+const instagramReels = ['DSpYGQckv96', 'DSANn-YknOQ'];
+
+const youtubeVideos = [
+  'ILz0K2XjZF8', 'Ape2Qg_waGA', 'x55GjA5352U', 'vDS5eLKd9lM',
+  'cu2dFLND0go', 'WuzyrXT91Qg', 'I2O7ipTH5VI', '2Dxv1VEfRjs',
+];
+---
+<BaseLayout title={title} description={description} path="/news">
+  <section class="news">
+    <div class="news__container">
+      <div class="news__decorators">
+        <span class="news__decorator"></span>
+        <span class="news__decorator"></span>
+        <span class="news__decorator"></span>
+      </div>
+      <h2 class="news__heading">News</h2>
+      <p class="news__description">로보시지의 최신 소식을 확인하세요</p>
+    </div>
+
+    <div class="news__tabs">
+      <button class="news__tab news__tab--active" data-tab="posts">Instagram Posts</button>
+      <button class="news__tab" data-tab="reels">Instagram Reels</button>
+      <button class="news__tab" data-tab="youtube">YouTube Videos</button>
+    </div>
+
+    <div class="news__content">
+      <div class="news__panel news__panel--active" data-panel="posts">
+        <div class="instagram-feed">
+          {instagramPosts.map((id) => (
+            <div class="instagram-feed__post">
+              <blockquote
+                class="instagram-media instagram-feed__embed"
+                data-instgrm-captioned
+                data-instgrm-permalink={`https://www.instagram.com/p/${id}/?img_index=1/`}
+                data-instgrm-version="14"
+              ></blockquote>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="news__panel" data-panel="reels">
+        <div class="instagram-feed">
+          {instagramReels.map((id) => (
+            <div class="instagram-feed__post">
+              <blockquote
+                class="instagram-media instagram-feed__embed"
+                data-instgrm-captioned
+                data-instgrm-permalink={`https://www.instagram.com/reel/${id}/?img_index=1/`}
+                data-instgrm-version="14"
+              ></blockquote>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="news__panel" data-panel="youtube">
+        <div class="instagram-feed">
+          {youtubeVideos.map((videoId) => (
+            <div class="instagram-feed__post youtube-video" data-video-id={videoId}>
+              <iframe
+                class="youtube-video__iframe"
+                src={`https://www.youtube.com/embed/${videoId}`}
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+              <a
+                class="youtube-video__title"
+                href={`https://www.youtube.com/watch?v=${videoId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >Loading...</a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // 탭 전환 + YouTube oEmbed 제목 로딩 (기존 js/main.js에서 포팅)
+  const tabs = document.querySelectorAll('.news__tab');
+  const panels = document.querySelectorAll('.news__panel');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const targetTab = (tab as HTMLElement).dataset.tab;
+      tabs.forEach((t) => t.classList.remove('news__tab--active'));
+      panels.forEach((p) => p.classList.remove('news__panel--active'));
+      tab.classList.add('news__tab--active');
+      const targetPanel = document.querySelector(`.news__panel[data-panel="${targetTab}"]`);
+      targetPanel?.classList.add('news__panel--active');
+    });
+  });
+
+  async function loadYouTubeTitles() {
+    const videos = document.querySelectorAll<HTMLElement>('.youtube-video[data-video-id]');
+    for (const el of videos) {
+      const videoId = el.getAttribute('data-video-id');
+      const titleEl = el.querySelector<HTMLElement>('.youtube-video__title');
+      if (!videoId || !titleEl) continue;
+      try {
+        const res = await fetch(
+          `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
+        );
+        if (!res.ok) throw new Error('oembed failed');
+        const data = await res.json();
+        titleEl.textContent = data.title || 'YouTube Video';
+      } catch (err) {
+        console.error(`Error loading title for video ${videoId}:`, err);
+        titleEl.textContent = 'YouTube Video';
+      }
+    }
+  }
+
+  loadYouTubeTitles();
+</script>
+
+<!-- Instagram embed -->
+<script async src="https://www.instagram.com/embed.js" is:inline></script>
