@@ -15,9 +15,11 @@ interface Props {
   image?: string;
   /** body에 추가할 클래스 (페이지별 스타일 hook용) */
   bodyClass?: string;
+  /** false면 공통 헤더/푸터를 렌더하지 않음 (자체 chrome을 가진 랜딩 페이지용) */
+  chrome?: boolean;
 }
 
-const { title, description, path, image, bodyClass } = Astro.props;
+const { title, description, path, image, bodyClass, chrome = true } = Astro.props;
 ---
 <!doctype html>
 <html lang="ko">
@@ -33,8 +35,8 @@ const { title, description, path, image, bodyClass } = Astro.props;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   </head>
   <body class={bodyClass}>
-    <MainHeader />
+    {chrome && <MainHeader />}
     <slot />
-    <MainFooter />
+    {chrome && <MainFooter />}
   </body>
 </html>
