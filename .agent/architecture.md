@@ -1,72 +1,98 @@
 # Architecture
 
-정적 웹사이트의 파일 구조와 구성 요소.
+Astro 기반 정적 사이트의 폴더 구조와 구성 요소.
 
 ## 루트 레이아웃
 
 ```
 roboseasy-website/
-├── index.html              # 메인 홈
-├── programs.html           # 프로그램 목록 + 상세 모달
-├── documents.html          # 문서 허브
-├── news.html               # 뉴스
-├── hackathon-2026.html     # 해커톤 랜딩
-├── docs-*.html             # 개별 문서 뷰어 페이지 (lekiwi, lerobot-library, lerobot-so-arm, xlerobot)
-├── _redirects              # Netlify pretty URL 라우팅
-├── feed.xml / site.xml     # Jekyll 생성 RSS / sitemap
-├── css/                    # 페이지별 스타일시트
-├── js/                     # 메인 스크립트 + 컴포넌트
-├── docs/                   # docsify 기반 문서 콘텐츠 (md + 이미지)
-├── img/                    # 이미지 리소스
-└── videos/                 # 비디오 리소스
-```
-
-## 페이지 ↔ 스타일 ↔ 스크립트 매핑
-
-| 페이지 | CSS | 비고 |
-| --- | --- | --- |
-| `index.html` | `style.css`, `reset.css`, `home.css` | 메인 |
-| `programs.html` | `programs.css` | 프로그램 카드 + 모달 |
-| `documents.html` | `documents.css` | 문서 카테고리 |
-| `news.html` | `news.css` | 뉴스 목록 |
-| `hackathon-2026.html` | `hackaton-2026.css` | 단발성 이벤트 (오타 주의: hackaTon) |
-| `docs-*.html` | `docsify.css` | docsify 런타임 사용 |
-
-공통 JS:
-- `js/jquery-3.7.1.min.js` — 일부 레거시 인터랙션
-- `js/main.js` — 글로벌 동작
-- `js/sidebar-toggle.js` — 모바일 사이드바
-
-## 컴포넌트 시스템
-
-`js/components/` 안에 Web Components(Custom Elements) 형태로 공통 영역을 정의합니다.
-
-- `main-header.js` → `<main-header>` : 상단 네비게이션
-- `main-footer.js` → `<main-footer>` : 하단 푸터
-- `main-banner.js` → `<main-banner>` : 메인 배너 슬라이드
-
-각 페이지 HTML에서 해당 스크립트를 로드하고 커스텀 태그를 삽입하면 됩니다.
-
-```html
-<main-header></main-header>
-<script src="js/components/main-header.js"></script>
+├── astro.config.mjs            # Astro 설정 (sitemap 통합, /hackathon 리다이렉트)
+├── netlify.toml                # Netlify 빌드 (npm run build → dist/, Node 20)
+├── package.json
+├── tsconfig.json
+├── .nvmrc                      # Node 20
+├── .agent/                     # 개발 가이드 문서 (이 폴더)
+├── public/                     # 그대로 dist로 복사되는 정적 자산
+│   ├── img/                    # 이미지 (42개 + assembly/, so_arm/, lerobot_library/)
+│   ├── videos/                 # mp4 (조립 가이드용 6개)
+│   ├── _redirects              # Netlify 리다이렉트 — 옛 docsify URL → 새 라우트
+│   ├── googlef0b1a1e39ee27640.html  # Google Search Console 인증
+│   └── naver*.html             # 네이버 웹마스터 인증
+├── src/
+│   ├── layouts/
+│   │   └── BaseLayout.astro    # 모든 페이지 공통 head/header/slot/footer
+│   ├── components/
+│   │   ├── MainHeader.astro    # 상단 네비 + 모바일 메뉴 토글
+│   │   ├── MainFooter.astro
+│   │   ├── MainBanner.astro
+│   │   ├── SeoMeta.astro       # OG/Twitter/canonical 단일 정의
+│   │   ├── docs/Sidebar.astro  # 카테고리별 docs 사이드바
+│   │   └── programs/
+│   │       ├── ProgramCard.astro
+│   │       ├── Sts3215Detail.astro
+│   │       ├── KeyboardTeleopDetail.astro
+│   │       └── EndeffectorTeleopDetail.astro
+│   ├── pages/
+│   │   ├── index.astro                  → /
+│   │   ├── documents.astro              → /documents
+│   │   ├── news.astro                   → /news
+│   │   ├── hackathon-2026.astro         → /hackathon-2026 (+ /hackathon 별칭)
+│   │   ├── programs.astro               → /programs (카드 그리드)
+│   │   ├── programs/[slug].astro        → /programs/sts3215-motor-test 등
+│   │   └── docs/[...slug].astro         → /docs/lerobot-so-arm/setup-hardware-assembly 등
+│   ├── content/
+│   │   ├── config.ts                    # programs / docs 컬렉션 zod 스키마
+│   │   ├── programs/                    # JSON 3개 (카드 메타데이터)
+│   │   └── docs/                        # 마크다운 (frontmatter: title, category, group, order)
+│   │       ├── lerobot-library/         # 3 md
+│   │       ├── lerobot-so-arm/          # 14 md
+│   │       ├── lekiwi/index.md          # placeholder
+│   │       └── xlerobot/index.md        # placeholder
+│   └── styles/
+│       ├── tokens.css                   # :root 색·폰트 변수 + Pretendard
+│       ├── reset.css
+│       ├── global.css                   # 헤더/푸터/배너 + 반응형
+│       └── pages/                       # 페이지별 CSS
+│           ├── home.css, programs.css, documents.css
+│           ├── news.css, hackaton-2026.css
+│           └── docs.css
+└── dist/                                # 빌드 결과 (gitignore)
 ```
 
 ## 라우팅
 
-Netlify `_redirects`에서 `.html` 확장자를 제거한 pretty URL을 200 리다이렉트로 매핑합니다.
-새 페이지를 추가할 때는 반드시 이 파일에 한 줄 추가하세요.
+Astro의 파일 기반 라우팅. `src/pages/*.astro`의 경로가 곧 URL.
+- 단일 페이지: `pages/foo.astro` → `/foo`
+- 동적 라우트: `pages/programs/[slug].astro` + `getStaticPaths` → 다중 URL 생성
+- Catch-all: `pages/docs/[...slug].astro` → `/docs/<여러 segment>` 처리
 
-```
-/{path}   /{path}.html   200
-```
+`astro.config.mjs`의 `redirects`로 별칭 처리 (`/hackathon` → `/hackathon-2026`).
+SEO 호환을 위한 영구 리다이렉트(옛 `docs-*.html` 등)는 `public/_redirects`에서 Netlify가 처리.
 
-## 문서(docs) 시스템
+## 공통 레이아웃: `BaseLayout`
 
-`docs-*.html` 파일은 [docsify](https://docsify.js.org/)를 사용해 `docs/<topic>/` 하위의 마크다운을 렌더링합니다.
-새 문서 카테고리를 만들 때는:
+모든 페이지가 `BaseLayout`을 상속하여 head/header/footer를 한 곳에서만 관리.
+- `title`, `description`, `path`, `image` props로 SEO 메타 자동 합성 (`SeoMeta` 컴포넌트가 절대 URL로 변환)
+- `chrome={false}` props로 헤더/푸터를 끄는 옵션 (hackathon 같은 자체 chrome 페이지용)
+- 글로벌 CSS(`tokens` → `reset` → `global`) + Font Awesome CDN 로드
 
-1. `docs/<topic>/` 폴더에 `_sidebar.md`, `README.md` 등 docsify 구조로 콘텐츠 작성
-2. `docs-<topic>.html` 진입 페이지 생성 (기존 파일을 복제하여 `basePath`만 수정)
-3. `documents.html`에 카드 추가
-4. `_redirects`에 매핑 추가
+## 컨텐츠 컬렉션
+
+### `programs` (`type: 'data'`, JSON)
+카드 메타데이터. 스키마: slug, title, description, thumbnail, downloadUrl, order.
+3개 항목 → `/programs` 카드 그리드 + `/programs/[slug]` 상세 라우트 자동 생성.
+
+### `docs` (`type: 'content'`, Markdown)
+프론트매터: title, category, group, order, description?
+- `category`: `lerobot-library` / `lerobot-so-arm` / `lekiwi` / `xlerobot`
+- `group`: 사이드바 그룹 라벨 (예: 'Setup', 'Dataset')
+- `order`: 카테고리 내 정렬 순서
+- 파일명 `index.md`는 카테고리 루트 URL로 매핑 (`docs/lerobot-so-arm/index.md` → `/docs/lerobot-so-arm`)
+
+`Sidebar.astro`가 카테고리로 필터링하고 `group`으로 묶어 렌더, 활성 항목 하이라이트.
+
+## 빌드 / 배포
+
+- 로컬: `npm install` → `npm run dev` (http://localhost:4321) / `npm run build` (dist/) / `npm run preview`
+- Netlify: `netlify.toml`에 `command = "npm run build"`, `publish = "dist"`, `NODE_VERSION = "20"`
+- Sitemap: `@astrojs/sitemap` 통합이 빌드 시 `dist/sitemap-index.xml` 자동 생성

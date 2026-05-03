@@ -2,64 +2,74 @@
 
 ## 파일/폴더 네이밍
 
-- HTML 페이지: `kebab-case.html` (예: `hackathon-2026.html`)
-- 문서 뷰어 페이지: `docs-<topic>.html` 형태로 통일
-- CSS: 페이지명과 매칭되는 파일 (`programs.html` ↔ `css/programs.css`)
-- 이미지: `kebab-case.png` (예: `endeffector-teleop-gui.png`)
-- JS 컴포넌트: `js/components/<component-name>.js` → 태그명도 같은 이름 (`<main-header>`)
+- 페이지: `src/pages/<kebab-case>.astro` (URL = 파일명)
+- 컴포넌트: `src/components/<도메인>/<PascalCase>.astro` (예: `programs/Sts3215Detail.astro`)
+- CSS: `src/styles/pages/<페이지명>.css`
+- 콘텐츠: `src/content/<collection>/<slug>.<json|md>`
+- 이미지: `public/img/<kebab-case>.png` (또는 카테고리 폴더)
+- 비디오: `public/videos/<name>.mp4`
 
 ## CSS 클래스 네이밍
 
-BEM 컨벤션을 사용합니다.
+BEM 컨벤션 — `.block__element--modifier`
 
 ```
-.block__element--modifier
 .header__nav-link
-.program-card__title--featured
+.program-card__title
+.docs-sidebar__link--active
 ```
 
-신규 컴포넌트 작성 시 페이지명을 prefix로 두면 충돌을 피하기 좋습니다.
+페이지/도메인명을 prefix로 두면 충돌 방지에 좋음 (`.programs__`, `.docs-`).
 
-## JavaScript
+## JavaScript / TypeScript
 
-- 신규 코드는 **Vanilla JS / Web Components** 우선
-- jQuery는 기존 코드 유지보수 한정
-- Custom Element 클래스는 PascalCase, 태그는 kebab-case 두 단어 이상 (`MainHeader` → `<main-header>`)
-- `connectedCallback` 안에서 `innerHTML` 템플릿을 정의하고, 그 뒤에 이벤트 바인딩
+- 페이지 인터랙션은 Astro `<script>` (모듈 스코프) 또는 `<script is:inline>` (전역 함수, 옛 onclick 호환용)
+- 새 코드는 가능하면 모듈 `<script>`. 외부 onclick 어트리뷰트와 호환이 필요할 때만 `is:inline`
+- jQuery 미사용 (Phase 6에서 제거 완료)
 
-## 다국어/문자열
+## Astro 컴포넌트
+
+- frontmatter에 TypeScript `interface Props` 정의 + `Astro.props` 구조 분해
+- 슬롯 활용으로 재사용성 ↑ (`<slot />`, named slots)
+- 페이지 고유 CSS는 `import '../styles/pages/<page>.css'`로 frontmatter에서 로드
+- 컴포넌트 단위 스타일은 `<style>` 또는 `<style is:global>`
+
+## 다국어 / 문자열
 
 - 사용자 노출 텍스트는 **한국어**가 기본
-- 영문 병기는 가독성·SEO에 도움될 때만 (예: 메뉴 항목)
-- meta 태그(`og:title`, `og:description`)는 한국어로 작성
+- 영문 병기는 가독성·SEO에 도움될 때만 (메뉴 항목 등)
+- meta 태그(`title`, `description`)는 한국어로 작성
 
 ## 커밋 메시지
-
-기존 히스토리에서 사용 중인 prefix를 따릅니다.
 
 | Prefix | 용도 |
 | --- | --- |
 | `FEAT:` | 새 기능 / 새 페이지 |
-| `ADD:` | 콘텐츠/리소스 추가 (이미지, 문서, 팁 등) |
+| `ADD:` | 콘텐츠·리소스 추가 (이미지, docs 페이지 등) |
 | `UPDATE:` | 기존 기능/UI 개선 |
 | `FIX:` | 버그 수정 |
 | `REFACTOR:` | 동작 변경 없는 코드 정리 |
 | `DOCS:` | 문서/주석 변경 |
 | `CHORE:` | 설정·메타데이터 변경 |
 
-제목은 영어로 간결하게 (예: `UPDATE: Redesign Program Detail Modal with Tab Navigation`).
+제목은 영어로 간결하게 (예: `FEAT: Add LeKiwi assembly guide`).
 
-## 이미지/미디어
+## 이미지 / 미디어
 
-- `img/` 루트에 직접 두거나 주제별 하위 폴더 (`img/lerobot_library/`, `img/so_arm/`, `img/assembly/`)
-- OpenGraph 배너는 `img/banner.png` 사용 (1200×630 권장)
-- 큰 동영상은 `videos/`에 두되, 필요 시 외부 호스팅 고려
+- 자산은 `public/img/`, `public/videos/`에 위치 — URL은 `/img/...`, `/videos/...` 절대경로
+- OpenGraph 배너: `public/img/banner.png` (1200×630)
+- 큰 비디오는 외부 호스팅(YouTube/Vimeo) 고려
 
 ## 새 페이지를 만들 때 체크리스트
 
-1. HTML 파일 생성 (기존 페이지를 복제해 헤더/푸터 임포트 유지)
-2. 전용 CSS 분리 (`css/<page>.css`)
-3. `<main-header>`, `<main-footer>` 포함
-4. OpenGraph / Twitter 메타 태그 채우기
-5. `_redirects`에 pretty URL 매핑 추가
-6. (필요 시) `main-header.js`의 네비게이션 메뉴에 항목 추가
+1. `src/pages/<page>.astro` 생성, `BaseLayout` 사용
+2. `title`, `description`, `path` props 채우기 (SEO 자동 처리)
+3. (필요 시) `src/styles/pages/<page>.css` 생성 후 frontmatter에서 import
+4. (필요 시) `src/components/MainHeader.astro` 네비에 항목 추가
+5. `npm run dev`로 확인
+
+## 새 콘텐츠를 추가할 때
+
+- 프로그램: `src/content/programs/<slug>.json` (썸네일은 `public/img/`)
+- docs: `src/content/docs/<category>/<slug>.md` (frontmatter에 title/category/group/order 필수)
+- 자세한 절차: [workflows.md](workflows.md)

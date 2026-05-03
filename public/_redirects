@@ -1,0 +1,15 @@
+# Astro 라우트가 모든 새 URL을 직접 서빙하므로 pretty URL 매핑은 더 이상 필요 없음.
+# 아래는 Astro 마이그레이션 이전 외부에 노출된 URL의 SEO 호환을 위한 영구 리다이렉트.
+
+# 옛 docsify 문서 진입 URL → 새 docs 라우트
+/docs-lerobot-library.html        /docs/lerobot-library        301
+/docs-lerobot-so-arm.html         /docs/lerobot-so-arm         301
+/docs-xlerobot.html               /docs/xlerobot               301
+/docs-lekiwi.html                 /docs/lekiwi                 301
+
+# 옛 .html 진입 URL (Netlify pretty URL 사용 전 직접 링크된 경우)
+/index.html                       /                            301
+/programs.html                    /programs                    301
+/news.html                        /news                        301
+/documents.html                   /documents                   301
+/hackathon-2026.html              /hackathon-2026              301

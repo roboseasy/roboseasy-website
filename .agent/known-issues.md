@@ -1,38 +1,54 @@
 # Known Issues / 주의사항
 
-작업 시 알아둬야 할 함정과 미해결 이슈를 모아둡니다.
+작업 시 알아둬야 할 함정과 미해결 이슈.
 
 ## 절대 건드리지 말 것
 
-- `googlef0b1a1e39ee27640.html` — Google Search Console 소유 인증 파일
-- `naver7c406803e4247ba3ca91608608d9f54b.html`, `naver9135c1ba273dbc0521b00160be932a2f.html` — 네이버 웹마스터 인증 파일
-- `_redirects` 의 기존 라인 — 잘못 수정하면 라우팅 깨짐. **추가만** 권장
+- `public/googlef0b1a1e39ee27640.html` — Google Search Console 소유 인증 파일
+- `public/naver7c406803e4247ba3ca91608608d9f54b.html`, `public/naver9135c1ba273dbc0521b00160be932a2f.html` — 네이버 웹마스터 인증
+- `public/_redirects`의 기존 라인 — 외부 인바운드 링크 SEO 호환에 사용. 추가만 권장
 
-## 알려진 오타 / 명명 불일치
+## Astro 4 + Node 버전
 
-- `css/hackaton-2026.css` — 파일명이 "hackaTon" (T 빠짐). 페이지(`hackathon-2026.html`)는 정상 철자.
-  → 수정 시 양쪽 import 경로 모두 변경 필요. 현재는 그대로 유지 중.
+- `package.json`이 `astro@^4.16.18`로 핀 (Astro 5는 Node 20+ 강제 요구하나 시스템에 따라 미설치)
+- `.nvmrc`는 Node 20. Netlify 빌드는 항상 Node 20 사용
+- 로컬에서 Node 18.20.8 이상이면 동작은 하지만 `nvm use`로 20을 맞추는 게 권장
 
-## 로컬 ↔ 배포 차이
+## CSS 파일명 오타
 
-- 로컬에서는 `_redirects`가 동작하지 않아 `/programs` 같은 pretty URL 접근이 404.
-  → 로컬에서는 `/programs.html` 직접 입력하거나, Netlify CLI(`netlify dev`)로 실행.
-- Jekyll 템플릿 문법은 `feed.xml`, `site.xml`에만 있고 정적 서버에서는 처리되지 않음 (배포 후에만 정상 출력).
+- `src/styles/pages/hackaton-2026.css` — `hackaTon`(T 빠짐). 페이지 이름은 정상 철자 `hackathon`
+- 통일하려면 `hackathon-2026.css`로 rename + `src/pages/hackathon-2026.astro`의 import 경로 갱신 필요
+- 파급도 적으나 다른 작업과 함께 일괄 수정 권장
 
-## 이미지 크기
+## 모바일 UX
 
-- `og:image`로 사용하는 `img/banner.png`는 1200×630 권장. 변경 시 SNS 캐시 무효화 시간 고려.
-- `videos/` 안에 큰 파일을 넣으면 Netlify 빌드 시간/용량 한도에 영향. 가능하면 외부 호스팅.
+- `/programs/<slug>` 상세 페이지: 원래 모달이 PC 전용이었음. 라우트 전환 시 모바일 가드 제거됨 → 모바일에서 진입 가능하나 CSS가 PC 기반이라 일부 어긋남
+- `/docs/<slug>` 페이지: 1024px 이하에서 사이드바가 오버레이로 토글됨 (우하단 ☰ 버튼)
+- 모바일 디자인 보강은 별도 작업으로 진행 필요
 
-## 브라우저 호환성
+## docsify 호환
 
-- Web Components(Custom Elements) 사용 — IE 미지원. 최신 Chrome/Edge/Safari/Firefox만 타겟.
-- `<main-header>` 등은 스크립트 로드 전까지 빈 영역으로 보일 수 있음 (FOUC). 필요 시 헤더에 placeholder 스타일 고려.
+- 옛 `?> ...` `!> ...` 콜아웃 → `> ℹ️ ...` `> ⚠️ ...` blockquote로 변환됨
+- 옛 docsify-tabs 등 일부 플러그인 markup이 콘텐츠에 남아 있을 수 있음 (현재 파일에는 미사용으로 확인됨)
+- 검색은 docsify 시 클라이언트 사이드였으나 현재는 미구현. Pagefind 도입 검토 가능
+
+## phase0-check 페이지
+
+Phase 1 검증용 임시 페이지였고 Phase 6에서 제거됨. 재생성 불필요.
+
+## Jekyll 잔재 없음
+
+- 옛 `feed.xml`, `site.xml` (Jekyll Liquid 템플릿) 모두 삭제됨
+- 사이트맵은 `@astrojs/sitemap`이 빌드 시 `dist/sitemap-index.xml` 자동 생성
+- RSS 피드가 다시 필요해지면 `@astrojs/rss` 추가 검토
 
 ## 알려진 미해결 작업 (TODO)
 
-- [ ] `documents-lekiwi.html` 등 docs- 페이지들의 메타 태그 일관화
-- [ ] 모바일 메뉴 열린 상태에서 라우팅 시 닫힘 처리 점검
-- [ ] `feed.xml` 실제 포스트 연동 여부 확인 (현재 Jekyll posts가 비어있을 가능성)
+- [ ] LeKiwi, XLeRobot docs 실제 콘텐츠 작성 (현재 placeholder)
+- [ ] `/programs/<slug>` 모바일 반응형 보강
+- [ ] `hackaton-2026.css` 파일명 오타 수정
+- [ ] (선택) Pagefind 검색 통합 (`postbuild`에 `npx pagefind --site dist`)
+- [ ] (선택) 큰 PNG 이미지 (`keyboard-teleop-gui.png` 8MB 등) WebP 압축
+- [ ] (선택) `hackathon-2026` 페이지를 공통 헤더/푸터 사용으로 통일 (현재 chrome={false})
 
-> 새 이슈를 발견하면 위 섹션에 추가하고, 해결되면 한 줄 요약과 함께 제거하세요.
+> 새 이슈 발견 시 위 섹션에 추가, 해결되면 한 줄 요약과 함께 제거.

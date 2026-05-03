@@ -176,7 +176,7 @@ lerobot-setup-motors \
 **참고 영상:**
 
 <video width="100%" controls>
-  <source src="../../videos/Joint1_v2.mp4" type="video/mp4">
+  <source src="/videos/Joint1_v2.mp4" type="video/mp4">
   브라우저가 video 태그를 지원하지 않습니다.
 </video>
 
@@ -190,7 +190,7 @@ lerobot-setup-motors \
 **참고 영상:**
 
 <video width="100%" controls>
-  <source src="../../videos/Joint2_v2.mp4" type="video/mp4">
+  <source src="/videos/Joint2_v2.mp4" type="video/mp4">
   브라우저가 video 태그를 지원하지 않습니다.
 </video>
 
@@ -203,7 +203,7 @@ lerobot-setup-motors \
 **참고 영상:**
 
 <video width="100%" controls>
-  <source src="../../videos/Joint3_v2.mp4" type="video/mp4">
+  <source src="/videos/Joint3_v2.mp4" type="video/mp4">
   브라우저가 video 태그를 지원하지 않습니다.
 </video>
 
@@ -216,7 +216,7 @@ lerobot-setup-motors \
 **참고 영상:**
 
 <video width="100%" controls>
-  <source src="../../videos/Joint4_v2.mp4" type="video/mp4">
+  <source src="/videos/Joint4_v2.mp4" type="video/mp4">
   브라우저가 video 태그를 지원하지 않습니다.
 </video>
 
@@ -229,7 +229,7 @@ lerobot-setup-motors \
 **참고 영상:**
 
 <video width="100%" controls>
-  <source src="../../videos/Joint5_v2.mp4" type="video/mp4">
+  <source src="/videos/Joint5_v2.mp4" type="video/mp4">
   브라우저가 video 태그를 지원하지 않습니다.
 </video>
 
@@ -243,7 +243,7 @@ lerobot-setup-motors \
 **참고 영상:**
 
 <video width="100%" controls>
-  <source src="../../videos/Gripper_v2.mp4" type="video/mp4">
+  <source src="/videos/Gripper_v2.mp4" type="video/mp4">
   브라우저가 video 태그를 지원하지 않습니다.
 </video>
 

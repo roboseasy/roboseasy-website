@@ -1,25 +1,26 @@
 # RoboSEasy Website
 
-로보시지(RoboSEasy) 공식 웹사이트. 로봇 교육·제품·기술 콘텐츠를 제공하는 정적 웹사이트.
+로보시지(RoboSEasy) 공식 웹사이트. 로봇 교육·제품·기술 콘텐츠를 제공.
 
 - **배포**: Netlify (https://roboseasy.netlify.app)
-- **스택**: 순수 HTML / CSS / Vanilla JS + Jekyll(템플릿/사이트맵용)
+- **스택**: [Astro](https://astro.build/) 4 + Vanilla CSS/JS — 빌드 타임 정적 HTML
 - **언어**: 한국어 우선, 영어 보조
 
 ## 작업 시 먼저 읽을 문서
 
-새 작업을 시작하기 전 아래 문서를 컨텍스트로 사용하세요.
-
-- [.agent/architecture.md](.agent/architecture.md) — 폴더 구조, 페이지 구성, 컴포넌트 시스템
-- [.agent/tech-stack.md](.agent/tech-stack.md) — 사용 기술, 로컬 실행/배포 방법
-- [.agent/conventions.md](.agent/conventions.md) — 코딩/네이밍/커밋 규칙
-- [.agent/workflows.md](.agent/workflows.md) — 자주 하는 작업 절차 (페이지 추가, 프로그램 추가 등)
+- [.agent/architecture.md](.agent/architecture.md) — 폴더 구조, 라우팅, 컴포넌트
+- [.agent/tech-stack.md](.agent/tech-stack.md) — Astro, 의존성, 외부 통합
+- [.agent/conventions.md](.agent/conventions.md) — 코딩·네이밍·커밋 규칙
+- [.agent/workflows.md](.agent/workflows.md) — 페이지/프로그램/docs 추가 절차
 - [.agent/known-issues.md](.agent/known-issues.md) — 알려진 이슈, 주의사항
-- [.agent/tasks/](.agent/tasks/) — 진행/완료된 작업 단위 메모
+- [.agent/tasks/](.agent/tasks/) — 진행/완료 작업 단위 메모
+- [.agent/refactor-astro-plan.md](.agent/refactor-astro-plan.md) — Astro 마이그레이션 기획서
 
 ## 기본 원칙
 
-- 정적 사이트이므로 빌드 단계 없음. HTML/CSS/JS를 직접 수정하면 즉시 반영.
-- `<main-header>`, `<main-footer>`, `<main-banner>` 같은 Web Components로 공통 영역을 재사용.
-- 새 페이지 추가 시 `_redirects`에 pretty URL 매핑 추가 필요.
-- 커밋 메시지는 `FEAT:`, `UPDATE:`, `ADD:`, `FIX:` prefix 사용 (자세한 건 conventions.md).
+- **빌드 단계 있음**: `npm run dev` / `npm run build`. Node 20 LTS (.nvmrc)
+- **공통 레이아웃**: 모든 페이지가 `BaseLayout`을 상속 — head/header/footer 한 곳에서만 관리
+- **콘텐츠 = 데이터/마크다운**: 프로그램은 `src/content/programs/*.json`, 문서는 `src/content/docs/<cat>/*.md`
+- **자산 절대경로**: `/img/...`, `/videos/...` 형식. 파일은 `public/`에 위치
+- **새 페이지 추가** 시 `_redirects` 수정 불필요 (Astro 라우팅이 처리). 옛 URL 호환만 `public/_redirects`에 추가
+- 커밋 메시지: `FEAT:`, `UPDATE:`, `ADD:`, `FIX:`, `REFACTOR:`, `DOCS:`, `CHORE:` prefix
