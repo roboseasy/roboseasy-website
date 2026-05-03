@@ -1,12 +1,24 @@
 ---
 // /programs 페이지 상단 "Download RoboSEasy Studio" 섹션.
 // VSCode 다운로드 페이지와 동일한 3-OS 컬럼 레이아웃.
-// 실제 바이너리가 준비되기 전까지 모든 href는 '#' placeholder.
-// 추후 운영 시 columns 데이터의 href 값만 교체.
+//
+// 데이터 구조:
+//   versions: 릴리스별 자산(URL) 매핑. 각 자산은 'os.label.variant' 형태의 키로 식별
+//   columns: 시각 구조 (OS → 메인 버튼 + variant chip 매트릭스). 각 슬롯은 assetKey만 보유
+//
+// 새 릴리스 추가 시 versions 배열에 entry 한 줄만 추가하면 selector 자동 노출.
+
+interface Version {
+  tag: string;
+  label: string;       // dropdown 표시 텍스트 (예: "v0.5.1 (0.0.1) — latest")
+  /** 자산 키('os.label.variant')에 대한 다운로드 URL. 없으면 '#'로 폴백 */
+  assets: Record<string, string>;
+}
 
 interface VariantLink {
   l: string;
-  h: string;
+  /** versions[*].assets에서 이 칩의 URL을 찾는 키 */
+  k: string;
 }
 
 interface VariantRow {
@@ -17,7 +29,8 @@ interface VariantRow {
 interface PrimaryButton {
   primary: string;
   secondary: string;
-  href: string;
+  /** 메인 버튼이 가리키는 자산 키 */
+  k: string;
 }
 
 interface OSColumn {
@@ -28,55 +41,133 @@ interface OSColumn {
   rows: VariantRow[];
 }
 
+const versions: Version[] = [
+  {
+    tag: 'v0.5.1-0.0.1',
+    label: 'v0.5.1 (0.0.1) — latest',
+    assets: {
+      'linux.deb.x64':
+        'https://github.com/roboseasy-members/roboseasy-studio/releases/download/v0.5.1-0.0.1/roboseasy-studio_0.5.1-0.0.1_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy-members/roboseasy-studio/archive/refs/tags/v0.5.1-0.0.1.tar.gz',
+    },
+  },
+];
+
+const defaultVersion = versions[0];
+
+/** 키 → URL (현재 선택 버전 기준). 없으면 '#'. 클라이언트 select 변경 시 JS가 swap */
+const hrefFor = (key: string) => defaultVersion.assets[key] ?? '#';
+
 const columns: OSColumn[] = [
   {
     key: 'windows',
     iconClass: 'fa-brands fa-windows',
     iconAlt: 'Windows',
-    buttons: [{ primary: 'Windows', secondary: 'Windows 10, 11', href: '#' }],
+    buttons: [{ primary: 'Windows', secondary: 'Windows 10, 11', k: 'windows.primary' }],
     rows: [
-      { label: 'User Installer', variants: [{ l: 'x64', h: '#' }, { l: 'Arm64', h: '#' }] },
-      { label: 'System Installer', variants: [{ l: 'x64', h: '#' }, { l: 'Arm64', h: '#' }] },
-      { label: '.zip', variants: [{ l: 'x64', h: '#' }, { l: 'Arm64', h: '#' }] },
+      {
+        label: 'User Installer',
+        variants: [
+          { l: 'x64', k: 'windows.user-installer.x64' },
+          { l: 'Arm64', k: 'windows.user-installer.arm64' },
+        ],
+      },
+      {
+        label: 'System Installer',
+        variants: [
+          { l: 'x64', k: 'windows.system-installer.x64' },
+          { l: 'Arm64', k: 'windows.system-installer.arm64' },
+        ],
+      },
+      {
+        label: '.zip',
+        variants: [
+          { l: 'x64', k: 'windows.zip.x64' },
+          { l: 'Arm64', k: 'windows.zip.arm64' },
+        ],
+      },
     ],
   },
   {
     key: 'linux',
     iconClass: 'fa-brands fa-linux',
     iconAlt: 'Linux',
-    buttons: [
-      { primary: '.deb', secondary: 'Debian, Ubuntu', href: '#' },
-      { primary: '.rpm', secondary: 'Red Hat, Fedora, SUSE', href: '#' },
-    ],
+    // 사용자 요청으로 .rpm 메인 버튼 제거. variant row 'rpm'은 향후 빌드 대비 유지.
+    buttons: [{ primary: '.deb', secondary: 'Debian, Ubuntu', k: 'linux.deb.x64' }],
     rows: [
-      { label: '.deb', variants: [{ l: 'x64', h: '#' }, { l: 'Arm32', h: '#' }, { l: 'Arm64', h: '#' }] },
-      { label: '.rpm', variants: [{ l: 'x64', h: '#' }, { l: 'Arm32', h: '#' }, { l: 'Arm64', h: '#' }] },
-      { label: '.tar.gz', variants: [{ l: 'x64', h: '#' }, { l: 'Arm32', h: '#' }, { l: 'Arm64', h: '#' }] },
-      { label: 'Snap', variants: [{ l: 'Snap Store', h: '#' }] },
+      {
+        label: '.deb',
+        variants: [
+          { l: 'x64', k: 'linux.deb.x64' },
+          { l: 'Arm32', k: 'linux.deb.arm32' },
+          { l: 'Arm64', k: 'linux.deb.arm64' },
+        ],
+      },
+      {
+        label: '.rpm',
+        variants: [
+          { l: 'x64', k: 'linux.rpm.x64' },
+          { l: 'Arm32', k: 'linux.rpm.arm32' },
+          { l: 'Arm64', k: 'linux.rpm.arm64' },
+        ],
+      },
+      {
+        label: '.tar.gz',
+        variants: [
+          { l: 'x64', k: 'linux.tar.gz.x64' },
+          { l: 'Arm32', k: 'linux.tar.gz.arm32' },
+          { l: 'Arm64', k: 'linux.tar.gz.arm64' },
+        ],
+      },
+      {
+        label: 'Snap',
+        variants: [{ l: 'Snap Store', k: 'linux.snap' }],
+      },
     ],
   },
   {
     key: 'mac',
     iconClass: 'fa-brands fa-apple',
     iconAlt: 'macOS',
-    buttons: [{ primary: 'Mac', secondary: 'macOS 12.0+', href: '#' }],
+    buttons: [{ primary: 'Mac', secondary: 'macOS 12.0+', k: 'mac.dmg.universal' }],
     rows: [
       {
         label: '.dmg',
         variants: [
-          { l: 'Intel chip', h: '#' },
-          { l: 'Apple silicon', h: '#' },
-          { l: 'Universal', h: '#' },
+          { l: 'Intel chip', k: 'mac.dmg.intel' },
+          { l: 'Apple silicon', k: 'mac.dmg.silicon' },
+          { l: 'Universal', k: 'mac.dmg.universal' },
         ],
       },
     ],
   },
 ];
+
+// 클라이언트 스크립트가 select 변경 시 참조할 자산 매핑 (JSON으로 직렬화)
+const versionAssetsJson = JSON.stringify(
+  versions.reduce<Record<string, Record<string, string>>>((acc, v) => {
+    acc[v.tag] = v.assets;
+    return acc;
+  }, {})
+);
 ---
 <section class="studio-download">
   <header class="studio-download__header">
     <h2 class="studio-download__title">Download RoboSEasy Studio</h2>
     <p class="studio-download__subtitle">로봇 학습·제어 통합 스튜디오. 무료 로봇 데스크탑 앱</p>
+    <div class="studio-download__toolbar">
+      <label class="studio-download__version-label" for="studio-version-select">Version</label>
+      <select
+        id="studio-version-select"
+        class="studio-download__version-select"
+        data-version-assets={versionAssetsJson}
+      >
+        {versions.map((v) => (
+          <option value={v.tag} selected={v.tag === defaultVersion.tag}>{v.label}</option>
+        ))}
+      </select>
+    </div>
   </header>
 
   <div class="studio-download__grid">
@@ -88,7 +179,12 @@ const columns: OSColumn[] = [
 
         <div class="studio-download__buttons">
           {col.buttons.map((btn) => (
-            <a class="studio-download__btn" href={btn.href} aria-label={`${col.iconAlt} ${btn.primary} 다운로드`}>
+            <a
+              class="studio-download__btn"
+              href={hrefFor(btn.k)}
+              data-asset-key={btn.k}
+              aria-label={`${col.iconAlt} ${btn.primary} 다운로드`}
+            >
               <span class="studio-download__btn-arrow"><i class="fa-solid fa-down-long"></i></span>
               <span class="studio-download__btn-primary">{btn.primary}</span>
               <span class="studio-download__btn-secondary">{btn.secondary}</span>
@@ -102,7 +198,7 @@ const columns: OSColumn[] = [
               <span class="studio-download__row-label">{row.label}</span>
               <span class="studio-download__row-variants">
                 {row.variants.map((v) => (
-                  <a class="studio-download__chip" href={v.h}>{v.l}</a>
+                  <a class="studio-download__chip" href={hrefFor(v.k)} data-asset-key={v.k}>{v.l}</a>
                 ))}
               </span>
             </div>
@@ -112,3 +208,22 @@ const columns: OSColumn[] = [
     ))}
   </div>
 </section>
+
+<script is:inline>
+  // 버전 셀렉터 변경 시 모든 [data-asset-key] 요소의 href를 새 버전의 URL로 swap.
+  // 자산이 없는 키는 '#'으로 폴백.
+  (() => {
+    const select = document.getElementById('studio-version-select');
+    if (!select) return;
+    const assetMap = JSON.parse(select.dataset.versionAssets || '{}');
+
+    select.addEventListener('change', () => {
+      const tag = select.value;
+      const assets = assetMap[tag] || {};
+      document.querySelectorAll('[data-asset-key]').forEach((el) => {
+        const key = el.getAttribute('data-asset-key');
+        el.setAttribute('href', (key && assets[key]) || '#');
+      });
+    });
+  })();
+</script>

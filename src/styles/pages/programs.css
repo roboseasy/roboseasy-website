@@ -954,6 +954,50 @@
   line-height: 1.6;
 }
 
+/* 버전 셀렉터 — subtitle 바로 아래, 가운데 정렬 */
+.studio-download__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.studio-download__version-label {
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-primary);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.studio-download__version-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%234C1594' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  border: 1px solid rgba(76, 21, 148, 0.25);
+  border-radius: 6px;
+  padding: 6px 30px 6px 12px;
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.studio-download__version-select:hover {
+  border-color: var(--color-secondary);
+}
+
+.studio-download__version-select:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(76, 21, 148, 0.15);
+}
+
 .studio-download__grid {
   display: grid;
   /* 세 컬럼을 동일 너비로 강제 — 각 OS 콘텐츠가 자기 컬럼 안에 중앙 정렬되어
@@ -1121,6 +1165,9 @@
   }
   .studio-download__subtitle {
     font-size: 14px;
+  }
+  .studio-download__toolbar {
+    margin-top: 14px;
   }
   .studio-download__btn {
     padding: 12px 16px;
