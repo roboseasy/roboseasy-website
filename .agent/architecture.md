@@ -54,7 +54,7 @@ roboseasy-website/
 │       ├── global.css                   # 헤더/푸터/배너 + 반응형
 │       └── pages/                       # 페이지별 CSS
 │           ├── home.css, programs.css, documents.css
-│           ├── news.css, hackaton-2026.css
+│           ├── news.css, hackathon-2026.css
 │           └── docs.css
 └── dist/                                # 빌드 결과 (gitignore)
 ```
