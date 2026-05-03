@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  /** 현재 페이지의 카테고리 */
+  category: 'lerobot-library' | 'lerobot-so-arm' | 'lekiwi' | 'xlerobot';
+  /** 현재 페이지 URL path (예: '/docs/lerobot-so-arm/setup-hardware-assembly') — 활성 항목 표시용 */
+  currentPath: string;
+}
+
+const { category, currentPath } = Astro.props;
+
+// 같은 카테고리의 항목만 가져와서 order로 정렬
+const entries = (await getCollection('docs', ({ data }) => data.category === category)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+// group별로 묶기 (순서 유지)
+type Entry = (typeof entries)[number];
+const groups: { label: string; items: Entry[] }[] = [];
+for (const entry of entries) {
+  const last = groups[groups.length - 1];
+  if (last && last.label === entry.data.group) {
+    last.items.push(entry);
+  } else {
+    groups.push({ label: entry.data.group, items: [entry] });
+  }
+}
+
+// entry → URL path 변환 (index.md → 카테고리 루트)
+function entryHref(entry: Entry): string {
+  // entry.slug 형태: "lerobot-so-arm/setup-hardware-assembly" 또는 "lerobot-so-arm/index"
+  const slug = entry.slug.endsWith('/index') ? entry.slug.replace(/\/index$/, '') : entry.slug;
+  return `/docs/${slug}`;
+}
+---
+<aside class="docs-sidebar">
+  <nav class="docs-sidebar__nav" aria-label="문서 목차">
+    {groups.map(({ label, items }) => (
+      <div class="docs-sidebar__group">
+        <div class="docs-sidebar__group-title">{label}</div>
+        <ul class="docs-sidebar__list">
+          {items.map((entry) => {
+            const href = entryHref(entry);
+            const isActive = currentPath === href || currentPath === `${href}/`;
+            return (
+              <li class="docs-sidebar__item">
+                <a href={href} class:list={['docs-sidebar__link', { 'docs-sidebar__link--active': isActive }]}>
+                  {entry.data.title}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+
+    <hr class="docs-sidebar__divider" />
+
+    <ul class="docs-sidebar__list">
+      <li class="docs-sidebar__item">
+        <a class="docs-sidebar__link" href="https://github.com/huggingface/lerobot" target="_blank" rel="noopener">
+          <i class="fa-brands fa-github"></i> GitHub
+        </a>
+      </li>
+      <li class="docs-sidebar__item">
+        <a class="docs-sidebar__link" href="https://huggingface.co/lerobot" target="_blank" rel="noopener">🤗 HuggingFace</a>
+      </li>
+      <li class="docs-sidebar__item">
+        <a class="docs-sidebar__link" href="https://discord.com/invite/s3KuuzsPFb" target="_blank" rel="noopener">
+          <i class="fa-brands fa-discord"></i> Discord
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
