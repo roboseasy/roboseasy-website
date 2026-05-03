@@ -920,3 +920,227 @@
     .program-modal__title { font-size: 17px; }
     .modal-feature-grid--3 { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   RoboSEasy Studio Download Section (/programs 페이지 상단)
+   VSCode 다운로드 페이지와 거의 동일한 3-OS 컬럼 레이아웃.
+   ============================================================ */
+
+.studio-download {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 60px 20px 32px;
+}
+
+.studio-download__header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.studio-download__title {
+  font-size: 48px;
+  font-weight: var(--fw-black);
+  color: var(--color-primary);
+  letter-spacing: -1px;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.studio-download__subtitle {
+  font-size: 18px;
+  color: var(--color-primary);
+  opacity: 0.75;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.studio-download__grid {
+  display: grid;
+  /* 세 컬럼을 동일 너비로 강제 — 각 OS 콘텐츠가 자기 컬럼 안에 중앙 정렬되어
+     Windows / Linux / Mac 시각적 간격이 정확히 일치하도록 */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  align-items: start;
+  justify-items: center;
+}
+
+.studio-download__column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.studio-download__icon {
+  font-size: 80px;
+  color: var(--color-primary);
+  margin-bottom: 18px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 메인 다운로드 버튼들 (Linux는 .deb / .rpm 두 개를 위아래로 stack) */
+.studio-download__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.studio-download__btn {
+  /* 모든 버튼을 .rpm 버튼 너비에 맞춰 동일하게 (Red Hat, Fedora, SUSE 부제 기준) */
+  width: 210px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  padding: 10px 18px;
+  background: var(--color-secondary);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(76, 21, 148, 0.2);
+}
+
+.studio-download__btn:hover {
+  background: var(--color-logo);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(46, 0, 104, 0.32);
+}
+
+.studio-download__btn-arrow {
+  grid-row: 1 / span 2;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.studio-download__btn-primary {
+  font-size: 17px;
+  font-weight: var(--fw-bold);
+  text-align: left;
+  line-height: 1.2;
+}
+
+.studio-download__btn-secondary {
+  font-size: 12px;
+  font-weight: var(--fw-regular);
+  text-align: left;
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+/* 변형(variant) 매트릭스 — 작은 칩 링크 */
+.studio-download__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: max-content;       /* 가장 넓은 행에 맞춰 자연 너비. 칩이 줄바꿈되지 않도록 */
+  font-size: 13px;
+}
+
+.studio-download__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.studio-download__row-label {
+  text-align: right;
+  font-weight: var(--fw-semibold);
+  color: var(--color-primary);
+  white-space: nowrap;
+  min-width: 90px;
+}
+
+.studio-download__row-variants {
+  display: flex;
+  flex-wrap: nowrap;        /* 모든 변형 칩을 한 줄에 유지 */
+  gap: 6px;
+  justify-content: flex-start;
+}
+
+.studio-download__chip {
+  display: inline-block;
+  padding: 3px 10px;
+  background: var(--color-secondary);
+  color: white;
+  text-decoration: underline;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  transition: background-color 0.15s ease;
+}
+
+.studio-download__chip:hover {
+  background: var(--color-logo);
+}
+
+/* 추가 프로그램 섹션과의 구분선 */
+.studio-download + .programs {
+  border-top: 1px solid rgba(8, 2, 28, 0.08);
+  margin-top: 40px;
+}
+
+/* ===== Studio Download — 반응형 ===== */
+@media screen and (max-width: 1024px) {
+  .studio-download {
+    padding: 60px 20px 30px;
+  }
+  .studio-download__title {
+    font-size: 36px;
+  }
+  .studio-download__subtitle {
+    font-size: 16px;
+  }
+  .studio-download__grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .studio-download__icon {
+    font-size: 80px;
+    height: 90px;
+    margin-bottom: 28px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .studio-download {
+    padding: 40px 16px 20px;
+  }
+  .studio-download__title {
+    font-size: 28px;
+  }
+  .studio-download__subtitle {
+    font-size: 14px;
+  }
+  .studio-download__btn {
+    padding: 12px 16px;
+    min-width: 140px;
+  }
+  .studio-download__btn-primary {
+    font-size: 15px;
+  }
+  .studio-download__btn-secondary {
+    font-size: 11px;
+  }
+  .studio-download__icon {
+    font-size: 64px;
+    height: 76px;
+  }
+  .studio-download__row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .studio-download__row-label {
+    text-align: left;
+  }
+}

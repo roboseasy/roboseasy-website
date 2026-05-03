@@ -2,14 +2,17 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProgramCard from '../components/programs/ProgramCard.astro';
+import StudioDownloadSection from '../components/programs/StudioDownloadSection.astro';
 import '../styles/pages/programs.css';
 
 const title = 'Programs - RoboSEasy | 로보시지';
-const description = '로보시지에서 제공하는 프로그램을 다운로드하세요';
+const description = 'RoboSEasy Studio 데스크탑 앱과 도구 모음을 다운로드하세요';
 
 const programs = (await getCollection('programs')).sort((a, b) => a.data.order - b.data.order);
 ---
 <BaseLayout title={title} description={description} path="/programs">
+  <StudioDownloadSection />
+
   <section class="programs">
     <div class="programs__container">
       <div class="programs__decorators">
@@ -17,8 +20,8 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
         <span class="programs__decorator"></span>
         <span class="programs__decorator"></span>
       </div>
-      <h2 class="programs__heading">Programs</h2>
-      <p class="programs__description">로보시지에서 제공하는 프로그램을 다운로드하세요</p>
+      <h2 class="programs__heading">추가 프로그램</h2>
+      <p class="programs__description">로보시지에서 제공하는 도구를 다운로드하세요</p>
     </div>
 
     <div class="programs-grid">

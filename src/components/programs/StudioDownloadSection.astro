@@ -1,0 +1,114 @@
+---
+// /programs 페이지 상단 "Download RoboSEasy Studio" 섹션.
+// VSCode 다운로드 페이지와 동일한 3-OS 컬럼 레이아웃.
+// 실제 바이너리가 준비되기 전까지 모든 href는 '#' placeholder.
+// 추후 운영 시 columns 데이터의 href 값만 교체.
+
+interface VariantLink {
+  l: string;
+  h: string;
+}
+
+interface VariantRow {
+  label: string;
+  variants: VariantLink[];
+}
+
+interface PrimaryButton {
+  primary: string;
+  secondary: string;
+  href: string;
+}
+
+interface OSColumn {
+  key: 'windows' | 'linux' | 'mac';
+  iconClass: string;
+  iconAlt: string;
+  buttons: PrimaryButton[];
+  rows: VariantRow[];
+}
+
+const columns: OSColumn[] = [
+  {
+    key: 'windows',
+    iconClass: 'fa-brands fa-windows',
+    iconAlt: 'Windows',
+    buttons: [{ primary: 'Windows', secondary: 'Windows 10, 11', href: '#' }],
+    rows: [
+      { label: 'User Installer', variants: [{ l: 'x64', h: '#' }, { l: 'Arm64', h: '#' }] },
+      { label: 'System Installer', variants: [{ l: 'x64', h: '#' }, { l: 'Arm64', h: '#' }] },
+      { label: '.zip', variants: [{ l: 'x64', h: '#' }, { l: 'Arm64', h: '#' }] },
+    ],
+  },
+  {
+    key: 'linux',
+    iconClass: 'fa-brands fa-linux',
+    iconAlt: 'Linux',
+    buttons: [
+      { primary: '.deb', secondary: 'Debian, Ubuntu', href: '#' },
+      { primary: '.rpm', secondary: 'Red Hat, Fedora, SUSE', href: '#' },
+    ],
+    rows: [
+      { label: '.deb', variants: [{ l: 'x64', h: '#' }, { l: 'Arm32', h: '#' }, { l: 'Arm64', h: '#' }] },
+      { label: '.rpm', variants: [{ l: 'x64', h: '#' }, { l: 'Arm32', h: '#' }, { l: 'Arm64', h: '#' }] },
+      { label: '.tar.gz', variants: [{ l: 'x64', h: '#' }, { l: 'Arm32', h: '#' }, { l: 'Arm64', h: '#' }] },
+      { label: 'Snap', variants: [{ l: 'Snap Store', h: '#' }] },
+    ],
+  },
+  {
+    key: 'mac',
+    iconClass: 'fa-brands fa-apple',
+    iconAlt: 'macOS',
+    buttons: [{ primary: 'Mac', secondary: 'macOS 12.0+', href: '#' }],
+    rows: [
+      {
+        label: '.dmg',
+        variants: [
+          { l: 'Intel chip', h: '#' },
+          { l: 'Apple silicon', h: '#' },
+          { l: 'Universal', h: '#' },
+        ],
+      },
+    ],
+  },
+];
+---
+<section class="studio-download">
+  <header class="studio-download__header">
+    <h2 class="studio-download__title">Download RoboSEasy Studio</h2>
+    <p class="studio-download__subtitle">로봇 학습·제어 통합 스튜디오. 무료, 오픈소스 기반.</p>
+  </header>
+
+  <div class="studio-download__grid">
+    {columns.map((col) => (
+      <div class={`studio-download__column studio-download__column--${col.key}`}>
+        <div class="studio-download__icon" aria-hidden="true">
+          <i class={col.iconClass}></i>
+        </div>
+
+        <div class="studio-download__buttons">
+          {col.buttons.map((btn) => (
+            <a class="studio-download__btn" href={btn.href} aria-label={`${col.iconAlt} ${btn.primary} 다운로드`}>
+              <span class="studio-download__btn-arrow"><i class="fa-solid fa-down-long"></i></span>
+              <span class="studio-download__btn-primary">{btn.primary}</span>
+              <span class="studio-download__btn-secondary">{btn.secondary}</span>
+            </a>
+          ))}
+        </div>
+
+        <div class="studio-download__rows">
+          {col.rows.map((row) => (
+            <div class="studio-download__row">
+              <span class="studio-download__row-label">{row.label}</span>
+              <span class="studio-download__row-variants">
+                {row.variants.map((v) => (
+                  <a class="studio-download__chip" href={v.h}>{v.l}</a>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
