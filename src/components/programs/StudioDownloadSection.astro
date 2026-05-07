@@ -226,4 +226,15 @@ const versionAssetsJson = JSON.stringify(
       });
     });
   })();
+
+  // Mac 컬럼은 아직 빌드 자산이 없음 — 클릭 시 안내 alert.
+  // href가 실제 URL로 채워지면 (미래 릴리스에 mac.* 키 추가) 자연스럽게 안내가 사라지고 실제 다운로드 진행.
+  document.querySelectorAll('.studio-download__column--mac [data-asset-key]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      if (el.getAttribute('href') === '#') {
+        e.preventDefault();
+        alert('죄송합니다. 준비중입니다.');
+      }
+    });
+  });
 </script>
