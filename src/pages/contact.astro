@@ -1,0 +1,733 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Contact Us | 로보시지 RoboSEasy"
+  description="로봇 구매·교육·기타 문의 — 로보시지에 문의해주세요. 빠르게 답변드립니다."
+  path="/contact"
+  bodyClass="contact-page"
+>
+
+<link slot="head" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" />
+<link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+<link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link slot="head" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style is:global>
+  body.contact-page {
+    --bg-primary:   #ffffff;
+    --bg-secondary: #F8F7FB;
+    --bg-tertiary:  #F0EEF5;
+    --text-primary:   #1A0A3D;
+    --text-secondary: #4a4550;
+    --text-muted:     #8a8590;
+    --border:         rgba(8, 2, 28, 0.08);
+    --border-strong:  rgba(8, 2, 28, 0.14);
+    --accent-purple:  #6e48aa;
+    --accent-pink:    #ff69b4;
+    --accent-sky:     #87ceeb;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.contact-page .keep-all { word-break: keep-all; }
+  body.contact-page .text-secondary { color: var(--text-secondary); }
+  body.contact-page .text-primary   { color: var(--text-primary); }
+  body.contact-page .text-muted     { color: var(--text-muted); }
+  body.contact-page .small-meta { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em; }
+
+  /* Page hero */
+  body.contact-page .page-hero {
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(255,105,180,0.08), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(165,130,220,0.10), transparent 65%),
+      var(--bg-primary);
+    padding-top: 7rem;
+    padding-bottom: clamp(24px, 3vh, 48px);
+  }
+  body.contact-page .page-inner {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+  }
+
+  /* Grid */
+  body.contact-page .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+  @media (min-width: 1024px) {
+    body.contact-page .contact-grid { grid-template-columns: 5fr 7fr; }
+  }
+
+  /* Info panel */
+  body.contact-page .info-panel {
+    background: linear-gradient(155deg, #1A0A3D 0%, #2E0068 60%, #4C1594 120%);
+    color: #ffffff;
+    border-radius: 22px;
+    padding: clamp(28px, 3.6vw, 44px);
+    box-shadow: 0 30px 60px -30px rgba(46, 0, 104, 0.35);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  body.contact-page .info-panel::before {
+    content: ""; position: absolute; right: -60px; top: -60px;
+    width: 240px; height: 240px; border-radius: 9999px;
+    background: radial-gradient(circle, rgba(255,105,180,0.22), transparent 65%);
+    pointer-events: none;
+  }
+  body.contact-page .panel-eyebrow {
+    font-family: 'Geist', system-ui, sans-serif;
+    color: var(--accent-pink);
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    position: relative;
+  }
+  body.contact-page .panel-title {
+    font-family: 'Geist', 'Pretendard', system-ui, sans-serif;
+    font-size: clamp(2rem, 3.6vw, 2.8rem);
+    line-height: 1.1; font-weight: 700;
+    margin-top: 12px; position: relative;
+  }
+  body.contact-page .panel-desc {
+    margin-top: 20px; color: rgba(255,255,255,0.75);
+    line-height: 1.7; font-size: 0.95rem; position: relative;
+  }
+  body.contact-page .panel-spacer { flex: 1; min-height: 24px; }
+  body.contact-page .panel-info-block { margin-top: 32px; position: relative; }
+  body.contact-page .panel-info-row {
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 14px; align-items: start;
+    padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.10);
+  }
+  body.contact-page .panel-info-label {
+    color: var(--accent-pink);
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; padding-top: 2px;
+  }
+  body.contact-page .panel-info-value {
+    color: rgba(255,255,255,0.88); font-size: 0.9rem; line-height: 1.55;
+  }
+
+  /* Form card */
+  body.contact-page .form-card {
+    background: #ffffff; border: 1px solid var(--border);
+    border-radius: 22px; padding: clamp(24px, 3vw, 40px);
+    height: 100%; box-sizing: border-box;
+  }
+  body.contact-page .form-card h2 {
+    font-family: 'Geist', 'Pretendard', system-ui, sans-serif;
+    font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin: 0;
+  }
+  body.contact-page .form-space { display: flex; flex-direction: column; gap: 20px; margin-top: 28px; }
+  body.contact-page .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) {
+    body.contact-page .form-row-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Field */
+  body.contact-page .field-label {
+    display: block; font-size: 0.85rem; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 8px;
+  }
+  body.contact-page .req::before {
+    content: "*"; color: var(--accent-pink); margin-right: 4px; font-weight: 700;
+  }
+  body.contact-page .input,
+  body.contact-page .select,
+  body.contact-page .textarea {
+    width: 100%; padding: 12px 14px;
+    background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text-primary); font-family: inherit; font-size: 0.92rem;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+  body.contact-page .input::placeholder,
+  body.contact-page .textarea::placeholder { color: var(--text-muted); }
+  body.contact-page .input:focus,
+  body.contact-page .select:focus,
+  body.contact-page .textarea:focus {
+    outline: none; border-color: var(--accent-pink);
+    background: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12);
+  }
+  body.contact-page .select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+      linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+    background-position: calc(100% - 18px) 52%, calc(100% - 13px) 52%;
+    background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+    background-color: var(--bg-secondary); padding-right: 36px; cursor: pointer;
+  }
+  body.contact-page .select:focus { background-color: #ffffff; }
+  body.contact-page .textarea { resize: vertical; min-height: 130px; }
+
+  /* File drop */
+  body.contact-page .file-drop {
+    border: 1px dashed var(--border-strong); border-radius: 12px;
+    padding: 28px 20px; text-align: center; background: var(--bg-secondary);
+    cursor: pointer; transition: border-color 0.25s, background 0.25s; display: block;
+  }
+  body.contact-page .file-drop:hover { border-color: var(--accent-pink); background: #ffffff; }
+  body.contact-page .file-drop.drag-over { border-color: var(--accent-pink); background: rgba(255,105,180,0.05); }
+  body.contact-page .file-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  body.contact-page .file-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 10px 6px 12px; background: #ffffff;
+    border: 1px solid var(--border); border-radius: 9999px;
+    font-size: 0.82rem; color: var(--text-secondary);
+  }
+  body.contact-page .file-chip button {
+    width: 18px; height: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+  }
+  body.contact-page .file-chip button:hover { color: var(--accent-pink); background: rgba(255,105,180,0.10); }
+
+  /* Submit */
+  body.contact-page .btn-submit {
+    width: 100%; padding: 16px 20px;
+    background: linear-gradient(135deg, #ff69b4 0%, #d4509b 100%);
+    color: #ffffff; font-weight: 700; font-size: 1rem;
+    border: none; border-radius: 12px; cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s;
+    box-shadow: 0 14px 30px -12px rgba(255,105,180,0.5);
+  }
+  body.contact-page .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 18px 36px -12px rgba(255,105,180,0.65); }
+  body.contact-page .btn-submit:active:not(:disabled) { transform: translateY(0); }
+  body.contact-page .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
+
+  /* Purchase block */
+  body.contact-page .purchase-block {
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px; margin-top: 14px;
+  }
+  body.contact-page .purchase-eyebrow {
+    font-family: 'Geist', system-ui, sans-serif;
+    color: var(--accent-purple); font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  /* Quote cards */
+  body.contact-page .quote-cards { display: flex; flex-direction: column; gap: 10px; }
+  body.contact-page .quote-card {
+    background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 14px 12px;
+  }
+  body.contact-page .quote-card-head { display: grid; grid-template-columns: 28px 1fr 32px; align-items: center; gap: 10px; }
+  body.contact-page .row-no {
+    width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9999px; background: var(--bg-tertiary);
+    color: var(--text-secondary); font-family: 'Geist', system-ui, sans-serif; font-size: 0.78rem; font-weight: 600;
+  }
+  body.contact-page .item-select {
+    width: 100%; padding: 10px 36px 10px 12px;
+    background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-primary); font-family: inherit; font-size: 0.88rem;
+    appearance: none; cursor: pointer; box-sizing: border-box;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+      linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+    background-position: calc(100% - 18px) 52%, calc(100% - 13px) 52%;
+    background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+    background-color: var(--bg-secondary);
+  }
+  body.contact-page .item-select:focus { outline: none; border-color: var(--accent-pink); background-color: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12); }
+  body.contact-page .row-del {
+    width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  body.contact-page .row-del:hover { color: var(--accent-pink); background: rgba(255,105,180,0.10); }
+  body.contact-page .quote-card-body {
+    margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px;
+  }
+  @media (min-width: 640px) { body.contact-page .quote-card-body { grid-template-columns: repeat(4, 1fr); } }
+  body.contact-page .qc-field { display: flex; flex-direction: column; gap: 4px; }
+  body.contact-page .qc-label { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.04em; font-weight: 500; }
+  body.contact-page .qc-value { font-family: 'Geist', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-size: 0.92rem; color: var(--text-primary); font-weight: 600; }
+  body.contact-page .qc-input {
+    width: 100%; padding: 6px 10px;
+    background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text-primary); font-family: 'Geist', system-ui, sans-serif;
+    font-variant-numeric: tabular-nums; font-size: 0.92rem; font-weight: 600; box-sizing: border-box;
+  }
+  body.contact-page .qc-input:focus { outline: none; border-color: var(--accent-pink); background: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12); }
+  body.contact-page .quote-totals {
+    margin-top: 12px; background: #ffffff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+  }
+  body.contact-page .quote-totals .row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.86rem; color: var(--text-secondary); }
+  body.contact-page .quote-totals .row.final { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 12px; color: var(--text-primary); font-weight: 700; font-size: 1rem; }
+  body.contact-page .quote-totals .num { font-variant-numeric: tabular-nums; font-family: 'Geist', system-ui, sans-serif; }
+  body.contact-page .quote-note { font-size: 0.74rem; color: var(--text-muted); margin-top: 6px; }
+  body.contact-page .add-row-btn {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+    padding: 6px 12px; background: #ffffff; border: 1px dashed var(--border-strong);
+    border-radius: 9999px; color: var(--text-secondary); font-size: 0.82rem; cursor: pointer;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  body.contact-page .add-row-btn:hover { border-color: var(--accent-pink); color: var(--accent-pink); }
+
+  /* Result message */
+  body.contact-page .result-msg {
+    margin-top: 16px; padding: 14px 16px; border-radius: 10px;
+    font-size: 0.9rem; font-weight: 500; display: none;
+  }
+  body.contact-page .result-msg.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; display: block; }
+  body.contact-page .result-msg.error   { background: #fff1f2; border: 1px solid #fecdd3; color: #9f1239; display: block; }
+
+  /* Info box */
+  body.contact-page .info-box {
+    background: linear-gradient(155deg, #1A0A3D 0%, #2E0068 60%, #4C1594 120%);
+    border: 1px solid rgba(255,255,255,0.10); border-radius: 16px;
+    color: #ffffff; position: relative; overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(46, 0, 104, 0.35); margin-top: 32px;
+  }
+  body.contact-page .info-box::before {
+    content: ""; position: absolute; right: -80px; top: -80px;
+    width: 280px; height: 280px; border-radius: 9999px;
+    background: radial-gradient(circle, rgba(255,105,180,0.18), transparent 65%);
+    pointer-events: none;
+  }
+  body.contact-page .info-box > div { position: relative; z-index: 1; }
+  body.contact-page .info-box-inner {
+    display: grid; grid-template-columns: 1fr; gap: 20px; padding: 20px 24px;
+  }
+  @media (min-width: 1024px) { body.contact-page .info-box-inner { grid-template-columns: 6fr 3fr 3fr; } }
+  body.contact-page .info-row { color: rgba(255,255,255,0.78); font-size: 0.82rem; line-height: 1.6; }
+  body.contact-page .info-label { color: var(--accent-pink); min-width: 84px; display: inline-block; font-weight: 600; }
+  body.contact-page .info-link { color: rgba(255,255,255,0.78); text-decoration: none; }
+  body.contact-page .info-link:hover { color: #ffffff; }
+  body.contact-page .info-box .text-primary   { color: #ffffff; }
+  body.contact-page .info-box .text-secondary { color: rgba(255,255,255,0.70); }
+  body.contact-page .info-box .text-muted     { color: rgba(255,255,255,0.55); }
+  body.contact-page .info-box .small-meta     { color: rgba(255,255,255,0.55); }
+  body.contact-page .info-box-footer {
+    padding: 12px 24px; border-top: 1px solid rgba(255,255,255,0.10); position: relative; z-index: 1;
+  }
+  body.contact-page .info-section-title {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.55); margin-bottom: 8px;
+  }
+  body.contact-page .info-logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  body.contact-page .info-logo-row span {
+    font-family: 'Geist','Pretendard',system-ui,sans-serif; font-weight: 600; font-size: 0.875rem;
+  }
+  body.contact-page .info-ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+</style>
+
+<script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+
+<main class="page-hero">
+  <div class="page-inner">
+
+    <div class="contact-grid">
+
+      <!-- Left: Info panel -->
+      <aside>
+        <div class="info-panel">
+          <div class="panel-eyebrow">Contact Us</div>
+          <h1 class="panel-title keep-all">로보시지<br />문의하기</h1>
+          <p class="panel-desc keep-all">
+            로봇 구매 문의, 교육 문의, 기타 문의 등 이용해주시면<br />
+            빠르게 답변해드리겠습니다.
+          </p>
+          <div class="panel-spacer"></div>
+          <div class="panel-info-block">
+            <div class="panel-info-row">
+              <span class="panel-info-label">Email</span>
+              <span class="panel-info-value">roboseasy@gmail.com</span>
+            </div>
+            <div class="panel-info-row">
+              <span class="panel-info-label">Address</span>
+              <span class="panel-info-value keep-all">대한민국 서울특별시 동작구<br />상도로 15길 143, 창건빌딩 403호</span>
+            </div>
+            <div class="panel-info-row">
+              <span class="panel-info-label">Phone</span>
+              <span class="panel-info-value">010-3479-7777</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right: Form -->
+      <section>
+        <div class="form-card">
+          <h2>문의 보내기</h2>
+          <p class="small-meta" style="margin-top:4px;">아래 양식을 작성해 보내주시면, 담당자가 빠르게 답변드립니다.</p>
+
+          <form id="contactForm" class="form-space" novalidate>
+
+            <!-- 성함 / 직함 -->
+            <div class="form-row-2">
+              <div>
+                <label class="field-label req" for="f-name">성함</label>
+                <input id="f-name" name="name" type="text" class="input" placeholder="홍길동" required />
+              </div>
+              <div>
+                <label class="field-label" for="f-title">직함</label>
+                <input id="f-title" name="title" type="text" class="input" placeholder="예: 연구원, 책임 매니저" />
+              </div>
+            </div>
+
+            <!-- 이메일 / 연락처 -->
+            <div class="form-row-2">
+              <div>
+                <label class="field-label req" for="f-email">이메일</label>
+                <input id="f-email" name="email" type="email" class="input" placeholder="000@000.com" required />
+              </div>
+              <div>
+                <label class="field-label req" for="f-phone">연락처</label>
+                <input id="f-phone" name="phone" type="tel" class="input" placeholder="010-0000-0000" required />
+              </div>
+            </div>
+
+            <!-- 소속 -->
+            <div>
+              <label class="field-label" for="f-org">소속</label>
+              <input id="f-org" name="org" type="text" class="input" placeholder="회사명 / 기관명 / 학교명 등" />
+            </div>
+
+            <!-- 문의 종류 -->
+            <div>
+              <label class="field-label req" for="f-type">문의 종류</label>
+              <select id="f-type" name="type" class="select" required>
+                <option value="" disabled selected>문의 종류를 선택해 주세요</option>
+                <option value="purchase">로봇 구매 문의</option>
+                <option value="corp_edu">기업 교육 문의</option>
+                <option value="workshop">워크샵 문의</option>
+                <option value="etc">기타 문의</option>
+              </select>
+            </div>
+
+            <!-- 구매 전용: 로봇 구매 문의 선택 시 노출 -->
+            <div id="purchaseBlock" style="display:none;">
+              <div class="purchase-block">
+                <div class="purchase-eyebrow" style="margin-bottom:12px;">Purchase · 로봇 구매 견적</div>
+
+                <!-- 배송 주소 -->
+                <div>
+                  <label class="field-label req" for="f-shipto">배송 주소</label>
+                  <input id="f-shipto" name="shipto" type="text" class="input" placeholder="우편번호 / 도로명 주소 / 상세 주소" />
+                </div>
+
+                <!-- 견적 항목 (카드형) -->
+                <div style="margin-top:20px;">
+                  <label class="field-label">견적 항목</label>
+                  <div id="quoteRows" class="quote-cards"><!-- cards injected by JS --></div>
+                  <button type="button" id="addRowBtn" class="add-row-btn">
+                    <iconify-icon icon="solar:add-circle-linear" width="16"></iconify-icon>
+                    <span>품목 행 추가</span>
+                  </button>
+
+                  <div class="quote-totals">
+                    <div class="row">
+                      <span>공급가액계</span>
+                      <span class="num"><span id="qSubtotal">0</span> 원</span>
+                    </div>
+                    <div class="row">
+                      <span>부가세계</span>
+                      <span class="num"><span id="qVat">0</span> 원</span>
+                    </div>
+                    <div class="row final">
+                      <span>최종 견적</span>
+                      <span class="num"><span id="qFinal">0</span> 원 <span class="text-muted" style="font-size:0.75rem;font-weight:400;">(부가세 포함)</span></span>
+                    </div>
+                    <p class="quote-note">※ 부가세는 일의 자리에서 반올림 (10원 단위)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 파일 첨부 -->
+            <div>
+              <label class="field-label">파일 첨부</label>
+              <label for="f-files" class="file-drop" id="fileDrop">
+                <iconify-icon icon="solar:upload-linear" width="22" style="color:var(--text-muted);"></iconify-icon>
+                <p style="margin-top:4px;font-size:0.875rem;color:var(--text-secondary);">
+                  파일을 클릭하거나 드래그 앤 드롭으로 업로드하세요.
+                  <span class="text-muted">(최대 25 MB)</span>
+                </p>
+                <input id="f-files" name="files" type="file" multiple style="display:none;" />
+              </label>
+              <div id="fileList" class="file-list"></div>
+            </div>
+
+            <!-- 문의 내용 -->
+            <div>
+              <label class="field-label req" for="f-message">문의 내용</label>
+              <textarea id="f-message" name="message" class="textarea" placeholder="문의 내용을 입력해주세요" required></textarea>
+            </div>
+
+            <!-- 제출 -->
+            <div>
+              <button type="submit" id="submitBtn" class="btn-submit">문의하기</button>
+              <div id="resultMsg" class="result-msg"></div>
+            </div>
+
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom info box -->
+    <div class="info-box">
+      <div class="info-box-inner">
+        <div>
+          <div class="info-logo-row">
+            <img src="/img/logo.png" alt="RoboSEasy" style="height:28px;width:auto;object-fit:contain;" />
+            <span class="text-primary">RoboSEasy &nbsp;|&nbsp; <span class="text-secondary" style="font-weight:400;">로보시지</span></span>
+          </div>
+          <ul class="info-ul">
+            <li class="info-row">Robot is Easy, 이게 로보시지</li>
+            <li class="info-row"><span class="info-label">이메일</span>roboseasy@gmail.com</li>
+            <li class="info-row"><span class="info-label">주소</span>대한민국 서울특별시 동작구 상도로15길 143,</li>
+            <li class="info-row"><span class="info-label"></span>창건빌딩 403-404호</li>
+            <li class="info-row"><span class="info-label">사업자등록번호</span>173-44-01316</li>
+          </ul>
+        </div>
+        <div>
+          <div class="info-section-title">Social</div>
+          <ul class="info-ul">
+            <li><a href="https://github.com/roboseasy" target="_blank" rel="noopener" class="info-row info-link">GitHub</a></li>
+            <li><a href="https://www.instagram.com/robo_seasy/" target="_blank" rel="noopener" class="info-row info-link">instagram</a></li>
+            <li><a href="https://www.youtube.com/@RoboSEasy" target="_blank" rel="noopener" class="info-row info-link">YouTube</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="info-section-title">Store</div>
+          <ul class="info-ul">
+            <li><a href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener" class="info-row info-link">Naver Smart Store</a></li>
+            <li><a href="https://shop.coupang.com/roboseasy" target="_blank" rel="noopener" class="info-row info-link">Coupang</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box-footer">
+        <p class="small-meta">COPYRIGHT©2025 RoboSEasy ALL RIGHTS RESERVED</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  const ITEMS = [
+    { name: 'LeRobot SO-ARM 101 Max', price: 500000 },
+    { name: 'Top 카메라홀더 + 카메라모듈 + 셀카봉', price: 50000 },
+    { name: 'Wrist 카메라홀더 + 카메라모듈', price: 40000 },
+    { name: 'Belly 카메라홀더 + 카메라모듈', price: 40000 },
+    { name: '고급형 클램프 4pcs', price: 20000 },
+    { name: 'LeRobot SO-ARM 101 Open Gripper', price: 70000 },
+    { name: 'LeRobot SO-ARM 101 Max - 서보 모터 STS3215 (7.4v/19kg)', price: 30000 },
+    { name: 'LeRobot SO-ARM 101 Max - 서보 모터 STS3215 (12v/30kg)', price: 35000 },
+    { name: 'Dual SO-ARM (Only Bridge)', price: 230000 },
+    { name: 'Dual SO-ARM Full Set', price: 1230000 },
+    { name: 'LeRobot SO-ARM101 Max - 3D 프린팅 부품 제외', price: 440000 },
+    { name: 'LeRobot SO-ARM101 Max - 3D 프린팅 부품', price: 70000 },
+    { name: '리더암 모터 세트 (7.4v/19kg)', price: 180000 },
+    { name: '팔로워암 모터 세트 (12v/30kg)', price: 210000 },
+    { name: '모터드라이브 모듈', price: 10000 },
+    { name: '전원 어댑터', price: 10000 },
+    { name: 'USB to C 케이블', price: 2000 },
+    { name: '조립서비스', price: 90000 },
+  ];
+
+  /* Purchase block toggle */
+  const typeSelect = document.getElementById('f-type');
+  const purchaseBlock = document.getElementById('purchaseBlock');
+  typeSelect.addEventListener('change', () => {
+    const isPurchase = typeSelect.value === 'purchase';
+    purchaseBlock.style.display = isPurchase ? 'block' : 'none';
+    document.getElementById('f-shipto').required = isPurchase;
+    if (isPurchase && document.getElementById('quoteRows').children.length === 0) addRow();
+  });
+
+  /* Quote cards */
+  const wrap = document.getElementById('quoteRows');
+  const fmt = n => (n || 0).toLocaleString('ko-KR');
+  const itemOptions = ['<option value="" disabled selected>품목을 선택해 주세요</option>']
+    .concat(ITEMS.map((it, i) => `<option value="${i}">${it.name}</option>`)).join('');
+
+  function addRow() {
+    const idx = wrap.children.length + 1;
+    const card = document.createElement('div');
+    card.className = 'quote-card';
+    card.innerHTML = `
+      <div class="quote-card-head">
+        <span class="row-no">${idx}</span>
+        <select class="item-select q-item">${itemOptions}</select>
+        <button type="button" class="row-del" aria-label="행 삭제">
+          <iconify-icon icon="solar:trash-bin-trash-linear" width="16"></iconify-icon>
+        </button>
+      </div>
+      <div class="quote-card-body">
+        <div class="qc-field"><span class="qc-label">수량</span><input type="number" min="1" step="1" class="qc-input q-qty" placeholder="0" /></div>
+        <div class="qc-field"><span class="qc-label">단가</span><span class="qc-value q-unit">—</span></div>
+        <div class="qc-field"><span class="qc-label">공급가액</span><span class="qc-value q-supply">—</span></div>
+        <div class="qc-field"><span class="qc-label">부가세</span><span class="qc-value q-vat">—</span></div>
+      </div>`;
+    wrap.appendChild(card);
+    const sel = card.querySelector('.q-item');
+    const qty = card.querySelector('.q-qty');
+    sel.addEventListener('change', () => { if (card === wrap.lastElementChild) addRow(); recalc(); });
+    qty.addEventListener('input', recalc);
+    card.querySelector('.row-del').addEventListener('click', () => {
+      if (wrap.children.length === 1) { sel.value = ''; qty.value = ''; }
+      else card.remove();
+      renumber(); recalc();
+    });
+  }
+
+  function renumber() {
+    Array.from(wrap.children).forEach((c, i) => { c.querySelector('.row-no').textContent = i + 1; });
+  }
+
+  function recalc() {
+    let supplySum = 0, vatSum = 0;
+    Array.from(wrap.children).forEach(card => {
+      const sel = card.querySelector('.q-item');
+      const qty = parseInt(card.querySelector('.q-qty').value, 10) || 0;
+      const i = sel.value !== '' ? parseInt(sel.value, 10) : -1;
+      const unit = i >= 0 ? ITEMS[i].price : 0;
+      const supply = qty * unit;
+      const vat = unit && qty ? Math.round((supply * 0.1) / 10) * 10 : 0;
+      card.querySelector('.q-unit').textContent   = unit   ? `${fmt(unit)} 원`   : '—';
+      card.querySelector('.q-supply').textContent = supply ? `${fmt(supply)} 원` : '—';
+      card.querySelector('.q-vat').textContent    = (unit && qty) ? `${fmt(vat)} 원` : '—';
+      supplySum += supply; vatSum += vat;
+    });
+    document.getElementById('qSubtotal').textContent = fmt(supplySum);
+    document.getElementById('qVat').textContent = fmt(vatSum);
+    document.getElementById('qFinal').textContent = fmt(supplySum + vatSum);
+  }
+
+  document.getElementById('addRowBtn').addEventListener('click', addRow);
+
+  /* File upload */
+  const fileInput = document.getElementById('f-files');
+  const fileList  = document.getElementById('fileList');
+  const fileDrop  = document.getElementById('fileDrop');
+  const MAX_BYTES = 25 * 1024 * 1024;
+  let uploaded = [];
+
+  function refreshFileList() {
+    fileList.innerHTML = '';
+    uploaded.forEach((f, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'file-chip';
+      chip.innerHTML = `
+        <iconify-icon icon="solar:document-linear" width="14"></iconify-icon>
+        <span>${f.name} <span class="text-muted">(${(f.size/1024).toFixed(1)} KB)</span></span>
+        <button type="button" aria-label="삭제"><iconify-icon icon="solar:close-circle-linear" width="14"></iconify-icon></button>`;
+      chip.querySelector('button').addEventListener('click', () => { uploaded.splice(i, 1); refreshFileList(); });
+      fileList.appendChild(chip);
+    });
+  }
+
+  function addFiles(filesLike) {
+    Array.from(filesLike).forEach(f => {
+      if (uploaded.reduce((s, u) => s + u.size, 0) + f.size > MAX_BYTES) {
+        alert('총 파일 크기가 25 MB를 초과했습니다.'); return;
+      }
+      uploaded.push(f);
+    });
+    refreshFileList();
+  }
+
+  fileInput.addEventListener('change', e => addFiles(e.target.files));
+  ['dragenter','dragover'].forEach(ev => fileDrop.addEventListener(ev, e => { e.preventDefault(); fileDrop.classList.add('drag-over'); }));
+  ['dragleave','drop'].forEach(ev => fileDrop.addEventListener(ev, e => { e.preventDefault(); fileDrop.classList.remove('drag-over'); }));
+  fileDrop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+
+  /* Form submit → /api/contact */
+  document.getElementById('contactForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    for (const id of ['f-name', 'f-email', 'f-phone', 'f-type', 'f-message']) {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) { el.focus(); showResult('error', '필수 항목을 모두 입력해 주세요.'); return; }
+    }
+    if (typeSelect.value === 'purchase' && !document.getElementById('f-shipto').value.trim()) {
+      document.getElementById('f-shipto').focus();
+      showResult('error', '배송 주소를 입력해 주세요.'); return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = '전송 중...';
+    clearResult();
+
+    /* Collect quote items */
+    const items = [];
+    let supplySum = 0, vatSum = 0;
+    if (typeSelect.value === 'purchase') {
+      Array.from(wrap.children).forEach(card => {
+        const sel = card.querySelector('.q-item');
+        const qty = parseInt(card.querySelector('.q-qty').value, 10) || 0;
+        const idx = sel.value !== '' ? parseInt(sel.value, 10) : -1;
+        if (idx < 0 || qty <= 0) return;
+        const unit = ITEMS[idx].price;
+        const supply = qty * unit;
+        const vat = Math.round((supply * 0.1) / 10) * 10;
+        supplySum += supply; vatSum += vat;
+        items.push({ name: ITEMS[idx].name, qty, unitPrice: unit, supply, vat });
+      });
+    }
+
+    const payload = {
+      name:      document.getElementById('f-name').value.trim(),
+      title:     document.getElementById('f-title').value.trim() || undefined,
+      email:     document.getElementById('f-email').value.trim(),
+      phone:     document.getElementById('f-phone').value.trim(),
+      org:       document.getElementById('f-org').value.trim() || undefined,
+      type:      typeSelect.value,
+      message:   document.getElementById('f-message').value.trim(),
+      shipto:    document.getElementById('f-shipto')?.value.trim() || undefined,
+      items:     items.length > 0 ? items : undefined,
+      supplySum: supplySum || undefined,
+      vatSum:    vatSum || undefined,
+      total:     (supplySum + vatSum) || undefined,
+    };
+
+    try {
+      const fd = new FormData();
+      fd.append('data', JSON.stringify(payload));
+      uploaded.forEach(f => fd.append('files', f));
+
+      const res  = await fetch('/api/contact', { method: 'POST', body: fd });
+      const json = await res.json();
+      if (json.success) {
+        showResult('success', '문의가 접수되었습니다. 빠르게 답변드리겠습니다.');
+        document.getElementById('contactForm').reset();
+        wrap.innerHTML = ''; uploaded = []; refreshFileList();
+        purchaseBlock.style.display = 'none'; // 제출 후 초기화
+        recalc();
+      } else {
+        showResult('error', json.error ?? '전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      }
+    } catch {
+      showResult('error', '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      btn.disabled = false; btn.textContent = '문의하기';
+    }
+  });
+
+  function showResult(type, msg) {
+    const el = document.getElementById('resultMsg');
+    el.className = `result-msg ${type}`; el.textContent = msg;
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function clearResult() {
+    const el = document.getElementById('resultMsg');
+    el.className = 'result-msg'; el.textContent = '';
+  }
+</script>
+
+</BaseLayout>

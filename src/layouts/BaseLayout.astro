@@ -31,8 +31,8 @@ const { title, description, path, image, bodyClass, chrome = true } = Astro.prop
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
 
     <SeoMeta title={title} description={description} path={path} image={image} />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <slot name="head" />
   </head>
   <body class={bodyClass}>
     {chrome && <MainHeader />}
