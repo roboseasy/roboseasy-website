@@ -4,7 +4,8 @@ import type { APIRoute } from 'astro';
 import ExcelJS from 'exceljs';
 import { Resend } from 'resend';
 
-const getEnv = (key: string): string => process.env[key] ?? '';
+const getEnv = (key: string): string =>
+  (import.meta.env[key] as string | undefined) ?? process.env[key] ?? '';
 
 const resend = new Resend(getEnv('RESEND_API_KEY'));
 
