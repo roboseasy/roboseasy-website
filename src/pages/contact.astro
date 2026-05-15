@@ -322,6 +322,70 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: 'Geist','Pretendard',system-ui,sans-serif; font-weight: 600; font-size: 0.875rem;
   }
   body.contact-page .info-ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+
+  /* 견적서 미리보기/다운로드 버튼 */
+  body.contact-page .btn-quote-action {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 9999px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; font-family: inherit;
+  }
+  body.contact-page .btn-preview-quote {
+    background: #ffffff; border: 1.5px solid var(--border-strong); color: var(--text-secondary);
+  }
+  body.contact-page .btn-preview-quote:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
+  body.contact-page .btn-download-quote {
+    background: linear-gradient(135deg, #6e48aa, #4C1594);
+    color: #ffffff; border: none;
+    box-shadow: 0 8px 20px -8px rgba(110,72,170,0.5);
+  }
+  body.contact-page .btn-download-quote:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(110,72,170,0.6); }
+  body.contact-page .btn-download-quote:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+  /* Modal overlay */
+  body.contact-page .quote-modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.55); overflow-y: auto;
+    padding: 40px 20px; align-items: flex-start; justify-content: center;
+  }
+  body.contact-page .quote-modal-overlay.open { display: flex; }
+  body.contact-page .quote-modal-box {
+    background: #fff; border-radius: 16px; padding: 32px; width: 100%; max-width: 720px;
+    position: relative; margin: auto;
+  }
+  body.contact-page .modal-close-btn {
+    position: absolute; top: 14px; right: 14px;
+    width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9999px; border: none; background: var(--bg-tertiary);
+    color: var(--text-secondary); cursor: pointer; font-size: 1rem; font-family: inherit;
+    transition: background 0.2s, color 0.2s;
+  }
+  body.contact-page .modal-close-btn:hover { background: rgba(255,105,180,0.15); color: var(--accent-pink); }
+  body.contact-page .modal-footer {
+    display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; flex-wrap: wrap;
+  }
+  body.contact-page .btn-print {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 9999px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: #fff; border: 1.5px solid var(--border-strong); color: var(--text-secondary);
+    transition: border-color 0.2s, color 0.2s; font-family: inherit;
+  }
+  body.contact-page .btn-print:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
+  body.contact-page .btn-excel {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 9999px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: linear-gradient(135deg, #6e48aa, #4C1594); color: #fff; border: none;
+    box-shadow: 0 8px 20px -8px rgba(110,72,170,0.5); font-family: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  body.contact-page .btn-excel:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(110,72,170,0.6); }
+  body.contact-page .btn-excel:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+  @media print {
+    body * { visibility: hidden !important; }
+    #quotePrintArea, #quotePrintArea * { visibility: visible !important; }
+    #quotePrintArea { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 40px; z-index: 99999; box-sizing: border-box; }
+  }
 </style>
 
 <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
@@ -392,7 +456,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
             <!-- 소속 -->
             <div>
-              <label class="field-label" for="f-org">소속</label>
+              <label class="field-label" id="f-org-label" for="f-org">소속</label>
               <input id="f-org" name="org" type="text" class="input" placeholder="회사명 / 기관명 / 학교명 등" />
             </div>
 
@@ -444,12 +508,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     <p class="quote-note">※ 부가세는 일의 자리에서 반올림 (10원 단위)</p>
                   </div>
                 </div>
+
+                <!-- 견적서 미리보기 / 다운로드 -->
+                <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+                  <button type="button" id="previewQuoteBtn" class="btn-quote-action btn-preview-quote">
+                    <iconify-icon icon="solar:eye-linear" width="16"></iconify-icon>
+                    견적서 미리보기
+                  </button>
+                  <button type="button" id="downloadQuoteBtn" class="btn-quote-action btn-download-quote">
+                    <iconify-icon icon="solar:download-minimalistic-linear" width="16"></iconify-icon>
+                    견적서 다운로드
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- 파일 첨부 -->
             <div>
-              <label class="field-label">파일 첨부</label>
+              <label class="field-label" id="fileSectionLabel">파일 첨부</label>
+              <div id="bizRegNote" style="display:none; align-items:center; gap:6px; font-size:0.82rem; color:var(--accent-pink); margin-bottom:8px; font-weight:500;">
+                <iconify-icon icon="solar:info-circle-linear" width="14" style="flex-shrink:0;"></iconify-icon>
+                사업자 등록증 사본 업로드해주세요.
+              </div>
               <label for="f-files" class="file-drop" id="fileDrop">
                 <iconify-icon icon="solar:upload-linear" width="22" style="color:var(--text-muted);"></iconify-icon>
                 <p style="margin-top:4px;font-size:0.875rem;color:var(--text-secondary);">
@@ -463,8 +543,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
             <!-- 문의 내용 -->
             <div>
-              <label class="field-label req" for="f-message">문의 내용</label>
-              <textarea id="f-message" name="message" class="textarea" placeholder="문의 내용을 입력해주세요" required></textarea>
+              <label class="field-label" for="f-message">문의 내용</label>
+              <textarea id="f-message" name="message" class="textarea" placeholder="문의 내용을 입력해주세요"></textarea>
             </div>
 
             <!-- 제출 -->
@@ -480,6 +560,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   </div>
 </main>
+
+<!-- 견적서 미리보기 모달 -->
+<div id="quoteModalOverlay" class="quote-modal-overlay" role="dialog" aria-modal="true" aria-label="견적서 미리보기">
+  <div class="quote-modal-box">
+    <button id="quoteModalClose" class="modal-close-btn" aria-label="닫기">
+      <iconify-icon icon="solar:close-circle-bold" width="22"></iconify-icon>
+    </button>
+    <h3 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0 0 20px 0; padding-right:40px;">
+      <iconify-icon icon="solar:document-text-linear" width="18" style="vertical-align:middle; margin-right:6px;"></iconify-icon>
+      견적서 미리보기
+    </h3>
+    <div id="quotePrintArea">
+      <div id="quotePreviewContent" style="font-family:'Pretendard',system-ui,sans-serif;"></div>
+    </div>
+  </div>
+</div>
 
 <script>
   const ITEMS = [
@@ -503,40 +599,60 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { name: '조립서비스', price: 90000 },
   ];
 
-  /* Purchase block toggle */
-  const typeSelect = document.getElementById('f-type');
-  const purchaseBlock = document.getElementById('purchaseBlock');
+  const fmt = n => (n || 0).toLocaleString('ko-KR');
+  const pad = n => String(n).padStart(2, '0');
+
+  const typeSelect       = document.getElementById('f-type');
+  const purchaseBlock    = document.getElementById('purchaseBlock');
+  const wrap             = document.getElementById('quoteRows');
+  const orgLabel         = document.getElementById('f-org-label');
+  const orgInput         = document.getElementById('f-org');
+  const fileSectionLabel = document.getElementById('fileSectionLabel');
+  const bizRegNote       = document.getElementById('bizRegNote');
+  const modalOverlay     = document.getElementById('quoteModalOverlay');
+  const previewContent   = document.getElementById('quotePreviewContent');
+
+  /* ─── Purchase block toggle ─── */
   typeSelect.addEventListener('change', () => {
     const isPurchase = typeSelect.value === 'purchase';
     purchaseBlock.style.display = isPurchase ? 'block' : 'none';
     document.getElementById('f-shipto').required = isPurchase;
-    if (isPurchase && document.getElementById('quoteRows').children.length === 0) addRow();
+
+    if (isPurchase) {
+      orgLabel.classList.add('req');
+      orgInput.required = true;
+      fileSectionLabel.classList.add('req');
+      bizRegNote.style.display = 'flex';
+    } else {
+      orgLabel.classList.remove('req');
+      orgInput.required = false;
+      fileSectionLabel.classList.remove('req');
+      bizRegNote.style.display = 'none';
+    }
+
+    if (isPurchase && wrap.children.length === 0) addRow();
   });
 
-  /* Quote cards */
-  const wrap = document.getElementById('quoteRows');
-  const fmt = n => (n || 0).toLocaleString('ko-KR');
+  /* ─── Quote cards ─── */
   const itemOptions = ['<option value="" disabled selected>품목을 선택해 주세요</option>']
-    .concat(ITEMS.map((it, i) => `<option value="${i}">${it.name}</option>`)).join('');
+    .concat(ITEMS.map((it, i) => '<option value="' + i + '">' + it.name + '</option>')).join('');
 
   function addRow() {
     const idx = wrap.children.length + 1;
     const card = document.createElement('div');
     card.className = 'quote-card';
-    card.innerHTML = `
-      <div class="quote-card-head">
-        <span class="row-no">${idx}</span>
-        <select class="item-select q-item">${itemOptions}</select>
-        <button type="button" class="row-del" aria-label="행 삭제">
-          <iconify-icon icon="solar:trash-bin-trash-linear" width="16"></iconify-icon>
-        </button>
-      </div>
-      <div class="quote-card-body">
-        <div class="qc-field"><span class="qc-label">수량</span><input type="number" min="1" step="1" class="qc-input q-qty" placeholder="0" /></div>
-        <div class="qc-field"><span class="qc-label">단가</span><span class="qc-value q-unit">—</span></div>
-        <div class="qc-field"><span class="qc-label">공급가액</span><span class="qc-value q-supply">—</span></div>
-        <div class="qc-field"><span class="qc-label">부가세</span><span class="qc-value q-vat">—</span></div>
-      </div>`;
+    card.innerHTML =
+      '<div class="quote-card-head">' +
+        '<span class="row-no">' + idx + '</span>' +
+        '<select class="item-select q-item">' + itemOptions + '</select>' +
+        '<button type="button" class="row-del" aria-label="행 삭제"><iconify-icon icon="solar:trash-bin-trash-linear" width="16"></iconify-icon></button>' +
+      '</div>' +
+      '<div class="quote-card-body">' +
+        '<div class="qc-field"><span class="qc-label">수량</span><input type="number" min="1" step="1" class="qc-input q-qty" placeholder="0" /></div>' +
+        '<div class="qc-field"><span class="qc-label">단가</span><span class="qc-value q-unit">—</span></div>' +
+        '<div class="qc-field"><span class="qc-label">공급가액</span><span class="qc-value q-supply">—</span></div>' +
+        '<div class="qc-field"><span class="qc-label">부가세</span><span class="qc-value q-vat">—</span></div>' +
+      '</div>';
     wrap.appendChild(card);
     const sel = card.querySelector('.q-item');
     const qty = card.querySelector('.q-qty');
@@ -562,9 +678,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const unit = i >= 0 ? ITEMS[i].price : 0;
       const supply = qty * unit;
       const vat = unit && qty ? Math.round((supply * 0.1) / 10) * 10 : 0;
-      card.querySelector('.q-unit').textContent   = unit   ? `${fmt(unit)} 원`   : '—';
-      card.querySelector('.q-supply').textContent = supply ? `${fmt(supply)} 원` : '—';
-      card.querySelector('.q-vat').textContent    = (unit && qty) ? `${fmt(vat)} 원` : '—';
+      card.querySelector('.q-unit').textContent   = unit   ? fmt(unit)   + ' 원' : '—';
+      card.querySelector('.q-supply').textContent = supply ? fmt(supply) + ' 원' : '—';
+      card.querySelector('.q-vat').textContent    = (unit && qty) ? fmt(vat) + ' 원' : '—';
       supplySum += supply; vatSum += vat;
     });
     document.getElementById('qSubtotal').textContent = fmt(supplySum);
@@ -574,7 +690,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   document.getElementById('addRowBtn').addEventListener('click', addRow);
 
-  /* File upload */
+  /* ─── File upload ─── */
   const fileInput = document.getElementById('f-files');
   const fileList  = document.getElementById('fileList');
   const fileDrop  = document.getElementById('fileDrop');
@@ -586,10 +702,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     uploaded.forEach((f, i) => {
       const chip = document.createElement('span');
       chip.className = 'file-chip';
-      chip.innerHTML = `
-        <iconify-icon icon="solar:document-linear" width="14"></iconify-icon>
-        <span>${f.name} <span class="text-muted">(${(f.size/1024).toFixed(1)} KB)</span></span>
-        <button type="button" aria-label="삭제"><iconify-icon icon="solar:close-circle-linear" width="14"></iconify-icon></button>`;
+      chip.innerHTML =
+        '<iconify-icon icon="solar:document-linear" width="14"></iconify-icon>' +
+        '<span>' + f.name + ' <span class="text-muted">(' + (f.size/1024).toFixed(1) + ' KB)</span></span>' +
+        '<button type="button" aria-label="삭제"><iconify-icon icon="solar:close-circle-linear" width="14"></iconify-icon></button>';
       chip.querySelector('button').addEventListener('click', () => { uploaded.splice(i, 1); refreshFileList(); });
       fileList.appendChild(chip);
     });
@@ -610,46 +726,182 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   ['dragleave','drop'].forEach(ev => fileDrop.addEventListener(ev, e => { e.preventDefault(); fileDrop.classList.remove('drag-over'); }));
   fileDrop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
 
-  /* Form submit → /api/contact */
+  /* ─── Quote data collection ─── */
+  function collectQuoteItems() {
+    const items = [];
+    let supplySum = 0, vatSum = 0;
+    Array.from(wrap.children).forEach(card => {
+      const sel = card.querySelector('.q-item');
+      const qty = parseInt(card.querySelector('.q-qty').value, 10) || 0;
+      const idx = sel.value !== '' ? parseInt(sel.value, 10) : -1;
+      if (idx < 0 || qty <= 0) return;
+      const unit = ITEMS[idx].price;
+      const supply = qty * unit;
+      const vat = Math.round((supply * 0.1) / 10) * 10;
+      supplySum += supply; vatSum += vat;
+      items.push({ name: ITEMS[idx].name, qty, unitPrice: unit, supply, vat });
+    });
+    return { items, supplySum, vatSum };
+  }
+
+  /* ─── Preview modal ─── */
+  function buildPreviewHtml() {
+    const name   = document.getElementById('f-name').value.trim() || '—';
+    const title  = document.getElementById('f-title').value.trim();
+    const email  = document.getElementById('f-email').value.trim() || '—';
+    const phone  = document.getElementById('f-phone').value.trim() || '—';
+    const org    = orgInput.value.trim() || '—';
+    const shipto = document.getElementById('f-shipto').value.trim() || '—';
+
+    const now = new Date();
+    const dateStr = now.getFullYear() + '.' + pad(now.getMonth()+1) + '.' + pad(now.getDate());
+    const quoteNo = 'Q-' + now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate()) + '-' + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds());
+
+    const { items, supplySum, vatSum } = collectQuoteItems();
+    const finalTotal = supplySum + vatSum;
+
+    const itemRowsHtml = items.length > 0 ? items.map((it, i) =>
+      '<tr style="background:' + (i % 2 === 1 ? '#f9f9fb' : '#fff') + ';">' +
+        '<td style="padding:8px 10px;text-align:center;border-bottom:1px solid #e8e5f5;">' + (i+1) + '</td>' +
+        '<td style="padding:8px 10px;border-bottom:1px solid #e8e5f5;">' + it.name + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.qty.toLocaleString('ko-KR') + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.unitPrice.toLocaleString('ko-KR') + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.supply.toLocaleString('ko-KR') + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.vat.toLocaleString('ko-KR') + '</td>' +
+      '</tr>').join('') :
+      '<tr><td colspan="6" style="padding:14px;text-align:center;color:#888;font-size:13px;">품목을 추가해 주세요.</td></tr>';
+
+    return (
+      '<div style="text-align:center;margin-bottom:20px;">' +
+        '<div style="font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#6e48aa;margin-bottom:4px;">ROBOSEASY · 로보시지</div>' +
+        '<h2 style="font-size:22px;font-weight:700;color:#1a0a3d;margin:0 0 4px 0;">견 &nbsp;&nbsp; 적 &nbsp;&nbsp; 서</h2>' +
+        '<p style="font-size:12px;color:#888;margin:0;">견적번호: ' + quoteNo + '&nbsp;&nbsp;|&nbsp;&nbsp;작성일: ' + dateStr + '</p>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">' +
+        '<div style="border:1px solid #e8e5f5;border-radius:8px;padding:14px;">' +
+          '<div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6e48aa;margin-bottom:8px;">공급자</div>' +
+          '<div style="font-size:13px;font-weight:700;color:#1a0a3d;margin-bottom:4px;">로보시지 (RoboSEasy)</div>' +
+          '<div style="font-size:12px;color:#555;line-height:1.65;">서울특별시 동작구 상도로 15길 143<br/>창건빌딩 403호<br/>roboseasy@gmail.com<br/>010-3479-7777</div>' +
+        '</div>' +
+        '<div style="border:1px solid #e8e5f5;border-radius:8px;padding:14px;">' +
+          '<div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6e48aa;margin-bottom:8px;">공급받는자</div>' +
+          '<div style="font-size:13px;font-weight:700;color:#1a0a3d;margin-bottom:4px;">' + org + '</div>' +
+          '<div style="font-size:12px;color:#555;line-height:1.65;">' + name + (title ? ' (' + title + ')' : '') + '<br/>' + email + '<br/>' + phone + '<br/>배송지: ' + shipto + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e8e5f5;">' +
+        '<thead><tr style="background:#1a0a3d;color:#fff;">' +
+          '<th style="padding:9px 10px;text-align:center;font-weight:600;width:38px;">No.</th>' +
+          '<th style="padding:9px 10px;text-align:left;font-weight:600;">품목</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:50px;">수량</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:78px;">단가</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:84px;">공급가액</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:72px;">부가세</th>' +
+        '</tr></thead>' +
+        '<tbody>' + itemRowsHtml + '</tbody>' +
+      '</table>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e8e5f5;border-top:none;">' +
+        '<tr><td style="padding:8px 12px;color:#555;border-bottom:1px solid #e8e5f5;">공급가액계</td><td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">' + supplySum.toLocaleString('ko-KR') + ' 원</td></tr>' +
+        '<tr><td style="padding:8px 12px;color:#555;border-bottom:1px solid #e8e5f5;">부가세계</td><td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">' + vatSum.toLocaleString('ko-KR') + ' 원</td></tr>' +
+        '<tr style="background:#fffff2;"><td style="padding:10px 12px;font-weight:700;font-size:14px;color:#1a0a3d;">최종 견적 (부가세 포함)</td><td style="padding:10px 12px;font-weight:700;font-size:14px;color:#c00000;text-align:right;">' + finalTotal.toLocaleString('ko-KR') + ' 원</td></tr>' +
+      '</table>' +
+      '<p style="font-size:11px;color:#888;margin:8px 0 0 0;">※ 부가세는 일의 자리에서 반올림 (10원 단위) · 본 견적서는 참고용이며, 최종 견적은 담당자 확인 후 안내드립니다.</p>'
+    );
+  }
+
+  document.getElementById('previewQuoteBtn').addEventListener('click', () => {
+    previewContent.innerHTML = buildPreviewHtml();
+    modalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  document.getElementById('quoteModalClose').addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function closeModal() {
+    modalOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function handleExcelDownload(btn) {
+    const name = document.getElementById('f-name').value.trim();
+    const { items, supplySum, vatSum } = collectQuoteItems();
+    const payload = {
+      name,
+      title:     document.getElementById('f-title').value.trim() || undefined,
+      email:     document.getElementById('f-email').value.trim(),
+      phone:     document.getElementById('f-phone').value.trim(),
+      org:       orgInput.value.trim() || undefined,
+      shipto:    document.getElementById('f-shipto').value.trim() || undefined,
+      items:     items.length > 0 ? items : undefined,
+      supplySum: supplySum || undefined,
+      vatSum:    vatSum || undefined,
+      total:     (supplySum + vatSum) || undefined,
+    };
+    const origHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = '생성 중...';
+    try {
+      const res = await fetch('/api/quote-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) { alert('Excel 생성 중 오류가 발생했습니다.'); return; }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const now = new Date();
+      a.href = url;
+      a.download = '견적서_' + (name || '로보시지') + '_' + now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate()) + '.xlsx';
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    } catch {
+      alert('Excel 다운로드 중 오류가 발생했습니다.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = origHTML;
+    }
+  }
+
+  document.getElementById('downloadQuoteBtn').addEventListener('click', function() { handleExcelDownload(this); });
+
+  /* ─── Form submit ─── */
   document.getElementById('contactForm').addEventListener('submit', async e => {
     e.preventDefault();
 
-    for (const id of ['f-name', 'f-email', 'f-phone', 'f-type', 'f-message']) {
+    for (const id of ['f-name', 'f-email', 'f-phone', 'f-type']) {
       const el = document.getElementById(id);
       if (!el.value.trim()) { el.focus(); showResult('error', '필수 항목을 모두 입력해 주세요.'); return; }
     }
-    if (typeSelect.value === 'purchase' && !document.getElementById('f-shipto').value.trim()) {
-      document.getElementById('f-shipto').focus();
-      showResult('error', '배송 주소를 입력해 주세요.'); return;
+
+    if (typeSelect.value === 'purchase') {
+      if (!orgInput.value.trim()) {
+        orgInput.focus(); showResult('error', '소속(회사명/기관명)을 입력해 주세요.'); return;
+      }
+      if (!document.getElementById('f-shipto').value.trim()) {
+        document.getElementById('f-shipto').focus();
+        showResult('error', '배송 주소를 입력해 주세요.'); return;
+      }
+      if (uploaded.length === 0) {
+        document.getElementById('fileDrop').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showResult('error', '사업자 등록증 사본을 업로드해 주세요.'); return;
+      }
     }
 
     const btn = document.getElementById('submitBtn');
     btn.disabled = true; btn.textContent = '전송 중...';
     clearResult();
 
-    /* Collect quote items */
-    const items = [];
-    let supplySum = 0, vatSum = 0;
-    if (typeSelect.value === 'purchase') {
-      Array.from(wrap.children).forEach(card => {
-        const sel = card.querySelector('.q-item');
-        const qty = parseInt(card.querySelector('.q-qty').value, 10) || 0;
-        const idx = sel.value !== '' ? parseInt(sel.value, 10) : -1;
-        if (idx < 0 || qty <= 0) return;
-        const unit = ITEMS[idx].price;
-        const supply = qty * unit;
-        const vat = Math.round((supply * 0.1) / 10) * 10;
-        supplySum += supply; vatSum += vat;
-        items.push({ name: ITEMS[idx].name, qty, unitPrice: unit, supply, vat });
-      });
-    }
+    const { items, supplySum, vatSum } = typeSelect.value === 'purchase' ? collectQuoteItems() : { items: [], supplySum: 0, vatSum: 0 };
 
     const payload = {
       name:      document.getElementById('f-name').value.trim(),
       title:     document.getElementById('f-title').value.trim() || undefined,
       email:     document.getElementById('f-email').value.trim(),
       phone:     document.getElementById('f-phone').value.trim(),
-      org:       document.getElementById('f-org').value.trim() || undefined,
+      org:       orgInput.value.trim() || undefined,
       type:      typeSelect.value,
       message:   document.getElementById('f-message').value.trim(),
       shipto:    document.getElementById('f-shipto')?.value.trim() || undefined,
@@ -670,7 +922,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         showResult('success', '문의가 접수되었습니다. 빠르게 답변드리겠습니다.');
         document.getElementById('contactForm').reset();
         wrap.innerHTML = ''; uploaded = []; refreshFileList();
-        purchaseBlock.style.display = 'none'; // 제출 후 초기화
+        purchaseBlock.style.display = 'none';
+        orgLabel.classList.remove('req'); orgInput.required = false;
+        fileSectionLabel.classList.remove('req'); bizRegNote.style.display = 'none';
         recalc();
       } else {
         showResult('error', json.error ?? '전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
@@ -684,7 +938,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   function showResult(type, msg) {
     const el = document.getElementById('resultMsg');
-    el.className = `result-msg ${type}`; el.textContent = msg;
+    el.className = 'result-msg ' + type; el.textContent = msg;
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
   function clearResult() {
