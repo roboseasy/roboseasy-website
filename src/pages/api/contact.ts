@@ -7,6 +7,8 @@ import { buildQuoteExcel, type QuoteItem } from '../../lib/buildQuoteExcel';
 const getEnv = (key: string): string =>
   (import.meta.env[key] as string | undefined) ?? process.env[key] ?? '';
 
+const resend = new Resend(getEnv('RESEND_API_KEY'));
+
 interface ContactPayload {
   name: string;
   title?: string;
