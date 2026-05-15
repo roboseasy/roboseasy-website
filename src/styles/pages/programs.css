@@ -1134,6 +1134,17 @@
   margin-top: 40px;
 }
 
+/* 설치 가이드 섹션이 들어오면 다운로드 섹션과 자연스러운 구분선만 유지 */
+.studio-download + .install-guide {
+  border-top: 1px solid rgba(8, 2, 28, 0.08);
+  margin-top: 24px;
+}
+
+.install-guide + .programs {
+  border-top: 1px solid rgba(8, 2, 28, 0.08);
+  margin-top: 40px;
+}
+
 /* ===== Studio Download — 반응형 ===== */
 @media screen and (max-width: 1024px) {
   .studio-download {
@@ -1189,5 +1200,515 @@
   }
   .studio-download__row-label {
     text-align: left;
+  }
+}
+
+/* ============================================================
+   Install Guide Section (/programs 다운로드 섹션 ↔ 추가 프로그램 사이)
+   탭(Windows/Linux/macOS) + 단계별 타임라인.
+   ============================================================ */
+
+.install-guide {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 60px 20px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.install-guide__header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.install-guide__decorators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.install-guide__decorator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.install-guide__decorator:nth-child(1) {
+  background-color: var(--color-secondary);
+  animation-delay: 0s;
+}
+
+.install-guide__decorator:nth-child(2) {
+  background-color: var(--color-tertiary);
+  animation-delay: 0.2s;
+}
+
+.install-guide__decorator:nth-child(3) {
+  background-color: var(--color-secondary);
+  animation-delay: 0.4s;
+}
+
+.install-guide__heading {
+  font-size: 40px;
+  font-weight: 700;
+  color: #2E0068;
+  margin: 0 0 14px;
+  letter-spacing: -0.5px;
+}
+
+.install-guide__description {
+  font-size: 17px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===== 탭 ===== */
+.install-guide__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.install-guide__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 22px;
+  border: 1.5px solid rgba(76, 21, 148, 0.2);
+  background: white;
+  border-radius: 26px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    box-shadow 0.2s ease, transform 0.15s ease;
+  font-family: inherit;
+}
+
+.install-guide__tab i {
+  font-size: 16px;
+}
+
+.install-guide__tab:hover {
+  background: #f3eefb;
+  border-color: var(--color-secondary);
+  transform: translateY(-1px);
+}
+
+.install-guide__tab--active {
+  background: linear-gradient(135deg, #4C1594, #2563eb);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(76, 21, 148, 0.28);
+  transform: translateY(0);
+}
+
+.install-guide__tab--active:hover {
+  background: linear-gradient(135deg, #4C1594, #2563eb);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* 활성 탭은 클릭하면 닫는다는 단서 — 작은 ▾ 표시 */
+.install-guide__tab--active::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-left: 2px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  opacity: 0.85;
+}
+
+.install-guide__tab-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.08);
+  color: inherit;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.install-guide__tab--active .install-guide__tab-badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: white;
+}
+
+/* ===== 패널 ===== */
+.install-guide__panels {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+/* 패널은 닫힘 상태가 기본 — grid-template-rows 0fr → 1fr 트랜지션으로 펼침 */
+.install-guide__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s ease, margin-top 0.32s ease, opacity 0.25s ease;
+  margin-top: 0;
+  opacity: 0;
+}
+
+.install-guide__panel[hidden] {
+  display: none;
+}
+
+.install-guide__panel--open {
+  grid-template-rows: 1fr;
+  margin-top: 0;
+  opacity: 1;
+}
+
+.install-guide__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #ece7f7;
+  border-radius: 16px;
+  padding: 0 36px;
+  box-shadow: 0 8px 28px rgba(76, 21, 148, 0.06);
+  transition: padding 0.32s ease;
+}
+
+.install-guide__panel--open .install-guide__panel-inner {
+  padding: 32px 36px 28px;
+}
+
+.install-guide__panel--soon .install-guide__panel-inner {
+  text-align: center;
+  background: #faf8ff;
+  border-style: dashed;
+  border-color: #d9cfee;
+  box-shadow: none;
+}
+
+.install-guide__soon {
+  padding: 28px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.install-guide__soon-icon {
+  font-size: 32px;
+  color: var(--color-secondary);
+  opacity: 0.7;
+}
+
+.install-guide__soon-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.install-guide__soon-text {
+  font-size: 14px;
+  color: #777;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===== 타임라인 ===== */
+.install-guide__timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.install-guide__step {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 18px;
+  position: relative;
+  padding-bottom: 22px;
+}
+
+.install-guide__step:last-child {
+  padding-bottom: 0;
+}
+
+.install-guide__step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 21px;
+  top: 44px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #d9cfee, #ece7f7);
+}
+
+.install-guide__step-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4C1594, #2563eb);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 12px rgba(76, 21, 148, 0.25);
+}
+
+.install-guide__step--gui .install-guide__step-num,
+.install-guide__step--terminal .install-guide__step-num {
+  font-size: 13px;
+}
+
+.install-guide__step-body {
+  padding-top: 4px;
+  min-width: 0;
+}
+
+.install-guide__step-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1d1238;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.install-guide__step-title-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #f3eefb;
+  color: var(--color-secondary);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.install-guide__step-text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.7;
+  margin: 0 0 10px;
+}
+
+/* ===== 코드 블록 ===== */
+.install-guide__code {
+  position: relative;
+  background: #1e1e2e;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 6px 0 0;
+  overflow: hidden;
+}
+
+.install-guide__code pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.install-guide__code code {
+  color: #e4e4f0;
+  font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+.install-guide__copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #d4d4e8;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-family: inherit;
+}
+
+.install-guide__copy-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+.install-guide__copy-btn i {
+  font-size: 11px;
+}
+
+/* ===== Tip (info callout) ===== */
+.install-guide__tip {
+  display: flex;
+  gap: 13px;
+  padding: 14px 18px;
+  margin-top: 22px;
+  background: #eef4ff;
+  border-left: 4px solid #2563eb;
+  border-radius: 9px;
+}
+
+.install-guide__tip-icon {
+  font-size: 16px;
+  color: #2563eb;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.install-guide__tip-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.install-guide__tip-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d1238;
+  margin: 0 0 4px;
+}
+
+.install-guide__tip-text {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.install-guide__tip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+  color: var(--color-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.install-guide__tip-link:hover {
+  text-decoration: underline;
+}
+
+.install-guide__tip-link i {
+  font-size: 11px;
+}
+
+/* ===== Toast (복사 알림) ===== */
+.install-guide__toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(30, 18, 56, 0.92);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 22px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1100;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.install-guide__toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== Install Guide — 반응형 ===== */
+@media (max-width: 1024px) {
+  .install-guide {
+    padding: 50px 20px 30px;
+  }
+  .install-guide__heading {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 768px) {
+  .install-guide {
+    padding: 40px 16px 24px;
+  }
+  .install-guide__heading {
+    font-size: 26px;
+  }
+  .install-guide__description {
+    font-size: 14px;
+  }
+  .install-guide__tabs {
+    gap: 6px;
+  }
+  .install-guide__tab {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .install-guide__panel {
+    padding: 22px 18px 20px;
+    border-radius: 12px;
+  }
+  .install-guide__step {
+    grid-template-columns: 36px 1fr;
+    gap: 12px;
+    padding-bottom: 18px;
+  }
+  .install-guide__step:not(:last-child)::before {
+    left: 17px;
+    top: 40px;
+  }
+  .install-guide__step-num {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+  .install-guide__step--gui .install-guide__step-num,
+  .install-guide__step--terminal .install-guide__step-num {
+    font-size: 11px;
+  }
+  .install-guide__step-title {
+    font-size: 15px;
+  }
+  .install-guide__step-text {
+    font-size: 13px;
+  }
+  .install-guide__code code {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .install-guide__heading {
+    font-size: 22px;
+  }
+  .install-guide__tab {
+    padding: 7px 13px;
+    font-size: 12px;
+  }
+  .install-guide__tab i {
+    font-size: 14px;
   }
 }
