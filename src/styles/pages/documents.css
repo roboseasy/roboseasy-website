@@ -1,241 +1,151 @@
-/* Documents 페이지 전용 스타일 */
+/* Documents 페이지 — Tella 디자인 */
 
 .documents {
-    max-width: 1200px;
-    margin: 100px auto 0;
-    position: relative;
-    z-index: 1;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 64px 20px 96px;
 }
 
-/* 제목 섹션 */
-.documents__container {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.documents__decorators {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.1s;
-}
-
-.documents__decorator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--color-primary);
-    transition: all 0.3s ease;
-    animation: bounce 1.5s ease-in-out infinite;
-}
-
-.documents__decorator:nth-child(1) {
-    background-color: var(--color-secondary);
-    animation-delay: 0s;
-}
-
-.documents__decorator:nth-child(2) {
-    background-color: var(--color-tertiary);
-    animation-delay: 0.2s;
-}
-
-.documents__decorator:nth-child(3) {
-    background-color: var(--color-secondary);
-    animation-delay: 0.4s;
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.documents__heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: #2E0068;
-    text-align: center;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.3s;
-}
-
-.documents__description {
-    font-size: 18px;
-    color: #666;
-    text-align: center;
-    margin-bottom: 100px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.5s;
-}
-
-/* 애니메이션 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* 제품 그리드 */
-.products-grid {
+/* 카드 그리드 */
+.docs-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
-    max-width: 1000px;
-    margin: 0 auto;
+    gap: 32px;
 }
 
-/* 제품 카드 */
-.product-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 40px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+/* 개별 카드 */
+.doc-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-ash-border);
+    border-radius: var(--radius-feature-cards);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    animation: card-pop-in 0.8s ease-out both;
-    position: relative;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.doc-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl-2);
+}
+
+/* 이미지 영역 */
+.doc-card__image-wrap {
+    display: block;
+    aspect-ratio: 4 / 3;
+    background: var(--color-chalk);
+    border-bottom: 1px solid var(--color-ash-border);
     overflow: hidden;
 }
 
-@keyframes card-pop-in {
-    0% {
-        opacity: 0;
-        transform: scale(0.8) rotateY(20deg);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) rotateY(0deg);
-    }
-}
-
-.product-card:nth-child(1) { animation-delay: 0.1s; }
-.product-card:nth-child(2) { animation-delay: 0.2s; }
-.product-card:nth-child(3) { animation-delay: 0.3s; }
-.product-card:nth-child(4) { animation-delay: 0.4s; }
-
-.product-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(175, 145, 225, 0.12), transparent);
-    transition: left 0.6s;
-}
-
-.product-card:hover::before {
-    left: 100%;
-}
-
-.product-card:hover {
-    transform: translateY(-15px) scale(1.05);
-    box-shadow: 0 25px 50px rgba(165, 130, 220, 0.25);
-}
-
-/* 이미지 컨테이너 */
-.product-card__image-container {
-    width: 100%;
-    height: 100%;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.product-card__image {
+.doc-card__image {
     width: 100%;
     height: 100%;
     object-fit: contain;
     object-position: center;
-    transition: transform 0.4s ease;
+    padding: 24px;
+    box-sizing: border-box;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.product-card:hover .product-card__image {
-    transform: scale(1.1) rotate(3deg);
+.doc-card:hover .doc-card__image {
+    transform: scale(1.06);
 }
 
-/* 제목 */
-.product-card__title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #08021C;
-    margin-bottom: 15px;
+/* 텍스트 본문 */
+.doc-card__body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
 }
 
-/* 설명 */
-.product-card__description {
-    font-size: 15px;
-    color: #666;
-    line-height: 1.8;
-    margin-bottom: 30px;
-    flex-grow: 1;
+.doc-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-heading-sm);
+    font-weight: var(--fw-bold);
+    color: var(--color-ink);
+    margin: 0;
 }
 
-/* 버튼 */
-.product-card__button {
+.doc-card__description {
+    font-size: var(--text-body);
+    color: var(--color-slate);
+    line-height: 1.65;
+    margin: 0;
+    flex: 1;
+}
+
+.doc-card__button {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #2563eb, #a582dc);
-    color: white;
-    padding: 15px 32px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 16px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    gap: 8px;
+    align-self: flex-start;
     position: relative;
-    z-index: 1;
+    isolation: isolate;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(165, 130, 220, 0.3);
+    background: linear-gradient(to bottom, #6d60ff, #5e51f8);
+    color: #eef2ff;
+    padding: 12px 24px;
+    border-radius: var(--radius-buttons);
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: var(--fw-semibold);
+    text-decoration: none;
+    box-shadow:
+        0 1px rgba(255,255,255,0.07) inset,
+        0 1px 3px rgba(0,0,0,0.2),
+        0 2px 4px rgba(94,81,248,0),
+        0 4px 6px rgba(94,81,248,0);
+    transition: box-shadow 0.3s cubic-bezier(0.4,0.36,0,1), transform 0.2s ease;
 }
 
-.product-card__button::before {
-    content: "";
+.doc-card__button::before {
+    content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+    opacity: 0.5;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4,0.36,0,1);
 }
 
-.product-card__button:hover::before {
-    width: 300px;
-    height: 300px;
+.doc-card__button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.05) 46%, transparent 54%);
+    mix-blend-mode: overlay;
+    border-radius: inherit;
+    pointer-events: none;
 }
 
-.product-card__button:hover {
-    transform: scale(1.1) translateY(-3px);
-    box-shadow: 0 10px 30px rgba(165, 130, 220, 0.5);
+.doc-card__button:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 1px rgba(255,255,255,0.07) inset,
+        0 1px 3px rgba(0,0,0,0.2),
+        0 2px 4px rgba(94,81,248,0.12),
+        0 4px 6px rgba(94,81,248,0.2);
 }
 
-.product-card__button i {
-    margin-right: 8px;
+.doc-card__button:hover::before {
+    opacity: 1;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .documents {
+        padding: 48px 16px 64px;
+    }
+
+    .docs-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
 }

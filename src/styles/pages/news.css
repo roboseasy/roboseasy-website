@@ -1,192 +1,85 @@
-/* News Section */
+/* News 페이지 — Tella 디자인 */
+
 .news {
-    max-width: 1200px;
-    margin: 100px auto 0;
-    text-align: center;
-    position: relative;
-    z-index: 1;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 20px 96px;
 }
 
-/* 제목 섹션 */
-.news__container {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.news__decorators {
+/* 탭 컨테이너 */
+.news__tabs-wrap {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.1s;
+    padding: 40px 20px 0;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
 }
 
-.news__decorator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--color-primary);
-    transition: all 0.3s ease;
-    animation: bounce 1.5s ease-in-out infinite;
-}
-
-.news__decorator:nth-child(1) {
-    background-color: var(--color-secondary);
-    animation-delay: 0s;
-}
-
-.news__decorator:nth-child(2) {
-    background-color: var(--color-tertiary);
-    animation-delay: 0.2s;
-}
-
-.news__decorator:nth-child(3) {
-    background-color: var(--color-secondary);
-    animation-delay: 0.4s;
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.news__heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: #2E0068;
-    text-align: center;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.3s;
-}
-
-.news__description {
-    font-size: 18px;
-    color: #666;
-    text-align: center;
-    margin-bottom: 100px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.5s;
-}
-
-/* Tabs Navigation */
 .news__tabs {
     display: inline-flex;
-    justify-content: center;
-    margin: 0 auto 100px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.7s;
-    border: 2px solid #e0e0e0;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    gap: 6px;
+    background: rgba(94, 81, 248, 0.08);
+    border-radius: var(--radius-buttons);
+    padding: 6px;
 }
 
 .news__tab {
-    padding: 15px 70px;
-    font-size: 17px;
-    font-weight: 600;
-    color: #666;
-    background-color: white;
+    padding: 10px 22px;
     border: none;
-    border-right: 2px solid #e0e0e0;
+    border-radius: var(--radius-buttons);
+    font-family: var(--font-display);
+    font-size: var(--text-body-sm);
+    font-weight: var(--fw-medium);
+    color: var(--color-slate);
+    background: transparent;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.news__tab:last-child {
-    border-right: none;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
 }
 
 .news__tab:hover {
-    color: var(--color-secondary);
-    background-color: rgba(76, 21, 148, 0.05);
+    color: var(--color-signal-violet);
 }
 
 .news__tab--active {
-    color: white;
-    background-color: var(--color-secondary);
+    background: var(--color-pure-white);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-sm-2);
+    font-weight: var(--fw-semibold);
 }
 
-/* Tab Content */
+/* 탭 콘텐츠 */
 .news__content {
+    margin-top: 40px;
     min-height: 400px;
 }
 
 .news__panel {
     display: none;
-    animation: fadeIn 0.3s ease;
+    animation: fadeInUp 0.3s ease;
 }
 
 .news__panel--active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Instagram Feed Grid */
+/* Instagram 피드 그리드 */
 .instagram-feed {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 20px;
+    gap: 24px;
 }
 
 .instagram-feed__post {
-    background-color: white;
-    border-radius: 15px;
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-ash-border);
+    border-radius: var(--radius-cards);
     overflow: hidden;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--shadow-xl);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
     max-height: 800px;
     position: relative;
-    animation: feed-fade-in 0.6s ease-out both;
 }
-
-@keyframes feed-fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(30px) rotateX(10deg);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) rotateX(0deg);
-    }
-}
-
-.instagram-feed__post:nth-child(1) { animation-delay: 0.1s; }
-.instagram-feed__post:nth-child(2) { animation-delay: 0.2s; }
-.instagram-feed__post:nth-child(3) { animation-delay: 0.3s; }
 
 .instagram-feed__post::after {
     content: '';
@@ -194,15 +87,15 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 50px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 1) 100%);
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 100%);
     pointer-events: none;
-    border-radius: 0 0 15px 15px;
+    border-radius: 0 0 var(--radius-cards) var(--radius-cards);
 }
 
 .instagram-feed__post:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(165, 130, 220, 0.2);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl-2);
 }
 
 .instagram-feed__embed {
@@ -211,7 +104,7 @@
     max-width: 100% !important;
 }
 
-/* YouTube Video Styles */
+/* YouTube */
 .youtube-video {
     max-height: none;
     display: flex;
@@ -227,19 +120,19 @@
     aspect-ratio: 16 / 9;
     border: none;
     display: block;
-    border-radius: 15px 15px 0 0;
+    border-radius: var(--radius-cards) var(--radius-cards) 0 0;
     flex-shrink: 0;
 }
 
 .youtube-video__title {
-    padding: 15px 15px 5px;
-    font-size: 14px;
+    padding: 16px;
+    font-size: var(--text-body-sm);
     font-weight: var(--fw-medium);
-    color: var(--color-primary);
-    line-height: 1.4;
-    background-color: white;
-    border-radius: 0 0 15px 15px;
-    min-height: 50px;
+    color: var(--color-ink);
+    line-height: 1.45;
+    background: var(--color-pure-white);
+    border-radius: 0 0 var(--radius-cards) var(--radius-cards);
+    min-height: 52px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -247,207 +140,27 @@
     text-overflow: ellipsis;
     text-decoration: none;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
 }
 
 .youtube-video__title:hover {
-    color: var(--color-secondary);
-    text-decoration: underline;
+    color: var(--color-signal-violet);
 }
 
-/* 반응형 - 태블릿 (1024px 이하) */
+/* ─── Responsive ─── */
 @media (max-width: 1024px) {
-    .news {
-        margin: 120px auto 0;
-        padding: 0 20px;
-    }
-
-    .news__container {
-        margin-bottom: 40px;
-    }
-
-    .news__heading {
-        font-size: 40px;
-    }
-
-    .news__description {
-        font-size: 17px;
-        margin-bottom: 60px;
-    }
-
-    .news__tabs {
-        margin-bottom: 60px;
-    }
-
-    .news__tab {
-        padding: 14px 40px;
-        font-size: 15px;
-    }
-
-    .instagram-feed {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 25px;
-    }
-
-    .youtube-video__title {
-        font-size: 13px;
-        padding: 12px 12px 5px;
-        min-height: 45px;
-    }
+    .news { padding: 0 20px 64px; }
+    .instagram-feed { grid-template-columns: repeat(2, 1fr); gap: 20px; }
 }
 
-/* 모바일 (768px 이하) - 인스타그램 앱 스타일 */
 @media (max-width: 768px) {
-    .news {
-        margin: 100px auto 0;
-        padding: 0;
-    }
-
-    .news__container {
-        margin-bottom: 20px;
-        padding: 0 16px;
-    }
-
-    .news__decorators {
-        margin-bottom: 20px;
-    }
-
-    .news__decorator {
-        width: 10px;
-        height: 10px;
-    }
-
-    .news__heading {
-        font-size: 28px;
-        margin-bottom: 10px;
-    }
-
-    .news__description {
-        font-size: 14px;
-        margin-bottom: 30px;
-    }
-
-    .news__tabs {
-        flex-direction: row;
-        width: 100%;
-        max-width: none;
-        margin: 30px 0 30px;
-        border: none;
-        border-radius: 0;
-        border-top: 1px solid #dbdbdb;
-        border-bottom: 1px solid #dbdbdb;
-        box-shadow: none;
-        background: white;
-    }
-
-    .news__tab {
-        flex: 1;
-        padding: 12px 8px;
-        font-size: 12px;
-        border-right: none;
-        border-bottom: none;
-        color: #8e8e8e;
-        position: relative;
-    }
-
-    .news__tab--active {
-        color: #262626;
-        background: white;
-    }
-
-    .news__tab--active::after {
-        content: '';
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: #262626;
-    }
-
-    .news__tab:last-child {
-        border-bottom: none;
-    }
-
-    .news__content {
-        min-height: auto;
-    }
-
-    /* 인스타그램 피드 스타일 */
-    .instagram-feed {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        max-width: none;
-        padding: 0;
-    }
-
-    .instagram-feed__post {
-        border-radius: 0;
-        box-shadow: none;
-        max-height: 550px;
-        overflow: hidden;
-        border-bottom: 1px solid #dbdbdb;
-        background: white;
-    }
-
-    .instagram-feed__post:hover {
-        transform: none;
-        box-shadow: none;
-    }
-
-    .instagram-feed__post::after {
-        display: none;
-    }
-
-    .instagram-feed__embed {
-        transform: none;
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
-    }
-
-    /* 유튜브 비디오 */
-    .youtube-video {
-        border-radius: 0;
-    }
-
-    .youtube-video__iframe {
-        border-radius: 0;
-        aspect-ratio: 16 / 9;
-    }
-
-    .youtube-video__title {
-        font-size: 14px;
-        padding: 12px 16px;
-        min-height: auto;
-        border-radius: 0;
-        text-align: left;
-    }
+    .news { padding: 0 16px 48px; }
+    .news__tabs-wrap { padding: 32px 16px 0; }
+    .news__tabs { gap: 4px; padding: 4px; }
+    .news__tab { padding: 8px 14px; font-size: 12px; }
+    .instagram-feed { grid-template-columns: 1fr; gap: 16px; }
 }
 
-/* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
-    .news {
-        margin: 80px auto 0;
-    }
-
-    .news__heading {
-        font-size: 24px;
-    }
-
-    .news__description {
-        font-size: 13px;
-        margin-bottom: 20px;
-    }
-
-    .news__tab {
-        padding: 10px 6px;
-        font-size: 11px;
-    }
-
-    .youtube-video__title {
-        font-size: 13px;
-        padding: 10px 12px 30px;
-    }
+    .news__tab { padding: 8px 10px; font-size: 11px; }
 }

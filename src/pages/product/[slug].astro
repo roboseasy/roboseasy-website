@@ -1,0 +1,338 @@
+---
+import ShopLayout from '../../layouts/ShopLayout.astro';
+
+type Product = {
+  slug: string;
+  cat: string;
+  category: string;
+  name: string;
+  price: number;
+  img: string;
+  url: string;
+  desc: string;
+};
+
+export function getStaticPaths() {
+  const PRODUCTS: Product[] = [
+    { slug: 'servo-sts3215',      cat: 'parts',    category: '서보 모터',  name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - 서보 모터 STS3215',                         price: 33000,  img: '/img/products/92080566702035437_410740015.jpg',    url: 'https://smartstore.naver.com/roboseasy/products/12407315664', desc: 'LeRobot SO-ARM101 Max에 사용되는 STS3215 서보 모터. 국내 직접 생산·테스트한 정품입니다.' },
+    { slug: 'clamp-2pcs',         cat: 'parts',    category: '클램프',     name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - 고급형 클램프 2pcs',                         price: 11000,  img: '/img/products/8989115033228448_734697920.jpg',     url: 'https://smartstore.naver.com/roboseasy/products/12739176577', desc: 'SO-ARM101 Max 조립용 고급형 클램프 2개 세트.' },
+    { slug: 'open-gripper',       cat: 'assembly', category: '완조립품',   name: '(완조립품) 르로봇 그리퍼 LeRobot SO-ARM Open Gripper',                                price: 77000,  img: '/img/products/21823396272049845_2029614228.jpeg',  url: 'https://smartstore.naver.com/roboseasy/products/13156884121', desc: '완전 조립 상태로 배송. 바로 로봇 팔에 장착 가능한 오픈 그리퍼.' },
+    { slug: 'shoulder',           cat: '3d',       category: '3D 프린팅',  name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - Shoulder',                                  price: 4400,   img: '/img/products/44843358702213918_1014349603.jpeg', url: 'https://smartstore.naver.com/roboseasy/products/12645287536', desc: '뱀부랩 정품 PLA로 국내에서 직접 3D 프린팅한 Shoulder 파트.' },
+    { slug: 'base-camera-holder', cat: '3d',       category: '3D 프린팅',  name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - Base + Base Camera Holder',                 price: 16500,  img: '/img/products/10142672034278512_622532690.jpg',   url: 'https://smartstore.naver.com/roboseasy/products/12629454095', desc: 'SO-ARM101 Max 베이스와 베이스 카메라 홀더 세트.' },
+    { slug: 'fullkit-no-3d',      cat: 'fullpkg',  category: '풀패키지',   name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - 3D 프린팅 부품 제외',                      price: 484000, img: '/img/products/112851104212780333_856347944.jpg',  url: 'https://smartstore.naver.com/roboseasy/products/12605183674', desc: '3D 프린팅 파트를 제외한 SO-ARM101 Max 풀키트. 프린터 보유자에게 추천.' },
+    { slug: '3d-parts-fullset',   cat: '3d',       category: '3D 프린팅',  name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - 3D 프린팅 부품 풀세트',                    price: 77000,  img: '/img/products/91281501671940449_626074635.jpeg',  url: 'https://smartstore.naver.com/roboseasy/products/12361795642', desc: '뱀부랩 정품 PLA로 제작한 SO-ARM101 Max 3D 프린팅 파트 풀세트.' },
+    { slug: 'belly-camera',       cat: 'camera',   category: '카메라',     name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - Belly 카메라홀더 + 카메라 모듈',            price: 44000,  img: '/img/products/47786843391101174_2069176386.jpeg', url: 'https://smartstore.naver.com/roboseasy/products/12357804707', desc: '로봇 팔 하단(Belly)에 장착하는 카메라 홀더 + 모듈 세트.' },
+    { slug: 'wrist-camera',       cat: 'camera',   category: '카메라',     name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - Wrist 카메라홀더 + 카메라 모듈',            price: 44000,  img: '/img/products/74083261821818805_785481099.jpeg',  url: 'https://smartstore.naver.com/roboseasy/products/12357786775', desc: '손목(Wrist)에 장착하는 카메라 홀더 + 모듈 세트.' },
+    { slug: 'top-camera',         cat: 'camera',   category: '카메라',     name: '(국내생산) 르로봇 LeRobot SO-ARM101 Max - Top 카메라홀더 + 카메라 모듈 + 셀카봉',    price: 55000,  img: '/img/products/74145988394487677_172794382.jpeg',  url: 'https://smartstore.naver.com/roboseasy/products/12357751279', desc: '상단(Top) 카메라 홀더 + 모듈 + 셀카봉 세트.' },
+  ];
+  return PRODUCTS.map(p => ({ params: { slug: p.slug }, props: { product: p } }));
+}
+
+interface Props { product: Product; }
+const { product } = Astro.props;
+const priceFormatted = product.price.toLocaleString('ko-KR');
+---
+<ShopLayout
+  title={`${product.name} · RoboSEasy Shop`}
+  description={product.desc}
+  path={`/product/${product.slug}`}
+>
+
+<style>
+  .detail-wrap {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    color: #1A0A3D;
+    -webkit-font-smoothing: antialiased;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--color-slate);
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: var(--color-slate);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover { color: var(--color-signal-violet); }
+
+  .breadcrumb__sep { color: var(--color-ash-border); }
+
+  .breadcrumb__current {
+    color: var(--color-ink);
+    font-weight: 500;
+    max-width: 40ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Two-column grid */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .detail-grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  /* Product image */
+  .detail-image {
+    aspect-ratio: 1;
+    background: var(--color-chalk);
+    border-radius: var(--radius-cards);
+    border: 1px solid var(--color-ash-border);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .detail-image img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 10%;
+  }
+
+  /* Info panel */
+  .detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    background: rgba(94,81,248,0.08);
+    border: 1px solid rgba(94,81,248,0.25);
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-signal-violet);
+    width: fit-content;
+  }
+
+  .detail-name {
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 700;
+    color: var(--color-ink);
+    line-height: 1.3;
+    word-break: keep-all;
+    margin: 0;
+  }
+
+  .detail-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .detail-price {
+    font-variant-numeric: tabular-nums;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .detail-price-label {
+    font-size: 0.9rem;
+    color: #8a8590;
+  }
+
+  .detail-divider {
+    border: none;
+    border-top: 1px solid var(--color-ash-border);
+    margin: 4px 0;
+  }
+
+  .detail-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #4a4550;
+    word-break: keep-all;
+  }
+
+  .btn-buy {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(to bottom, #6d60ff, #5e51f8);
+    color: #eef2ff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Pretendard', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .btn-buy:hover {
+    box-shadow: 0 8px 32px rgba(94,81,248,0.45);
+    transform: translateY(-2px);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--color-slate);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    text-align: center;
+    width: 100%;
+  }
+
+  .back-link:hover { color: var(--color-signal-violet); }
+
+  /* Product details section */
+  .product-details {
+    margin-top: 64px;
+    border-top: 1px solid var(--color-ash-border);
+    padding-top: 40px;
+  }
+
+  .product-details__title {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin: 0 0 28px;
+  }
+
+  .info-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-ash-border);
+    border-radius: var(--radius-cards);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .info-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    border-bottom: 1px solid var(--color-ash-border);
+  }
+
+  .info-row:last-child { border-bottom: none; }
+
+  .info-label {
+    padding: 14px 18px;
+    background: var(--color-chalk);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-slate);
+    border-right: 1px solid var(--color-ash-border);
+  }
+
+  .info-value {
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    color: var(--color-ink);
+  }
+
+  .detail-note {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: #4a4550;
+    word-break: keep-all;
+    padding: 16px 18px;
+    background: var(--color-chalk);
+    border: 1px solid var(--color-ash-border);
+    border-radius: var(--radius-images);
+  }
+</style>
+
+<div class="detail-wrap">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <a href="/shop">Shop</a>
+    <span class="breadcrumb__sep">›</span>
+    <a href="/products">Products</a>
+    <span class="breadcrumb__sep">›</span>
+    <span class="breadcrumb__current">{product.name}</span>
+  </nav>
+
+  <!-- Two-column detail -->
+  <div class="detail-grid">
+    <!-- Left: image -->
+    <div class="detail-image">
+      <img
+        src={product.img}
+        alt={product.name}
+        loading="eager"
+        decoding="async"
+        onerror="this.onerror=null;this.style.cssText='position:absolute;inset:0;width:100%;height:100%;background:linear-gradient(135deg,#251544,#5e51f8);';this.removeAttribute('src');"
+      />
+    </div>
+
+    <!-- Right: info panel -->
+    <div class="detail-info">
+      <span class="detail-badge">{product.category}</span>
+      <h1 class="detail-name">{product.name}</h1>
+
+      <div class="detail-price-row">
+        <span class="detail-price">{priceFormatted}원</span>
+        <span class="detail-price-label">· VAT 포함</span>
+      </div>
+
+      <hr class="detail-divider" />
+
+      <p class="detail-desc">{product.desc}</p>
+
+      <a href={product.url} target="_blank" rel="noopener noreferrer" class="btn-buy">
+        네이버 스마트스토어에서 구매하기
+      </a>
+
+      <a href="/products" class="back-link">← 제품 목록으로</a>
+    </div>
+  </div>
+
+  <!-- Product details section -->
+  <section class="product-details">
+    <h2 class="product-details__title">제품 정보</h2>
+
+    <div class="info-table">
+      <div class="info-row">
+        <span class="info-label">카테고리</span>
+        <span class="info-value">{product.category}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">원산지</span>
+        <span class="info-value">국내 (대한민국)</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">KC인증</span>
+        <span class="info-value">KC인증 획득 제품</span>
+      </div>
+    </div>
+
+    <p class="detail-note">
+      {product.cat === '3d'
+        ? '뱀부랩(Bambu Lab) 정품 PLA 필라멘트로 국내에서 직접 3D 프린팅한 제품입니다. 출력 품질 및 치수 정확도를 자체 검수 후 출고합니다. 색상·표면 질감은 3D 프린팅 특성상 로트마다 미세하게 다를 수 있습니다.'
+        : '로보시지(RoboSEasy)가 직접 생산·검수하여 출고합니다. 제품 관련 문의는 roboseasy@gmail.com 으로 연락주시면 1영업일 내 답변드립니다.'
+      }
+    </p>
+  </section>
+</div>
+
+</ShopLayout>

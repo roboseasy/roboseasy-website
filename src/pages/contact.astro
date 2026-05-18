@@ -16,16 +16,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style is:global>
   body.contact-page {
     --bg-primary:   #ffffff;
-    --bg-secondary: #F8F7FB;
-    --bg-tertiary:  #F0EEF5;
-    --text-primary:   #1A0A3D;
-    --text-secondary: #4a4550;
-    --text-muted:     #8a8590;
-    --border:         rgba(8, 2, 28, 0.08);
-    --border-strong:  rgba(8, 2, 28, 0.14);
-    --accent-purple:  #6e48aa;
-    --accent-pink:    #ff69b4;
-    --accent-sky:     #87ceeb;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary:  #f0eef8;
+    --text-primary:   #0f172a;
+    --text-secondary: #475569;
+    --text-muted:     #808a99;
+    --border:         #e5e7eb;
+    --border-strong:  rgba(15, 23, 42, 0.18);
+    --accent:         #5e51f8;
+    --accent-mid:     #4b41c6;
+    --accent-soft:    #cfcbfd;
     background: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
@@ -40,8 +40,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* Page hero */
   body.contact-page .page-hero {
     background:
-      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(255,105,180,0.08), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(165,130,220,0.10), transparent 65%),
+      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(94,81,248,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(134,125,250,0.08), transparent 65%),
       var(--bg-primary);
     padding-top: 7rem;
     padding-bottom: clamp(24px, 3vh, 48px);
@@ -65,11 +65,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Info panel */
   body.contact-page .info-panel {
-    background: linear-gradient(155deg, #1A0A3D 0%, #2E0068 60%, #4C1594 120%);
+    background: linear-gradient(155deg, #1c1451 0%, #2d1f8a 50%, #5e51f8 100%);
     color: #ffffff;
     border-radius: 22px;
     padding: clamp(28px, 3.6vw, 44px);
-    box-shadow: 0 30px 60px -30px rgba(46, 0, 104, 0.35);
+    box-shadow: rgba(94,81,248,0.35) 0px 30px 60px -30px;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -78,14 +78,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     box-sizing: border-box;
   }
   body.contact-page .info-panel::before {
-    content: ""; position: absolute; right: -60px; top: -60px;
+    content: ""; position: absolute; right: -70px; top: -70px;
     width: 240px; height: 240px; border-radius: 9999px;
-    background: radial-gradient(circle, rgba(255,105,180,0.22), transparent 65%);
+    background: radial-gradient(circle, rgba(134,125,250,0.25), transparent 65%);
     pointer-events: none;
   }
   body.contact-page .panel-eyebrow {
     font-family: 'Geist', system-ui, sans-serif;
-    color: var(--accent-pink);
+    color: var(--accent-soft);
     font-size: 0.78rem; font-weight: 700;
     letter-spacing: 0.28em; text-transform: uppercase;
     position: relative;
@@ -108,7 +108,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.10);
   }
   body.contact-page .panel-info-label {
-    color: var(--accent-pink);
+    color: var(--accent-soft);
     font-family: 'Geist', system-ui, sans-serif;
     font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; padding-top: 2px;
   }
@@ -138,7 +138,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: var(--text-primary); margin-bottom: 8px;
   }
   body.contact-page .req::before {
-    content: "*"; color: var(--accent-pink); margin-right: 4px; font-weight: 700;
+    content: "*"; color: var(--accent); margin-right: 4px; font-weight: 700;
   }
   body.contact-page .input,
   body.contact-page .select,
@@ -154,8 +154,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .input:focus,
   body.contact-page .select:focus,
   body.contact-page .textarea:focus {
-    outline: none; border-color: var(--accent-pink);
-    background: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12);
+    outline: none; border-color: var(--accent);
+    background: #ffffff; box-shadow: 0 0 0 3px rgba(94,81,248,0.12);
   }
   body.contact-page .select {
     appearance: none;
@@ -175,8 +175,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 28px 20px; text-align: center; background: var(--bg-secondary);
     cursor: pointer; transition: border-color 0.25s, background 0.25s; display: block;
   }
-  body.contact-page .file-drop:hover { border-color: var(--accent-pink); background: #ffffff; }
-  body.contact-page .file-drop.drag-over { border-color: var(--accent-pink); background: rgba(255,105,180,0.05); }
+  body.contact-page .file-drop:hover { border-color: var(--accent); background: #ffffff; }
+  body.contact-page .file-drop.drag-over { border-color: var(--accent); background: rgba(94,81,248,0.04); }
   body.contact-page .file-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
   body.contact-page .file-chip {
     display: inline-flex; align-items: center; gap: 8px;
@@ -190,18 +190,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
     transition: color 0.2s, background 0.2s;
   }
-  body.contact-page .file-chip button:hover { color: var(--accent-pink); background: rgba(255,105,180,0.10); }
+  body.contact-page .file-chip button:hover { color: var(--accent); background: rgba(94,81,248,0.10); }
 
   /* Submit */
   body.contact-page .btn-submit {
     width: 100%; padding: 16px 20px;
-    background: linear-gradient(135deg, #ff69b4 0%, #d4509b 100%);
-    color: #ffffff; font-weight: 700; font-size: 1rem;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #6d60ff, #5e51f8);
+    color: #eef2ff; font-weight: 700; font-size: 1rem;
     border: none; border-radius: 12px; cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s;
-    box-shadow: 0 14px 30px -12px rgba(255,105,180,0.5);
+    box-shadow:
+      0 1px rgba(255,255,255,0.07) inset,
+      0 1px 3px rgba(0,0,0,0.2),
+      0 2px 4px rgba(94,81,248,0),
+      0 4px 6px rgba(94,81,248,0);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.4,0.36,0,1);
   }
-  body.contact-page .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 18px 36px -12px rgba(255,105,180,0.65); }
+  body.contact-page .btn-submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+    opacity: 0.5;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4,0.36,0,1);
+  }
+  body.contact-page .btn-submit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.05) 46%, transparent 54%);
+    mix-blend-mode: overlay;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  body.contact-page .btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px rgba(255,255,255,0.07) inset,
+      0 1px 3px rgba(0,0,0,0.2),
+      0 2px 4px rgba(94,81,248,0.12),
+      0 4px 6px rgba(94,81,248,0.2);
+  }
+  body.contact-page .btn-submit:hover:not(:disabled)::before { opacity: 1; }
   body.contact-page .btn-submit:active:not(:disabled) { transform: translateY(0); }
   body.contact-page .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
 
@@ -212,7 +248,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   body.contact-page .purchase-eyebrow {
     font-family: 'Geist', system-ui, sans-serif;
-    color: var(--accent-purple); font-size: 0.72rem; font-weight: 700;
+    color: var(--accent); font-size: 0.72rem; font-weight: 700;
     letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px;
   }
 
@@ -239,13 +275,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
     background-color: var(--bg-secondary);
   }
-  body.contact-page .item-select:focus { outline: none; border-color: var(--accent-pink); background-color: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12); }
+  body.contact-page .item-select:focus { outline: none; border-color: var(--accent); background-color: #ffffff; box-shadow: 0 0 0 3px rgba(94,81,248,0.12); }
   body.contact-page .row-del {
     width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
     border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
     transition: background 0.2s, color 0.2s;
   }
-  body.contact-page .row-del:hover { color: var(--accent-pink); background: rgba(255,105,180,0.10); }
+  body.contact-page .row-del:hover { color: var(--accent); background: rgba(94,81,248,0.10); }
   body.contact-page .quote-card-body {
     margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
     display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px;
@@ -260,7 +296,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: var(--text-primary); font-family: 'Geist', system-ui, sans-serif;
     font-variant-numeric: tabular-nums; font-size: 0.92rem; font-weight: 600; box-sizing: border-box;
   }
-  body.contact-page .qc-input:focus { outline: none; border-color: var(--accent-pink); background: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12); }
+  body.contact-page .qc-input:focus { outline: none; border-color: var(--accent); background: #ffffff; box-shadow: 0 0 0 3px rgba(94,81,248,0.12); }
   body.contact-page .quote-totals {
     margin-top: 12px; background: #ffffff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
   }
@@ -274,7 +310,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-radius: 9999px; color: var(--text-secondary); font-size: 0.82rem; cursor: pointer;
     transition: border-color 0.25s, color 0.25s;
   }
-  body.contact-page .add-row-btn:hover { border-color: var(--accent-pink); color: var(--accent-pink); }
+  body.contact-page .add-row-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Result message */
   body.contact-page .result-msg {
@@ -286,15 +322,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Info box */
   body.contact-page .info-box {
-    background: linear-gradient(155deg, #1A0A3D 0%, #2E0068 60%, #4C1594 120%);
+    background: linear-gradient(rgb(39, 21, 76) 0%, rgb(24, 17, 39) 100%);
     border: 1px solid rgba(255,255,255,0.10); border-radius: 16px;
     color: #ffffff; position: relative; overflow: hidden;
-    box-shadow: 0 30px 60px -30px rgba(46, 0, 104, 0.35); margin-top: 32px;
+    box-shadow: rgba(94,81,248,0.25) 0px 30px 60px -30px; margin-top: 32px;
   }
   body.contact-page .info-box::before {
     content: ""; position: absolute; right: -80px; top: -80px;
     width: 280px; height: 280px; border-radius: 9999px;
-    background: radial-gradient(circle, rgba(255,105,180,0.18), transparent 65%);
+    background: radial-gradient(circle, rgba(134,125,250,0.20), transparent 65%);
     pointer-events: none;
   }
   body.contact-page .info-box > div { position: relative; z-index: 1; }
@@ -303,7 +339,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   @media (min-width: 1024px) { body.contact-page .info-box-inner { grid-template-columns: 6fr 3fr 3fr; } }
   body.contact-page .info-row { color: rgba(255,255,255,0.78); font-size: 0.82rem; line-height: 1.6; }
-  body.contact-page .info-label { color: var(--accent-pink); min-width: 84px; display: inline-block; font-weight: 600; }
+  body.contact-page .info-label { color: var(--accent-soft); min-width: 84px; display: inline-block; font-weight: 600; }
   body.contact-page .info-link { color: rgba(255,255,255,0.78); text-decoration: none; }
   body.contact-page .info-link:hover { color: #ffffff; }
   body.contact-page .info-box .text-primary   { color: #ffffff; }

@@ -14,12 +14,7 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
   <StudioDownloadSection />
 
   <section class="programs">
-    <div class="programs__container">
-      <div class="programs__decorators">
-        <span class="programs__decorator"></span>
-        <span class="programs__decorator"></span>
-        <span class="programs__decorator"></span>
-      </div>
+    <div class="programs__header">
       <h2 class="programs__heading">추가 프로그램</h2>
       <p class="programs__description">로보시지에서 제공하는 도구를 다운로드하세요</p>
     </div>
@@ -31,7 +26,6 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
 </BaseLayout>
 
 <script is:inline>
-  // 카드 다운로드 버튼 — onclick="return handleDownload(...)" 어트리뷰트 호환을 위해 전역 함수로 노출
   function handleDownload(url) {
     window.open(url, '_blank');
     return false;

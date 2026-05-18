@@ -1,0 +1,496 @@
+---
+import ShopLayout from '../layouts/ShopLayout.astro';
+---
+<ShopLayout
+  title="RoboSEasy Shop · 로보시지 스토어"
+  description="로보시지가 직접 만드는 LeRobot 시리즈 — Physical AI 입문용부터 모바일 베이스까지."
+  path="/shop"
+>
+  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link slot="head" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script slot="head" src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+
+<style>
+  :root {
+    --shop-bg-primary:   #ffffff;
+    --shop-bg-secondary: #F8F7FB;
+    --shop-text-primary:   #1A0A3D;
+    --shop-text-secondary: #4a4550;
+    --shop-text-muted:     #8a8590;
+    --shop-border:         rgba(8, 2, 28, 0.08);
+    --shop-accent-purple:  #5e51f8;
+    --shop-accent-pink:    #867dfa;
+  }
+
+  .shop-wrap {
+    font-family: 'Pretendard', 'Geist', system-ui, sans-serif;
+    color: var(--shop-text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Main grid: slide (2/3) + right column (1/3) ===== */
+  .shop-main {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 80px clamp(20px, 4vw, 56px) clamp(16px, 2vh, 28px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.6vh, 20px);
+  }
+
+  .shop-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: clamp(12px, 1.4vw, 18px);
+    min-height: min(560px, 60vh);
+  }
+
+  @media (max-width: 900px) {
+    .shop-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== SLIDE ===== */
+  .slide-card {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    background: linear-gradient(155deg, #1c1451 0%, #2d1f8a 50%, var(--color-signal-violet) 100%);
+    box-shadow: var(--shadow-xl-2);
+    border: 1px solid rgba(255,255,255,0.10);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide-card::before {
+    content: ""; position: absolute; right: -90px; top: -90px;
+    width: 320px; height: 320px; border-radius: 9999px;
+    background: radial-gradient(circle, rgba(134,125,250,0.30), transparent 65%);
+    pointer-events: none;
+  }
+
+  .slide-stage {
+    position: relative; z-index: 1;
+    flex: 1;
+    min-height: 280px;
+  }
+
+  .slide-stage::before {
+    content: "";
+    position: absolute;
+    left: 50%; bottom: 8%;
+    width: 70%; height: 30px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(134,125,250,0.35), transparent 70%);
+    filter: blur(10px);
+    pointer-events: none;
+  }
+
+  .slide-frame {
+    position: absolute;
+    inset: clamp(40px,5vh,64px) clamp(56px,7vw,110px) clamp(28px,3vh,44px);
+  }
+
+  .slide-img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transform: scale(0.96);
+    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+  }
+
+  .slide-img.is-active { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+  .slide-meta {
+    position: relative; z-index: 1;
+    padding: 14px 22px 20px;
+    color: #ffffff;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .slide-name {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.4vw, 1.4rem);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .slide-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-soft-amethyst);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .slide-price {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+    color: #ffffff;
+  }
+
+  .slide-price small {
+    font-size: 0.7em;
+    font-weight: 500;
+    color: rgba(255,255,255,0.65);
+    margin-left: 3px;
+  }
+
+  .slide-arrows { display: inline-flex; gap: 6px; }
+
+  .slide-arrow {
+    width: 32px; height: 32px;
+    border-radius: 9999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.20);
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .slide-arrow:hover {
+    background: rgba(134,125,250,0.30);
+    border-color: rgba(134,125,250,0.60);
+    color: #ffffff;
+  }
+
+  /* ===== RIGHT TILES ===== */
+  .tile-col { display: grid; grid-template-rows: 1fr 1fr; gap: clamp(14px, 1.6vw, 22px); }
+
+  .tile {
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    padding: clamp(22px, 3vw, 36px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s ease;
+  }
+
+  .tile:hover { transform: translateY(-3px); }
+
+  .tile-eyebrow {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 0.74rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .tile-title {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    font-size: clamp(2rem, 4.6vw, 4rem);
+  }
+
+  .tile-desc {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    max-width: 36ch;
+    word-break: keep-all;
+  }
+
+  .tile-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: gap 0.3s ease;
+  }
+
+  .tile:hover .tile-cta { gap: 14px; }
+
+  .tile-arrow {
+    width: 56px; height: 56px;
+    border-radius: 9999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    flex-shrink: 0;
+  }
+
+  .tile:hover .tile-arrow { transform: translate(6px, -6px) rotate(-8deg); }
+
+  /* Contact 타일 (다크) */
+  .tile-contact {
+    background: linear-gradient(155deg, #1c1451 0%, #2d1f8a 50%, var(--color-signal-violet) 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .tile-contact::before {
+    content: ""; position: absolute; right: -70px; top: -70px;
+    width: 240px; height: 240px; border-radius: 9999px;
+    background: radial-gradient(circle, rgba(134,125,250,0.25), transparent 65%);
+    pointer-events: none;
+  }
+
+  .tile-contact .tile-eyebrow { color: var(--color-soft-amethyst); }
+  .tile-contact .tile-desc { color: rgba(255,255,255,0.78); }
+  .tile-contact .tile-arrow {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.20);
+    color: #ffffff;
+  }
+
+  /* Products 타일 (라이트) */
+  .tile-products {
+    background: linear-gradient(160deg, var(--color-powder-violet) 0%, var(--color-chalk) 60%, #ffffff 110%);
+    color: var(--shop-text-primary);
+    border: 1px solid var(--color-ash-border);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .tile-products .tile-eyebrow { color: var(--color-signal-violet); }
+  .tile-products .tile-desc { color: var(--shop-text-secondary); }
+  .tile-products .tile-arrow {
+    background: var(--color-signal-violet);
+    color: #ffffff;
+    box-shadow: 0 14px 28px -10px rgba(94,81,248,0.45);
+  }
+
+  /* ===== Bottom strip ===== */
+  .strip {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 56px) clamp(16px, 2vh, 28px);
+  }
+
+  .strip-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(8px, 1vw, 14px);
+    padding: 10px clamp(14px, 2vw, 28px);
+    border: 1px solid var(--color-ash-border);
+    border-radius: var(--radius-cards);
+    background: var(--color-chalk);
+  }
+
+  @media (max-width: 700px) {
+    .strip-grid { grid-template-columns: 1fr; }
+  }
+
+  .strip-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 6px;
+    justify-content: center;
+  }
+
+  .strip-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex: 0 0 auto;
+    background: #ffffff;
+    border: 1px solid var(--color-ash-border);
+    color: var(--color-signal-violet);
+  }
+
+  .strip-label {
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--shop-text-muted);
+    font-weight: 600;
+  }
+
+  .strip-value {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--shop-text-primary);
+    line-height: 1.3;
+    margin-top: 2px;
+  }
+</style>
+
+<div class="shop-wrap">
+  <main class="shop-main">
+    <div class="shop-grid">
+
+      <!-- ===== LEFT: Slide ===== -->
+      <section class="slide-card" id="slideCard" aria-roledescription="carousel" aria-label="대표 상품 슬라이드">
+        <div class="slide-stage">
+          <div class="slide-frame" id="slideFrame"></div>
+        </div>
+        <div class="slide-meta">
+          <div>
+            <div class="slide-tag">
+              <span style="width:6px;height:6px;border-radius:9999px;background:var(--color-soft-amethyst);display:inline-block;"></span>
+              <span id="slideIndex">01 / 03</span>
+            </div>
+            <div class="slide-name" id="slideName">—</div>
+            <div class="slide-price" style="margin-top:6px;" id="slidePrice">—</div>
+          </div>
+          <div class="slide-arrows">
+            <button type="button" class="slide-arrow" id="slidePrev" aria-label="이전 상품">
+              <iconify-icon icon="solar:arrow-left-linear" width="18"></iconify-icon>
+            </button>
+            <button type="button" class="slide-arrow" id="slideNext" aria-label="다음 상품">
+              <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== RIGHT: Tiles ===== -->
+      <div class="tile-col">
+        <a href="/contact" class="tile tile-contact">
+          <div>
+            <div class="tile-eyebrow">Contact Us</div>
+            <h2 class="tile-title" style="margin-top:12px;word-break:keep-all;">문의하기</h2>
+          </div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;">
+            <p class="tile-desc">
+              로봇 구매 견적, 교육 협업, 기술 컨설팅 — 평균 1영업일 내 답변드립니다.
+            </p>
+            <span class="tile-arrow">
+              <iconify-icon icon="solar:arrow-right-up-linear" width="26"></iconify-icon>
+            </span>
+          </div>
+        </a>
+
+        <a href="/products" class="tile tile-products">
+          <div>
+            <div class="tile-eyebrow">Parts &amp; Accessories</div>
+            <h2 class="tile-title" style="margin-top:12px;word-break:keep-all;">부품<br/>구매하기</h2>
+          </div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;">
+            <p class="tile-desc">
+              모터, 프레임, 케이블, 카메라 모듈까지 — 18종 부품을 직접 골라 담아보세요.
+            </p>
+            <span class="tile-arrow">
+              <iconify-icon icon="solar:arrow-right-up-linear" width="26"></iconify-icon>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== BOTTOM STRIP ===== -->
+  <section class="strip">
+    <div class="strip-grid">
+      <div class="strip-item">
+        <span class="strip-icon">
+          <iconify-icon icon="solar:printer-2-bold-duotone" width="22"></iconify-icon>
+        </span>
+        <div>
+          <div class="strip-label">3D Printing</div>
+          <div class="strip-value">뱀부랩 정품 PLA 사용</div>
+        </div>
+      </div>
+      <div class="strip-item">
+        <span class="strip-icon">
+          <iconify-icon icon="solar:letter-bold-duotone" width="22"></iconify-icon>
+        </span>
+        <div>
+          <div class="strip-label">Customer Care</div>
+          <div class="strip-value">roboseasy@gmail.com</div>
+        </div>
+      </div>
+      <div class="strip-item">
+        <span class="strip-icon">
+          <iconify-icon icon="solar:verified-check-bold-duotone" width="22"></iconify-icon>
+        </span>
+        <div>
+          <div class="strip-label">Certified</div>
+          <div class="strip-value">KC인증 획득</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  const PRODUCTS = [
+    { name: 'LeRobot SO-ARM',       price: '550,000원',               img: '/img/lerobot-so-arm.png' },
+    { name: 'XLeRobot Dual SO-ARM', price: '미정', priceMuted: true,  img: '/img/xlerobot.png' },
+    { name: 'Lekiwi',               price: '미정', priceMuted: true,  img: '/img/lekiwi.png' },
+  ];
+
+  const AUTOPLAY_MS = 6000;
+
+  const frame   = document.getElementById('slideFrame');
+  const elName  = document.getElementById('slideName');
+  const elPrice = document.getElementById('slidePrice');
+  const elIdx   = document.getElementById('slideIndex');
+
+  const BASE_STYLE = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transform:scale(0.96);transition:opacity 0.6s ease,transform 0.7s cubic-bezier(0.16,1,0.3,1);pointer-events:none;';
+  const ACTIVE_STYLE = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;transform:scale(1);transition:opacity 0.6s ease,transform 0.7s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;';
+
+  PRODUCTS.forEach((p, i) => {
+    const img = document.createElement('img');
+    img.src = p.img;
+    img.alt = p.name;
+    (img as HTMLImageElement).loading = i === 0 ? 'eager' : 'lazy';
+    img.decoding = 'async';
+    img.style.cssText = BASE_STYLE;
+    frame?.appendChild(img);
+  });
+
+  let current = 0;
+  let timer: ReturnType<typeof setTimeout> | null = null;
+
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
+  function render() {
+    Array.from(frame?.children ?? []).forEach((el, i) => {
+      (el as HTMLElement).style.cssText = i === current ? ACTIVE_STYLE : BASE_STYLE;
+    });
+    const p = PRODUCTS[current];
+    if (elName) elName.textContent = p.name;
+    if (elPrice) elPrice.innerHTML = p.priceMuted
+      ? `<span style="color:rgba(255,255,255,0.85)">${p.price}</span> <small>출시 예정</small>`
+      : `${p.price} <small>VAT 포함</small>`;
+    if (elIdx) elIdx.textContent = `${pad(current + 1)} / ${pad(PRODUCTS.length)}`;
+  }
+
+  function goTo(i: number) {
+    current = (i + PRODUCTS.length) % PRODUCTS.length;
+    render();
+  }
+
+  function start() {
+    stop();
+    timer = setTimeout(() => { goTo(current + 1); start(); }, AUTOPLAY_MS);
+  }
+  function stop() { if (timer) { clearTimeout(timer); timer = null; } }
+
+  document.getElementById('slideNext')?.addEventListener('click', () => { goTo(current + 1); stop(); start(); });
+  document.getElementById('slidePrev')?.addEventListener('click', () => { goTo(current - 1); stop(); start(); });
+
+  const card = document.getElementById('slideCard');
+  card?.addEventListener('mouseenter', stop);
+  card?.addEventListener('mouseleave', start);
+
+  if (card) {
+    card.tabIndex = 0;
+    card.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') { goTo(current + 1); stop(); start(); }
+      if (e.key === 'ArrowLeft')  { goTo(current - 1); stop(); start(); }
+    });
+  }
+
+  render();
+  start();
+</script>
+</ShopLayout>

@@ -1,107 +1,46 @@
-/* Programs 페이지 전용 스타일 */
+/* Programs 페이지 — Tella 디자인 */
 
 .programs {
-    max-width: 1200px;
-    margin: 100px auto 0;
-    position: relative;
-    z-index: 1;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 20px 96px;
 }
 
-/* 제목 섹션 */
-.programs__container {
+/* 섹션 헤더 */
+.programs__header {
     text-align: center;
-    margin-bottom: 60px;
-}
-
-.programs__decorators {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.1s;
-}
-
-.programs__decorator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--color-primary);
-    transition: all 0.3s ease;
-    animation: bounce 1.5s ease-in-out infinite;
-}
-
-.programs__decorator:nth-child(1) {
-    background-color: var(--color-secondary);
-    animation-delay: 0s;
-}
-
-.programs__decorator:nth-child(2) {
-    background-color: var(--color-tertiary);
-    animation-delay: 0.2s;
-}
-
-.programs__decorator:nth-child(3) {
-    background-color: var(--color-secondary);
-    animation-delay: 0.4s;
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
+    padding: 56px 0 40px;
+    border-top: 1px solid var(--color-ash-border);
 }
 
 .programs__heading {
-    font-size: 48px;
-    font-weight: 700;
-    color: #2E0068;
-    text-align: center;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.3s;
+    font-family: var(--font-display);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: var(--fw-bold);
+    color: var(--color-ink);
+    margin: 0 0 12px;
 }
 
 .programs__description {
-    font-size: 18px;
-    color: #666;
-    text-align: center;
-    margin-bottom: 100px;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards;
-    animation-delay: 0.5s;
-}
-
-/* 애니메이션 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    font-size: var(--text-body);
+    color: var(--color-slate);
+    margin: 0;
 }
 
 /* 프로그램 그리드 */
 .programs-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
+    gap: 32px;
     max-width: 1000px;
     margin: 0 auto;
 }
 
 /* 프로그램 카드 */
 .program-card {
-    background-color: white;
-    border-radius: 12px;
+    background-color: var(--color-pure-white);
+    border: 1px solid var(--color-ash-border);
+    border-radius: var(--radius-feature-cards);
     padding: 30px;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -166,67 +105,92 @@
 .program-card__buttons {
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
     justify-content: center;
 }
 
-/* 공통 버튼 스타일 */
+/* 공통 버튼 스타일 — Tella 패턴 */
 .program-card__button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
+    padding: 9px 16px;
+    border-radius: var(--radius-buttons);
     text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: 12px;
     position: relative;
-    z-index: 1;
+    isolation: isolate;
     overflow: hidden;
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0.36, 0, 1), transform 0.2s ease;
 }
 
 .program-card__button::before {
-    content: "";
+    content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.12), transparent);
+    opacity: 0.5;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0.36, 0, 1);
 }
 
-.program-card__button:hover::before {
-    width: 300px;
-    height: 300px;
+.program-card__button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 46%, transparent 54%);
+    mix-blend-mode: overlay;
+    border-radius: inherit;
+    pointer-events: none;
 }
 
 .program-card__button:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 }
 
-/* 자세히 보기 버튼 */
+.program-card__button:hover::before {
+    opacity: 1;
+}
+
+/* 자세히 보기 버튼 — 회색 계열 */
 .program-card__button--details {
-    background: linear-gradient(135deg, #6b7280, #9ca3af);
-    box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    background: linear-gradient(to bottom, #9ca3af, #6b7280);
+    box-shadow:
+        0 1px rgba(255, 255, 255, 0.07) inset,
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(107, 114, 128, 0),
+        0 4px 6px rgba(107, 114, 128, 0);
 }
 
 .program-card__button--details:hover {
-    box-shadow: 0 10px 30px rgba(107, 114, 128, 0.5);
+    box-shadow:
+        0 1px rgba(255, 255, 255, 0.07) inset,
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(107, 114, 128, 0.15),
+        0 4px 6px rgba(107, 114, 128, 0.22);
 }
 
-/* 다운로드 버튼 */
+/* 다운로드 버튼 — 바이올렛 계열 */
 .program-card__button--download {
-    background: linear-gradient(135deg, #2563eb, #a582dc);
-    box-shadow: 0 4px 15px rgba(165, 130, 220, 0.3);
+    background: linear-gradient(to bottom, #6d60ff, #5e51f8);
+    box-shadow:
+        0 1px rgba(255, 255, 255, 0.07) inset,
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(94, 81, 248, 0),
+        0 4px 6px rgba(94, 81, 248, 0);
 }
 
 .program-card__button--download:hover {
-    box-shadow: 0 10px 30px rgba(165, 130, 220, 0.5);
+    box-shadow:
+        0 1px rgba(255, 255, 255, 0.07) inset,
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(94, 81, 248, 0.12),
+        0 4px 6px rgba(94, 81, 248, 0.2);
 }
 
 /* ================================
@@ -869,10 +833,8 @@
 
 /* ===== 반응형 — 태블릿 ===== */
 @media (max-width: 1024px) {
-    .programs { margin: 120px auto 0; padding: 0 20px; }
-    .programs__heading { font-size: 40px; }
-    .programs__description { font-size: 17px; margin-bottom: 80px; }
-    .programs-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 700px; }
+    .programs { padding: 0 20px 64px; }
+    .programs-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 700px; }
     .program-card { padding: 25px; }
     .program-card__title { font-size: 18px; }
     .program-card__description { font-size: 13px; }
@@ -882,24 +844,20 @@
 
 /* ===== 반응형 — 모바일 ===== */
 @media (max-width: 768px) {
-    .programs { margin: 100px auto 0; padding: 0 16px; }
-    .programs__container { margin-bottom: 40px; }
-    .programs__decorators { margin-bottom: 20px; }
-    .programs__decorator { width: 10px; height: 10px; }
-    .programs__heading { font-size: 32px; margin-bottom: 15px; }
-    .programs__description { font-size: 15px; margin-bottom: 50px; }
-    .programs-grid { grid-template-columns: 1fr; gap: 20px; max-width: 350px; }
+    .programs { padding: 0 16px 48px; }
+    .programs__header { padding: 40px 0 28px; }
+    .programs-grid { grid-template-columns: 1fr; gap: 16px; max-width: 350px; }
     .program-card { padding: 20px; }
     .program-card__image-container { margin-bottom: 15px; }
     .program-card__title { font-size: 17px; margin-bottom: 10px; }
     .program-card__description { font-size: 13px; margin-bottom: 15px; }
-    .program-card__buttons { flex-direction: column; width: 100%; gap: 8px; }
+    .program-card__buttons { gap: 8px; }
     .program-card__button { width: auto; justify-content: center; padding: 10px 16px; font-size: 12px; border-radius: 20px; }
     .program-modal { width: 95%; max-height: 95vh; border-radius: 15px; }
     .program-modal__header { grid-template-columns: 1fr; }
     .program-modal__image-section { padding: 18px; }
     .program-modal__image { max-height: 130px; }
-    .program-modal__info-section { padding: 14px 18px 18px; border-left: none; border-top: 1px solid rgba(76,21,148,0.1); }
+    .program-modal__info-section { padding: 14px 18px 18px; border-left: none; border-top: 1px solid rgba(94,81,248,0.1); }
     .program-modal__title { font-size: 19px; }
     .modal-tab-panel { padding: 16px 16px 22px; }
     .modal-feature-grid { grid-template-columns: 1fr; }
@@ -909,9 +867,7 @@
 
 /* ===== 반응형 — 작은 모바일 ===== */
 @media (max-width: 480px) {
-    .programs { margin: 80px auto 0; }
-    .programs__heading { font-size: 26px; }
-    .programs__description { font-size: 14px; margin-bottom: 40px; }
+    .programs { padding: 0 16px 32px; }
     .programs-grid { max-width: 300px; }
     .program-card { padding: 18px; }
     .program-card__title { font-size: 16px; }
@@ -1035,7 +991,6 @@
 }
 
 .studio-download__btn {
-  /* 모든 버튼을 .rpm 버튼 너비에 맞춰 동일하게 (Red Hat, Fedora, SUSE 부제 기준) */
   width: 210px;
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1043,19 +998,19 @@
   column-gap: 10px;
   align-items: center;
   padding: 10px 18px;
-  background: var(--color-secondary);
+  background: var(--color-signal-violet);
   color: white;
   text-decoration: none;
   border-radius: 6px;
   box-sizing: border-box;
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(76, 21, 148, 0.2);
+  box-shadow: 0 2px 8px rgba(94, 81, 248, 0.25);
 }
 
 .studio-download__btn:hover {
-  background: var(--color-logo);
+  background: var(--color-iris-mid);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(46, 0, 104, 0.32);
+  box-shadow: 0 4px 14px rgba(94, 81, 248, 0.4);
 }
 
 .studio-download__btn-arrow {
@@ -1115,7 +1070,7 @@
 .studio-download__chip {
   display: inline-block;
   padding: 3px 10px;
-  background: var(--color-secondary);
+  background: var(--color-signal-violet);
   color: white;
   text-decoration: underline;
   border-radius: 4px;
@@ -1125,7 +1080,7 @@
 }
 
 .studio-download__chip:hover {
-  background: var(--color-logo);
+  background: var(--color-iris-mid);
 }
 
 /* 추가 프로그램 섹션과의 구분선 */

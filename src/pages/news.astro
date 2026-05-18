@@ -18,21 +18,20 @@ const youtubeVideos = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/news">
-  <section class="news">
-    <div class="news__container">
-      <div class="news__decorators">
-        <span class="news__decorator"></span>
-        <span class="news__decorator"></span>
-        <span class="news__decorator"></span>
-      </div>
-      <h2 class="news__heading">News</h2>
-      <p class="news__description">로보시지의 최신 소식을 확인하세요</p>
+  <section class="page-intro">
+    <div class="page-intro__container">
+      <h1 class="page-intro__heading">News</h1>
+      <p class="page-intro__description">로보시지의 최신 소식을 확인하세요</p>
     </div>
+  </section>
 
-    <div class="news__tabs">
-      <button class="news__tab news__tab--active" data-tab="posts">Instagram Posts</button>
-      <button class="news__tab" data-tab="reels">Instagram Reels</button>
-      <button class="news__tab" data-tab="youtube">YouTube Videos</button>
+  <section class="news">
+    <div class="news__tabs-wrap">
+      <div class="news__tabs">
+        <button class="news__tab news__tab--active" data-tab="posts">Instagram Posts</button>
+        <button class="news__tab" data-tab="reels">Instagram Reels</button>
+        <button class="news__tab" data-tab="youtube">YouTube Videos</button>
+      </div>
     </div>
 
     <div class="news__content">
@@ -93,7 +92,6 @@ const youtubeVideos = [
 </BaseLayout>
 
 <script>
-  // 탭 전환 + YouTube oEmbed 제목 로딩 (기존 js/main.js에서 포팅)
   const tabs = document.querySelectorAll('.news__tab');
   const panels = document.querySelectorAll('.news__panel');
 
