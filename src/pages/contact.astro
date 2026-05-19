@@ -15,17 +15,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <style is:global>
   body.contact-page {
-    --bg-primary:   #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary:  #f0eef8;
-    --text-primary:   #0f172a;
-    --text-secondary: #475569;
-    --text-muted:     #808a99;
-    --border:         #e5e7eb;
-    --border-strong:  rgba(15, 23, 42, 0.18);
-    --accent:         #5e51f8;
-    --accent-mid:     #4b41c6;
-    --accent-soft:    #cfcbfd;
+    --bg-primary:   #171717;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary:  #242424;
+    --text-primary:   #eeeeee;
+    --text-secondary: #bcbcbc;
+    --text-muted:     #a3a3a3;
+    --border:         rgba(255, 255, 255, 0.08);
+    --border-strong:  rgba(255, 255, 255, 0.15);
+    --accent:         #7c3aed;
+    --accent-mid:     #7c3aed;
+    --accent-soft:    #a78bfa;
     background: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
@@ -40,8 +40,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* Page hero */
   body.contact-page .page-hero {
     background:
-      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(94,81,248,0.06), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(134,125,250,0.08), transparent 65%),
+      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(124,58,237,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(124,58,237,0.08), transparent 65%),
       var(--bg-primary);
     padding-top: 7rem;
     padding-bottom: clamp(24px, 3vh, 48px);
@@ -62,11 +62,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Info panel */
   body.contact-page .info-panel {
-    background: linear-gradient(155deg, #1c1451 0%, #2d1f8a 50%, #5e51f8 100%);
-    color: #ffffff;
-    border-radius: 22px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 12px;
     padding: clamp(28px, 3.6vw, 44px);
-    box-shadow: rgba(94,81,248,0.35) 0px 30px 60px -30px;
+    box-shadow: none;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -74,15 +74,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     height: 100%;
     box-sizing: border-box;
   }
-  body.contact-page .info-panel::before {
-    content: ""; position: absolute; right: -70px; top: -70px;
-    width: 240px; height: 240px; border-radius: 9999px;
-    background: radial-gradient(circle, rgba(134,125,250,0.25), transparent 65%);
-    pointer-events: none;
-  }
   body.contact-page .panel-eyebrow {
     font-family: 'Geist', system-ui, sans-serif;
-    color: var(--accent-soft);
+    color: rgba(255, 255, 255, 0.45);
     font-size: 0.78rem; font-weight: 700;
     letter-spacing: 0.28em; text-transform: uppercase;
     position: relative;
@@ -92,9 +86,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: clamp(2rem, 3.6vw, 2.8rem);
     line-height: 1.1; font-weight: 700;
     margin-top: 12px; position: relative;
+    color: #ffffff;
   }
   body.contact-page .panel-desc {
-    margin-top: 20px; color: rgba(255,255,255,0.75);
+    margin-top: 20px; color: #a3a3a3;
     line-height: 1.7; font-size: 0.95rem; position: relative;
   }
   body.contact-page .panel-spacer { flex: 1; min-height: 24px; }
@@ -102,21 +97,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .panel-info-row {
     display: grid; grid-template-columns: 80px 1fr;
     gap: 14px; align-items: start;
-    padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.10);
+    padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08);
   }
   body.contact-page .panel-info-label {
-    color: var(--accent-soft);
+    color: rgba(255, 255, 255, 0.45);
     font-family: 'Geist', system-ui, sans-serif;
     font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; padding-top: 2px;
   }
   body.contact-page .panel-info-value {
-    color: rgba(255,255,255,0.88); font-size: 0.9rem; line-height: 1.55;
+    color: #ffffff; font-size: 0.9rem; line-height: 1.55;
   }
 
   /* Form card */
   body.contact-page .form-card {
-    background: #ffffff; border: 1px solid var(--border);
-    border-radius: 22px; padding: clamp(24px, 3vw, 40px);
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: 12px; padding: clamp(24px, 3vw, 40px);
     height: 100%; box-sizing: border-box;
   }
   body.contact-page .form-card h2 {
@@ -152,7 +147,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .select:focus,
   body.contact-page .textarea:focus {
     outline: none; border-color: var(--accent);
-    background: #ffffff; box-shadow: 0 0 0 3px rgba(94,81,248,0.12);
+    background: var(--bg-secondary); box-shadow: 0 0 0 3px rgba(124,58,237,0.18);
   }
   body.contact-page .select {
     appearance: none;
@@ -163,7 +158,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
     background-color: var(--bg-secondary); padding-right: 36px; cursor: pointer;
   }
-  body.contact-page .select:focus { background-color: #ffffff; }
+  body.contact-page .select:focus { background-color: var(--bg-secondary); }
   body.contact-page .textarea { resize: vertical; min-height: 130px; }
 
   /* File drop */
@@ -172,12 +167,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 28px 20px; text-align: center; background: var(--bg-secondary);
     cursor: pointer; transition: border-color 0.25s, background 0.25s; display: block;
   }
-  body.contact-page .file-drop:hover { border-color: var(--accent); background: #ffffff; }
-  body.contact-page .file-drop.drag-over { border-color: var(--accent); background: rgba(94,81,248,0.04); }
+  body.contact-page .file-drop:hover { border-color: var(--accent); background: var(--bg-tertiary); }
+  body.contact-page .file-drop.drag-over { border-color: var(--accent); background: rgba(124,58,237,0.08); }
   body.contact-page .file-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
   body.contact-page .file-chip {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 10px 6px 12px; background: #ffffff;
+    padding: 6px 10px 6px 12px; background: var(--bg-tertiary);
     border: 1px solid var(--border); border-radius: 9999px;
     font-size: 0.82rem; color: var(--text-secondary);
   }
@@ -187,54 +182,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
     transition: color 0.2s, background 0.2s;
   }
-  body.contact-page .file-chip button:hover { color: var(--accent); background: rgba(94,81,248,0.10); }
+  body.contact-page .file-chip button:hover { color: var(--accent); background: rgba(124,58,237,0.10); }
 
   /* Submit */
   body.contact-page .btn-submit {
     width: 100%; padding: 16px 20px;
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background: linear-gradient(to bottom, #6d60ff, #5e51f8);
-    color: #eef2ff; font-weight: 700; font-size: 1rem;
-    border: none; border-radius: 12px; cursor: pointer;
-    box-shadow:
-      0 1px rgba(255,255,255,0.07) inset,
-      0 1px 3px rgba(0,0,0,0.2),
-      0 2px 4px rgba(94,81,248,0),
-      0 4px 6px rgba(94,81,248,0);
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.4,0.36,0,1);
-  }
-  body.contact-page .btn-submit::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
-    opacity: 0.5;
-    border-radius: inherit;
-    pointer-events: none;
-    transition: opacity 0.3s cubic-bezier(0.4,0.36,0,1);
-  }
-  body.contact-page .btn-submit::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.05) 46%, transparent 54%);
-    mix-blend-mode: overlay;
-    border-radius: inherit;
-    pointer-events: none;
+    background: #7c3aed;
+    color: #ffffff; font-weight: 700; font-size: 1rem;
+    border: none; border-radius: 8px; cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
   }
   body.contact-page .btn-submit:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow:
-      0 1px rgba(255,255,255,0.07) inset,
-      0 1px 3px rgba(0,0,0,0.2),
-      0 2px 4px rgba(94,81,248,0.12),
-      0 4px 6px rgba(94,81,248,0.2);
+    background: #a78bfa;
   }
-  body.contact-page .btn-submit:hover:not(:disabled)::before { opacity: 1; }
   body.contact-page .btn-submit:active:not(:disabled) { transform: translateY(0); }
   body.contact-page .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
 
@@ -252,7 +212,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* Quote cards */
   body.contact-page .quote-cards { display: flex; flex-direction: column; gap: 10px; }
   body.contact-page .quote-card {
-    background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
+    background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
     display: flex; align-items: center; gap: 10px;
   }
   body.contact-page .quote-card-head { display: contents; }
@@ -273,13 +233,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
     background-color: var(--bg-secondary);
   }
-  body.contact-page .item-select:focus { outline: none; border-color: var(--accent); background-color: #ffffff; box-shadow: 0 0 0 3px rgba(94,81,248,0.12); }
+  body.contact-page .item-select:focus { outline: none; border-color: var(--accent); background-color: var(--bg-secondary); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
   body.contact-page .row-del {
     width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
     border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
     transition: background 0.2s, color 0.2s; flex-shrink: 0; order: 10; margin-left: auto;
   }
-  body.contact-page .row-del:hover { color: var(--accent); background: rgba(94,81,248,0.10); }
+  body.contact-page .row-del:hover { color: var(--accent); background: rgba(124,58,237,0.10); }
   body.contact-page .quote-card-body { display: contents; }
   body.contact-page .qc-field { display: flex; flex-direction: row; align-items: center; gap: 6px; flex-shrink: 0; margin-left: 20px; }
   body.contact-page .qc-label { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.04em; font-weight: 500; }
@@ -290,9 +250,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: var(--text-primary); font-family: 'Geist', system-ui, sans-serif;
     font-variant-numeric: tabular-nums; font-size: 0.92rem; font-weight: 600; box-sizing: border-box;
   }
-  body.contact-page .qc-input:focus { outline: none; border-color: var(--accent); background: #ffffff; box-shadow: 0 0 0 3px rgba(94,81,248,0.12); }
+  body.contact-page .qc-input:focus { outline: none; border-color: var(--accent); background: var(--bg-secondary); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
   body.contact-page .quote-totals {
-    margin-top: 12px; background: #ffffff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    margin-top: 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
   }
   body.contact-page .quote-totals .row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.86rem; color: var(--text-secondary); }
   body.contact-page .quote-totals .row.final { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 12px; color: var(--text-primary); font-weight: 700; font-size: 1rem; }
@@ -300,7 +260,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .quote-note { font-size: 0.74rem; color: var(--text-muted); margin-top: 6px; }
   body.contact-page .add-row-btn {
     display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
-    padding: 6px 12px; background: #ffffff; border: 1px dashed var(--border-strong);
+    padding: 6px 12px; background: var(--bg-secondary); border: 1px dashed var(--border-strong);
     border-radius: 9999px; color: var(--text-secondary); font-size: 0.82rem; cursor: pointer;
     transition: border-color 0.25s, color 0.25s;
   }
@@ -311,20 +271,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-top: 16px; padding: 14px 16px; border-radius: 10px;
     font-size: 0.9rem; font-weight: 500; display: none;
   }
-  body.contact-page .result-msg.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; display: block; }
-  body.contact-page .result-msg.error   { background: #fff1f2; border: 1px solid #fecdd3; color: #9f1239; display: block; }
+  body.contact-page .result-msg.success { background: rgba(22,101,52,0.15); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; display: block; }
+  body.contact-page .result-msg.error   { background: rgba(159,18,57,0.15); border: 1px solid rgba(248,113,113,0.3); color: #f87171; display: block; }
 
   /* Info box */
   body.contact-page .info-box {
-    background: linear-gradient(rgb(39, 21, 76) 0%, rgb(24, 17, 39) 100%);
-    border: 1px solid rgba(255,255,255,0.10); border-radius: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid rgba(255,255,255,0.10); border-radius: 12px;
     color: #ffffff; position: relative; overflow: hidden;
-    box-shadow: rgba(94,81,248,0.25) 0px 30px 60px -30px; margin-top: 32px;
+    margin-top: 32px;
   }
   body.contact-page .info-box::before {
     content: ""; position: absolute; right: -80px; top: -80px;
     width: 280px; height: 280px; border-radius: 9999px;
-    background: radial-gradient(circle, rgba(134,125,250,0.20), transparent 65%);
+    background: radial-gradient(circle, rgba(124,58,237,0.20), transparent 65%);
     pointer-events: none;
   }
   body.contact-page .info-box > div { position: relative; z-index: 1; }
@@ -366,11 +326,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       flex-direction: column;
       gap: 4px;
       padding: 16px 0;
-      border-top: 1px solid rgba(255,255,255,0.10);
+      border-top: 1px solid rgba(255,255,255,0.08);
     }
     body.contact-page .panel-info-row:not(:last-child) {
       padding-right: 24px;
-      border-right: 1px solid rgba(255,255,255,0.10);
+      border-right: 1px solid rgba(255,255,255,0.08);
     }
     body.contact-page .panel-info-row:not(:first-child) {
       padding-left: 24px;

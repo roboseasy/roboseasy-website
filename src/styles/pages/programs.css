@@ -38,13 +38,13 @@
 
 /* 프로그램 카드 */
 .program-card {
-    background-color: var(--color-pure-white);
-    border: 1px solid var(--color-ash-border);
+    background-color: var(--surface-card);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-feature-cards);
     padding: 30px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+    box-shadow: var(--shadow-subtle);
+    transition: box-shadow 0.25s ease-out;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,8 +53,7 @@
 }
 
 .program-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 36px rgba(165, 130, 220, 0.2);
+    box-shadow: var(--shadow-subtle-2);
 }
 
 /* 이미지 컨테이너 - 정사각형 */
@@ -69,7 +68,7 @@
     position: relative;
     z-index: 1;
     border-radius: 8px;
-    background-color: #f8f9fa;
+    background-color: var(--color-surface-2);
 }
 
 .program-card__image {
@@ -77,25 +76,20 @@
     height: 100%;
     object-fit: contain;
     object-position: center;
-    transition: transform 0.4s ease;
-}
-
-.program-card:hover .program-card__image {
-    transform: scale(1.1);
 }
 
 /* 제목 */
 .program-card__title {
     font-size: 20px;
     font-weight: 700;
-    color: #08021C;
+    color: var(--color-bright-gray);
     margin-bottom: 12px;
 }
 
 /* 설명 */
 .program-card__description {
     font-size: 14px;
-    color: #666;
+    color: var(--color-muted-gray);
     line-height: 1.6;
     margin-bottom: 20px;
     flex-grow: 1;
@@ -108,89 +102,38 @@
     justify-content: center;
 }
 
-/* 공통 버튼 스타일 — Tella 패턴 */
+/* 공통 버튼 스타일 */
 .program-card__button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    color: white;
+    color: #ffffff;
     padding: 9px 16px;
-    border-radius: var(--radius-buttons);
+    border-radius: 8px;
     text-decoration: none;
     font-family: var(--font-display);
     font-weight: var(--fw-semibold);
     font-size: 12px;
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    transition: box-shadow 0.3s cubic-bezier(0.4, 0.36, 0, 1), transform 0.2s ease;
+    transition: background 0.2s ease;
 }
 
-.program-card__button::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.12), transparent);
-    opacity: 0.5;
-    border-radius: inherit;
-    pointer-events: none;
-    transition: opacity 0.3s cubic-bezier(0.4, 0.36, 0, 1);
-}
-
-.program-card__button::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 46%, transparent 54%);
-    mix-blend-mode: overlay;
-    border-radius: inherit;
-    pointer-events: none;
-}
-
-.program-card__button:hover {
-    transform: translateY(-2px);
-}
-
-.program-card__button:hover::before {
-    opacity: 1;
-}
-
-/* 자세히 보기 버튼 — 회색 계열 */
+/* 자세히 보기 버튼 */
 .program-card__button--details {
-    background: linear-gradient(to bottom, #9ca3af, #6b7280);
-    box-shadow:
-        0 1px rgba(255, 255, 255, 0.07) inset,
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        0 2px 4px rgba(107, 114, 128, 0),
-        0 4px 6px rgba(107, 114, 128, 0);
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .program-card__button--details:hover {
-    box-shadow:
-        0 1px rgba(255, 255, 255, 0.07) inset,
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        0 2px 4px rgba(107, 114, 128, 0.15),
-        0 4px 6px rgba(107, 114, 128, 0.22);
+    background: #a78bfa;
 }
 
-/* 다운로드 버튼 — 바이올렛 계열 */
+/* 다운로드 버튼 */
 .program-card__button--download {
-    background: linear-gradient(to bottom, #6d60ff, #5e51f8);
-    box-shadow:
-        0 1px rgba(255, 255, 255, 0.07) inset,
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        0 2px 4px rgba(94, 81, 248, 0),
-        0 4px 6px rgba(94, 81, 248, 0);
+    background: var(--color-amethyst);
 }
 
 .program-card__button--download:hover {
-    box-shadow:
-        0 1px rgba(255, 255, 255, 0.07) inset,
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        0 2px 4px rgba(94, 81, 248, 0.12),
-        0 4px 6px rgba(94, 81, 248, 0.2);
+    background: #a78bfa;
 }
 
 /* ================================
@@ -226,9 +169,9 @@
     width: 90%;
     max-width: 900px;
     max-height: 88vh;
-    background: white;
+    background: var(--color-surface-2);
     border-radius: 20px;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
     z-index: 1001;
     opacity: 0;
     visibility: hidden;
@@ -259,7 +202,7 @@
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    color: #666;
+    color: var(--color-medium-gray);
     transition: all 0.2s ease;
     z-index: 10;
 }
@@ -284,8 +227,8 @@
     grid-template-columns: 170px 1fr;
     gap: 0;
     flex-shrink: 0;
-    background: linear-gradient(135deg, #f5f3fb 0%, #eef0f8 100%);
-    border-bottom: 1px solid #e4dff0;
+    background: var(--color-surface-2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .program-modal__image-section {
@@ -308,14 +251,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-left: 1px solid rgba(76, 21, 148, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .program-modal__badge {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: linear-gradient(135deg, #4C1594, #2563eb);
+    background: var(--color-amethyst);
     color: white;
     padding: 4px 11px;
     border-radius: 14px;
@@ -328,14 +271,14 @@
 .program-modal__title {
     font-size: 24px;
     font-weight: 700;
-    color: #2E0068;
+    color: var(--color-bright-gray);
     margin-bottom: 6px;
     line-height: 1.3;
 }
 
 .program-modal__subtitle {
     font-size: 13px;
-    color: #666;
+    color: var(--color-medium-gray);
     line-height: 1.6;
     margin-bottom: 14px;
 }
@@ -344,7 +287,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, #4C1594, #2563eb);
+    background: var(--color-amethyst);
     color: white;
     padding: 9px 20px;
     border-radius: 22px;
@@ -353,12 +296,10 @@
     font-size: 13px;
     transition: all 0.25s ease;
     width: fit-content;
-    box-shadow: 0 4px 14px rgba(76, 21, 148, 0.3);
 }
 
 .program-modal__download-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(76, 21, 148, 0.4);
+    background: #a78bfa;
 }
 
 /* ===== 탭 네비게이션 ===== */
@@ -366,8 +307,8 @@
     display: flex;
     gap: 4px;
     padding: 10px 16px;
-    background: white;
-    border-bottom: 1px solid #f0eef8;
+    background: var(--surface-card);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
@@ -379,11 +320,11 @@
     flex-shrink: 0;
     padding: 7px 16px;
     border: 1.5px solid transparent;
-    background: #f3f4f6;
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 18px;
     font-size: 13px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-muted-gray);
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
@@ -391,12 +332,12 @@
 }
 
 .modal-tab:hover {
-    background: #ede8f8;
-    color: #4C1594;
+    background: rgba(124, 58, 237, 0.15);
+    color: var(--color-lavender);
 }
 
 .modal-tab--active {
-    background: linear-gradient(135deg, #4C1594, #2563eb);
+    background: var(--color-amethyst);
     color: white;
     border-color: transparent;
 }
@@ -410,7 +351,7 @@
 .modal-tab-panel {
     display: none;
     padding: 22px 28px 30px;
-    background: #fafbfc;
+    background: var(--color-surface-2);
 }
 
 .modal-tab-panel--active {
@@ -427,7 +368,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
-    color: #4C1594;
+    color: var(--color-lavender);
     margin-bottom: 11px;
     display: flex;
     align-items: center;
@@ -442,7 +383,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: #e0d8f5;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 /* ===== 뱃지 행 ===== */
@@ -457,16 +398,16 @@
     align-items: center;
     gap: 6px;
     padding: 5px 12px;
-    background: white;
-    border: 1.5px solid #ddd6f3;
+    background: var(--color-tag-bg);
+    border: 1.5px solid rgba(167, 139, 250, 0.3);
     border-radius: 16px;
     font-size: 12px;
     font-weight: 500;
-    color: #4C1594;
+    color: var(--color-lavender);
 }
 
 .modal-badge-chip i {
-    color: #22c55e;
+    color: #4ade80;
     font-size: 10px;
 }
 
@@ -482,10 +423,10 @@
 }
 
 .modal-feature-card {
-    background: white;
+    background: var(--color-surface-2);
     border-radius: 10px;
     padding: 13px 15px;
-    border: 1px solid #eee;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -494,7 +435,7 @@
 .modal-feature-card__icon {
     width: 28px;
     height: 28px;
-    background: linear-gradient(135deg, #4C1594, #2563eb);
+    background: var(--color-amethyst);
     border-radius: 7px;
     display: flex;
     align-items: center;
@@ -507,12 +448,12 @@
 .modal-feature-card__title {
     font-size: 13px;
     font-weight: 700;
-    color: #222;
+    color: var(--color-bright-gray);
 }
 
 .modal-feature-card__desc {
     font-size: 12px;
-    color: #666;
+    color: var(--color-medium-gray);
     line-height: 1.5;
 }
 
@@ -535,14 +476,14 @@
     top: 32px;
     height: calc(100% - 14px);
     width: 2px;
-    background: #e0d8f5;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .modal-timeline__num {
     width: 32px;
     height: 32px;
     min-width: 32px;
-    background: linear-gradient(135deg, #4C1594, #2563eb);
+    background: var(--color-amethyst);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -564,13 +505,13 @@
 .modal-timeline__title {
     font-size: 13px;
     font-weight: 700;
-    color: #222;
+    color: var(--color-bright-gray);
     margin-bottom: 3px;
 }
 
 .modal-timeline__desc {
     font-size: 12px;
-    color: #666;
+    color: var(--color-medium-gray);
     line-height: 1.5;
 }
 
@@ -590,38 +531,38 @@
 }
 
 .modal-kv {
-    background: white;
+    background: var(--color-surface-2);
     border-radius: 10px;
     padding: 12px 10px;
     text-align: center;
-    border: 1px solid #eee;
-    border-top: 3px solid #a582dc;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 3px solid var(--color-amethyst);
 }
 
 .modal-kv i {
     font-size: 18px;
-    color: #4C1594;
+    color: var(--color-amethyst);
     margin-bottom: 5px;
     display: block;
 }
 
 .modal-kv__label {
     font-size: 11px;
-    color: #888;
+    color: var(--color-muted-gray);
     margin-bottom: 3px;
 }
 
 .modal-kv__value {
     font-size: 12px;
     font-weight: 600;
-    color: #222;
+    color: var(--color-bright-gray);
 }
 
 /* ===== Spec 리스트 (시스템 요구사항) ===== */
 .modal-spec-list {
-    background: white;
+    background: var(--color-surface-2);
     border-radius: 10px;
-    border: 1px solid #eee;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
 }
 
@@ -630,7 +571,7 @@
     align-items: center;
     gap: 13px;
     padding: 11px 15px;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .modal-spec-item:last-child { border-bottom: none; }
@@ -638,20 +579,20 @@
 .modal-spec-item i {
     width: 18px;
     text-align: center;
-    color: #4C1594;
+    color: var(--color-amethyst);
     font-size: 14px;
 }
 
 .modal-spec-item__label {
     font-size: 11px;
-    color: #888;
+    color: var(--color-muted-gray);
     width: 68px;
     flex-shrink: 0;
 }
 
 .modal-spec-item__value {
     font-size: 13px;
-    color: #333;
+    color: var(--color-medium-gray);
     font-weight: 500;
 }
 
@@ -665,18 +606,18 @@
 }
 
 .modal-callout--warning {
-    background: #fff8e1;
-    border-left: 4px solid #ffc107;
+    background: rgba(250, 204, 21, 0.1);
+    border-left: 4px solid #facc15;
 }
 
 .modal-callout--danger {
-    background: #fef2f2;
-    border-left: 4px solid #dc2626;
+    background: rgba(248, 113, 113, 0.1);
+    border-left: 4px solid #f87171;
 }
 
 .modal-callout--info {
-    background: #e3f2fd;
-    border-left: 4px solid #2196f3;
+    background: rgba(124, 58, 237, 0.1);
+    border-left: 4px solid var(--color-amethyst);
 }
 
 .modal-callout__icon {
@@ -685,20 +626,20 @@
     flex-shrink: 0;
 }
 
-.modal-callout--warning .modal-callout__icon { color: #f59e0b; }
-.modal-callout--danger  .modal-callout__icon { color: #dc2626; }
-.modal-callout--info    .modal-callout__icon { color: #2196f3; }
+.modal-callout--warning .modal-callout__icon { color: #facc15; }
+.modal-callout--danger  .modal-callout__icon { color: #f87171; }
+.modal-callout--info    .modal-callout__icon { color: var(--color-amethyst); }
 
 .modal-callout__title {
     font-size: 12px;
     font-weight: 700;
-    color: #333;
+    color: var(--color-bright-gray);
     margin-bottom: 3px;
 }
 
 .modal-callout__text {
     font-size: 12px;
-    color: #555;
+    color: var(--color-medium-gray);
     line-height: 1.6;
 }
 
@@ -720,7 +661,7 @@
 }
 
 .modal-code code {
-    color: #d4d4d4;
+    color: #eeeeee;
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 12px;
     line-height: 1.6;
@@ -739,7 +680,7 @@
     padding-left: 15px;
     margin-bottom: 4px;
     font-size: 12px;
-    color: #555;
+    color: var(--color-medium-gray);
     line-height: 1.5;
 }
 
@@ -750,7 +691,7 @@
     top: 6px;
     width: 6px;
     height: 6px;
-    background: #a582dc;
+    background: #a78bfa;
     border-radius: 50%;
 }
 
@@ -762,9 +703,9 @@
 }
 
 .modal-accordion__item {
-    background: white;
+    background: var(--color-surface-2);
     border-radius: 10px;
-    border: 1px solid #eee;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
 }
 
@@ -777,13 +718,13 @@
     transition: background 0.2s;
 }
 
-.modal-accordion__header:hover { background: #f8f9fa; }
+.modal-accordion__header:hover { background: rgba(255, 255, 255, 0.04); }
 
 .modal-accordion__icon {
     width: 26px;
     height: 26px;
-    background: #fee2e2;
-    color: #dc2626;
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -796,11 +737,11 @@
     flex: 1;
     font-size: 13px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-bright-gray);
 }
 
 .modal-accordion__toggle {
-    color: #888;
+    color: var(--color-muted-gray);
     transition: transform 0.3s;
     font-size: 11px;
 }
@@ -823,7 +764,7 @@
 
 .modal-accordion__solution {
     font-size: 12px;
-    color: #555;
+    color: var(--color-medium-gray);
     line-height: 1.7;
 }
 
@@ -857,7 +798,7 @@
     .program-modal__header { grid-template-columns: 1fr; }
     .program-modal__image-section { padding: 18px; }
     .program-modal__image { max-height: 130px; }
-    .program-modal__info-section { padding: 14px 18px 18px; border-left: none; border-top: 1px solid rgba(94,81,248,0.1); }
+    .program-modal__info-section { padding: 14px 18px 18px; border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
     .program-modal__title { font-size: 19px; }
     .modal-tab-panel { padding: 16px 16px 22px; }
     .modal-feature-grid { grid-template-columns: 1fr; }
@@ -896,7 +837,7 @@
 .studio-download__title {
   font-size: 48px;
   font-weight: var(--fw-black);
-  color: var(--color-primary);
+  color: var(--color-bright-gray);
   letter-spacing: -1px;
   margin: 0 0 16px;
   line-height: 1.2;
@@ -904,8 +845,7 @@
 
 .studio-download__subtitle {
   font-size: 18px;
-  color: var(--color-primary);
-  opacity: 0.75;
+  color: var(--color-medium-gray);
   margin: 0;
   line-height: 1.6;
 }
@@ -922,7 +862,7 @@
 .studio-download__version-label {
   font-size: 13px;
   font-weight: var(--fw-semibold);
-  color: var(--color-primary);
+  color: var(--color-bright-gray);
   letter-spacing: 0.3px;
   text-transform: uppercase;
 }
@@ -930,28 +870,33 @@
 .studio-download__version-select {
   appearance: none;
   -webkit-appearance: none;
-  background-color: white;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%234C1594' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-color: var(--color-surface-2);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23a78bfa' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
-  border: 1px solid rgba(76, 21, 148, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
   padding: 6px 30px 6px 12px;
   font-size: 13px;
   font-weight: var(--fw-medium);
-  color: var(--color-primary);
+  color: var(--color-bright-gray);
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+.studio-download__version-select option {
+  background-color: #1e1e1e;
+  color: #eeeeee;
+}
+
 .studio-download__version-select:hover {
-  border-color: var(--color-secondary);
+  border-color: var(--color-amethyst);
 }
 
 .studio-download__version-select:focus {
   outline: none;
-  border-color: var(--color-secondary);
-  box-shadow: 0 0 0 3px rgba(76, 21, 148, 0.15);
+  border-color: var(--color-amethyst);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .studio-download__grid {
@@ -973,7 +918,7 @@
 
 .studio-download__icon {
   font-size: 80px;
-  color: var(--color-primary);
+  color: var(--color-bright-gray);
   margin-bottom: 18px;
   height: 92px;
   display: flex;
@@ -998,20 +943,18 @@
   column-gap: 10px;
   align-items: center;
   padding: 10px 18px;
-  background: var(--color-signal-violet);
-  color: white;
+  background: var(--color-amethyst);
+  color: #ffffff;
   text-decoration: none;
-  border-radius: 6px;
+  border-radius: 8px;
   box-sizing: border-box;
-  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(94, 81, 248, 0.25);
+  transition: background 0.2s ease;
 }
 
 .studio-download__btn:hover {
-  background: var(--color-iris-mid);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(94, 81, 248, 0.4);
+  background: #a78bfa;
 }
+
 
 .studio-download__btn-arrow {
   grid-row: 1 / span 2;
@@ -1055,7 +998,7 @@
 .studio-download__row-label {
   text-align: right;
   font-weight: var(--fw-semibold);
-  color: var(--color-primary);
+  color: var(--color-medium-gray);
   white-space: nowrap;
   min-width: 90px;
 }
@@ -1080,12 +1023,12 @@
 }
 
 .studio-download__chip:hover {
-  background: var(--color-iris-mid);
+  background: #a78bfa;
 }
 
 /* 추가 프로그램 섹션과의 구분선 */
 .studio-download + .programs {
-  border-top: 1px solid rgba(8, 2, 28, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin-top: 40px;
 }
 

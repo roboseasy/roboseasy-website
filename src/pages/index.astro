@@ -14,7 +14,82 @@ const newsItems = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/">
-  <MainBanner />
+  <div class="hero-viewport">
+    <MainBanner />
+
+    <!-- 고객사 티커 -->
+    <section class="client-ticker-section">
+      <div class="client-ticker">
+        <div class="client-ticker__track">
+          <div class="client-ticker__group">
+            <img src="/img/hyundai.png"   alt="현대자동차"   class="client-ticker__logo" />
+            <img src="/img/hansung.png"   alt="한성대학교"   class="client-ticker__logo" />
+            <img src="/img/opengraph.png" alt="OpenGraph"    class="client-ticker__logo" />
+            <img src="/img/hyundai.png"   alt="현대자동차"   class="client-ticker__logo" />
+            <img src="/img/hansung.png"   alt="한성대학교"   class="client-ticker__logo" />
+            <img src="/img/opengraph.png" alt="OpenGraph"    class="client-ticker__logo" />
+          </div>
+          <div class="client-ticker__group" aria-hidden="true">
+            <img src="/img/hyundai.png"   alt="" class="client-ticker__logo" />
+            <img src="/img/hansung.png"   alt="" class="client-ticker__logo" />
+            <img src="/img/opengraph.png" alt="" class="client-ticker__logo" />
+            <img src="/img/hyundai.png"   alt="" class="client-ticker__logo" />
+            <img src="/img/hansung.png"   alt="" class="client-ticker__logo" />
+            <img src="/img/opengraph.png" alt="" class="client-ticker__logo" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Services 섹션 -->
+  <section class="services-section">
+    <div class="services-section__container">
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Hardware</h3>
+            <p class="service-card__desc">TheRobotStudio 공식 파트너. SO-ARM100 대한민국 공식 판매처. 초저가 로봇 플랫폼으로 누구나 Physical AI를 시작할 수 있습니다. <a href="/products" class="service-card__link">자세히 보기.</a></p>
+          </div>
+          <div class="service-card__media">
+            <span class="service-card__placeholder-icon">?</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Software</h3>
+            <p class="service-card__desc">RoboSEasy-Studio 배포. CLI 없이 UI 데스크탑 앱만으로 로봇 데이터 수집부터 학습까지 전 과정을 진행합니다. <a href="/programs" class="service-card__link">자세히 보기.</a></p>
+          </div>
+          <div class="service-card__media">
+            <span class="service-card__placeholder-icon">?</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Education</h3>
+            <p class="service-card__desc">글로벌 최신 피지컬 AI 기술을 한국어로 정리한 Documents. 누구나 따라할 수 있는 단계별 실습 가이드와 해커톤 운영. <a href="/documents" class="service-card__link">자세히 보기.</a></p>
+          </div>
+          <div class="service-card__media">
+            <span class="service-card__placeholder-icon">?</span>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Community</h3>
+            <p class="service-card__desc">피지컬 AI 커뮤니티 1,000명+. 오픈소스 협업과 최신 글로벌 기술을 한국어로 공유하며 함께 성장합니다. <a href="/contact" class="service-card__link">참여하기.</a></p>
+          </div>
+          <div class="service-card__media">
+            <span class="service-card__placeholder-icon">?</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
   <!-- About Us 섹션 -->
   <section class="content-section">
@@ -59,39 +134,39 @@ const newsItems = [
             <div class="about-tabs__item is-active" data-tab="hardware">
               <div class="about-tabs__item-header">
                 <span class="about-tabs__icon">
-                  <i class="fa-solid fa-check about-tabs__icon-check"></i>
-                  <i class="fa-solid fa-plus about-tabs__icon-plus"></i>
+                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
+                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
                 </span>
                 <span class="about-tabs__title">Hardware</span>
               </div>
               <div class="about-tabs__body">
-                <p>TheRobotStudio 공식 파트너. SO-ARM 대한민국 공식 판매처.</p>
+                <p>TheRobotStudio 공식 파트너.<br>SO-ARM 대한민국 공식 판매처.</p>
               </div>
             </div>
 
             <div class="about-tabs__item" data-tab="software">
               <div class="about-tabs__item-header">
                 <span class="about-tabs__icon">
-                  <i class="fa-solid fa-check about-tabs__icon-check"></i>
-                  <i class="fa-solid fa-plus about-tabs__icon-plus"></i>
+                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
+                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
                 </span>
                 <span class="about-tabs__title">Software</span>
               </div>
               <div class="about-tabs__body">
-                <p>RoboSEasy-Studio 배포. CLI가 아닌 UI 데스크탑 앱.</p>
+                <p>RoboSEasy-Studio 배포.<br>CLI가 아닌 UI 데스크탑 앱.</p>
               </div>
             </div>
 
             <div class="about-tabs__item" data-tab="education">
               <div class="about-tabs__item-header">
                 <span class="about-tabs__icon">
-                  <i class="fa-solid fa-check about-tabs__icon-check"></i>
-                  <i class="fa-solid fa-plus about-tabs__icon-plus"></i>
+                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
+                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
                 </span>
                 <span class="about-tabs__title">Education</span>
               </div>
               <div class="about-tabs__body">
-                <p>피지컬 AI 커뮤니티 운영 (1,000명+). 해커톤 개최 · 한국어 Documents.</p>
+                <p>피지컬 AI 커뮤니티 운영 (1,000명+).<br>해커톤 개최 · 한국어 Documents.</p>
               </div>
             </div>
 
@@ -132,70 +207,6 @@ const newsItems = [
     </div>
   </section>
 
-  <!-- Skills 섹션 -->
-  <section class="content-section">
-    <div class="content-section__container">
-      <h2 class="content-section__heading">Skills</h2>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <i class="skill-card__icon fa-solid fa-robot"></i>
-          <div class="skill-card__body">
-            <h3 class="skill-card__title">양팔 로봇 매니퓰레이션</h3>
-            <ul class="skill-card__desc">
-              <li>모빌리티 플랫폼과 양팔 매니퓰레이터의 통합 제어</li>
-              <li>ROS2 기반 모듈화 제어 소프트웨어 아키텍처</li>
-              <li>RTOS 환경에서의 고정밀 실시간 제어 구현</li>
-            </ul>
-          </div>
-        </div>
-        <div class="skill-card">
-          <i class="skill-card__icon fa-solid fa-map-location-dot"></i>
-          <div class="skill-card__body">
-            <h3 class="skill-card__title">SLAM 기반 자율주행</h3>
-            <ul class="skill-card__desc">
-              <li>LiDAR · 카메라 융합 SLAM으로 정밀 지도 생성 및 위치 추정</li>
-              <li>동적 장애물 회피 및 실시간 경로 재계획</li>
-              <li>실내외 복합 환경에서의 안정적인 내비게이션</li>
-            </ul>
-          </div>
-        </div>
-        <div class="skill-card">
-          <i class="skill-card__icon fa-solid fa-network-wired"></i>
-          <div class="skill-card__body">
-            <h3 class="skill-card__title">FMS (Fleet Management System)</h3>
-            <ul class="skill-card__desc">
-              <li>다수 로봇의 실시간 위치·상태 통합 모니터링</li>
-              <li>작업 스케줄링 및 충돌 없는 다중 로봇 경로 조율</li>
-              <li>클라우드 연동 원격 관제 대시보드</li>
-            </ul>
-          </div>
-        </div>
-        <div class="skill-card">
-          <i class="skill-card__icon fa-solid fa-eye"></i>
-          <div class="skill-card__body">
-            <h3 class="skill-card__title">비전 및 객체 인식</h3>
-            <ul class="skill-card__desc">
-              <li>깊이 카메라 기반 3D 포인트 클라우드 처리</li>
-              <li>물체 위치·자세 추정으로 정밀 파지(Grasping) 지원</li>
-              <li>의료영상 처리 경험을 바탕으로 한 고정밀 영상 분석</li>
-            </ul>
-          </div>
-        </div>
-        <div class="skill-card">
-          <i class="skill-card__icon fa-solid fa-compass"></i>
-          <div class="skill-card__body">
-            <h3 class="skill-card__title">오도메트리 & 포즈 추정</h3>
-            <ul class="skill-card__desc">
-              <li>IMU · 카메라 · LiDAR 융합 기반 6-DoF 포즈 추정</li>
-              <li>누적 오차 보정을 통한 장거리 정밀 이동 경로 추적</li>
-              <li>피지컬 AI 로봇의 공간 인식 핵심 모듈</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- 뉴스 섹션 (Contact 디자인 패턴) -->
   <section class="content-section">
     <div class="content-section__container">
@@ -203,7 +214,7 @@ const newsItems = [
       <div class="news-feature">
 
         <button class="news-feature__side-btn news-feature__side-btn--prev" aria-label="이전">
-          <i class="fa-solid fa-chevron-left"></i>
+          <iconify-icon icon="solar:alt-arrow-left-bold"></iconify-icon>
         </button>
 
         <div class="news-feature__content">
@@ -226,7 +237,7 @@ const newsItems = [
         </div>
 
         <button class="news-feature__side-btn news-feature__side-btn--next" aria-label="다음">
-          <i class="fa-solid fa-chevron-right"></i>
+          <iconify-icon icon="solar:alt-arrow-right-bold"></iconify-icon>
         </button>
 
       </div>
@@ -238,23 +249,6 @@ const newsItems = [
     </div>
   </section>
 
-  <!-- Trusted By 섹션 -->
-  <section class="trusted-section">
-    <div class="trusted-section__container">
-      <p class="trusted-section__label">Trusted By</p>
-      <div class="trusted-logos">
-        <div class="trusted-logos__item">
-          <img class="trusted-logos__img" src="/img/opengraph.png" alt="OpenGraph" />
-        </div>
-        <div class="trusted-logos__item">
-          <img class="trusted-logos__img" src="/img/hyundai.png" alt="현대자동차" />
-        </div>
-        <div class="trusted-logos__item">
-          <img class="trusted-logos__img" src="/img/hansung.png" alt="한성대학교" />
-        </div>
-      </div>
-    </div>
-  </section>
 
 </BaseLayout>
 
