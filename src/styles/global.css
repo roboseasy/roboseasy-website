@@ -115,8 +115,6 @@ body {
 
 /* ─── Banner (Hero) ─── */
 .banner {
-    background: var(--color-chalk);
-    background-color: var(--color-chalk);
     display: flex;
     align-items: center;
     justify-content: center;

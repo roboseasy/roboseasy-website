@@ -505,6 +505,60 @@
     letter-spacing: 0.05em;
 }
 
+/* ─── Trusted By ─── */
+.trusted-section {
+    padding: 48px 20px 80px;
+    text-align: center;
+}
+
+.trusted-section__container {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+}
+
+.trusted-section__label {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: var(--fw-bold);
+    color: var(--color-ink);
+    letter-spacing: var(--tracking-heading-lg);
+    line-height: 1.1;
+    margin: 0 0 var(--spacing-48);
+}
+
+.trusted-logos {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: var(--spacing-24);
+    flex-wrap: wrap;
+}
+
+.trusted-logos__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--surface-card);
+    border: 1px solid var(--color-ash-border);
+    border-radius: var(--radius-feature-cards);
+    padding: 16px 24px;
+    box-shadow: var(--shadow-xl);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.trusted-logos__item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl-2);
+    border-color: var(--color-signal-violet);
+}
+
+.trusted-logos__img {
+    height: 40px;
+    width: auto;
+    max-width: 160px;
+    object-fit: contain;
+}
+
 /* ─── Responsive ─── */
 @media screen and (max-width: 1024px) {
     .content-section {
@@ -589,5 +643,18 @@
 
     .skill-card {
         padding: var(--spacing-16) var(--spacing-24);
+    }
+
+    .trusted-section__label {
+        font-size: 26px;
+        margin-bottom: var(--spacing-32);
+    }
+
+    .trusted-logos {
+        gap: var(--spacing-16);
+    }
+
+    .trusted-logos__img {
+        height: 32px;
     }
 }
