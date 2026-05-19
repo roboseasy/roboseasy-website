@@ -31,7 +31,6 @@
   --color-signal-violet: #7c3aed;
   --color-ink: #eeeeee;
   --color-slate: #bcbcbc;
-  --color-muted: #a3a3a3;
   --color-ash-border: rgba(255, 255, 255, 0.08);
   --color-chalk: #242424;
   --color-pure-white: #ffffff;
@@ -40,8 +39,6 @@
   --color-carbon: #eeeeee;
   --surface-page: #171717;
   --surface-card: #1e1e1e;
-  --surface-hero: #171717;
-  --surface-dark: #171717;
 
   /* ─── Fonts ─── */
   --font-display: 'Geist', 'Pretendard', ui-sans-serif, system-ui, sans-serif;
@@ -105,7 +102,4 @@
   --shadow-subtle-3: rgba(255, 255, 255, 0.10) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
   --shadow-xl: rgba(0, 0, 0, 0.4) 0px 8px 32px 4px;
   --shadow-xl-2: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
-  --shadow-xl-3: rgba(0, 0, 0, 0.3) 0px 8px 32px 0px;
-  --shadow-sm: rgba(0, 0, 0, 0.2) 0px 2px 8px 0px;
-  --shadow-sm-2: rgba(0, 0, 0, 0.3) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 1px 1px 0px inset;
 }

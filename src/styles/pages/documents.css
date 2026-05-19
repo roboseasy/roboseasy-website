@@ -33,7 +33,7 @@
 .doc-card__image-wrap {
     display: block;
     aspect-ratio: 4 / 3;
-    background: var(--color-chalk);
+    background: var(--color-surface-2);
     border-bottom: 1px solid var(--color-ash-border);
     overflow: hidden;
 }
@@ -60,13 +60,13 @@
     font-family: var(--font-display);
     font-size: var(--text-heading-sm);
     font-weight: var(--fw-bold);
-    color: var(--color-ink);
+    color: var(--color-bright-gray);
     margin: 0;
 }
 
 .doc-card__description {
     font-size: var(--text-body);
-    color: var(--color-slate);
+    color: var(--color-medium-gray);
     line-height: 1.65;
     margin: 0;
     flex: 1;
