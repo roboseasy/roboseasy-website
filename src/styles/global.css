@@ -128,18 +128,6 @@ body {
     overflow: hidden;
 }
 
-.banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60%;
-    background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(124, 58, 237, 0.18) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-}
-
 .banner__row {
     display: flex;
     align-items: center;
