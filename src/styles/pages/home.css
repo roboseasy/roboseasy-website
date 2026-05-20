@@ -111,10 +111,15 @@
     flex-shrink: 0;
 }
 
-/* ─── Section Aurora Pulse ─── */
-@keyframes auroraPulse {
-    from { transform: scale(0.82); opacity: 0.55; }
-    to   { transform: scale(1.18); opacity: 1; }
+/* ─── Section Conic Rotation ─── */
+@keyframes conicSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes conicSpinReverse {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(-360deg); }
 }
 
 .services-section,
@@ -136,36 +141,51 @@
 .vision-section::before {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 50%;
+    left: 50%;
+    width: 160%;
+    height: 160%;
     pointer-events: none;
     z-index: 0;
-    animation: auroraPulse 4s ease-in-out infinite alternate;
+    mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 70%);
+    animation: conicSpin 20s linear infinite;
 }
 
-/* Services: 삼색 혼합 — 좌(navy) 중(purple) 우(cyan) */
+/* Services: navy 주도 */
 .services-section::before {
-    background:
-        radial-gradient(ellipse 28% 38% at 10% 50%, rgba(0, 44, 95, 0.28) 0%, transparent 65%),
-        radial-gradient(ellipse 24% 34% at 50% 50%, rgba(138, 92, 245, 0.16) 0%, transparent 65%),
-        radial-gradient(ellipse 22% 32% at 88% 50%, rgba(4, 158, 216, 0.18) 0%, transparent 65%);
+    background: conic-gradient(
+        from 0deg at 50% 50%,
+        rgba(0, 44, 95, 0.20),
+        rgba(4, 158, 216, 0.15),
+        rgba(138, 92, 245, 0.15),
+        rgba(0, 44, 95, 0.20)
+    );
 }
 
-/* About Us: 삼색 혼합 — 상(purple) 중(cyan) 하(navy) */
+/* About Us: purple 주도 */
 .services-section + .content-section::before {
-    background:
-        radial-gradient(ellipse 26% 36% at 50% 10%, rgba(138, 92, 245, 0.20) 0%, transparent 65%),
-        radial-gradient(ellipse 22% 32% at 80% 50%, rgba(4, 158, 216, 0.15) 0%, transparent 65%),
-        radial-gradient(ellipse 24% 34% at 20% 80%, rgba(0, 44, 95, 0.18) 0%, transparent 65%);
-    animation-delay: 1.4s;
+    background: conic-gradient(
+        from 120deg at 50% 50%,
+        rgba(138, 92, 245, 0.20),
+        rgba(0, 44, 95, 0.15),
+        rgba(4, 158, 216, 0.15),
+        rgba(138, 92, 245, 0.20)
+    );
+    animation: conicSpinReverse 20s linear infinite;
+    animation-delay: -7s;
 }
 
-/* Vision: 삼색 혼합 — 우(cyan) 좌(navy) 중하(purple) */
+/* Vision: cyan 주도 */
 .vision-section::before {
-    background:
-        radial-gradient(ellipse 26% 36% at 85% 40%, rgba(4, 158, 216, 0.20) 0%, transparent 65%),
-        radial-gradient(ellipse 22% 32% at 15% 55%, rgba(0, 44, 95, 0.18) 0%, transparent 65%),
-        radial-gradient(ellipse 24% 34% at 50% 80%, rgba(138, 92, 245, 0.15) 0%, transparent 65%);
-    animation-delay: 0.7s;
+    background: conic-gradient(
+        from 240deg at 50% 50%,
+        rgba(4, 158, 216, 0.20),
+        rgba(138, 92, 245, 0.15),
+        rgba(0, 44, 95, 0.15),
+        rgba(4, 158, 216, 0.20)
+    );
+    animation-delay: -13s;
 }
 
 /* ─── Services ─── */
