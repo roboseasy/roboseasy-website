@@ -5,21 +5,36 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
 :root {
-  /* ─── Obsidian Dark Palette ─── */
-  --color-abyss: #171717;
-  --color-surface: #1e1e1e;
-  --color-surface-2: #242424;
-  --color-graphite: #3f3f3f;
+  /* ─── Tella Light Palette ─── */
+  --color-signal-violet: #5e51f8;
+  --color-deep-nebula: #251544;
+  --color-iris-mid: #4b41c6;
+  --color-soft-amethyst: #cfcbfd;
+  --color-lavender-mist: #d5a8f5;
+  --color-powder-violet: #d7d3fd;
+  --color-periwinkle-glow: #867dfa;
+  --color-celestial-cyan: #99eeff;
+  --color-ink: #0f172a;
+  --color-slate: #475569;
+  --color-steel: #808a99;
+  --color-fog: #94a3b8;
+  --color-ash-border: #e5e7eb;
+  --color-chalk: #f8fafc;
+  --color-pure-white: #ffffff;
+  --color-carbon: #111111;
+  --color-deep-violet-text: #312e58;
 
-  /* Text */
-  --color-bright-gray: #eeeeee;
-  --color-medium-gray: #bcbcbc;
-  --color-muted-gray: #a3a3a3;
-
-  /* Accent */
-  --color-amethyst: #7c3aed;
-  --color-lavender: #a78bfa;
-  --color-tag-bg: rgba(138, 92, 245, 0.15);
+  /* ─── Legacy Aliases — updated to light theme ─── */
+  --color-abyss: #181127;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f0fe;
+  --color-graphite: #475569;
+  --color-bright-gray: #0f172a;
+  --color-medium-gray: #475569;
+  --color-muted-gray: #808a99;
+  --color-amethyst: #5e51f8;
+  --color-lavender: #867dfa;
+  --color-tag-bg: rgba(94, 81, 248, 0.10);
 
   /* Utility */
   --color-white: #ffffff;
@@ -27,18 +42,11 @@
   --color-warning: #facc15;
   --color-error: #f87171;
 
-  /* ─── Legacy aliases (used across other pages) ─── */
-  --color-signal-violet: #7c3aed;
-  --color-ink: #eeeeee;
-  --color-slate: #bcbcbc;
-  --color-ash-border: rgba(255, 255, 255, 0.08);
-  --color-chalk: #242424;
-  --color-pure-white: #ffffff;
-  --color-soft-amethyst: #a78bfa;
-  --color-lavender-mist: rgba(167, 139, 250, 0.15);
-  --color-carbon: #eeeeee;
-  --surface-page: #171717;
-  --surface-card: #1e1e1e;
+  /* ─── Surfaces ─── */
+  --surface-page: #f8fafc;
+  --surface-card: #ffffff;
+  --surface-hero: #5e51f8;
+  --surface-dark: #181127;
 
   /* ─── Fonts ─── */
   --font-display: 'Geist', 'Pretendard', ui-sans-serif, system-ui, sans-serif;
@@ -60,13 +68,13 @@
   --text-body: 16px;
   --text-subheading: 18px;
   --text-heading-sm: 24px;
-  --text-heading: 28px;
-  --text-heading-lg: 36px;
-  --text-display: 60px;
-  --tracking-heading-lg: -0.72px;
-  --tracking-display: -1.2px;
+  --text-heading: 30px;
+  --text-heading-lg: 56px;
+  --text-display: 84px;
+  --tracking-heading-lg: -3.02px;
+  --tracking-display: -4.54px;
 
-  /* ─── Spacing ─── */
+  /* ─── Spacing (8px base) ─── */
   --spacing-4: 4px;
   --spacing-8: 8px;
   --spacing-12: 12px;
@@ -85,21 +93,24 @@
   --spacing-168: 168px;
 
   /* ─── Layout ─── */
-  --page-max-width: 1120px;
+  --page-max-width: 1200px;
   --section-gap: 96px;
 
   /* ─── Border Radius ─── */
-  --radius-tags: 9999px;
-  --radius-cards: 12px;
-  --radius-images: 12px;
+  --radius-tags: 12px;
+  --radius-cards: 24px;
+  --radius-images: 16px;
   --radius-inputs: 8px;
-  --radius-buttons: 8px;
-  --radius-feature-cards: 12px;
+  --radius-buttons: 40px;
+  --radius-feature-cards: 32px;
 
-  /* ─── Shadows (Obsidian inset-glow pattern) ─── */
-  --shadow-subtle: rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
-  --shadow-subtle-2: rgba(255, 255, 255, 0.10) 0px 0px 0px 1px inset;
-  --shadow-subtle-3: rgba(255, 255, 255, 0.10) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
-  --shadow-xl: rgba(0, 0, 0, 0.4) 0px 8px 32px 4px;
-  --shadow-xl-2: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+  /* ─── Shadows (Tella) ─── */
+  --shadow-xl: rgba(0, 0, 0, 0.15) 0px 8px 32px 4px;
+  --shadow-xl-2: rgba(238, 217, 253, 0.25) 0px 16px 64px 4px, rgba(0, 0, 0, 0.1) 0px 8px 32px 0px;
+  --shadow-xl-3: rgba(0, 0, 0, 0.15) 0px 8px 32px 0px;
+  --shadow-sm: rgba(0, 0, 0, 0.05) 0px -4px 6px 0px, rgba(0, 0, 0, 0.1) 0px -10px 15px 0px;
+  --shadow-sm-2: rgba(0, 0, 0, 0.16) 0px 2px 4px 0px, rgba(0, 0, 0, 0.16) 0px 4px 8px 0px, rgba(255, 255, 255, 0.25) 0px 1px 1px 0px inset;
+  --shadow-subtle: rgba(0, 0, 0, 0.06) 0px 2px 8px 0px, rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+  --shadow-subtle-2: rgba(0, 0, 0, 0.12) 0px 8px 24px 0px, rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+  --shadow-subtle-3: rgba(0, 0, 0, 0.08) 0px 4px 16px 0px, rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
 }

@@ -39,7 +39,7 @@
 /* 프로그램 카드 */
 .program-card {
     background-color: var(--surface-card);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     border-radius: var(--radius-feature-cards);
     padding: 30px;
     text-align: center;
@@ -120,20 +120,24 @@
 
 /* 자세히 보기 버튼 */
 .program-card__button--details {
-    background: rgba(255, 255, 255, 0.12);
+    background: transparent;
+    color: var(--color-signal-violet);
+    border: 1px solid var(--color-signal-violet);
 }
 
 .program-card__button--details:hover {
-    background: #a78bfa;
+    background: var(--color-signal-violet);
+    color: #ffffff;
 }
 
 /* 다운로드 버튼 */
 .program-card__button--download {
-    background: var(--color-amethyst);
+    background: var(--color-signal-violet);
+    color: #ffffff;
 }
 
 .program-card__button--download:hover {
-    background: #a78bfa;
+    background: var(--color-iris-mid);
 }
 
 /* ================================
@@ -228,7 +232,7 @@
     gap: 0;
     flex-shrink: 0;
     background: var(--color-surface-2);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-ash-border);
 }
 
 .program-modal__image-section {
@@ -251,7 +255,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid var(--color-ash-border);
 }
 
 .program-modal__badge {
@@ -308,7 +312,7 @@
     gap: 4px;
     padding: 10px 16px;
     background: var(--surface-card);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-ash-border);
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
@@ -320,7 +324,7 @@
     flex-shrink: 0;
     padding: 7px 16px;
     border: 1.5px solid transparent;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--color-chalk);
     border-radius: 18px;
     font-size: 13px;
     font-weight: 600;
@@ -383,7 +387,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-chalk);
 }
 
 /* ===== 뱃지 행 ===== */
@@ -426,7 +430,7 @@
     background: var(--color-surface-2);
     border-radius: 10px;
     padding: 13px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -476,7 +480,7 @@
     top: 32px;
     height: calc(100% - 14px);
     width: 2px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-chalk);
 }
 
 .modal-timeline__num {
@@ -535,7 +539,7 @@
     border-radius: 10px;
     padding: 12px 10px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     border-top: 3px solid var(--color-amethyst);
 }
 
@@ -562,7 +566,7 @@
 .modal-spec-list {
     background: var(--color-surface-2);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     overflow: hidden;
 }
 
@@ -571,7 +575,7 @@
     align-items: center;
     gap: 13px;
     padding: 11px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--color-ash-border);
 }
 
 .modal-spec-item:last-child { border-bottom: none; }
@@ -705,7 +709,7 @@
 .modal-accordion__item {
     background: var(--color-surface-2);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     overflow: hidden;
 }
 
@@ -718,7 +722,7 @@
     transition: background 0.2s;
 }
 
-.modal-accordion__header:hover { background: rgba(255, 255, 255, 0.04); }
+.modal-accordion__header:hover { background: rgba(94, 81, 248, 0.04); }
 
 .modal-accordion__icon {
     width: 26px;
@@ -874,7 +878,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23a78bfa' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--color-ash-border);
   border-radius: 6px;
   padding: 6px 30px 6px 12px;
   font-size: 13px;
@@ -1028,7 +1032,7 @@
 
 /* 추가 프로그램 섹션과의 구분선 */
 .studio-download + .programs {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--color-ash-border);
   margin-top: 40px;
 }
 

@@ -16,13 +16,13 @@ body {
 
 /* ─── Header ─── */
 .header {
-    background-color: var(--color-abyss);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: var(--color-pure-white);
+    border-bottom: 1px solid var(--color-ash-border);
     padding: 0 20px;
     position: sticky;
     top: 0;
     z-index: 100;
-    height: 85px;
+    height: 64px;
     display: flex;
     align-items: center;
 }
@@ -44,9 +44,9 @@ body {
 }
 
 .header__logo-image {
-    height: 44px;
+    height: 36px;
     width: auto;
-    filter: brightness(0) saturate(100%) invert(36%) sepia(82%) saturate(750%) hue-rotate(224deg) brightness(101%) contrast(100%);
+    filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(900%) hue-rotate(228deg) brightness(88%) contrast(110%);
 }
 
 .header__nav-close {
@@ -66,9 +66,9 @@ body {
     color: var(--color-slate);
     text-decoration: none;
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: var(--text-body);
     font-weight: var(--fw-medium);
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: var(--radius-cards);
     background-color: transparent;
     transition: color 0.2s ease, background-color 0.2s ease;
@@ -76,10 +76,9 @@ body {
 }
 
 .header__nav-link:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-signal-violet);
+    background-color: rgba(94, 81, 248, 0.06);
 }
-
 
 /* ─── Hamburger toggle ─── */
 .header__menu-toggle {
@@ -117,15 +116,18 @@ body {
 
 /* ─── Banner (Hero) ─── */
 .banner {
-    flex: 1;
+    min-height: calc(100vh - 64px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: var(--spacing-32) 20px var(--spacing-64);
+    padding: var(--spacing-80) 20px var(--spacing-168);
     position: relative;
     overflow: hidden;
+    background:
+        radial-gradient(50% 200% at 50% -100%, rgba(119, 107, 255, 0.9) 0%, transparent 70%),
+        linear-gradient(180deg, #27154c 0%, #181127 100%);
 }
 
 .banner__row {
@@ -159,26 +161,23 @@ body {
     font-weight: var(--fw-medium);
     color: var(--color-soft-amethyst);
     padding: 6px 16px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(207, 203, 253, 0.3);
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(207, 203, 253, 0.35);
     border-radius: var(--radius-tags);
     backdrop-filter: blur(8px);
-    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .banner__tag:hover {
-    background-color: var(--color-signal-violet);
-    color: var(--color-pure-white);
-    border-color: rgba(94, 81, 248, 0.8);
-    box-shadow: 0 0 0 3px rgba(94, 81, 248, 0.25), 0 0 24px rgba(94, 81, 248, 0.45);
-    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(207, 203, 253, 0.6);
 }
 
 .banner__title {
     font-family: var(--font-display);
     font-size: clamp(48px, 7vw, var(--text-display));
     font-weight: var(--fw-bold);
-    color: var(--color-ink);
+    color: var(--color-pure-white);
     margin: 0 0 var(--spacing-24);
     line-height: 1.1;
     letter-spacing: var(--tracking-display);
@@ -187,12 +186,12 @@ body {
 }
 
 .banner__title-accent {
-    color: #8a5cf5;
+    color: #4b41c6;
 }
 
 .banner__subtitle {
-    max-width: 480px;
-    margin: 0 auto var(--spacing-40);
+    max-width: 520px;
+    margin: 0 auto var(--spacing-48);
     opacity: 0;
     animation: fadeInUp 0.8s ease forwards 0.4s;
 }
@@ -200,7 +199,7 @@ body {
 .banner__subtitle-text {
     font-size: var(--text-subheading);
     font-weight: var(--fw-regular);
-    color: var(--color-slate);
+    color: rgba(255, 255, 255, 0.80);
     margin: 8px 0;
     line-height: 1.6;
 }
@@ -215,44 +214,48 @@ body {
     animation: fadeInUp 0.8s ease forwards 0.55s;
 }
 
+/* Primary: dark pill */
 .banner__cta-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 36px;
-    background: var(--color-amethyst);
+    padding: 16px 32px;
+    background: var(--color-carbon);
     color: #ffffff;
     font-family: var(--font-display);
     font-size: var(--text-body);
     font-weight: var(--fw-semibold);
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-buttons);
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .banner__cta-primary:hover {
-    background: var(--color-lavender);
+    opacity: 0.88;
     transform: translateY(-2px);
 }
 
+/* Secondary: signal violet pill */
 .banner__cta-secondary {
     display: inline-flex;
     align-items: center;
-    background-color: var(--color-lavender-mist);
-    color: var(--color-carbon);
-    border-radius: var(--radius-buttons);
+    justify-content: center;
     padding: 16px 32px;
+    background-color: var(--color-signal-violet);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-buttons);
     font-family: var(--font-display);
     font-size: var(--text-body);
     font-weight: var(--fw-semibold);
     text-decoration: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .banner__cta-secondary:hover {
-    opacity: 0.85;
+    background-color: var(--color-iris-mid);
     transform: translateY(-2px);
 }
 
@@ -273,9 +276,9 @@ body {
 
 .banner__frame-inner {
     display: inline-block;
-    background-color: var(--color-pure-white);
+    background-color: var(--color-carbon);
     border-radius: 20px;
-    padding: 12px;
+    padding: 10px;
     box-shadow: var(--shadow-xl-2);
     max-width: 420px;
     width: 100%;
@@ -291,7 +294,7 @@ body {
 /* ─── Footer ─── */
 .footer {
     background: var(--color-abyss);
-    color: var(--color-bright-gray);
+    color: rgba(255, 255, 255, 0.85);
     padding: 64px 0 24px;
     margin-top: var(--section-gap);
 }
@@ -309,7 +312,7 @@ body {
     gap: 48px;
     margin-bottom: 48px;
     padding-bottom: 48px;
-    border-bottom: 1px solid var(--color-ash-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .footer__section {
@@ -318,27 +321,6 @@ body {
 
 .footer__section--about {
     flex: 2;
-    position: relative;
-}
-
-.footer__section--about::before {
-    content: '';
-    position: absolute;
-    /* 푸터 상단 패딩(64px)까지 위로, 하단은 구분선+저작권 영역까지 커버 */
-    top: -64px;
-    bottom: -108px;
-    left: -40px;
-    right: -120px;
-    background:
-        radial-gradient(ellipse 85% 80% at 25% 48%, rgba(138, 92, 245, 0.38) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 55% at 10% 50%, rgba(0, 44, 95, 0.32) 0%, transparent 55%);
-    pointer-events: none;
-    z-index: 0;
-}
-
-.footer__section--about > * {
-    position: relative;
-    z-index: 1;
 }
 
 .footer__section--social,
@@ -350,7 +332,7 @@ body {
     font-family: var(--font-display);
     font-size: var(--text-body-sm);
     font-weight: var(--fw-semibold);
-    color: var(--color-bright-gray);
+    color: rgba(255, 255, 255, 0.50);
     margin-bottom: var(--spacing-16);
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -366,29 +348,24 @@ body {
     margin-bottom: 10px;
     font-size: var(--text-body-sm);
     line-height: 1.6;
-    color: var(--color-medium-gray);
+    color: rgba(255, 255, 255, 0.60);
 }
 
 .footer__section--about .footer__list-item span {
     display: inline-block;
     min-width: 120px;
     margin-right: 8px;
-    color: var(--color-muted-gray);
-}
-
-.footer__section--social .footer__title,
-.footer__section--store .footer__title {
-    color: var(--color-medium-gray);
+    color: rgba(255, 255, 255, 0.40);
 }
 
 .footer__link {
-    color: var(--color-white);
+    color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .footer__link:hover {
-    color: var(--color-lavender);
+    color: var(--color-soft-amethyst);
 }
 
 .footer__bottom {
@@ -397,12 +374,12 @@ body {
 
 .footer__copyright {
     font-size: var(--text-caption);
-    color: var(--color-muted-gray);
+    color: rgba(255, 255, 255, 0.30);
     margin: 0;
     letter-spacing: 0.05em;
 }
 
-/* ─── Tella Page Intro (shared — documents, news, programs) ─── */
+/* ─── Page Intro (shared — documents, news, programs) ─── */
 .page-intro {
     background: var(--color-chalk);
     padding: 80px 20px 56px;
@@ -440,7 +417,7 @@ body {
 /* Tablet / Compressed Desktop */
 @media screen and (max-width: 1024px) {
     .banner {
-        padding: 60px 20px 80px;
+        padding: 60px 20px 140px;
     }
 
     .banner__row {
@@ -462,10 +439,10 @@ body {
 
     .header__nav {
         position: fixed;
-        top: 80px;
+        top: 64px;
         left: 0;
         width: 100%;
-        background-color: var(--color-surface);
+        background-color: var(--color-pure-white);
         border-bottom: 1px solid var(--color-ash-border);
         padding: 8px 0 12px;
         transform: translateY(-10px);
@@ -489,11 +466,11 @@ body {
     .header__overlay {
         display: none;
         position: fixed;
-        top: 80px;
+        top: 64px;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(15, 23, 42, 0.15);
+        background-color: rgba(15, 23, 42, 0.20);
         z-index: 998;
     }
 
@@ -530,6 +507,7 @@ body {
 
     .header__nav-link:hover {
         color: var(--color-signal-violet);
+        background-color: transparent;
     }
 }
 
@@ -543,10 +521,9 @@ body {
         padding: 0 16px;
     }
 
-
     /* Banner */
     .banner {
-        padding: 60px 16px 80px;
+        padding: 60px 16px 120px;
         min-height: auto;
     }
 

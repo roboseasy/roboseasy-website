@@ -14,76 +14,9 @@ const newsItems = [
 ];
 ---
 <BaseLayout title={title} description={description} path="/">
-  <div class="hero-viewport">
-    <!-- 히어로 아크 글로우 (배너 뒤에 렌더링) -->
-    <div class="hero-arc" aria-hidden="true">
-      <svg class="hero-arc__svg" viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <!-- 좌(#002c5f) → 중앙(#8a5cf5) → 우(#049ED8) 색상 그라디언트 -->
-          <linearGradient id="hero-arc-grad" x1="0" y1="0" x2="1440" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0%"   stop-color="#002c5f"/>
-            <stop offset="6%"   stop-color="#002c5f"/>
-            <stop offset="28%"  stop-color="#8a5cf5"/>
-            <stop offset="50%"  stop-color="#8a5cf5"/>
-            <stop offset="72%"  stop-color="#8a5cf5"/>
-            <stop offset="94%"  stop-color="#049ED8"/>
-            <stop offset="100%" stop-color="#049ED8"/>
-          </linearGradient>
+  <MainBanner />
 
-          <!-- 와이드 아우라 — 중앙이 가장 높은 글로우 높이 -->
-          <filter id="arc-glow-wide" x="-5%" y="-300%" width="110%" height="700%">
-            <feGaussianBlur stdDeviation="20 45"/>
-          </filter>
-
-          <!-- 미디엄 글로우 -->
-          <filter id="arc-glow-med" x="-5%" y="-120%" width="110%" height="340%">
-            <feGaussianBlur stdDeviation="7 18"/>
-          </filter>
-
-          <!-- 베이스 글로우 — 끝부분 최소 글로우 보장 -->
-          <filter id="arc-glow-base" x="-5%" y="-40%" width="110%" height="180%">
-            <feGaussianBlur stdDeviation="5 6"/>
-          </filter>
-
-          <!-- 샤프 코어 라인 -->
-          <filter id="arc-glow-sharp" x="-5%" y="-40%" width="110%" height="180%">
-            <feGaussianBlur stdDeviation="1.5 4" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        <!-- 다크 돔 (페이지 배경과 동일) -->
-        <ellipse cx="720" cy="760" rx="1800" ry="600" fill="#171717"/>
-
-        <!-- 와이드 아우라 (중앙 글로우 키 가장 높음) -->
-        <ellipse cx="720" cy="760" rx="1800" ry="600"
-                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="4"
-                 filter="url(#arc-glow-wide)" opacity="0.4"/>
-
-        <!-- 미디엄 글로우 -->
-        <ellipse cx="720" cy="760" rx="1800" ry="600"
-                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="3"
-                 filter="url(#arc-glow-med)" opacity="0.7"/>
-
-        <!-- 베이스 글로우 (끝부분 최소 보장) -->
-        <ellipse cx="720" cy="760" rx="1800" ry="600"
-                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="5"
-                 filter="url(#arc-glow-base)" opacity="0.35"/>
-
-        <!-- 샤프 코어 -->
-        <ellipse cx="720" cy="760" rx="1800" ry="600"
-                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="1.5"
-                 filter="url(#arc-glow-sharp)"/>
-      </svg>
-    </div>
-
-    <MainBanner />
-  </div>
-
-  <div class="gradient-wrap">
+  <div class="sections-wrap">
   <!-- Services 섹션 -->
   <section class="services-section">
     <div class="services-section__container">
@@ -291,7 +224,6 @@ const newsItems = [
     </div>
   </section>
   </div>
-
 
 </BaseLayout>
 
