@@ -1,58 +1,54 @@
-/* ─── Shooting Stars ─── */
-@keyframes shootingStar {
-    0%   { transform: rotate(var(--angle)) translateY(0);    opacity: 0; }
-    8%   { opacity: 1; }
-    100% { transform: rotate(var(--angle)) translateY(48vh); opacity: 0; }
+/* ─── Hero Aurora Wave ─── */
+@keyframes auroraShift1 {
+    0%, 100% { transform: translateX(-12%) scaleX(1.10); }
+    50%       { transform: translateX(10%)  scaleX(0.92); }
+}
+@keyframes auroraShift2 {
+    0%, 100% { transform: translateX(10%)  scaleX(0.95); }
+    50%       { transform: translateX(-10%) scaleX(1.08); }
+}
+@keyframes auroraShift3 {
+    0%   { transform: translateX(0%);   }
+    33%  { transform: translateX(-14%); }
+    66%  { transform: translateX(12%);  }
+    100% { transform: translateX(0%);   }
 }
 
-.shooting-stars {
+.hero-aurora {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
 }
 
-.shooting-star {
+.hero-aurora__layer {
     position: absolute;
     top: 0;
-    width: 1.5px;
-    height: 110px;
-    border-radius: 2px;
-    transform-origin: top center;
-    animation: shootingStar var(--dur) ease-in var(--delay) infinite;
+    left: -15%;
+    width: 130%;
+    height: 100%;
 }
 
-.shooting-star--1 {
-    left: 8%;
-    --angle: 14deg;  --dur: 2.6s;  --delay: 0s;
-    background: linear-gradient(to top, #8a5cf5, transparent);
+.hero-aurora__layer--purple {
+    background: radial-gradient(ellipse 55% 100% at 40% 0%, rgba(138, 92, 245, 0.65) 0%, transparent 70%);
+    filter: blur(14px);
+    animation: auroraShift1 9s ease-in-out infinite;
 }
-.shooting-star--2 {
-    left: 28%;
-    --angle: -10deg; --dur: 2.3s;  --delay: 1.5s;
-    background: linear-gradient(to top, #049ED8, transparent);
+.hero-aurora__layer--navy {
+    background: radial-gradient(ellipse 45% 100% at 65% 0%, rgba(138, 92, 245, 0.45) 0%, transparent 70%);
+    filter: blur(18px);
+    animation: auroraShift2 12s ease-in-out infinite;
 }
-.shooting-star--3 {
-    left: 48%;
-    --angle: 13deg;  --dur: 3.0s;  --delay: 0.6s;
-    background: linear-gradient(to top, #8a5cf5, transparent);
+.hero-aurora__layer--cyan {
+    background: radial-gradient(ellipse 50% 100% at 55% 0%, rgba(138, 92, 245, 0.55) 0%, transparent 70%);
+    filter: blur(12px);
+    animation: auroraShift3 7s ease-in-out infinite;
 }
-.shooting-star--4 {
-    left: 68%;
-    --angle: -9deg;  --dur: 2.5s;  --delay: 2.3s;
-    background: linear-gradient(to top, #049ED8, #002c5f 60%, transparent);
-}
-.shooting-star--5 {
-    left: 83%;
-    --angle: -12deg; --dur: 2.7s;  --delay: 1.0s;
-    background: linear-gradient(to top, #8a5cf5, transparent);
-}
-.shooting-star--6 {
-    left: 94%;
-    --angle: 8deg;   --dur: 2.0s;  --delay: 0.4s;
-    background: linear-gradient(to top, #049ED8, transparent);
-}
+
 
 /* ─── Hero Viewport ─── */
 .hero-viewport {
