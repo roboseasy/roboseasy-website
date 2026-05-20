@@ -111,96 +111,61 @@
     flex-shrink: 0;
 }
 
-
-/* ─── Section Accent Bar + Left Radial Gradient ─── */
-/* ::before = 3px 바 (상하 페이드 + box-shadow 글로우)
-   ::after  = 이중 radial 배경 glow (강도 낮춤) */
+/* ─── Section Aurora Pulse ─── */
+@keyframes auroraPulse {
+    from { transform: scale(0.82); opacity: 0.55; }
+    to   { transform: scale(1.18); opacity: 1; }
+}
 
 .services-section,
-.vision-section,
 .services-section + .content-section,
-.vision-section + .content-section {
+.vision-section {
     position: relative;
+    overflow: hidden;
 }
 
-/* ── 어센트 바 공통 ── */
+.services-section > *,
+.services-section + .content-section > *,
+.vision-section > * {
+    position: relative;
+    z-index: 1;
+}
+
 .services-section::before,
 .services-section + .content-section::before,
-.vision-section::before,
-.vision-section + .content-section::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    pointer-events: none;
-}
-
-/* ── 배경 glow 공통 ── */
-.services-section::after,
-.services-section + .content-section::after,
-.vision-section::after,
-.vision-section + .content-section::after {
+.vision-section::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
+    z-index: 0;
+    animation: auroraPulse 4s ease-in-out infinite alternate;
 }
 
-/* Services: #002c5f — 파란 계열 글로우로 가시성 확보 */
+/* Services: 삼색 혼합 — 좌(navy) 중(purple) 우(cyan) */
 .services-section::before {
-    background: linear-gradient(to bottom,
-        transparent 0%, rgba(0, 44, 95, 0.55) 12%, rgba(0, 44, 95, 0.55) 88%, transparent 100%);
-    box-shadow:
-        2px 0 10px rgba(0, 80, 210, 0.55),
-        4px 0 28px rgba(0, 44, 95, 0.30),
-        6px 0 50px rgba(4, 158, 216, 0.12);
-}
-.services-section::after {
     background:
-        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(0, 44, 95, 0.12) 0%, transparent 100%),
-        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(0, 44, 95, 0.04) 0%, transparent 70%);
+        radial-gradient(ellipse 28% 38% at 10% 50%, rgba(0, 44, 95, 0.28) 0%, transparent 65%),
+        radial-gradient(ellipse 24% 34% at 50% 50%, rgba(138, 92, 245, 0.16) 0%, transparent 65%),
+        radial-gradient(ellipse 22% 32% at 88% 50%, rgba(4, 158, 216, 0.18) 0%, transparent 65%);
 }
 
-/* About Us: #8a5cf5 */
+/* About Us: 삼색 혼합 — 상(purple) 중(cyan) 하(navy) */
 .services-section + .content-section::before {
-    background: linear-gradient(to bottom,
-        transparent 0%, rgba(138, 92, 245, 0.55) 12%, rgba(138, 92, 245, 0.55) 88%, transparent 100%);
-    box-shadow:
-        2px 0 10px rgba(138, 92, 245, 0.50),
-        4px 0 28px rgba(138, 92, 245, 0.22);
-}
-.services-section + .content-section::after {
     background:
-        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(138, 92, 245, 0.10) 0%, transparent 100%),
-        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(138, 92, 245, 0.04) 0%, transparent 70%);
+        radial-gradient(ellipse 26% 36% at 50% 10%, rgba(138, 92, 245, 0.20) 0%, transparent 65%),
+        radial-gradient(ellipse 22% 32% at 80% 50%, rgba(4, 158, 216, 0.15) 0%, transparent 65%),
+        radial-gradient(ellipse 24% 34% at 20% 80%, rgba(0, 44, 95, 0.18) 0%, transparent 65%);
+    animation-delay: 1.4s;
 }
 
-/* Vision: #049ED8 */
+/* Vision: 삼색 혼합 — 우(cyan) 좌(navy) 중하(purple) */
 .vision-section::before {
-    background: linear-gradient(to bottom,
-        transparent 0%, rgba(4, 158, 216, 0.55) 12%, rgba(4, 158, 216, 0.55) 88%, transparent 100%);
-    box-shadow:
-        2px 0 10px rgba(4, 158, 216, 0.50),
-        4px 0 28px rgba(4, 158, 216, 0.22);
-}
-.vision-section::after {
     background:
-        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(4, 158, 216, 0.11) 0%, transparent 100%),
-        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(4, 158, 216, 0.04) 0%, transparent 70%);
-}
-
-/* News: #8a5cf5 */
-.vision-section + .content-section::before {
-    background: linear-gradient(to bottom,
-        transparent 0%, rgba(138, 92, 245, 0.55) 12%, rgba(138, 92, 245, 0.55) 88%, transparent 100%);
-    box-shadow:
-        2px 0 10px rgba(138, 92, 245, 0.50),
-        4px 0 28px rgba(138, 92, 245, 0.22);
-}
-.vision-section + .content-section::after {
-    background:
-        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(138, 92, 245, 0.10) 0%, transparent 100%),
-        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(138, 92, 245, 0.04) 0%, transparent 70%);
+        radial-gradient(ellipse 26% 36% at 85% 40%, rgba(4, 158, 216, 0.20) 0%, transparent 65%),
+        radial-gradient(ellipse 22% 32% at 15% 55%, rgba(0, 44, 95, 0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 24% 34% at 50% 80%, rgba(138, 92, 245, 0.15) 0%, transparent 65%);
+    animation-delay: 0.7s;
 }
 
 /* ─── Services ─── */
