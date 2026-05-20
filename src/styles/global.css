@@ -338,6 +338,10 @@ body {
     letter-spacing: 0.08em;
 }
 
+.footer__section--about .footer__title {
+    color: #ffffff;
+}
+
 .footer__list {
     list-style: none;
     padding: 0;
@@ -359,7 +363,7 @@ body {
 }
 
 .footer__link {
-    color: rgba(255, 255, 255, 0.75);
+    color: #ffffff;
     text-decoration: none;
     transition: color 0.2s ease;
 }
