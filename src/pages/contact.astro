@@ -116,7 +116,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   body.contact-page .form-card h2 {
     font-family: 'Geist', 'Pretendard', system-ui, sans-serif;
-    font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin: 0;
+    font-size: 2.1rem; font-weight: 700; color: var(--text-primary); margin: 0;
   }
   body.contact-page .form-space { display: flex; flex-direction: column; gap: 20px; margin-top: 28px; }
   body.contact-page .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -126,7 +126,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Field */
   body.contact-page .field-label {
-    display: block; font-size: 0.85rem; font-weight: 600;
+    display: block; font-size: 1rem; font-weight: 600;
     color: var(--text-primary); margin-bottom: 8px;
   }
   body.contact-page .req::before {
@@ -137,7 +137,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .textarea {
     width: 100%; padding: 12px 14px;
     background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px;
-    color: var(--text-primary); font-family: inherit; font-size: 0.92rem;
+    color: var(--text-primary); font-family: inherit; font-size: 1.05rem;
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
   }
@@ -362,7 +362,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
             <div class="panel-info-row">
               <span class="panel-info-label">Address</span>
-              <span class="panel-info-value keep-all">대한민국 서울특별시 동작구<br />상도로 15길 143, 창건빌딩 403호</span>
+              <span class="panel-info-value keep-all">서울 관악구 신림동 532-35, 3층</span>
             </div>
             <div class="panel-info-row">
               <span class="panel-info-label">Phone</span>
@@ -406,8 +406,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
             <!-- 소속 -->
             <div>
-              <label class="field-label" for="f-org">소속</label>
-              <input id="f-org" name="org" type="text" class="input" placeholder="회사명 / 기관명 / 학교명 등" />
+              <label class="field-label req" for="f-org">소속</label>
+              <input id="f-org" name="org" type="text" class="input" placeholder="회사명 / 기관명 / 학교명 / 개인 등" required />
             </div>
 
             <!-- 문의 종류 -->
@@ -416,6 +416,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <select id="f-type" name="type" class="select" required>
                 <option value="" disabled selected>문의 종류를 선택해 주세요</option>
                 <option value="purchase">로봇 구매 문의</option>
+                <option value="as">AS 문의</option>
                 <option value="corp_edu">기업 교육 문의</option>
                 <option value="workshop">워크샵 문의</option>
                 <option value="etc">기타 문의</option>
@@ -456,6 +457,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                       <span class="num"><span id="qFinal">0</span> 원 <span class="text-muted" style="font-size:0.75rem;font-weight:400;">(부가세 포함)</span></span>
                     </div>
                     <p class="quote-note">※ 부가세는 일의 자리에서 반올림 (10원 단위)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AS 문의 전용: 구매자 여부 + 구매 날짜 -->
+            <div id="asBlock" style="display:none;">
+              <div class="purchase-block">
+                <div class="purchase-eyebrow" style="margin-bottom:12px;">AS · 구매자 정보</div>
+                <div class="form-row-2">
+                  <div>
+                    <label class="field-label req" for="f-is-buyer">구매자 여부</label>
+                    <select id="f-is-buyer" name="is_buyer" class="select">
+                      <option value="" disabled selected>선택해 주세요</option>
+                      <option value="yes">네</option>
+                      <option value="no">아니오</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="field-label req" for="f-purchase-month">구매 날짜</label>
+                    <input id="f-purchase-month" name="purchase_month" type="month" class="input" required />
                   </div>
                 </div>
               </div>
@@ -517,14 +539,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { name: '조립서비스', price: 90000 },
   ];
 
-  /* Purchase block toggle */
+  /* Purchase / AS block toggle */
   const typeSelect = document.getElementById('f-type');
   const purchaseBlock = document.getElementById('purchaseBlock');
+  const asBlock = document.getElementById('asBlock');
+  const isBuyerSelect = document.getElementById('f-is-buyer');
   typeSelect.addEventListener('change', () => {
     const isPurchase = typeSelect.value === 'purchase';
+    const isAS = typeSelect.value === 'as';
     purchaseBlock.style.display = isPurchase ? 'block' : 'none';
     document.getElementById('f-shipto').required = isPurchase;
     if (isPurchase && document.getElementById('quoteRows').children.length === 0) addRow();
+    asBlock.style.display = isAS ? 'block' : 'none';
+    isBuyerSelect.required = isAS;
   });
 
   /* Quote cards */
@@ -628,13 +655,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   document.getElementById('contactForm').addEventListener('submit', async e => {
     e.preventDefault();
 
-    for (const id of ['f-name', 'f-email', 'f-phone', 'f-type', 'f-message']) {
+    for (const id of ['f-name', 'f-email', 'f-phone', 'f-org', 'f-type', 'f-message']) {
       const el = document.getElementById(id);
       if (!el.value.trim()) { el.focus(); showResult('error', '필수 항목을 모두 입력해 주세요.'); return; }
     }
     if (typeSelect.value === 'purchase' && !document.getElementById('f-shipto').value.trim()) {
       document.getElementById('f-shipto').focus();
       showResult('error', '배송 주소를 입력해 주세요.'); return;
+    }
+    if (typeSelect.value === 'as' && !isBuyerSelect.value) {
+      isBuyerSelect.focus();
+      showResult('error', '구매자 여부를 선택해 주세요.'); return;
+    }
+    if (typeSelect.value === 'as' && !document.getElementById('f-purchase-month').value) {
+      document.getElementById('f-purchase-month').focus();
+      showResult('error', '구매 날짜를 선택해 주세요.'); return;
     }
 
     const btn = document.getElementById('submitBtn');
@@ -664,6 +699,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       email:     document.getElementById('f-email').value.trim(),
       phone:     document.getElementById('f-phone').value.trim(),
       org:       document.getElementById('f-org').value.trim() || undefined,
+      isBuyer:        typeSelect.value === 'as' ? isBuyerSelect.value : undefined,
+      purchaseMonth:  typeSelect.value === 'as' ? (document.getElementById('f-purchase-month').value || undefined) : undefined,
       type:      typeSelect.value,
       message:   document.getElementById('f-message').value.trim(),
       shipto:    document.getElementById('f-shipto')?.value.trim() || undefined,
@@ -684,7 +721,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         showResult('success', '문의가 접수되었습니다. 빠르게 답변드리겠습니다.');
         document.getElementById('contactForm').reset();
         wrap.innerHTML = ''; uploaded = []; refreshFileList();
-        purchaseBlock.style.display = 'none'; // 제출 후 초기화
+        purchaseBlock.style.display = 'none';
+        asBlock.style.display = 'none';
+        isBuyerSelect.value = '';
+        document.getElementById('f-purchase-month').value = '';
         recalc();
       } else {
         showResult('error', json.error ?? '전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');

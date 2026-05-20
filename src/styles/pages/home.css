@@ -1,8 +1,26 @@
 /* ─── Hero Viewport ─── */
 .hero-viewport {
-    height: calc(100vh - 64px);
+    height: calc(100vh - 85px);
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+/* ─── Hero Arc Glow ─── */
+.hero-arc {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 260px;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.hero-arc__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 /* ─── Placeholder ─── */
@@ -30,29 +48,18 @@
     height: auto;
 }
 
-/* ─── Hero Media ─── */
-.banner__hero-media {
-    flex: 2.5;
-    min-width: 0;
-    margin: 0;
-    opacity: 0;
-    animation: fadeInUp 1s ease forwards 0.65s;
-    border-radius: var(--radius-cards);
-    overflow: hidden;
-    box-shadow: var(--shadow-subtle), var(--shadow-xl);
-}
-
 /* ─── Client Ticker ─── */
-.client-ticker-section {
-    padding: 96px 0;
-    flex-shrink: 0;
-    display: flex;
-    justify-content: center;
+.banner__ticker-inset {
+    position: absolute;
+    bottom: 100px;
+    left: 0;
+    right: 0;
 }
 
 .client-ticker {
     width: 100%;
     max-width: var(--page-max-width);
+    margin: 0 auto;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(
         to right,
@@ -99,15 +106,114 @@
     max-width: 180px;
     object-fit: contain;
     filter: brightness(0) invert(1);
-    opacity: 0.45;
+    opacity: 1;
     transition: opacity 0.2s ease;
     flex-shrink: 0;
 }
 
 
+/* ─── Section Accent Bar + Left Radial Gradient ─── */
+/* ::before = 3px 바 (상하 페이드 + box-shadow 글로우)
+   ::after  = 이중 radial 배경 glow (강도 낮춤) */
+
+.services-section,
+.vision-section,
+.services-section + .content-section,
+.vision-section + .content-section {
+    position: relative;
+}
+
+/* ── 어센트 바 공통 ── */
+.services-section::before,
+.services-section + .content-section::before,
+.vision-section::before,
+.vision-section + .content-section::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    pointer-events: none;
+}
+
+/* ── 배경 glow 공통 ── */
+.services-section::after,
+.services-section + .content-section::after,
+.vision-section::after,
+.vision-section + .content-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Services: #002c5f — 파란 계열 글로우로 가시성 확보 */
+.services-section::before {
+    background: linear-gradient(to bottom,
+        transparent 0%, rgba(0, 44, 95, 0.55) 12%, rgba(0, 44, 95, 0.55) 88%, transparent 100%);
+    box-shadow:
+        2px 0 10px rgba(0, 80, 210, 0.55),
+        4px 0 28px rgba(0, 44, 95, 0.30),
+        6px 0 50px rgba(4, 158, 216, 0.12);
+}
+.services-section::after {
+    background:
+        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(0, 44, 95, 0.12) 0%, transparent 100%),
+        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(0, 44, 95, 0.04) 0%, transparent 70%);
+}
+
+/* About Us: #8a5cf5 */
+.services-section + .content-section::before {
+    background: linear-gradient(to bottom,
+        transparent 0%, rgba(138, 92, 245, 0.55) 12%, rgba(138, 92, 245, 0.55) 88%, transparent 100%);
+    box-shadow:
+        2px 0 10px rgba(138, 92, 245, 0.50),
+        4px 0 28px rgba(138, 92, 245, 0.22);
+}
+.services-section + .content-section::after {
+    background:
+        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(138, 92, 245, 0.10) 0%, transparent 100%),
+        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(138, 92, 245, 0.04) 0%, transparent 70%);
+}
+
+/* Vision: #049ED8 */
+.vision-section::before {
+    background: linear-gradient(to bottom,
+        transparent 0%, rgba(4, 158, 216, 0.55) 12%, rgba(4, 158, 216, 0.55) 88%, transparent 100%);
+    box-shadow:
+        2px 0 10px rgba(4, 158, 216, 0.50),
+        4px 0 28px rgba(4, 158, 216, 0.22);
+}
+.vision-section::after {
+    background:
+        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(4, 158, 216, 0.11) 0%, transparent 100%),
+        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(4, 158, 216, 0.04) 0%, transparent 70%);
+}
+
+/* News: #8a5cf5 */
+.vision-section + .content-section::before {
+    background: linear-gradient(to bottom,
+        transparent 0%, rgba(138, 92, 245, 0.55) 12%, rgba(138, 92, 245, 0.55) 88%, transparent 100%);
+    box-shadow:
+        2px 0 10px rgba(138, 92, 245, 0.50),
+        4px 0 28px rgba(138, 92, 245, 0.22);
+}
+.vision-section + .content-section::after {
+    background:
+        radial-gradient(ellipse 28% 55% at 0% 50%, rgba(138, 92, 245, 0.10) 0%, transparent 100%),
+        radial-gradient(ellipse 60% 85% at 0% 50%, rgba(138, 92, 245, 0.04) 0%, transparent 70%);
+}
+
 /* ─── Services ─── */
 .services-section {
     padding: 96px 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.services-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .services-section__container {
@@ -130,11 +236,18 @@
     overflow: hidden;
     box-shadow: var(--shadow-subtle);
     min-height: 540px;
-    transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease, transform 1s ease;
 }
 
 .service-card:hover {
     box-shadow: var(--shadow-subtle-2);
+}
+
+.service-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .service-card__content {
@@ -208,7 +321,7 @@
     text-align: center;
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition: opacity 1s ease, transform 1s ease;
 }
 
 .content-section.is-visible {
@@ -243,14 +356,9 @@
 .about-tabs__panels { order: 2; }
 .about-tabs__nav    { order: 1; }
 
-.about-tabs__panel {
-    display: none;
-    animation: panelFadeIn 0.3s ease;
-}
+.about-tabs__panel { display: none; }
 
-.about-tabs__panel.is-active {
-    display: block;
-}
+.about-tabs__panel.is-active { display: block; }
 
 @keyframes panelFadeIn {
     from { opacity: 0; transform: translateY(8px); }
@@ -367,7 +475,7 @@
     text-align: center;
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition: opacity 1s ease, transform 1s ease;
 }
 
 .vision-section.is-visible {
@@ -413,8 +521,9 @@
     border-radius: var(--radius-cards);
     padding: var(--spacing-32);
     box-shadow: var(--shadow-subtle);
-    transform: translateY(var(--arc-y));
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity: 0;
+    transform: translateY(calc(var(--arc-y) + 20px));
+    transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -424,6 +533,11 @@
 
 .vision-card:hover {
     box-shadow: var(--shadow-subtle-2);
+}
+
+.vision-card.is-visible {
+    opacity: 1;
+    transform: translateY(var(--arc-y));
 }
 
 .vision-card__num {
@@ -479,7 +593,6 @@
 
 .news-feature__item.is-active {
     display: block;
-    animation: panelFadeIn 0.3s ease;
 }
 
 .news-feature__item::after {
@@ -632,7 +745,7 @@
 
 /* ─── Responsive ─── */
 @media screen and (max-width: 1024px) {
-    .hero-viewport { height: auto; min-height: calc(100vh - 64px); }
+    .hero-viewport { height: auto; min-height: calc(100vh - 85px); }
 
     .content-section { padding: 64px 20px; }
 
