@@ -1,3 +1,59 @@
+/* ─── Shooting Stars ─── */
+@keyframes shootingStar {
+    0%   { transform: rotate(var(--angle)) translateY(0);    opacity: 0; }
+    8%   { opacity: 1; }
+    100% { transform: rotate(var(--angle)) translateY(48vh); opacity: 0; }
+}
+
+.shooting-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.shooting-star {
+    position: absolute;
+    top: 0;
+    width: 1.5px;
+    height: 110px;
+    border-radius: 2px;
+    transform-origin: top center;
+    animation: shootingStar var(--dur) ease-in var(--delay) infinite;
+}
+
+.shooting-star--1 {
+    left: 8%;
+    --angle: 14deg;  --dur: 2.6s;  --delay: 0s;
+    background: linear-gradient(to top, #8a5cf5, transparent);
+}
+.shooting-star--2 {
+    left: 28%;
+    --angle: -10deg; --dur: 2.3s;  --delay: 1.5s;
+    background: linear-gradient(to top, #049ED8, transparent);
+}
+.shooting-star--3 {
+    left: 48%;
+    --angle: 13deg;  --dur: 3.0s;  --delay: 0.6s;
+    background: linear-gradient(to top, #8a5cf5, transparent);
+}
+.shooting-star--4 {
+    left: 68%;
+    --angle: -9deg;  --dur: 2.5s;  --delay: 2.3s;
+    background: linear-gradient(to top, #049ED8, #002c5f 60%, transparent);
+}
+.shooting-star--5 {
+    left: 83%;
+    --angle: -12deg; --dur: 2.7s;  --delay: 1.0s;
+    background: linear-gradient(to top, #8a5cf5, transparent);
+}
+.shooting-star--6 {
+    left: 94%;
+    --angle: 8deg;   --dur: 2.0s;  --delay: 0.4s;
+    background: linear-gradient(to top, #049ED8, transparent);
+}
+
 /* ─── Hero Viewport ─── */
 .hero-viewport {
     height: calc(100vh - 85px);
