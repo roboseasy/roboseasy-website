@@ -1150,16 +1150,17 @@
 }
 
 .install-guide__heading {
-  font-size: 40px;
-  font-weight: 700;
-  color: #2E0068;
-  margin: 0 0 14px;
-  letter-spacing: -0.5px;
+  font-size: 48px;
+  font-weight: var(--fw-black);
+  color: var(--color-bright-gray);
+  letter-spacing: -1px;
+  margin: 0 0 16px;
+  line-height: 1.2;
 }
 
 .install-guide__description {
-  font-size: 17px;
-  color: #666;
+  font-size: 18px;
+  color: var(--color-medium-gray);
   margin: 0;
   line-height: 1.6;
 }
@@ -1544,7 +1545,10 @@
     padding: 50px 20px 30px;
   }
   .install-guide__heading {
-    font-size: 34px;
+    font-size: 36px;
+  }
+  .install-guide__description {
+    font-size: 16px;
   }
 }
 
@@ -1553,7 +1557,7 @@
     padding: 40px 16px 24px;
   }
   .install-guide__heading {
-    font-size: 26px;
+    font-size: 28px;
   }
   .install-guide__description {
     font-size: 14px;
@@ -1599,9 +1603,6 @@
 }
 
 @media (max-width: 480px) {
-  .install-guide__heading {
-    font-size: 22px;
-  }
   .install-guide__tab {
     padding: 7px 13px;
     font-size: 12px;
