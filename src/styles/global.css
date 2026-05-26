@@ -391,17 +391,6 @@ body {
     color: var(--color-lavender);
 }
 
-.footer__bottom {
-    text-align: center;
-}
-
-.footer__copyright {
-    font-size: var(--text-caption);
-    color: var(--color-muted-gray);
-    margin: 0;
-    letter-spacing: 0.05em;
-}
-
 /* ─── Tella Page Intro (shared — documents, news, programs) ─── */
 .page-intro {
     background: var(--color-chalk);
@@ -598,9 +587,5 @@ body {
     .banner__title {
         font-size: 32px;
         letter-spacing: -1.5px;
-    }
-
-    .footer__copyright {
-        font-size: 11px;
     }
 }

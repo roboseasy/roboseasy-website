@@ -280,7 +280,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 20% center;
+    object-position: 35% center;
     display: block;
 }
 
@@ -584,6 +584,13 @@
 }
 
 .news-feature__image { display: block; }
+
+.news-feature__img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
 
 .news-feature__body {
     position: absolute;

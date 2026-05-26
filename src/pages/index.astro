@@ -8,10 +8,18 @@ const title = 'RoboSEasy | 로보시지 - Robot is Easy, 이게 로보시지';
 const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제품·교육·기술을 통해 전국민의 Physical AI 접근성 향상에 기여합니다';
 
 const newsItems = [
-  { title: '아무 제목', date: '2025.01.01' },
-  { title: '아무 제목', date: '2025.01.01' },
-  { title: '아무 제목', date: '2025.01.01' },
-  { title: '아무 제목', date: '2025.01.01' },
+  {
+    title: '현대중앙연구소에서 열린 Physical AI 강연',
+    date: '2026.05.13',
+    url: null,
+    image: '/img/news-hyundai-lecture.jpg',
+  },
+  {
+    title: '한성대, 양팔로봇 활용 Physical AI 해커톤 대회',
+    date: '2026.02.09',
+    url: null,
+    image: '/img/news-hansung-hackathon.jpg',
+  },
 ];
 ---
 <BaseLayout title={title} description={description} path="/">
@@ -266,15 +274,23 @@ const newsItems = [
           {newsItems.map((item, i) => (
             <div class={`news-feature__item${i === 0 ? ' is-active' : ''}`}>
               <div class="news-feature__image">
-                <div class="placeholder-img placeholder-img--news">
-                  <span class="placeholder-img__icon">?</span>
-                </div>
+                {item.image ? (
+                  <img src={item.image} alt={item.title} class="news-feature__img" loading="lazy" />
+                ) : (
+                  <div class="placeholder-img placeholder-img--news">
+                    <span class="placeholder-img__icon">?</span>
+                  </div>
+                )}
               </div>
               <div class="news-feature__body">
                 <h3 class="news-feature__title">{item.title}</h3>
                 <div class="news-feature__meta">
                   <time class="news-feature__date">{item.date}</time>
-                  <button class="news-feature__view-btn" type="button">뉴스 보기</button>
+                  {item.url ? (
+                    <a class="news-feature__view-btn" href={item.url} target="_blank" rel="noopener noreferrer">뉴스 보기</a>
+                  ) : (
+                    <button class="news-feature__view-btn" type="button" disabled>뉴스 보기</button>
+                  )}
                 </div>
               </div>
             </div>
