@@ -68,13 +68,6 @@ const seoTitle = `${entry.data.title} - ${hero.heading} | RoboSEasy`;
 const seoDesc = entry.data.description ?? hero.description;
 ---
 <BaseLayout title={seoTitle} description={seoDesc} path={currentPath}>
-  <section class="docs-hero">
-    <div class="docs-hero__container">
-      <h1 class="docs-hero__heading">{hero.heading}</h1>
-      <p class="docs-hero__description">{hero.description}</p>
-    </div>
-  </section>
-
   <div class="docs-layout">
     <Sidebar category={category} currentPath={currentPath} />
 

@@ -15,17 +15,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <style is:global>
   body.contact-page {
-    --bg-primary:   #ffffff;
-    --bg-secondary: #F8F7FB;
-    --bg-tertiary:  #F0EEF5;
-    --text-primary:   #1A0A3D;
-    --text-secondary: #4a4550;
-    --text-muted:     #8a8590;
-    --border:         rgba(8, 2, 28, 0.08);
-    --border-strong:  rgba(8, 2, 28, 0.14);
-    --accent-purple:  #6e48aa;
-    --accent-pink:    #ff69b4;
-    --accent-sky:     #87ceeb;
+    --bg-primary:   #171717;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary:  #242424;
+    --text-primary:   #eeeeee;
+    --text-secondary: #bcbcbc;
+    --text-muted:     #a3a3a3;
+    --border:         rgba(255, 255, 255, 0.08);
+    --border-strong:  rgba(255, 255, 255, 0.15);
+    --accent:         #7c3aed;
+    --accent-mid:     #7c3aed;
+    --accent-soft:    #a78bfa;
     background: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
@@ -40,8 +40,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* Page hero */
   body.contact-page .page-hero {
     background:
-      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(255,105,180,0.08), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(165,130,220,0.10), transparent 65%),
+      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(124,58,237,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(124,58,237,0.08), transparent 65%),
       var(--bg-primary);
     padding-top: 7rem;
     padding-bottom: clamp(24px, 3vh, 48px);
@@ -59,17 +59,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: 24px;
     align-items: stretch;
   }
-  @media (min-width: 1024px) {
-    body.contact-page .contact-grid { grid-template-columns: 5fr 7fr; }
-  }
 
   /* Info panel */
   body.contact-page .info-panel {
-    background: linear-gradient(155deg, #1A0A3D 0%, #2E0068 60%, #4C1594 120%);
-    color: #ffffff;
-    border-radius: 22px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 12px;
     padding: clamp(28px, 3.6vw, 44px);
-    box-shadow: 0 30px 60px -30px rgba(46, 0, 104, 0.35);
+    box-shadow: none;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -77,15 +74,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     height: 100%;
     box-sizing: border-box;
   }
-  body.contact-page .info-panel::before {
-    content: ""; position: absolute; right: -60px; top: -60px;
-    width: 240px; height: 240px; border-radius: 9999px;
-    background: radial-gradient(circle, rgba(255,105,180,0.22), transparent 65%);
-    pointer-events: none;
-  }
   body.contact-page .panel-eyebrow {
     font-family: 'Geist', system-ui, sans-serif;
-    color: var(--accent-pink);
+    color: rgba(255, 255, 255, 0.45);
     font-size: 0.78rem; font-weight: 700;
     letter-spacing: 0.28em; text-transform: uppercase;
     position: relative;
@@ -95,9 +86,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: clamp(2rem, 3.6vw, 2.8rem);
     line-height: 1.1; font-weight: 700;
     margin-top: 12px; position: relative;
+    color: #ffffff;
   }
   body.contact-page .panel-desc {
-    margin-top: 20px; color: rgba(255,255,255,0.75);
+    margin-top: 20px; color: #a3a3a3;
     line-height: 1.7; font-size: 0.95rem; position: relative;
   }
   body.contact-page .panel-spacer { flex: 1; min-height: 24px; }
@@ -105,26 +97,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .panel-info-row {
     display: grid; grid-template-columns: 80px 1fr;
     gap: 14px; align-items: start;
-    padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.10);
+    padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.08);
   }
   body.contact-page .panel-info-label {
-    color: var(--accent-pink);
+    color: rgba(255, 255, 255, 0.45);
     font-family: 'Geist', system-ui, sans-serif;
     font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; padding-top: 2px;
   }
   body.contact-page .panel-info-value {
-    color: rgba(255,255,255,0.88); font-size: 0.9rem; line-height: 1.55;
+    color: #ffffff; font-size: 0.9rem; line-height: 1.55;
   }
 
   /* Form card */
   body.contact-page .form-card {
-    background: #ffffff; border: 1px solid var(--border);
-    border-radius: 22px; padding: clamp(24px, 3vw, 40px);
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: 12px; padding: clamp(24px, 3vw, 40px);
     height: 100%; box-sizing: border-box;
   }
   body.contact-page .form-card h2 {
     font-family: 'Geist', 'Pretendard', system-ui, sans-serif;
-    font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin: 0;
+    font-size: 2.1rem; font-weight: 700; color: var(--text-primary); margin: 0;
   }
   body.contact-page .form-space { display: flex; flex-direction: column; gap: 20px; margin-top: 28px; }
   body.contact-page .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -134,18 +126,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Field */
   body.contact-page .field-label {
-    display: block; font-size: 0.85rem; font-weight: 600;
+    display: block; font-size: 1rem; font-weight: 600;
     color: var(--text-primary); margin-bottom: 8px;
   }
   body.contact-page .req::before {
-    content: "*"; color: var(--accent-pink); margin-right: 4px; font-weight: 700;
+    content: "*"; color: var(--accent); margin-right: 4px; font-weight: 700;
   }
   body.contact-page .input,
   body.contact-page .select,
   body.contact-page .textarea {
     width: 100%; padding: 12px 14px;
     background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px;
-    color: var(--text-primary); font-family: inherit; font-size: 0.92rem;
+    color: var(--text-primary); font-family: inherit; font-size: 1.05rem;
     transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
   }
@@ -154,8 +146,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .input:focus,
   body.contact-page .select:focus,
   body.contact-page .textarea:focus {
-    outline: none; border-color: var(--accent-pink);
-    background: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12);
+    outline: none; border-color: var(--accent);
+    background: var(--bg-secondary); box-shadow: 0 0 0 3px rgba(124,58,237,0.18);
   }
   body.contact-page .select {
     appearance: none;
@@ -166,7 +158,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
     background-color: var(--bg-secondary); padding-right: 36px; cursor: pointer;
   }
-  body.contact-page .select:focus { background-color: #ffffff; }
+  body.contact-page .select:focus { background-color: var(--bg-secondary); }
   body.contact-page .textarea { resize: vertical; min-height: 130px; }
 
   /* File drop */
@@ -175,12 +167,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 28px 20px; text-align: center; background: var(--bg-secondary);
     cursor: pointer; transition: border-color 0.25s, background 0.25s; display: block;
   }
-  body.contact-page .file-drop:hover { border-color: var(--accent-pink); background: #ffffff; }
-  body.contact-page .file-drop.drag-over { border-color: var(--accent-pink); background: rgba(255,105,180,0.05); }
+  body.contact-page .file-drop:hover { border-color: var(--accent); background: var(--bg-tertiary); }
+  body.contact-page .file-drop.drag-over { border-color: var(--accent); background: rgba(124,58,237,0.08); }
   body.contact-page .file-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
   body.contact-page .file-chip {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 10px 6px 12px; background: #ffffff;
+    padding: 6px 10px 6px 12px; background: var(--bg-tertiary);
     border: 1px solid var(--border); border-radius: 9999px;
     font-size: 0.82rem; color: var(--text-secondary);
   }
@@ -190,18 +182,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
     transition: color 0.2s, background 0.2s;
   }
-  body.contact-page .file-chip button:hover { color: var(--accent-pink); background: rgba(255,105,180,0.10); }
+  body.contact-page .file-chip button:hover { color: var(--accent); background: rgba(124,58,237,0.10); }
 
   /* Submit */
   body.contact-page .btn-submit {
     width: 100%; padding: 16px 20px;
-    background: linear-gradient(135deg, #ff69b4 0%, #d4509b 100%);
+    background: #7c3aed;
     color: #ffffff; font-weight: 700; font-size: 1rem;
-    border: none; border-radius: 12px; cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s;
-    box-shadow: 0 14px 30px -12px rgba(255,105,180,0.5);
+    border: none; border-radius: 8px; cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
   }
-  body.contact-page .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 18px 36px -12px rgba(255,105,180,0.65); }
+  body.contact-page .btn-submit:hover:not(:disabled) {
+    background: #a78bfa;
+  }
   body.contact-page .btn-submit:active:not(:disabled) { transform: translateY(0); }
   body.contact-page .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
 
@@ -212,23 +205,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   body.contact-page .purchase-eyebrow {
     font-family: 'Geist', system-ui, sans-serif;
-    color: var(--accent-purple); font-size: 0.72rem; font-weight: 700;
+    color: var(--accent); font-size: 0.72rem; font-weight: 700;
     letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px;
   }
 
   /* Quote cards */
   body.contact-page .quote-cards { display: flex; flex-direction: column; gap: 10px; }
   body.contact-page .quote-card {
-    background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 14px 12px;
+    background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
   }
-  body.contact-page .quote-card-head { display: grid; grid-template-columns: 28px 1fr 32px; align-items: center; gap: 10px; }
+  body.contact-page .quote-card-head { display: contents; }
   body.contact-page .row-no {
     width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
     border-radius: 9999px; background: var(--bg-tertiary);
     color: var(--text-secondary); font-family: 'Geist', system-ui, sans-serif; font-size: 0.78rem; font-weight: 600;
   }
   body.contact-page .item-select {
-    width: 100%; padding: 10px 36px 10px 12px;
+    width: 512px; flex: none; height: 38px; padding: 0 36px 0 12px;
     background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px;
     color: var(--text-primary); font-family: inherit; font-size: 0.88rem;
     appearance: none; cursor: pointer; box-sizing: border-box;
@@ -239,30 +233,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
     background-color: var(--bg-secondary);
   }
-  body.contact-page .item-select:focus { outline: none; border-color: var(--accent-pink); background-color: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12); }
+  body.contact-page .item-select:focus { outline: none; border-color: var(--accent); background-color: var(--bg-secondary); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
   body.contact-page .row-del {
     width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
     border-radius: 9999px; color: var(--text-muted); background: none; border: none; cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s; flex-shrink: 0; order: 10; margin-left: auto;
   }
-  body.contact-page .row-del:hover { color: var(--accent-pink); background: rgba(255,105,180,0.10); }
-  body.contact-page .quote-card-body {
-    margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px;
-  }
-  @media (min-width: 640px) { body.contact-page .quote-card-body { grid-template-columns: repeat(4, 1fr); } }
-  body.contact-page .qc-field { display: flex; flex-direction: column; gap: 4px; }
+  body.contact-page .row-del:hover { color: var(--accent); background: rgba(124,58,237,0.10); }
+  body.contact-page .quote-card-body { display: contents; }
+  body.contact-page .qc-field { display: flex; flex-direction: row; align-items: center; gap: 6px; flex-shrink: 0; margin-left: 20px; }
   body.contact-page .qc-label { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.04em; font-weight: 500; }
   body.contact-page .qc-value { font-family: 'Geist', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-size: 0.92rem; color: var(--text-primary); font-weight: 600; }
   body.contact-page .qc-input {
-    width: 100%; padding: 6px 10px;
+    width: 70px; height: 38px; padding: 0 8px;
     background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px;
     color: var(--text-primary); font-family: 'Geist', system-ui, sans-serif;
     font-variant-numeric: tabular-nums; font-size: 0.92rem; font-weight: 600; box-sizing: border-box;
   }
-  body.contact-page .qc-input:focus { outline: none; border-color: var(--accent-pink); background: #ffffff; box-shadow: 0 0 0 3px rgba(255,105,180,0.12); }
+  body.contact-page .qc-input:focus { outline: none; border-color: var(--accent); background: var(--bg-secondary); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
   body.contact-page .quote-totals {
-    margin-top: 12px; background: #ffffff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    margin-top: 12px; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
   }
   body.contact-page .quote-totals .row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.86rem; color: var(--text-secondary); }
   body.contact-page .quote-totals .row.final { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 12px; color: var(--text-primary); font-weight: 700; font-size: 1rem; }
@@ -270,31 +260,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   body.contact-page .quote-note { font-size: 0.74rem; color: var(--text-muted); margin-top: 6px; }
   body.contact-page .add-row-btn {
     display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
-    padding: 6px 12px; background: #ffffff; border: 1px dashed var(--border-strong);
+    padding: 6px 12px; background: var(--bg-secondary); border: 1px dashed var(--border-strong);
     border-radius: 9999px; color: var(--text-secondary); font-size: 0.82rem; cursor: pointer;
     transition: border-color 0.25s, color 0.25s;
   }
-  body.contact-page .add-row-btn:hover { border-color: var(--accent-pink); color: var(--accent-pink); }
+  body.contact-page .add-row-btn:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Result message */
   body.contact-page .result-msg {
     margin-top: 16px; padding: 14px 16px; border-radius: 10px;
     font-size: 0.9rem; font-weight: 500; display: none;
   }
-  body.contact-page .result-msg.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; display: block; }
-  body.contact-page .result-msg.error   { background: #fff1f2; border: 1px solid #fecdd3; color: #9f1239; display: block; }
+  body.contact-page .result-msg.success { background: rgba(22,101,52,0.15); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; display: block; }
+  body.contact-page .result-msg.error   { background: rgba(159,18,57,0.15); border: 1px solid rgba(248,113,113,0.3); color: #f87171; display: block; }
 
   /* Info box */
   body.contact-page .info-box {
-    background: linear-gradient(155deg, #1A0A3D 0%, #2E0068 60%, #4C1594 120%);
-    border: 1px solid rgba(255,255,255,0.10); border-radius: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid rgba(255,255,255,0.10); border-radius: 12px;
     color: #ffffff; position: relative; overflow: hidden;
-    box-shadow: 0 30px 60px -30px rgba(46, 0, 104, 0.35); margin-top: 32px;
+    margin-top: 32px;
   }
   body.contact-page .info-box::before {
     content: ""; position: absolute; right: -80px; top: -80px;
     width: 280px; height: 280px; border-radius: 9999px;
-    background: radial-gradient(circle, rgba(255,105,180,0.18), transparent 65%);
+    background: radial-gradient(circle, rgba(124,58,237,0.20), transparent 65%);
     pointer-events: none;
   }
   body.contact-page .info-box > div { position: relative; z-index: 1; }
@@ -303,7 +293,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   @media (min-width: 1024px) { body.contact-page .info-box-inner { grid-template-columns: 6fr 3fr 3fr; } }
   body.contact-page .info-row { color: rgba(255,255,255,0.78); font-size: 0.82rem; line-height: 1.6; }
-  body.contact-page .info-label { color: var(--accent-pink); min-width: 84px; display: inline-block; font-weight: 600; }
+  body.contact-page .info-label { color: var(--accent-soft); min-width: 84px; display: inline-block; font-weight: 600; }
   body.contact-page .info-link { color: rgba(255,255,255,0.78); text-decoration: none; }
   body.contact-page .info-link:hover { color: #ffffff; }
   body.contact-page .info-box .text-primary   { color: #ffffff; }
@@ -322,6 +312,94 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: 'Geist','Pretendard',system-ui,sans-serif; font-weight: 600; font-size: 0.875rem;
   }
   body.contact-page .info-ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+
+  /* 견적서 미리보기/다운로드 버튼 */
+  body.contact-page .btn-quote-action {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 9999px;
+    font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; font-family: inherit;
+  }
+  body.contact-page .btn-preview-quote {
+    background: #ffffff; border: 1.5px solid var(--border-strong); color: var(--text-secondary);
+  }
+  body.contact-page .btn-preview-quote:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
+  body.contact-page .btn-download-quote {
+    background: linear-gradient(135deg, #6e48aa, #4C1594);
+    color: #ffffff; border: none;
+    box-shadow: 0 8px 20px -8px rgba(110,72,170,0.5);
+  }
+  body.contact-page .btn-download-quote:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(110,72,170,0.6); }
+  body.contact-page .btn-download-quote:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+  /* Modal overlay */
+  body.contact-page .quote-modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.55); overflow-y: auto;
+    padding: 40px 20px; align-items: flex-start; justify-content: center;
+  }
+  body.contact-page .quote-modal-overlay.open { display: flex; }
+  body.contact-page .quote-modal-box {
+    background: #fff; border-radius: 16px; padding: 32px; width: 100%; max-width: 720px;
+    position: relative; margin: auto;
+  }
+  body.contact-page .modal-close-btn {
+    position: absolute; top: 14px; right: 14px;
+    width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9999px; border: none; background: var(--bg-tertiary);
+    color: var(--text-secondary); cursor: pointer; font-size: 1rem; font-family: inherit;
+    transition: background 0.2s, color 0.2s;
+  }
+  body.contact-page .modal-close-btn:hover { background: rgba(255,105,180,0.15); color: var(--accent-pink); }
+  body.contact-page .modal-footer {
+    display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; flex-wrap: wrap;
+  }
+  body.contact-page .btn-print {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 9999px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: #fff; border: 1.5px solid var(--border-strong); color: var(--text-secondary);
+    transition: border-color 0.2s, color 0.2s; font-family: inherit;
+  }
+  body.contact-page .btn-print:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
+  body.contact-page .btn-excel {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 9999px; font-size: 0.84rem; font-weight: 600; cursor: pointer;
+    background: linear-gradient(135deg, #6e48aa, #4C1594); color: #fff; border: none;
+    box-shadow: 0 8px 20px -8px rgba(110,72,170,0.5); font-family: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  body.contact-page .btn-excel:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(110,72,170,0.6); }
+  body.contact-page .btn-excel:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+  @media print {
+    body * { visibility: hidden !important; }
+    #quotePrintArea, #quotePrintArea * { visibility: visible !important; }
+    #quotePrintArea { position: fixed; top: 0; left: 0; width: 100%; background: white; padding: 40px; z-index: 99999; box-sizing: border-box; }
+  }
+
+  @media (min-width: 768px) {
+    body.contact-page .panel-spacer { display: none; }
+    body.contact-page .panel-info-block {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 24px;
+      gap: 0;
+    }
+    body.contact-page .panel-info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    body.contact-page .panel-info-row:not(:last-child) {
+      padding-right: 24px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    body.contact-page .panel-info-row:not(:first-child) {
+      padding-left: 24px;
+    }
+  }
 </style>
 
 <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
@@ -348,7 +426,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
             <div class="panel-info-row">
               <span class="panel-info-label">Address</span>
-              <span class="panel-info-value keep-all">대한민국 서울특별시 동작구<br />상도로 15길 143, 창건빌딩 403호</span>
+              <span class="panel-info-value keep-all">서울 관악구 신림동 532-35, 그린스타 3층</span>
             </div>
             <div class="panel-info-row">
               <span class="panel-info-label">Phone</span>
@@ -392,8 +470,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
             <!-- 소속 -->
             <div>
-              <label class="field-label" for="f-org">소속</label>
-              <input id="f-org" name="org" type="text" class="input" placeholder="회사명 / 기관명 / 학교명 등" />
+              <label class="field-label" id="f-org-label" for="f-org">소속</label>
+              <input id="f-org" name="org" type="text" class="input" placeholder="회사명 / 기관명 / 학교명 / 개인 등" />
             </div>
 
             <!-- 문의 종류 -->
@@ -402,6 +480,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <select id="f-type" name="type" class="select" required>
                 <option value="" disabled selected>문의 종류를 선택해 주세요</option>
                 <option value="purchase">로봇 구매 문의</option>
+                <option value="as">AS 문의</option>
                 <option value="corp_edu">기업 교육 문의</option>
                 <option value="workshop">워크샵 문의</option>
                 <option value="etc">기타 문의</option>
@@ -444,12 +523,49 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     <p class="quote-note">※ 부가세는 일의 자리에서 반올림 (10원 단위)</p>
                   </div>
                 </div>
+
+                <!-- 견적서 미리보기 / 다운로드 -->
+                <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+                  <button type="button" id="previewQuoteBtn" class="btn-quote-action btn-preview-quote">
+                    <iconify-icon icon="solar:eye-linear" width="16"></iconify-icon>
+                    견적서 미리보기
+                  </button>
+                  <button type="button" id="downloadQuoteBtn" class="btn-quote-action btn-download-quote">
+                    <iconify-icon icon="solar:download-minimalistic-linear" width="16"></iconify-icon>
+                    견적서 다운로드
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- AS 문의 전용: 구매자 여부 + 구매 날짜 -->
+            <div id="asBlock" style="display:none;">
+              <div class="purchase-block">
+                <div class="purchase-eyebrow" style="margin-bottom:12px;">AS · 구매자 정보</div>
+                <div class="form-row-2">
+                  <div>
+                    <label class="field-label req" for="f-is-buyer">구매자 여부</label>
+                    <select id="f-is-buyer" name="is_buyer" class="select">
+                      <option value="" disabled selected>선택해 주세요</option>
+                      <option value="yes">네</option>
+                      <option value="no">아니오</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="field-label req" for="f-purchase-month">구매 날짜</label>
+                    <input id="f-purchase-month" name="purchase_month" type="month" class="input" required />
+                  </div>
+                </div>
               </div>
             </div>
 
             <!-- 파일 첨부 -->
             <div>
-              <label class="field-label">파일 첨부</label>
+              <label class="field-label" id="fileSectionLabel">파일 첨부</label>
+              <div id="bizRegNote" style="display:none; align-items:center; gap:6px; font-size:0.82rem; color:var(--accent-pink); margin-bottom:8px; font-weight:500;">
+                <iconify-icon icon="solar:info-circle-linear" width="14" style="flex-shrink:0;"></iconify-icon>
+                사업자 등록증 사본 업로드해주세요.
+              </div>
               <label for="f-files" class="file-drop" id="fileDrop">
                 <iconify-icon icon="solar:upload-linear" width="22" style="color:var(--text-muted);"></iconify-icon>
                 <p style="margin-top:4px;font-size:0.875rem;color:var(--text-secondary);">
@@ -463,8 +579,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
             <!-- 문의 내용 -->
             <div>
-              <label class="field-label req" for="f-message">문의 내용</label>
-              <textarea id="f-message" name="message" class="textarea" placeholder="문의 내용을 입력해주세요" required></textarea>
+              <label class="field-label" for="f-message">문의 내용</label>
+              <textarea id="f-message" name="message" class="textarea" placeholder="문의 내용을 입력해주세요"></textarea>
             </div>
 
             <!-- 제출 -->
@@ -480,6 +596,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   </div>
 </main>
+
+<!-- 견적서 미리보기 모달 -->
+<div id="quoteModalOverlay" class="quote-modal-overlay" role="dialog" aria-modal="true" aria-label="견적서 미리보기">
+  <div class="quote-modal-box">
+    <button id="quoteModalClose" class="modal-close-btn" aria-label="닫기">
+      <iconify-icon icon="solar:close-circle-bold" width="22"></iconify-icon>
+    </button>
+    <h3 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0 0 20px 0; padding-right:40px;">
+      <iconify-icon icon="solar:document-text-linear" width="18" style="vertical-align:middle; margin-right:6px;"></iconify-icon>
+      견적서 미리보기
+    </h3>
+    <div id="quotePrintArea">
+      <div id="quotePreviewContent" style="font-family:'Pretendard',system-ui,sans-serif;"></div>
+    </div>
+  </div>
+</div>
 
 <script>
   const ITEMS = [
@@ -503,40 +635,65 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     { name: '조립서비스', price: 90000 },
   ];
 
-  /* Purchase block toggle */
-  const typeSelect = document.getElementById('f-type');
-  const purchaseBlock = document.getElementById('purchaseBlock');
+  const fmt = n => (n || 0).toLocaleString('ko-KR');
+  const pad = n => String(n).padStart(2, '0');
+
+  const typeSelect       = document.getElementById('f-type');
+  const purchaseBlock    = document.getElementById('purchaseBlock');
+  const asBlock          = document.getElementById('asBlock');
+  const isBuyerSelect    = document.getElementById('f-is-buyer');
+  const wrap             = document.getElementById('quoteRows');
+  const orgLabel         = document.getElementById('f-org-label');
+  const orgInput         = document.getElementById('f-org');
+  const fileSectionLabel = document.getElementById('fileSectionLabel');
+  const bizRegNote       = document.getElementById('bizRegNote');
+  const modalOverlay     = document.getElementById('quoteModalOverlay');
+  const previewContent   = document.getElementById('quotePreviewContent');
+
+  /* ─── Purchase / AS block toggle ─── */
   typeSelect.addEventListener('change', () => {
     const isPurchase = typeSelect.value === 'purchase';
+    const isAS = typeSelect.value === 'as';
     purchaseBlock.style.display = isPurchase ? 'block' : 'none';
+    asBlock.style.display = isAS ? 'block' : 'none';
     document.getElementById('f-shipto').required = isPurchase;
-    if (isPurchase && document.getElementById('quoteRows').children.length === 0) addRow();
+    isBuyerSelect.required = isAS;
+
+    if (isPurchase) {
+      orgLabel.classList.add('req');
+      orgInput.required = true;
+      fileSectionLabel.classList.add('req');
+      bizRegNote.style.display = 'flex';
+    } else {
+      orgLabel.classList.remove('req');
+      orgInput.required = false;
+      fileSectionLabel.classList.remove('req');
+      bizRegNote.style.display = 'none';
+    }
+
+    if (isPurchase && wrap.children.length === 0) addRow();
   });
 
-  /* Quote cards */
-  const wrap = document.getElementById('quoteRows');
-  const fmt = n => (n || 0).toLocaleString('ko-KR');
+  /* ─── Quote cards ─── */
   const itemOptions = ['<option value="" disabled selected>품목을 선택해 주세요</option>']
-    .concat(ITEMS.map((it, i) => `<option value="${i}">${it.name}</option>`)).join('');
+    .concat(ITEMS.map((it, i) => '<option value="' + i + '">' + it.name + '</option>')).join('');
 
   function addRow() {
     const idx = wrap.children.length + 1;
     const card = document.createElement('div');
     card.className = 'quote-card';
-    card.innerHTML = `
-      <div class="quote-card-head">
-        <span class="row-no">${idx}</span>
-        <select class="item-select q-item">${itemOptions}</select>
-        <button type="button" class="row-del" aria-label="행 삭제">
-          <iconify-icon icon="solar:trash-bin-trash-linear" width="16"></iconify-icon>
-        </button>
-      </div>
-      <div class="quote-card-body">
-        <div class="qc-field"><span class="qc-label">수량</span><input type="number" min="1" step="1" class="qc-input q-qty" placeholder="0" /></div>
-        <div class="qc-field"><span class="qc-label">단가</span><span class="qc-value q-unit">—</span></div>
-        <div class="qc-field"><span class="qc-label">공급가액</span><span class="qc-value q-supply">—</span></div>
-        <div class="qc-field"><span class="qc-label">부가세</span><span class="qc-value q-vat">—</span></div>
-      </div>`;
+    card.innerHTML =
+      '<div class="quote-card-head">' +
+        '<span class="row-no">' + idx + '</span>' +
+        '<select class="item-select q-item">' + itemOptions + '</select>' +
+        '<button type="button" class="row-del" aria-label="행 삭제"><iconify-icon icon="solar:trash-bin-trash-linear" width="16"></iconify-icon></button>' +
+      '</div>' +
+      '<div class="quote-card-body">' +
+        '<div class="qc-field"><span class="qc-label">수량</span><input type="number" min="1" step="1" class="qc-input q-qty" placeholder="0" /></div>' +
+        '<div class="qc-field"><span class="qc-label">단가</span><span class="qc-value q-unit">—</span></div>' +
+        '<div class="qc-field"><span class="qc-label">공급가액</span><span class="qc-value q-supply">—</span></div>' +
+        '<div class="qc-field"><span class="qc-label">부가세</span><span class="qc-value q-vat">—</span></div>' +
+      '</div>';
     wrap.appendChild(card);
     const sel = card.querySelector('.q-item');
     const qty = card.querySelector('.q-qty');
@@ -562,9 +719,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const unit = i >= 0 ? ITEMS[i].price : 0;
       const supply = qty * unit;
       const vat = unit && qty ? Math.round((supply * 0.1) / 10) * 10 : 0;
-      card.querySelector('.q-unit').textContent   = unit   ? `${fmt(unit)} 원`   : '—';
-      card.querySelector('.q-supply').textContent = supply ? `${fmt(supply)} 원` : '—';
-      card.querySelector('.q-vat').textContent    = (unit && qty) ? `${fmt(vat)} 원` : '—';
+      card.querySelector('.q-unit').textContent   = unit   ? fmt(unit)   + ' 원' : '—';
+      card.querySelector('.q-supply').textContent = supply ? fmt(supply) + ' 원' : '—';
+      card.querySelector('.q-vat').textContent    = (unit && qty) ? fmt(vat) + ' 원' : '—';
       supplySum += supply; vatSum += vat;
     });
     document.getElementById('qSubtotal').textContent = fmt(supplySum);
@@ -574,7 +731,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   document.getElementById('addRowBtn').addEventListener('click', addRow);
 
-  /* File upload */
+  /* ─── File upload ─── */
   const fileInput = document.getElementById('f-files');
   const fileList  = document.getElementById('fileList');
   const fileDrop  = document.getElementById('fileDrop');
@@ -586,10 +743,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     uploaded.forEach((f, i) => {
       const chip = document.createElement('span');
       chip.className = 'file-chip';
-      chip.innerHTML = `
-        <iconify-icon icon="solar:document-linear" width="14"></iconify-icon>
-        <span>${f.name} <span class="text-muted">(${(f.size/1024).toFixed(1)} KB)</span></span>
-        <button type="button" aria-label="삭제"><iconify-icon icon="solar:close-circle-linear" width="14"></iconify-icon></button>`;
+      chip.innerHTML =
+        '<iconify-icon icon="solar:document-linear" width="14"></iconify-icon>' +
+        '<span>' + f.name + ' <span class="text-muted">(' + (f.size/1024).toFixed(1) + ' KB)</span></span>' +
+        '<button type="button" aria-label="삭제"><iconify-icon icon="solar:close-circle-linear" width="14"></iconify-icon></button>';
       chip.querySelector('button').addEventListener('click', () => { uploaded.splice(i, 1); refreshFileList(); });
       fileList.appendChild(chip);
     });
@@ -610,46 +767,184 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   ['dragleave','drop'].forEach(ev => fileDrop.addEventListener(ev, e => { e.preventDefault(); fileDrop.classList.remove('drag-over'); }));
   fileDrop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
 
-  /* Form submit → /api/contact */
+  /* ─── Quote data collection ─── */
+  function collectQuoteItems() {
+    const items = [];
+    let supplySum = 0, vatSum = 0;
+    Array.from(wrap.children).forEach(card => {
+      const sel = card.querySelector('.q-item');
+      const qty = parseInt(card.querySelector('.q-qty').value, 10) || 0;
+      const idx = sel.value !== '' ? parseInt(sel.value, 10) : -1;
+      if (idx < 0 || qty <= 0) return;
+      const unit = ITEMS[idx].price;
+      const supply = qty * unit;
+      const vat = Math.round((supply * 0.1) / 10) * 10;
+      supplySum += supply; vatSum += vat;
+      items.push({ name: ITEMS[idx].name, qty, unitPrice: unit, supply, vat });
+    });
+    return { items, supplySum, vatSum };
+  }
+
+  /* ─── Preview modal ─── */
+  function buildPreviewHtml() {
+    const name   = document.getElementById('f-name').value.trim() || '—';
+    const title  = document.getElementById('f-title').value.trim();
+    const email  = document.getElementById('f-email').value.trim() || '—';
+    const phone  = document.getElementById('f-phone').value.trim() || '—';
+    const org    = orgInput.value.trim() || '—';
+    const shipto = document.getElementById('f-shipto').value.trim() || '—';
+
+    const now = new Date();
+    const dateStr = now.getFullYear() + '.' + pad(now.getMonth()+1) + '.' + pad(now.getDate());
+    const quoteNo = 'Q-' + now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate()) + '-' + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds());
+
+    const { items, supplySum, vatSum } = collectQuoteItems();
+    const finalTotal = supplySum + vatSum;
+
+    const itemRowsHtml = items.length > 0 ? items.map((it, i) =>
+      '<tr style="background:' + (i % 2 === 1 ? '#f9f9fb' : '#fff') + ';">' +
+        '<td style="padding:8px 10px;text-align:center;border-bottom:1px solid #e8e5f5;">' + (i+1) + '</td>' +
+        '<td style="padding:8px 10px;border-bottom:1px solid #e8e5f5;">' + it.name + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.qty.toLocaleString('ko-KR') + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.unitPrice.toLocaleString('ko-KR') + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.supply.toLocaleString('ko-KR') + '</td>' +
+        '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.vat.toLocaleString('ko-KR') + '</td>' +
+      '</tr>').join('') :
+      '<tr><td colspan="6" style="padding:14px;text-align:center;color:#888;font-size:13px;">품목을 추가해 주세요.</td></tr>';
+
+    return (
+      '<div style="text-align:center;margin-bottom:20px;">' +
+        '<div style="font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#6e48aa;margin-bottom:4px;">ROBOSEASY · 로보시지</div>' +
+        '<h2 style="font-size:22px;font-weight:700;color:#1a0a3d;margin:0 0 4px 0;">견 &nbsp;&nbsp; 적 &nbsp;&nbsp; 서</h2>' +
+        '<p style="font-size:12px;color:#888;margin:0;">견적번호: ' + quoteNo + '&nbsp;&nbsp;|&nbsp;&nbsp;작성일: ' + dateStr + '</p>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">' +
+        '<div style="border:1px solid #e8e5f5;border-radius:8px;padding:14px;">' +
+          '<div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6e48aa;margin-bottom:8px;">공급자</div>' +
+          '<div style="font-size:13px;font-weight:700;color:#1a0a3d;margin-bottom:4px;">로보시지 (RoboSEasy)</div>' +
+          '<div style="font-size:12px;color:#555;line-height:1.65;">서울 관악구 신림동 532-35, 그린스타 3층<br/>roboseasy@gmail.com<br/>010-3479-7777</div>' +
+        '</div>' +
+        '<div style="border:1px solid #e8e5f5;border-radius:8px;padding:14px;">' +
+          '<div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6e48aa;margin-bottom:8px;">공급받는자</div>' +
+          '<div style="font-size:13px;font-weight:700;color:#1a0a3d;margin-bottom:4px;">' + org + '</div>' +
+          '<div style="font-size:12px;color:#555;line-height:1.65;">' + name + (title ? ' (' + title + ')' : '') + '<br/>' + email + '<br/>' + phone + '<br/>배송지: ' + shipto + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e8e5f5;">' +
+        '<thead><tr style="background:#1a0a3d;color:#fff;">' +
+          '<th style="padding:9px 10px;text-align:center;font-weight:600;width:38px;">No.</th>' +
+          '<th style="padding:9px 10px;text-align:left;font-weight:600;">품목</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:50px;">수량</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:78px;">단가</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:84px;">공급가액</th>' +
+          '<th style="padding:9px 10px;text-align:right;font-weight:600;width:72px;">부가세</th>' +
+        '</tr></thead>' +
+        '<tbody>' + itemRowsHtml + '</tbody>' +
+      '</table>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e8e5f5;border-top:none;">' +
+        '<tr><td style="padding:8px 12px;color:#555;border-bottom:1px solid #e8e5f5;">공급가액계</td><td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">' + supplySum.toLocaleString('ko-KR') + ' 원</td></tr>' +
+        '<tr><td style="padding:8px 12px;color:#555;border-bottom:1px solid #e8e5f5;">부가세계</td><td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">' + vatSum.toLocaleString('ko-KR') + ' 원</td></tr>' +
+        '<tr style="background:#fffff2;"><td style="padding:10px 12px;font-weight:700;font-size:14px;color:#1a0a3d;">최종 견적 (부가세 포함)</td><td style="padding:10px 12px;font-weight:700;font-size:14px;color:#c00000;text-align:right;">' + finalTotal.toLocaleString('ko-KR') + ' 원</td></tr>' +
+      '</table>' +
+      '<p style="font-size:11px;color:#888;margin:8px 0 0 0;">※ 부가세는 일의 자리에서 반올림 (10원 단위) · 본 견적서는 참고용이며, 최종 견적은 담당자 확인 후 안내드립니다.</p>'
+    );
+  }
+
+  document.getElementById('previewQuoteBtn').addEventListener('click', () => {
+    previewContent.innerHTML = buildPreviewHtml();
+    modalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  document.getElementById('quoteModalClose').addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function closeModal() {
+    modalOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function handleExcelDownload(btn) {
+    const name = document.getElementById('f-name').value.trim();
+    const { items, supplySum, vatSum } = collectQuoteItems();
+    const payload = {
+      name,
+      title:     document.getElementById('f-title').value.trim() || undefined,
+      email:     document.getElementById('f-email').value.trim(),
+      phone:     document.getElementById('f-phone').value.trim(),
+      org:       orgInput.value.trim() || undefined,
+      shipto:    document.getElementById('f-shipto').value.trim() || undefined,
+      items:     items.length > 0 ? items : undefined,
+      supplySum: supplySum || undefined,
+      vatSum:    vatSum || undefined,
+      total:     (supplySum + vatSum) || undefined,
+    };
+    const origHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = '생성 중...';
+    try {
+      const res = await fetch('/api/quote-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) { alert('Excel 생성 중 오류가 발생했습니다.'); return; }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const now = new Date();
+      a.href = url;
+      a.download = '견적서_' + (name || '로보시지') + '_' + now.getFullYear() + pad(now.getMonth()+1) + pad(now.getDate()) + '.xlsx';
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    } catch {
+      alert('Excel 다운로드 중 오류가 발생했습니다.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = origHTML;
+    }
+  }
+
+  document.getElementById('downloadQuoteBtn').addEventListener('click', function() { handleExcelDownload(this); });
+
+  /* ─── Form submit ─── */
   document.getElementById('contactForm').addEventListener('submit', async e => {
     e.preventDefault();
 
-    for (const id of ['f-name', 'f-email', 'f-phone', 'f-type', 'f-message']) {
+    for (const id of ['f-name', 'f-email', 'f-phone', 'f-type']) {
       const el = document.getElementById(id);
       if (!el.value.trim()) { el.focus(); showResult('error', '필수 항목을 모두 입력해 주세요.'); return; }
     }
-    if (typeSelect.value === 'purchase' && !document.getElementById('f-shipto').value.trim()) {
-      document.getElementById('f-shipto').focus();
-      showResult('error', '배송 주소를 입력해 주세요.'); return;
+
+    if (typeSelect.value === 'purchase') {
+      if (!orgInput.value.trim()) {
+        orgInput.focus(); showResult('error', '소속(회사명/기관명)을 입력해 주세요.'); return;
+      }
+      if (!document.getElementById('f-shipto').value.trim()) {
+        document.getElementById('f-shipto').focus();
+        showResult('error', '배송 주소를 입력해 주세요.'); return;
+      }
+      if (uploaded.length === 0) {
+        document.getElementById('fileDrop').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showResult('error', '사업자 등록증 사본을 업로드해 주세요.'); return;
+      }
     }
 
     const btn = document.getElementById('submitBtn');
     btn.disabled = true; btn.textContent = '전송 중...';
     clearResult();
 
-    /* Collect quote items */
-    const items = [];
-    let supplySum = 0, vatSum = 0;
-    if (typeSelect.value === 'purchase') {
-      Array.from(wrap.children).forEach(card => {
-        const sel = card.querySelector('.q-item');
-        const qty = parseInt(card.querySelector('.q-qty').value, 10) || 0;
-        const idx = sel.value !== '' ? parseInt(sel.value, 10) : -1;
-        if (idx < 0 || qty <= 0) return;
-        const unit = ITEMS[idx].price;
-        const supply = qty * unit;
-        const vat = Math.round((supply * 0.1) / 10) * 10;
-        supplySum += supply; vatSum += vat;
-        items.push({ name: ITEMS[idx].name, qty, unitPrice: unit, supply, vat });
-      });
-    }
+    const { items, supplySum, vatSum } = typeSelect.value === 'purchase' ? collectQuoteItems() : { items: [], supplySum: 0, vatSum: 0 };
 
     const payload = {
       name:      document.getElementById('f-name').value.trim(),
       title:     document.getElementById('f-title').value.trim() || undefined,
       email:     document.getElementById('f-email').value.trim(),
       phone:     document.getElementById('f-phone').value.trim(),
-      org:       document.getElementById('f-org').value.trim() || undefined,
+      org:       orgInput.value.trim() || undefined,
+      isBuyer:        typeSelect.value === 'as' ? isBuyerSelect.value : undefined,
+      purchaseMonth:  typeSelect.value === 'as' ? (document.getElementById('f-purchase-month').value || undefined) : undefined,
       type:      typeSelect.value,
       message:   document.getElementById('f-message').value.trim(),
       shipto:    document.getElementById('f-shipto')?.value.trim() || undefined,
@@ -670,7 +965,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         showResult('success', '문의가 접수되었습니다. 빠르게 답변드리겠습니다.');
         document.getElementById('contactForm').reset();
         wrap.innerHTML = ''; uploaded = []; refreshFileList();
-        purchaseBlock.style.display = 'none'; // 제출 후 초기화
+        purchaseBlock.style.display = 'none';
+        orgLabel.classList.remove('req'); orgInput.required = false;
+        fileSectionLabel.classList.remove('req'); bizRegNote.style.display = 'none';
+        asBlock.style.display = 'none';
+        isBuyerSelect.value = '';
+        document.getElementById('f-purchase-month').value = '';
         recalc();
       } else {
         showResult('error', json.error ?? '전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
@@ -684,7 +984,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   function showResult(type, msg) {
     const el = document.getElementById('resultMsg');
-    el.className = `result-msg ${type}`; el.textContent = msg;
+    el.className = 'result-msg ' + type; el.textContent = msg;
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
   function clearResult() {

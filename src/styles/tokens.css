@@ -1,24 +1,105 @@
-/* Pretendard 웹폰트 */
+/* Geist — English display */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+
+/* Pretendard — Korean body */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
-/* 디자인 토큰 — 색상, 폰트 웨이트 */
 :root {
-    --color-logo: #2E0068;
-    --color-primary: #08021C;
-    --color-secondary: #4C1594;
-    --color-tertiary: #C2BCC3;
-    --color-background: #EFEFEF;
-    --color-background-dark: rgba(187, 187, 195, 0.75);
-    --color-primary-75: rgba(8, 2, 28, 0.75);
-    --color-secondary-75: rgba(76, 21, 148, 0.75);
-    --color-tertiary-90: rgba(194, 188, 195, 0.90);
+  /* ─── Obsidian Dark Palette ─── */
+  --color-abyss: #171717;
+  --color-surface: #1e1e1e;
+  --color-surface-2: #242424;
+  --color-graphite: #3f3f3f;
 
-    --fw-thin: 100;
-    --fw-light: 300;
-    --fw-regular: 400;
-    --fw-medium: 500;
-    --fw-semibold: 600;
-    --fw-bold: 700;
-    --fw-extrabold: 800;
-    --fw-black: 900;
+  /* Text */
+  --color-bright-gray: #eeeeee;
+  --color-medium-gray: #bcbcbc;
+  --color-muted-gray: #a3a3a3;
+
+  /* Accent */
+  --color-amethyst: #7c3aed;
+  --color-lavender: #a78bfa;
+  --color-tag-bg: rgba(138, 92, 245, 0.15);
+
+  /* Utility */
+  --color-white: #ffffff;
+  --color-success: #4ade80;
+  --color-warning: #facc15;
+  --color-error: #f87171;
+
+  /* ─── Legacy aliases (used across other pages) ─── */
+  --color-signal-violet: #7c3aed;
+  --color-ink: #eeeeee;
+  --color-slate: #bcbcbc;
+  --color-ash-border: rgba(255, 255, 255, 0.08);
+  --color-chalk: #242424;
+  --color-pure-white: #ffffff;
+  --color-soft-amethyst: #a78bfa;
+  --color-lavender-mist: rgba(167, 139, 250, 0.15);
+  --color-carbon: #eeeeee;
+  --surface-page: #171717;
+  --surface-card: #1e1e1e;
+
+  /* ─── Fonts ─── */
+  --font-display: 'Geist', 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Pretendard', 'Geist', ui-sans-serif, system-ui, sans-serif;
+
+  /* ─── Font Weights ─── */
+  --fw-thin: 100;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+  --fw-black: 900;
+
+  /* ─── Type Scale ─── */
+  --text-caption: 12px;
+  --text-body-sm: 14px;
+  --text-body: 16px;
+  --text-subheading: 18px;
+  --text-heading-sm: 24px;
+  --text-heading: 28px;
+  --text-heading-lg: 36px;
+  --text-display: 60px;
+  --tracking-heading-lg: -0.72px;
+  --tracking-display: -1.2px;
+
+  /* ─── Spacing ─── */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+  --spacing-168: 168px;
+
+  /* ─── Layout ─── */
+  --page-max-width: 1120px;
+  --section-gap: 96px;
+
+  /* ─── Border Radius ─── */
+  --radius-tags: 9999px;
+  --radius-cards: 12px;
+  --radius-images: 12px;
+  --radius-inputs: 8px;
+  --radius-buttons: 8px;
+  --radius-feature-cards: 12px;
+
+  /* ─── Shadows (Obsidian inset-glow pattern) ─── */
+  --shadow-subtle: rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  --shadow-subtle-2: rgba(255, 255, 255, 0.10) 0px 0px 0px 1px inset;
+  --shadow-subtle-3: rgba(255, 255, 255, 0.10) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
+  --shadow-xl: rgba(0, 0, 0, 0.4) 0px 8px 32px 4px;
+  --shadow-xl-2: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
 }

@@ -35,7 +35,7 @@ interface PrimaryButton {
 
 interface OSColumn {
   key: 'windows' | 'linux' | 'mac';
-  iconClass: string;
+  iconName: string;
   iconAlt: string;
   buttons: PrimaryButton[];
   rows: VariantRow[];
@@ -68,7 +68,7 @@ const hrefFor = (key: string) => defaultVersion.assets[key] ?? '#';
 const columns: OSColumn[] = [
   {
     key: 'windows',
-    iconClass: 'fa-brands fa-windows',
+    iconName: 'simple-icons:windows',
     iconAlt: 'Windows',
     buttons: [{ primary: 'Windows', secondary: 'Windows 10, 11', k: 'windows.primary' }],
     rows: [
@@ -97,7 +97,7 @@ const columns: OSColumn[] = [
   },
   {
     key: 'linux',
-    iconClass: 'fa-brands fa-linux',
+    iconName: 'simple-icons:linux',
     iconAlt: 'Linux',
     // 사용자 요청으로 .rpm 메인 버튼 제거. variant row 'rpm'은 향후 빌드 대비 유지.
     buttons: [{ primary: '.deb', secondary: 'Debian, Ubuntu', k: 'linux.deb.x64' }],
@@ -134,7 +134,7 @@ const columns: OSColumn[] = [
   },
   {
     key: 'mac',
-    iconClass: 'fa-brands fa-apple',
+    iconName: 'simple-icons:apple',
     iconAlt: 'macOS',
     buttons: [{ primary: 'Mac', secondary: 'macOS 12.0+', k: 'mac.dmg.universal' }],
     rows: [
@@ -180,7 +180,7 @@ const versionAssetsJson = JSON.stringify(
     {columns.map((col) => (
       <div class={`studio-download__column studio-download__column--${col.key}`}>
         <div class="studio-download__icon" aria-hidden="true">
-          <i class={col.iconClass}></i>
+          <iconify-icon icon={col.iconName} width="80" height="80"></iconify-icon>
         </div>
 
         <div class="studio-download__buttons">
@@ -191,7 +191,7 @@ const versionAssetsJson = JSON.stringify(
               data-asset-key={btn.k}
               aria-label={`${col.iconAlt} ${btn.primary} 다운로드`}
             >
-              <span class="studio-download__btn-arrow"><i class="fa-solid fa-down-long"></i></span>
+              <span class="studio-download__btn-arrow"><iconify-icon icon="solar:alt-arrow-down-bold" width="22" height="22"></iconify-icon></span>
               <span class="studio-download__btn-primary">{btn.primary}</span>
               <span class="studio-download__btn-secondary">{btn.secondary}</span>
             </a>
