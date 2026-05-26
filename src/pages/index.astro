@@ -1,225 +1,377 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MainBanner from '../components/MainBanner.astro';
+import CircuitBackground from '../components/CircuitBackground.astro';
 import '../styles/pages/home.css';
 
 const title = 'RoboSEasy | 로보시지 - Robot is Easy, 이게 로보시지';
 const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제품·교육·기술을 통해 전국민의 Physical AI 접근성 향상에 기여합니다';
+
+const newsItems = [
+  {
+    title: '현대의왕연구소에서 열린 Physical AI 강연',
+    date: '2026.05.13',
+    url: null,
+    image: null,
+  },
+  {
+    title: '한성대, 양팔로봇 활용 Physical AI 해커톤 대회',
+    date: '2026.02.09',
+    url: null,
+    image: '/img/news-hansung-hackathon.jpg',
+  },
+];
 ---
 <BaseLayout title={title} description={description} path="/">
-  <MainBanner />
+  <div class="hero-viewport">
+    <!-- PCB 회로 애니메이션 배경 (텍스트보다 먼저 렌더링되어 뒤에 위치) -->
+    <CircuitBackground />
+    <!-- 히어로 아크 글로우 (배너 뒤에 렌더링) -->
+    <div class="hero-arc" aria-hidden="true">
+      <svg class="hero-arc__svg" viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- 좌(#002c5f) → 중앙(#8a5cf5) → 우(#049ED8) 색상 그라디언트 -->
+          <linearGradient id="hero-arc-grad" x1="0" y1="0" x2="1440" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#002c5f"/>
+            <stop offset="6%"   stop-color="#002c5f"/>
+            <stop offset="28%"  stop-color="#8a5cf5"/>
+            <stop offset="50%"  stop-color="#8a5cf5"/>
+            <stop offset="72%"  stop-color="#8a5cf5"/>
+            <stop offset="94%"  stop-color="#049ED8"/>
+            <stop offset="100%" stop-color="#049ED8"/>
+          </linearGradient>
 
-  <section class="mobile-hackathon-section">
-    <a href="/hackathon" class="mobile-hackathon-button">해커톤 신청하기</a>
-    <a href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener" class="mobile-shop-button">로봇 구매하기</a>
-  </section>
+          <!-- 와이드 아우라 — 중앙이 가장 높은 글로우 높이 -->
+          <filter id="arc-glow-wide" x="-5%" y="-300%" width="110%" height="700%">
+            <feGaussianBlur stdDeviation="20 45"/>
+          </filter>
 
-  <section class="content-section">
-    <div class="content-section__container">
-      <div class="content-section__decorators">
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-      </div>
-      <h2 class="content-section__heading">Trusted By</h2>
-      <div class="trusted-by">
-        <div class="trusted-by__item">
-          <img class="trusted-by__logo" src="/img/opengraph.png" alt="OpenGraph" />
-        </div>
-        <div class="trusted-by__item">
-          <img class="trusted-by__logo" src="/img/hyundai.png" alt="현대자동차" />
-        </div>
-        <div class="trusted-by__item">
-          <img class="trusted-by__logo" src="/img/hansung.png" alt="한성대학교" />
-        </div>
-      </div>
+          <!-- 미디엄 글로우 -->
+          <filter id="arc-glow-med" x="-5%" y="-120%" width="110%" height="340%">
+            <feGaussianBlur stdDeviation="7 18"/>
+          </filter>
+
+          <!-- 베이스 글로우 — 끝부분 최소 글로우 보장 -->
+          <filter id="arc-glow-base" x="-5%" y="-40%" width="110%" height="180%">
+            <feGaussianBlur stdDeviation="5 6"/>
+          </filter>
+
+          <!-- 샤프 코어 라인 -->
+          <filter id="arc-glow-sharp" x="-5%" y="-40%" width="110%" height="180%">
+            <feGaussianBlur stdDeviation="1.5 4" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- 다크 돔 (페이지 배경과 동일) -->
+        <ellipse cx="720" cy="760" rx="1800" ry="600" fill="#171717"/>
+
+        <!-- 와이드 아우라 (중앙 글로우 키 가장 높음) -->
+        <ellipse cx="720" cy="760" rx="1800" ry="600"
+                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="4"
+                 filter="url(#arc-glow-wide)" opacity="0.4"/>
+
+        <!-- 미디엄 글로우 -->
+        <ellipse cx="720" cy="760" rx="1800" ry="600"
+                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="3"
+                 filter="url(#arc-glow-med)" opacity="0.7"/>
+
+        <!-- 베이스 글로우 (끝부분 최소 보장) -->
+        <ellipse cx="720" cy="760" rx="1800" ry="600"
+                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="5"
+                 filter="url(#arc-glow-base)" opacity="0.35"/>
+
+        <!-- 샤프 코어 -->
+        <ellipse cx="720" cy="760" rx="1800" ry="600"
+                 fill="none" stroke="url(#hero-arc-grad)" stroke-width="1.5"
+                 filter="url(#arc-glow-sharp)"/>
+      </svg>
     </div>
-  </section>
 
-  <section class="content-section">
-    <div class="content-section__container">
-      <div class="content-section__decorators">
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-      </div>
-      <h2 class="content-section__heading">About Us</h2>
-      <p class="content-section__description">
-        로보시지(RoboSEasy)는 <br class="mobile-br" />AI·로봇 기술의 진입장벽을 낮추고, <br class="mobile-br" />누구나 로봇을 조립하고 학습하며 <br class="mobile-br" />활용할 수 있는 환경을 만드는 <br class="mobile-br" /><span class="content-section__description--emphasis">기술·교육 전문 기업</span>입니다.
-      </p>
-      <p class="content-section__description">
-        <br class="mobile-br" />
-        Physical AI는 더 이상 <br class="mobile-br" />소수 전문가나 대기업만의 영역이 아닙니다.
-      </p>
-      <p class="content-section__description">
-        <br class="mobile-br" />
-        개인 메이커, 학생, 연구자, 중소기업 모두가 <br class="mobile-br" />로봇 기술에 쉽게 접근할 수 있도록, <br class="mobile-br" /><span class="content-section__description--emphasis">대한민국 Physical AI 생태계 구축에 기여</span>합니다.
-      </p>
+    <MainBanner />
+  </div>
 
-      <div class="about-us">
-        <div class="about-us__item about-us__item--accessibility">
-          <h3 class="about-us__title">Accessibility</h3>
-          <p class="about-us__description">누구나 쉽게 로봇을 만들고<br />배울 수 있는 환경 제공</p>
-        </div>
-        <div class="about-us__item about-us__item--innovation">
-          <h3 class="about-us__title">Innovation</h3>
-          <p class="about-us__description">제조업과 로봇 산업의<br />발전을 선도하는 기술 보급</p>
-        </div>
-        <div class="about-us__item about-us__item--sovereignty">
-          <h3 class="about-us__title">Sovereignty</h3>
-          <p class="about-us__description">해외 기술 의존도를 낮추며<br />대한민국 고유의<br />Physical AI 역량 강화</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="gradient-wrap">
+  <!-- Services 섹션 -->
+  <section class="services-section">
+    <div class="services-section__container">
+      <div class="services-grid">
 
-  <section class="content-section">
-    <div class="content-section__container">
-      <div class="content-section__decorators">
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-      </div>
-      <h2 class="content-section__heading">What We Do</h2>
-      <div class="what-we-do">
-        <div class="what-we-do__card">
-          <div class="what-we-do__thumbnail">
-            <img class="what-we-do__image" src="/img/business-product.png" alt="제품 사업" />
-            <div class="what-we-do__number">01</div>
+        <div class="service-card" data-stagger-delay="0">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Hardware</h3>
+            <p class="service-card__desc">TheRobotStudio 공식 파트너. SO-ARM100 대한민국 공식 판매처. Physical AI를 시작하기 좋은 초저가 로봇 플랫폼입니다. <a href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener noreferrer" class="service-card__link">자세히 보기.</a></p>
           </div>
-          <h3 class="what-we-do__title">제품 사업</h3>
-          <p class="what-we-do__description">오픈소스 로봇 조립 키트 판매</p>
-          <p class="what-we-do__description">한글 매뉴얼 및 기술 지원 포함</p>
-          <p class="what-we-do__description">로봇 및 3D 프린팅 설계·개발</p>
+          <div class="service-card__media">
+            <img src="/img/service-hardware.png" alt="로봇 하드웨어" class="service-card__image" loading="lazy" />
+          </div>
         </div>
 
-        <div class="what-we-do__card">
-          <div class="what-we-do__thumbnail">
-            <img class="what-we-do__image" src="/img/business-education.png" alt="교육 사업" />
-            <div class="what-we-do__number">02</div>
+        <div class="service-card" data-stagger-delay="150">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Software</h3>
+            <p class="service-card__desc">GUI 환경의 RoboSEasy-Studio 배포. 어떤 OS에서도 가능한 로봇 데이터 수집부터 학습까지 전 과정을 진행합니다. <a href="/programs" class="service-card__link">자세히 보기.</a></p>
           </div>
-          <h3 class="what-we-do__title">교육 사업</h3>
-          <p class="what-we-do__description">LeRobot 교육 콘텐츠 및 강의 제작</p>
-          <p class="what-we-do__description">기업·학교·기관 대상 오프라인 교육</p>
-          <p class="what-we-do__description">Physical AI 및 자동화 시스템 교육</p>
+          <div class="service-card__media">
+            <img src="/img/service-software.png" alt="RoboSEasy-Studio 소프트웨어" class="service-card__image" loading="lazy" />
+          </div>
         </div>
 
-        <div class="what-we-do__card">
-          <div class="what-we-do__thumbnail">
-            <img class="what-we-do__image" src="/img/business-tech.png" alt="기술 사업" />
-            <div class="what-we-do__number">03</div>
+        <div class="service-card" data-stagger-delay="0">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Education</h3>
+            <p class="service-card__desc">글로벌 최신 Physical AI 기술을 한국어로 정리한 Documents. 개인부터 기업까지 다양한 고객에게 제공하는 교육 시스템이 있습니다. <a href="/documents" class="service-card__link">자세히 보기.</a></p>
           </div>
-          <h3 class="what-we-do__title">기술 사업</h3>
-          <p class="what-we-do__description">Physical AI 도입 컨설팅 및 개발</p>
-          <p class="what-we-do__description">AI Vision 기반 제조 자동화 PoC 구축</p>
-          <p class="what-we-do__description">산업 현장 맞춤형 로봇 솔루션 개발</p>
+          <div class="service-card__media">
+            <img src="/img/service-education.png" alt="Physical AI Hackathon" class="service-card__image" loading="lazy" />
+          </div>
         </div>
 
-        <div class="what-we-do__card">
-          <div class="what-we-do__thumbnail">
-            <img class="what-we-do__image" src="/img/business-contents.png" alt="콘텐츠 사업" />
-            <div class="what-we-do__number">04</div>
+        <div class="service-card" data-stagger-delay="150">
+          <div class="service-card__content">
+            <h3 class="service-card__title">Community</h3>
+            <p class="service-card__desc">Physical AI 커뮤니티 1,000명+ 운영. 협업과 블로그로 대한민국의 Physical AI를 선도하는 기업입니다. <a href="/contact" class="service-card__link">참여하기.</a></p>
           </div>
-          <h3 class="what-we-do__title">콘텐츠 사업</h3>
-          <p class="what-we-do__description">YouTube 기술 채널 운영</p>
-          <p class="what-we-do__description">오픈소스 기여 및 기술 문서화</p>
-          <p class="what-we-do__description">Physical AI 개발자 커뮤니티 활성화</p>
+          <div class="service-card__media">
+            <span class="service-card__placeholder-icon">?</span>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
 
+  <!-- About Us 섹션 -->
   <section class="content-section">
     <div class="content-section__container">
-      <div class="content-section__decorators">
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-      </div>
-      <h2 class="content-section__heading">Who We Are</h2>
-      <p class="content-section__description">서로 다른 전문성을 가진 3명의 창업자가 모였습니다</p>
-      <p class="content-section__description"><span class="content-section__description--emphasis">AI + 하드웨어 + 소프트웨어의 통합 역량</span>으로 <br class="mobile-br" />완성도 높은 로봇 솔루션을 제공합니다</p>
+      <div class="about-tabs">
 
-      <div class="who-we-are">
-        <div class="who-we-are__member who-we-are__member--ai">
-          <h3 class="who-we-are__role">AI / 로보틱스 총괄</h3>
-          <p class="who-we-are__expertise">로봇 학습 알고리즘 및<br />강화학습 시스템 설계 경험</p>
-          <p class="who-we-are__expertise">Physical AI 연구 및<br />모방학습 기반 시스템 개발</p>
+        <!-- 우: 탭별 패널 -->
+        <div class="about-tabs__panels">
+
+          <div class="about-tabs__panel is-active" data-panel="hardware">
+            <div class="about-tabs__media">
+              <img src="/img/about-hardware.png" alt="Physical AI Hardware" class="about-tabs__image" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="about-tabs__panel" data-panel="software">
+            <div class="about-tabs__media">
+              <img src="/img/about-software.png" alt="Physical AI Platform Software" class="about-tabs__image" loading="lazy" />
+            </div>
+          </div>
+
+          <div class="about-tabs__panel" data-panel="education">
+            <div class="about-tabs__media">
+              <img src="/img/about-education.png" alt="Physical AI Education" class="about-tabs__image" loading="lazy" />
+            </div>
+          </div>
+
         </div>
-        <div class="who-we-are__member who-we-are__member--hardware">
-          <h3 class="who-we-are__role">하드웨어 / 시스템 총괄</h3>
-          <p class="who-we-are__expertise">로봇 메카니즘 및 구동계 설계,<br />센서 통합 시스템 설계</p>
-          <p class="who-we-are__expertise">협동로봇 및 산업용 로봇<br />자동화 시스템 개발 경력</p>
+
+        <!-- 좌: 탭 네비게이션 -->
+        <div class="about-tabs__nav">
+          <h2 class="about-tabs__label">About Us</h2>
+
+          <div class="about-tabs__list">
+
+            <div class="about-tabs__item is-active" data-tab="hardware">
+              <div class="about-tabs__item-header">
+                <span class="about-tabs__icon">
+                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
+                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
+                </span>
+                <span class="about-tabs__title">Hardware</span>
+              </div>
+              <div class="about-tabs__body">
+                <p>Robot Arm부터 자율주행 가능한 LeKiWi</p>
+              </div>
+            </div>
+
+            <div class="about-tabs__item" data-tab="software">
+              <div class="about-tabs__item-header">
+                <span class="about-tabs__icon">
+                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
+                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
+                </span>
+                <span class="about-tabs__title">Software</span>
+              </div>
+              <div class="about-tabs__body">
+                <p>어떤 OS에서도 가능한 GUI Application</p>
+              </div>
+            </div>
+
+            <div class="about-tabs__item" data-tab="education">
+              <div class="about-tabs__item-header">
+                <span class="about-tabs__icon">
+                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
+                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
+                </span>
+                <span class="about-tabs__title">Education</span>
+              </div>
+              <div class="about-tabs__body">
+                <p>다양한 고객에게 제공하는 교육 시스템과 Physical AI 해커톤 개최</p>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <div class="who-we-are__member who-we-are__member--software">
-          <h3 class="who-we-are__role">소프트웨어 / 플랫폼 총괄</h3>
-          <p class="who-we-are__expertise">로봇 통합 제어 시스템 및<br />비전 인식 솔루션 개발</p>
-          <p class="who-we-are__expertise">제조 현장 최적화 및<br />양산 프로세스 구축 경험</p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Vision 섹션 -->
+  <section class="vision-section">
+    <div class="vision-section__container">
+      <h2 class="content-section__heading">Our Vision</h2>
+      <div class="vision-section__tags">
+        <span class="vision-section__tag">#피지컬 AI</span>
+        <span class="vision-section__tag">#로봇 제조</span>
+        <span class="vision-section__tag">#로봇 교육</span>
+        <span class="vision-section__tag">#로봇 컨설팅</span>
+      </div>
+      <div class="vision-cards">
+        <div class="vision-card">
+          <span class="vision-card__num">Mission 01</span>
+          <h3 class="vision-card__title">모두를 위한 로봇</h3>
+          <p class="vision-card__desc">고가의 산업용 로봇이 아닌, 학생 메이커도 다룰 수 있는 Physical AI</p>
+        </div>
+        <div class="vision-card">
+          <span class="vision-card__num">Mission 02</span>
+          <h3 class="vision-card__title">모두를 위한 AI</h3>
+          <p class="vision-card__desc">어려운 CLI 환경이 아닌 GUI 환경으로 학생도 쉽게 터득할 수 있는 Physical AI</p>
+        </div>
+        <div class="vision-card">
+          <span class="vision-card__num">Mission 03</span>
+          <h3 class="vision-card__title">모두를 위한 가이드</h3>
+          <p class="vision-card__desc">글로벌 최신 기술을 한국어로 정리하고 누구나 쉽게 접할 수 있는 Physical AI</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- 뉴스 섹션 (Contact 디자인 패턴) -->
   <section class="content-section">
     <div class="content-section__container">
-      <div class="content-section__decorators">
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-      </div>
-      <h2 class="content-section__heading">Latest Activity</h2>
-      <div class="instagram-feed">
-        <div class="instagram-feed__post">
-          <blockquote class="instagram-media instagram-feed__embed" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DRXkNIsErNk/?img_index=1/" data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="instagram-feed__post">
-          <blockquote class="instagram-media instagram-feed__embed" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DRXj_ZlEnUx/?img_index=1/" data-instgrm-version="14"></blockquote>
-        </div>
-        <div class="instagram-feed__post">
-          <blockquote class="instagram-media instagram-feed__embed" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DRXjv7okkvd/?img_index=1/" data-instgrm-version="14"></blockquote>
-        </div>
-      </div>
-    </div>
-  </section>
+      <h2 class="content-section__heading">News</h2>
+      <div class="news-feature">
 
-  <section class="content-section">
-    <div class="content-section__container">
-      <div class="content-section__decorators">
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
-        <span class="content-section__decorator"></span>
+        <button class="news-feature__side-btn news-feature__side-btn--prev" aria-label="이전">
+          <iconify-icon icon="solar:alt-arrow-left-bold"></iconify-icon>
+        </button>
+
+        <div class="news-feature__content">
+          {newsItems.map((item, i) => (
+            <div class={`news-feature__item${i === 0 ? ' is-active' : ''}`}>
+              <div class="news-feature__image">
+                {item.image ? (
+                  <img src={item.image} alt={item.title} class="news-feature__img" loading="lazy" />
+                ) : (
+                  <div class="placeholder-img placeholder-img--news">
+                    <span class="placeholder-img__icon">?</span>
+                  </div>
+                )}
+              </div>
+              <div class="news-feature__body">
+                <h3 class="news-feature__title">{item.title}</h3>
+                <div class="news-feature__meta">
+                  <time class="news-feature__date">{item.date}</time>
+                  {item.url ? (
+                    <a class="news-feature__view-btn" href={item.url} target="_blank" rel="noopener noreferrer">뉴스 보기</a>
+                  ) : (
+                    <button class="news-feature__view-btn" type="button" disabled>뉴스 보기</button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button class="news-feature__side-btn news-feature__side-btn--next" aria-label="다음">
+          <iconify-icon icon="solar:alt-arrow-right-bold"></iconify-icon>
+        </button>
+
       </div>
-      <h2 class="content-section__heading">Join Our Community</h2>
-      <div class="community">
-        <a target="_blank" rel="noopener" href="https://github.com/roboseasy" class="community__link" aria-label="GitHub">
-          <i class="community__icon fa-brands fa-github"></i>
-        </a>
-        <a target="_blank" rel="noopener" href="https://www.instagram.com/robo_seasy/" class="community__link" aria-label="Instagram">
-          <i class="community__icon fa-brands fa-instagram"></i>
-        </a>
-        <a target="_blank" rel="noopener" href="https://www.youtube.com/@RoboSEasy" class="community__link" aria-label="YouTube">
-          <i class="community__icon fa-brands fa-youtube"></i>
-        </a>
+      <div class="news-feature__counter">
+        <span class="news-feature__counter-current">1</span>
+        <span class="news-feature__counter-sep"> / </span>
+        <span class="news-feature__counter-total">{newsItems.length}</span>
       </div>
     </div>
   </section>
+  </div>
+
+
 </BaseLayout>
 
 <script>
-  // 스크롤 시 .content-section 노출 애니메이션 (기존 js/main.js에서 포팅)
-  const sections = document.querySelectorAll('.content-section');
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        }
-      });
-    },
-    { root: null, rootMargin: '0px', threshold: 0.1 }
-  );
-  sections.forEach((section) => observer.observe(section));
-</script>
+  // About 탭
+  document.querySelectorAll('.about-tabs__item').forEach((item) => {
+    item.addEventListener('click', () => {
+      const tab = (item as HTMLElement).dataset.tab;
+      document.querySelectorAll('.about-tabs__item').forEach((i) => i.classList.remove('is-active'));
+      document.querySelectorAll('.about-tabs__panel').forEach((p) => p.classList.remove('is-active'));
+      item.classList.add('is-active');
+      document.querySelector(`.about-tabs__panel[data-panel="${tab}"]`)?.classList.add('is-active');
+    });
+  });
 
-<!-- Instagram embed -->
-<script async src="https://www.instagram.com/embed.js" is:inline></script>
+  // 뉴스 피처 슬라이더
+  const newsItems = document.querySelectorAll<HTMLElement>('.news-feature__item');
+  const counterCurrent = document.querySelector<HTMLElement>('.news-feature__counter-current');
+  let current = 0;
+
+  function goTo(idx: number) {
+    newsItems[current].classList.remove('is-active');
+    current = (idx + newsItems.length) % newsItems.length;
+    newsItems[current].classList.add('is-active');
+    if (counterCurrent) counterCurrent.textContent = String(current + 1);
+  }
+
+  document.querySelector('.news-feature__side-btn--prev')?.addEventListener('click', () => goTo(current - 1));
+  document.querySelector('.news-feature__side-btn--next')?.addEventListener('click', () => goTo(current + 1));
+
+  // 스크롤 애니메이션 헬퍼
+  const addVisible = (entries: IntersectionObserverEntry[]) =>
+    entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+
+  // 서비스 섹션 컨테이너
+  const servicesEl = document.querySelector('.services-section');
+  if (servicesEl) {
+    new IntersectionObserver(addVisible, { rootMargin: '0px', threshold: 0.05 }).observe(servicesEl);
+  }
+
+  // 서비스 카드 개별 관찰 (row1: Hardware/Software, row2: Education/Community 별도 트리거)
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target as HTMLElement;
+      const delay = parseInt(el.dataset.staggerDelay ?? '0', 10);
+      setTimeout(() => el.classList.add('is-visible'), delay);
+      cardObserver.unobserve(el);
+    });
+  }, { rootMargin: '0px', threshold: 0.1 });
+  document.querySelectorAll('.service-card').forEach((c) => cardObserver.observe(c));
+
+  // About / News 섹션 — 시작 지점 늦춤
+  const lateObserver = new IntersectionObserver(addVisible, { rootMargin: '-120px', threshold: 0.1 });
+  document.querySelectorAll('.content-section').forEach((s) => lateObserver.observe(s));
+
+  // Vision 섹션 — 늦은 트리거 + 카드 순차 등장
+  const visionEl = document.querySelector('.vision-section');
+  if (visionEl) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        entry.target.querySelectorAll('.vision-card').forEach((card, i) => {
+          setTimeout(() => card.classList.add('is-visible'), i * 200);
+        });
+      });
+    }, { rootMargin: '-120px', threshold: 0.1 }).observe(visionEl);
+  }
+</script>

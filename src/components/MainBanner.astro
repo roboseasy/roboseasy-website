@@ -1,21 +1,42 @@
 ---
-// 일부 페이지(home/news/documents)에 노출되는 메인 배너.
-// 기존 js/components/main-banner.js에서 1:1 포팅.
+// 홈페이지 히어로 섹션
 ---
 <section class="banner">
-  <a href="/" class="banner__link">
+  <div class="banner__row">
+
     <div class="banner__container">
-      <div class="banner__tags">
-        <span class="banner__tag"># Physical AI</span>
-        <span class="banner__tag"># 로봇 제조</span>
-        <span class="banner__tag"># 로봇 교육</span>
-        <span class="banner__tag"># 로봇 컨설팅</span>
-      </div>
-      <h1 class="banner__title">Robot is Easy, 이게 로보시지</h1>
+      <h1 class="banner__title">대한민국 Physical AI의 대중화를 이끄는 <span class="banner__title-accent">ROBOSEASY</span></h1>
       <div class="banner__subtitle">
         <p class="banner__subtitle-text">로봇이 더 쉽고, 더 가까워지도록.</p>
-        <p class="banner__subtitle-text">우리는 제품·교육·기술을 통해 <br class="mobile-br" />전국민의 Physical AI 접근성 향상에 기여합니다</p>
+        <p class="banner__subtitle-text">전국민의 Physical AI 접근성 향상에 기여합니다.</p>
+      </div>
+      <div class="banner__ctas">
+        <a href="/contact" class="banner__cta-primary">문의하기</a>
       </div>
     </div>
-  </a>
+
+  </div>
+
+  <div class="banner__ticker-inset">
+    <div class="client-ticker">
+      <div class="client-ticker__track">
+        <div class="client-ticker__group">
+          <img src="/img/hyundai.png"   alt="현대자동차" class="client-ticker__logo" />
+          <img src="/img/hansung.png"   alt="한성대학교" class="client-ticker__logo" />
+          <img src="/img/opengraph.png" alt="OpenGraph"  class="client-ticker__logo" />
+          <img src="/img/hyundai.png"   alt="현대자동차" class="client-ticker__logo" />
+          <img src="/img/hansung.png"   alt="한성대학교" class="client-ticker__logo" />
+          <img src="/img/opengraph.png" alt="OpenGraph"  class="client-ticker__logo" />
+        </div>
+        <div class="client-ticker__group" aria-hidden="true">
+          <img src="/img/hyundai.png"   alt="" class="client-ticker__logo" />
+          <img src="/img/hansung.png"   alt="" class="client-ticker__logo" />
+          <img src="/img/opengraph.png" alt="" class="client-ticker__logo" />
+          <img src="/img/hyundai.png"   alt="" class="client-ticker__logo" />
+          <img src="/img/hansung.png"   alt="" class="client-ticker__logo" />
+          <img src="/img/opengraph.png" alt="" class="client-ticker__logo" />
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
