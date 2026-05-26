@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MainBanner from '../components/MainBanner.astro';
+import CircuitBackground from '../components/CircuitBackground.astro';
 import '../styles/pages/home.css';
 
 const title = 'RoboSEasy | 로보시지 - Robot is Easy, 이게 로보시지';
@@ -15,6 +16,8 @@ const newsItems = [
 ---
 <BaseLayout title={title} description={description} path="/">
   <div class="hero-viewport">
+    <!-- PCB 회로 애니메이션 배경 (텍스트보다 먼저 렌더링되어 뒤에 위치) -->
+    <CircuitBackground />
     <!-- 히어로 아크 글로우 (배너 뒤에 렌더링) -->
     <div class="hero-arc" aria-hidden="true">
       <svg class="hero-arc__svg" viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,17 +95,17 @@ const newsItems = [
         <div class="service-card" data-stagger-delay="0">
           <div class="service-card__content">
             <h3 class="service-card__title">Hardware</h3>
-            <p class="service-card__desc">TheRobotStudio 공식 파트너. SO-ARM100 대한민국 공식 판매처. 초저가 로봇 플랫폼으로 누구나 Physical AI를 시작할 수 있습니다. <a href="/products" class="service-card__link">자세히 보기.</a></p>
+            <p class="service-card__desc">TheRobotStudio 공식 파트너. SO-ARM100 대한민국 공식 판매처. Physical AI를 시작하기 좋은 초저가 로봇 플랫폼입니다. <a href="/products" class="service-card__link">자세히 보기.</a></p>
           </div>
           <div class="service-card__media">
-            <span class="service-card__placeholder-icon">?</span>
+            <img src="/img/service-hardware.png" alt="로봇 하드웨어" class="service-card__image" loading="lazy" />
           </div>
         </div>
 
         <div class="service-card" data-stagger-delay="150">
           <div class="service-card__content">
             <h3 class="service-card__title">Software</h3>
-            <p class="service-card__desc">RoboSEasy-Studio 배포. CLI 없이 UI 데스크탑 앱만으로 로봇 데이터 수집부터 학습까지 전 과정을 진행합니다. <a href="/programs" class="service-card__link">자세히 보기.</a></p>
+            <p class="service-card__desc">GUI 환경의 RoboSEasy-Studio 배포. 어떤 OS에서도 가능한 로봇 데이터 수집부터 학습까지 전 과정을 진행합니다. <a href="/programs" class="service-card__link">자세히 보기.</a></p>
           </div>
           <div class="service-card__media">
             <span class="service-card__placeholder-icon">?</span>
@@ -112,7 +115,7 @@ const newsItems = [
         <div class="service-card" data-stagger-delay="0">
           <div class="service-card__content">
             <h3 class="service-card__title">Education</h3>
-            <p class="service-card__desc">글로벌 최신 피지컬 AI 기술을 한국어로 정리한 Documents. 누구나 따라할 수 있는 단계별 실습 가이드와 해커톤 운영. <a href="/documents" class="service-card__link">자세히 보기.</a></p>
+            <p class="service-card__desc">글로벌 최신 Physical AI 기술을 한국어로 정리한 Documents. 개인부터 기업까지 다양한 고객에게 제공하는 교육 시스템이 있습니다. <a href="/documents" class="service-card__link">자세히 보기.</a></p>
           </div>
           <div class="service-card__media">
             <span class="service-card__placeholder-icon">?</span>
@@ -122,7 +125,7 @@ const newsItems = [
         <div class="service-card" data-stagger-delay="150">
           <div class="service-card__content">
             <h3 class="service-card__title">Community</h3>
-            <p class="service-card__desc">피지컬 AI 커뮤니티 1,000명+. 오픈소스 협업과 최신 글로벌 기술을 한국어로 공유하며 함께 성장합니다. <a href="/contact" class="service-card__link">참여하기.</a></p>
+            <p class="service-card__desc">Physical AI 커뮤니티 1,000명+ 운영. 협업과 블로그로 대한민국의 Physical AI를 선도하는 기업입니다. <a href="/contact" class="service-card__link">참여하기.</a></p>
           </div>
           <div class="service-card__media">
             <span class="service-card__placeholder-icon">?</span>
@@ -182,7 +185,7 @@ const newsItems = [
                 <span class="about-tabs__title">Hardware</span>
               </div>
               <div class="about-tabs__body">
-                <p>TheRobotStudio 공식 파트너.<br>SO-ARM 대한민국 공식 판매처.</p>
+                <p>Robot Arm부터 자율주행 가능한 LeKiWi</p>
               </div>
             </div>
 
@@ -195,7 +198,7 @@ const newsItems = [
                 <span class="about-tabs__title">Software</span>
               </div>
               <div class="about-tabs__body">
-                <p>RoboSEasy-Studio 배포.<br>CLI가 아닌 UI 데스크탑 앱.</p>
+                <p>어떤 OS에서도 가능한 GUI Application</p>
               </div>
             </div>
 
@@ -208,7 +211,7 @@ const newsItems = [
                 <span class="about-tabs__title">Education</span>
               </div>
               <div class="about-tabs__body">
-                <p>피지컬 AI 커뮤니티 운영 (1,000명+).<br>해커톤 개최 · 한국어 Documents.</p>
+                <p>다양한 고객에게 제공하는 교육 시스템과 Physical AI 해커톤 개최</p>
               </div>
             </div>
 
@@ -233,17 +236,17 @@ const newsItems = [
         <div class="vision-card">
           <span class="vision-card__num">Mission 01</span>
           <h3 class="vision-card__title">모두를 위한 로봇</h3>
-          <p class="vision-card__desc">수천만 원짜리 산업용이 아닌, 학생 메이커도 손에 쥘 수 있는 초저가 플랫폼.</p>
+          <p class="vision-card__desc">고가의 산업용 로봇이 아닌, 학생 메이커도 다룰 수 있는 Physical AI</p>
         </div>
         <div class="vision-card">
           <span class="vision-card__num">Mission 02</span>
           <h3 class="vision-card__title">모두를 위한 AI</h3>
-          <p class="vision-card__desc">글로벌 최신 기술을 한국어로 정리하고 누구나 쉽게 커스텀할 수 있는 플랫폼.</p>
+          <p class="vision-card__desc">어려운 CLI 환경이 아닌 GUI 환경으로 학생도 쉽게 터득할 수 있는 Physical AI</p>
         </div>
         <div class="vision-card">
           <span class="vision-card__num">Mission 03</span>
           <h3 class="vision-card__title">모두를 위한 가이드</h3>
-          <p class="vision-card__desc">어려운 터미널 명령어가 아닌 쉬운 UI 앱과 가이드북으로, 누구나 쉽게 따라하면서 습득하는 Physical AI 전과정.</p>
+          <p class="vision-card__desc">글로벌 최신 기술을 한국어로 정리하고 누구나 쉽게 접할 수 있는 Physical AI</p>
         </div>
       </div>
     </div>
