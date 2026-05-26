@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProgramCard from '../components/programs/ProgramCard.astro';
 import StudioDownloadSection from '../components/programs/StudioDownloadSection.astro';
+import InstallGuideSection from '../components/programs/InstallGuideSection.astro';
 import '../styles/pages/programs.css';
 
 const title = 'Programs - RoboSEasy | 로보시지';
@@ -12,6 +13,8 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
 ---
 <BaseLayout title={title} description={description} path="/programs">
   <StudioDownloadSection />
+
+  <InstallGuideSection />
 
   <section class="programs">
     <div class="programs__header">
