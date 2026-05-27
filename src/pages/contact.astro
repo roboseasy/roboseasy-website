@@ -40,7 +40,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* Page hero */
   body.contact-page .page-hero {
     background:
-      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(124,58,237,0.06), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 20% 0%, rgba(124,58,237,0.18), transparent 60%),
       radial-gradient(ellipse 60% 50% at 90% 100%, rgba(124,58,237,0.08), transparent 65%),
       var(--bg-primary);
     padding-top: 7rem;
@@ -62,13 +62,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   /* Info panel */
   body.contact-page .info-panel {
-    background: var(--bg-primary);
     color: var(--text-primary);
-    border-radius: 12px;
     padding: clamp(28px, 3.6vw, 44px);
-    box-shadow: none;
     position: relative;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -313,24 +309,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   body.contact-page .info-ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
 
-  /* 견적서 미리보기/다운로드 버튼 */
+  /* 견적서 미리보기/다운로드 버튼 — 문의하기 버튼과 통일 */
   body.contact-page .btn-quote-action {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 9px 16px; border-radius: 9999px;
-    font-size: 0.84rem; font-weight: 600; cursor: pointer;
-    transition: all 0.2s; font-family: inherit;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 16px 20px;
+    background: #7c3aed;
+    color: #ffffff; font-weight: 700; font-size: 1rem;
+    border: none; border-radius: 8px; cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    font-family: inherit;
   }
-  body.contact-page .btn-preview-quote {
-    background: #ffffff; border: 1.5px solid var(--border-strong); color: var(--text-secondary);
+  body.contact-page .btn-quote-action:hover:not(:disabled) {
+    background: #a78bfa;
   }
-  body.contact-page .btn-preview-quote:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
-  body.contact-page .btn-download-quote {
-    background: linear-gradient(135deg, #6e48aa, #4C1594);
-    color: #ffffff; border: none;
-    box-shadow: 0 8px 20px -8px rgba(110,72,170,0.5);
-  }
-  body.contact-page .btn-download-quote:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(110,72,170,0.6); }
-  body.contact-page .btn-download-quote:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+  body.contact-page .btn-quote-action:active:not(:disabled) { transform: translateY(0); }
+  body.contact-page .btn-quote-action:disabled { opacity: 0.65; cursor: not-allowed; }
 
   /* Modal overlay */
   body.contact-page .quote-modal-overlay {
