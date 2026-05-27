@@ -369,6 +369,10 @@ body {
     color: var(--color-medium-gray);
 }
 
+.footer__section--about .footer__list-item {
+    color: #eeeeee;
+}
+
 .footer__section--about .footer__list-item span {
     display: inline-block;
     min-width: 120px;
