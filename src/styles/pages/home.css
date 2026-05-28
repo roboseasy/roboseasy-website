@@ -754,6 +754,9 @@
 }
 
 @media screen and (max-width: 768px) {
+    /* 모바일: 돔·아크 라인 전체 숨김 (글로우만 유지) */
+    .hero-arc { display: none; }
+
     .content-section { padding: 48px 16px; }
 
     .content-section__heading {
@@ -792,9 +795,46 @@
         min-height: 300px;
     }
 
-    .news-feature { gap: var(--spacing-8); }
+    .news-feature {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: var(--spacing-16);
+        margin-left: -16px;
+        margin-right: -16px;
+    }
 
-    .news-feature__side-btn { width: 36px; height: 36px; font-size: 13px; }
+    .news-feature__item { border-radius: 0; }
+
+    .news-feature__content {
+        flex: 0 0 100%;
+        order: 1;
+    }
+
+    .news-feature__side-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+
+    .news-feature__side-btn--prev { order: 2; }
+    .news-feature__side-btn--next { order: 3; }
+
+    .news-feature__body {
+        text-align: left;
+        padding: var(--spacing-16);
+    }
+    .news-feature__title {
+        text-align: left;
+        max-width: 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .news-feature__meta { justify-content: flex-start; }
+    .news-feature__view-btn-prefix { display: none; }
+
 }
 
 @media screen and (max-width: 480px) {
