@@ -754,6 +754,9 @@
 }
 
 @media screen and (max-width: 768px) {
+    /* 모바일: 돔·아크 라인 전체 숨김 (글로우만 유지) */
+    .hero-arc { display: none; }
+
     .content-section { padding: 48px 16px; }
 
     .content-section__heading {
