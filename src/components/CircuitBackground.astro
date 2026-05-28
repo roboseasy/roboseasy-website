@@ -142,7 +142,8 @@
       const p2 = [...this.paths[ri].pts].reverse();      // 안쪽 끝 → 우 edge
 
       const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      const speed = 150 + Math.random() * 50;
+      const mobileFactor = window.innerWidth <= 768 ? 0.5 : 1;
+      const speed = (150 + Math.random() * 50) * mobileFactor;
 
       this.active.push({
         pts: p1,
