@@ -16,7 +16,7 @@
 /* 개별 카드 */
 .doc-card {
     background: var(--surface-card);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     border-radius: var(--radius-feature-cards);
     box-shadow: var(--shadow-subtle);
     overflow: hidden;
@@ -74,7 +74,7 @@
 }
 
 .doc-card:hover .doc-card__description {
-    color: #eeeeee;
+    color: var(--color-bright-gray);
 }
 
 .doc-card__button {
