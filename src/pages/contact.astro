@@ -31,6 +31,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
+
+  /* ── 라이트 모드: contact 로컬 토큰 재정의 ── */
+  :root[data-theme='light'] body.contact-page {
+    --bg-primary:   #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary:  #f1f5f9;
+    --text-primary:   #0f172a;
+    --text-secondary: #475569;
+    --text-muted:     #64748b;
+    --border:         #e5e7eb;
+    --border-strong:  #cbd5e1;
+  }
+  /* info-box는 항상 다크 violet 강조 카드로 유지 (내부 텍스트가 흰색 고정) */
+  :root[data-theme='light'] body.contact-page .info-box {
+    background: #1e1e1e;
+    border-color: rgba(255, 255, 255, 0.10);
+  }
+
   body.contact-page .keep-all { word-break: keep-all; }
   body.contact-page .text-secondary { color: var(--text-secondary); }
   body.contact-page .text-primary   { color: var(--text-primary); }
@@ -72,7 +90,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   body.contact-page .panel-eyebrow {
     font-family: 'Geist', system-ui, sans-serif;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--text-muted);
     font-size: 0.78rem; font-weight: 700;
     letter-spacing: 0.28em; text-transform: uppercase;
     position: relative;
@@ -82,7 +100,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: clamp(2rem, 3.6vw, 2.8rem);
     line-height: 1.1; font-weight: 700;
     margin-top: 12px; position: relative;
-    color: #ffffff;
+    color: var(--text-primary);
   }
   body.contact-page .panel-desc {
     margin-top: 20px; color: #a3a3a3;
@@ -101,22 +119,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     flex-direction: column;
     gap: 4px;
     padding: 16px 0;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid var(--border);
   }
   body.contact-page .panel-info-row:not(:last-child) {
     padding-right: 24px;
-    border-right: 1px solid rgba(255,255,255,0.08);
+    border-right: 1px solid var(--border);
   }
   body.contact-page .panel-info-row:not(:first-child) {
     padding-left: 24px;
   }
   body.contact-page .panel-info-label {
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--text-muted);
     font-family: 'Geist', system-ui, sans-serif;
     font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; padding-top: 2px;
   }
   body.contact-page .panel-info-value {
-    color: #ffffff; font-size: 0.9rem; line-height: 1.55;
+    color: var(--text-primary); font-size: 0.9rem; line-height: 1.55;
   }
 
   /* Form card */
@@ -513,9 +531,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <select id="f-type" name="type" class="select" required>
                 <option value="" disabled selected>문의 종류를 선택해 주세요</option>
                 <option value="purchase">로봇 구매 문의</option>
-                <option value="as">AS 문의</option>
-                <option value="corp_edu">기업 교육 문의</option>
+                <option value="as">로봇 AS 문의</option>
                 <option value="workshop">워크샵 문의</option>
+                <option value="corp_edu">교육 문의</option>
                 <option value="etc">기타 문의</option>
               </select>
             </div>

@@ -102,4 +102,53 @@
   --shadow-subtle-3: rgba(255, 255, 255, 0.10) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
   --shadow-xl: rgba(0, 0, 0, 0.4) 0px 8px 32px 4px;
   --shadow-xl-2: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+
+  /* ─── Card fade overlay (news 피드 하단 페이드 — 카드 배경색에 맞춤) ─── */
+  --gradient-card-fade: linear-gradient(to bottom, rgba(30, 30, 30, 0) 0%, rgba(30, 30, 30, 0.95) 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   라이트 모드 — 색 변수만 재정의 (Tella 라이트 디자인 스펙 기반).
+   <html data-theme="light">에서 활성화. 강조 violet / 시맨틱 색은 공통 유지.
+   ────────────────────────────────────────────────────────────── */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* Surfaces */
+  --color-abyss: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f5f9;
+  --color-graphite: #e5e7eb;
+
+  /* Text */
+  --color-bright-gray: #0f172a;
+  --color-medium-gray: #475569;
+  --color-muted-gray: #64748b;
+
+  /* Accent (라이트 스펙: brand = signal violet #5e51f8) */
+  --color-amethyst: #5e51f8;
+  --color-lavender: #7c3aed;
+  --color-tag-bg: rgba(94, 81, 248, 0.1);
+
+  /* Legacy aliases */
+  --color-signal-violet: #5e51f8;
+  --color-ink: #0f172a;
+  --color-slate: #475569;
+  --color-ash-border: #e5e7eb;
+  --color-chalk: #ffffff;
+  --color-soft-amethyst: #5e51f8;
+  --color-lavender-mist: rgba(94, 81, 248, 0.12);
+  --color-carbon: #0f172a;
+  --surface-page: #f8fafc;
+  --surface-card: #ffffff;
+
+  /* Shadows — 라이트에서는 중립 검정 기반 */
+  --shadow-subtle: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px inset;
+  --shadow-subtle-2: rgba(0, 0, 0, 0.14) 0px 0px 0px 1px inset;
+  --shadow-subtle-3: rgba(0, 0, 0, 0.10) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.06) 0px 1px 3px 0px;
+  --shadow-xl: rgba(0, 0, 0, 0.12) 0px 8px 32px 4px;
+  --shadow-xl-2: rgba(0, 0, 0, 0.10) 0px 25px 50px -12px;
+
+  /* Card fade overlay — 라이트 카드(흰색)에 맞춤 */
+  --gradient-card-fade: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 100%);
 }

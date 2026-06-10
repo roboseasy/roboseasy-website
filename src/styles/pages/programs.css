@@ -39,7 +39,7 @@
 /* 프로그램 카드 */
 .program-card {
     background-color: var(--surface-card);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     border-radius: var(--radius-feature-cards);
     padding: 30px;
     text-align: center;
@@ -125,6 +125,17 @@
 
 .program-card__button--details:hover {
     background: #a78bfa;
+}
+
+/* 라이트 모드: 반투명 흰 배경은 흰 글씨와 대비가 사라지므로 violet 틴트로 */
+:root[data-theme='light'] .program-card__button--details {
+    background: var(--color-tag-bg);
+    color: var(--color-amethyst);
+}
+
+:root[data-theme='light'] .program-card__button--details:hover {
+    background: #a78bfa;
+    color: #ffffff;
 }
 
 /* 다운로드 버튼 */
@@ -228,7 +239,7 @@
     gap: 0;
     flex-shrink: 0;
     background: var(--color-surface-2);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-ash-border);
 }
 
 .program-modal__image-section {
@@ -251,7 +262,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid var(--color-ash-border);
 }
 
 .program-modal__badge {
@@ -308,7 +319,7 @@
     gap: 4px;
     padding: 10px 16px;
     background: var(--surface-card);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-ash-border);
     overflow-x: auto;
     scrollbar-width: none;
     flex-shrink: 0;
@@ -383,7 +394,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-ash-border);
 }
 
 /* ===== 뱃지 행 ===== */
@@ -426,7 +437,7 @@
     background: var(--color-surface-2);
     border-radius: 10px;
     padding: 13px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -476,7 +487,7 @@
     top: 32px;
     height: calc(100% - 14px);
     width: 2px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-ash-border);
 }
 
 .modal-timeline__num {
@@ -535,7 +546,7 @@
     border-radius: 10px;
     padding: 12px 10px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     border-top: 3px solid var(--color-amethyst);
 }
 
@@ -562,7 +573,7 @@
 .modal-spec-list {
     background: var(--color-surface-2);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     overflow: hidden;
 }
 
@@ -705,7 +716,7 @@
 .modal-accordion__item {
     background: var(--color-surface-2);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-ash-border);
     overflow: hidden;
 }
 
@@ -798,7 +809,7 @@
     .program-modal__header { grid-template-columns: 1fr; }
     .program-modal__image-section { padding: 18px; }
     .program-modal__image { max-height: 130px; }
-    .program-modal__info-section { padding: 14px 18px 18px; border-left: none; border-top: 1px solid rgba(255,255,255,0.08); }
+    .program-modal__info-section { padding: 14px 18px 18px; border-left: none; border-top: 1px solid var(--color-ash-border); }
     .program-modal__title { font-size: 19px; }
     .modal-tab-panel { padding: 16px 16px 22px; }
     .modal-feature-grid { grid-template-columns: 1fr; }
@@ -1028,7 +1039,7 @@
 
 /* 추가 프로그램 섹션과의 구분선 */
 .studio-download + .programs {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--color-ash-border);
   margin-top: 40px;
 }
 
@@ -1439,7 +1450,7 @@
   align-items: center;
   gap: 6px;
   padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-ash-border);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #d4d4e8;
   border-radius: 6px;

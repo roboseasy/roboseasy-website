@@ -17,14 +17,31 @@ interface Props {
   bodyClass?: string;
   /** false면 공통 헤더/푸터를 렌더하지 않음 (자체 chrome을 가진 랜딩 페이지용) */
   chrome?: boolean;
+  /** true면 라이트/다크 토글을 끄고 다크로 고정 (랜딩·해커톤 등 자체 디자인 페이지용) */
+  lockTheme?: boolean;
 }
 
-const { title, description, path, image, bodyClass, chrome = true } = Astro.props;
+const { title, description, path, image, bodyClass, chrome = true, lockTheme = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    {/* 페인트 전 테마 적용으로 FOUC 방지 — lockTheme이면 무조건 다크 */}
+    <script define:vars={{ lockTheme }}>
+      (function () {
+        try {
+          if (lockTheme) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            return;
+          }
+          var saved = localStorage.getItem('theme');
+          document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
@@ -35,7 +52,7 @@ const { title, description, path, image, bodyClass, chrome = true } = Astro.prop
     <slot name="head" />
   </head>
   <body class={bodyClass}>
-    {chrome && <MainHeader />}
+    {chrome && <MainHeader lockTheme={lockTheme} />}
     <slot />
     {chrome && <MainFooter />}
   </body>

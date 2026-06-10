@@ -17,7 +17,7 @@ body {
 /* ─── Header ─── */
 .header {
     background-color: var(--color-abyss);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-ash-border);
     padding: 0 20px;
     position: sticky;
     top: 0;
@@ -76,9 +76,41 @@ body {
 }
 
 .header__nav-link:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-bright-gray);
+    background-color: var(--color-ash-border);
 }
+
+/* ─── Theme toggle ─── */
+.header__theme-item {
+    display: flex;
+    align-items: center;
+}
+
+.header__theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-left: 4px;
+    border: none;
+    border-radius: var(--radius-cards);
+    background-color: transparent;
+    color: var(--color-slate);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.header__theme-toggle:hover {
+    color: var(--color-bright-gray);
+    background-color: var(--color-ash-border);
+}
+
+.header__theme-icon--moon { display: none; }
+.header__theme-icon--sun { display: inline-flex; }
+:root[data-theme='light'] .header__theme-icon--moon { display: inline-flex; }
+:root[data-theme='light'] .header__theme-icon--sun { display: none; }
 
 
 /* ─── Hamburger toggle ─── */
@@ -290,10 +322,35 @@ body {
 
 /* ─── Footer ─── */
 .footer {
+    /* 푸터 텍스트/테두리는 테마 무관하게 항상 다크 아일랜드로 고정 */
+    --color-abyss: #171717;
+    --color-bright-gray: #eeeeee;
+    --color-medium-gray: #bcbcbc;
+    --color-muted-gray: #a3a3a3;
+    --color-ash-border: rgba(255, 255, 255, 0.08);
+    --color-lavender: #a78bfa;
     background: var(--color-abyss);
     color: var(--color-bright-gray);
     padding: 64px 0 24px;
     margin-top: var(--section-gap);
+}
+
+/* 라이트 모드 페이지에서만 푸터 배경을 Deep Nebula로 (랜딩 등 다크 고정 페이지는 기존 #171717 유지) */
+:root[data-theme='light'] .footer {
+    background: rgb(16 10 30);
+}
+
+/* 라이트 모드: 푸터 about 섹션의 보라색 radial 그라디언트 글로우 제거 */
+:root[data-theme='light'] .footer__section--about::before {
+    display: none;
+}
+
+/* 라이트 모드: 푸터 about 섹션 텍스트를 #f8fafc로 빛나게(글로우) */
+:root[data-theme='light'] .footer__section--about .footer__title,
+:root[data-theme='light'] .footer__section--about .footer__list-item,
+:root[data-theme='light'] .footer__section--about .footer__list-item span {
+    color: #f8fafc;
+    text-shadow: 0 0 10px rgba(248, 250, 252, 0.55), 0 0 20px rgba(248, 250, 252, 0.3);
 }
 
 .footer__container {
