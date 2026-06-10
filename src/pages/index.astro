@@ -11,13 +11,13 @@ const newsItems = [
   {
     title: '현대 의왕연구소에서 열린 Physical AI 강연',
     date: '2026.05.13',
-    url: null,
-    image: null,
+    url: '/news',
+    image: '/img/news-hyundai-lecture.jpg',
   },
   {
     title: '한성대, 양팔로봇 활용 Physical AI 해커톤 대회',
     date: '2026.02.09',
-    url: null,
+    url: '/news',
     image: '/img/news-hansung-hackathon.jpg',
   },
 ];
@@ -281,7 +281,7 @@ const newsItems = [
                 <div class="news-feature__meta">
                   <time class="news-feature__date">{item.date}</time>
                   {item.url ? (
-                    <a class="news-feature__view-btn" href={item.url} target="_blank" rel="noopener noreferrer"><span class="news-feature__view-btn-prefix">뉴스 </span>보기</a>
+                    <a class="news-feature__view-btn" href={item.url} {...(item.url.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}><span class="news-feature__view-btn-prefix">뉴스 </span>보기</a>
                   ) : (
                     <button class="news-feature__view-btn" type="button" disabled><span class="news-feature__view-btn-prefix">뉴스 </span>보기</button>
                   )}

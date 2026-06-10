@@ -26,8 +26,9 @@ interface ContactPayload {
 
 const TYPE_LABEL: Record<string, string> = {
   purchase: '로봇 구매 문의',
-  corp_edu: '기업 교육 문의',
+  as: '로봇 AS 문의',
   workshop: '워크샵 문의',
+  corp_edu: '교육 문의',
   etc: '기타 문의',
 };
 
