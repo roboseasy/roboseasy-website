@@ -1,6 +1,11 @@
 ---
 // 모든 페이지 상단의 공통 네비게이션.
 // 마크업·인터랙션은 기존 js/components/main-header.js에서 1:1 포팅.
+interface Props {
+  /** true면 테마 토글 버튼을 숨김 (다크 고정 페이지) */
+  lockTheme?: boolean;
+}
+const { lockTheme = false } = Astro.props;
 ---
 <header class="header">
   <div class="header__container">
@@ -24,6 +29,14 @@
         <li class="header__nav-item"><a class="header__nav-link" href="/news">News</a></li>
         <li class="header__nav-item"><a class="header__nav-link" href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener noreferrer">Shop</a></li>
         <li class="header__nav-item"><a class="header__nav-link" href="/contact">Contact Us</a></li>
+        {!lockTheme && (
+          <li class="header__nav-item header__theme-item">
+            <button class="header__theme-toggle" type="button" aria-label="라이트/다크 모드 전환">
+              <iconify-icon class="header__theme-icon header__theme-icon--sun" icon="ph:sun-bold"></iconify-icon>
+              <iconify-icon class="header__theme-icon header__theme-icon--moon" icon="ph:moon-bold"></iconify-icon>
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   </div>
@@ -58,6 +71,17 @@
 
       header.querySelectorAll('.header__nav-link').forEach((link) => {
         link.addEventListener('click', closeMenu);
+      });
+    }
+
+    // 테마 토글 — data-theme 전환 + localStorage 저장
+    const themeToggle = header.querySelector('.header__theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const root = document.documentElement;
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
       });
     }
   }
