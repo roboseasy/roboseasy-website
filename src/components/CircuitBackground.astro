@@ -19,7 +19,9 @@
   const canvas = document.getElementById('hero-circuit');
   if (!(canvas instanceof HTMLCanvasElement)) return;
 
-  const COLORS = ['#8a5cf5', '#049ED8', '#1e6fba'];
+  const rootStyle = getComputedStyle(document.documentElement);
+  const brand = (name) => rootStyle.getPropertyValue(name).trim();
+  const COLORS = [brand('--brand-roboseasy'), brand('--brand-hansung'), '#1e6fba'];
 
   class Circuit {
     constructor(el) {

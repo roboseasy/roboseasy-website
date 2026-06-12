@@ -13,9 +13,9 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 75% 60% at 50% 88%, rgba(138, 92, 245, 0.52) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 50% at 10% 96%, rgba(0, 44, 95, 0.44) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 50% at 90% 96%, rgba(4, 158, 216, 0.38) 0%, transparent 60%);
+        radial-gradient(ellipse 75% 60% at 50% 88%, rgba(var(--brand-roboseasy-rgb), 0.52) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 50% at 10% 96%, rgba(var(--brand-hyundai-rgb), 0.44) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 90% 96%, rgba(var(--brand-hansung-rgb), 0.38) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
 }
@@ -154,10 +154,10 @@
     z-index: 0;
     background: conic-gradient(
         from 0deg at 50% 50%,
-        rgba(0, 44, 95, 0.20),
-        rgba(138, 92, 245, 0.16),
-        rgba(4, 158, 216, 0.16),
-        rgba(0, 44, 95, 0.20)
+        rgba(var(--brand-hyundai-rgb), 0.20),
+        rgba(var(--brand-roboseasy-rgb), 0.16),
+        rgba(var(--brand-hansung-rgb), 0.16),
+        rgba(var(--brand-hyundai-rgb), 0.20)
     );
     mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 70%);
     -webkit-mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 70%);
@@ -246,7 +246,7 @@
 }
 
 .service-card__link {
-    color: #8a5cf5;
+    color: var(--brand-roboseasy);
     text-decoration: none;
     transition: color 0.2s ease;
 }
