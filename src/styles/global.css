@@ -219,7 +219,7 @@ body {
 }
 
 .banner__title-accent {
-    color: #8a5cf5;
+    color: var(--brand-roboseasy);
 }
 
 .banner__subtitle {
@@ -387,8 +387,8 @@ body {
     left: -40px;
     right: -120px;
     background:
-        radial-gradient(ellipse 85% 80% at 25% 48%, rgba(138, 92, 245, 0.38) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 55% at 10% 50%, rgba(0, 44, 95, 0.32) 0%, transparent 55%);
+        radial-gradient(ellipse 85% 80% at 25% 48%, rgba(var(--brand-roboseasy-rgb), 0.38) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 55% at 10% 50%, rgba(var(--brand-hyundai-rgb), 0.32) 0%, transparent 55%);
     pointer-events: none;
     z-index: 0;
 }

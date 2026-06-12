@@ -27,6 +27,16 @@
   --color-warning: #facc15;
   --color-error: #f87171;
 
+  /* ─── Brand Colors (파트너십 — 라이트/다크 공통) ─── */
+  --brand-roboseasy: #8a5cf5;   /* 로보시지 */
+  --brand-hyundai: #002c5f;     /* 현대자동차 */
+  --brand-hansung: #049ed8;     /* 한성대학교 */
+
+  /* RGB 트리플 — rgba() 투명도 변형에 사용 */
+  --brand-roboseasy-rgb: 138, 92, 245;
+  --brand-hyundai-rgb: 0, 44, 95;
+  --brand-hansung-rgb: 4, 158, 216;
+
   /* ─── Legacy aliases (used across other pages) ─── */
   --color-signal-violet: #7c3aed;
   --color-ink: #eeeeee;
