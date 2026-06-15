@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ShopHeader from '../components/shop/ShopHeader.astro';
+import ProductCard from '../components/shop/ProductCard.astro';
+import { products, CATEGORY_LABELS } from '../data/products';
+import '../styles/pages/products.css';
+
+const title = 'Products - RoboSEasy | 로보시지';
+const description = 'RoboSEasy 전체 제품 목록. SO-ARM101, LeKiwi 등 카테고리별로 둘러보세요.';
+
+const categories = [
+  { key: 'all', label: '전체' },
+  { key: 'so-arm101', label: CATEGORY_LABELS['so-arm101'] },
+  { key: 'lekiwi', label: CATEGORY_LABELS['lekiwi'] },
+  { key: 'etc', label: CATEGORY_LABELS['etc'] },
+];
+---
+<BaseLayout title={title} description={description} path="/products" lockTheme="light">
+  <ShopHeader />
+
+  <div class="products-page">
+    <div class="products-page__container">
+      <!-- 좌측 사이드바 -->
+      <aside class="products-sidebar">
+        <h2 class="products-sidebar__heading">카테고리</h2>
+        <ul class="products-sidebar__list">
+          {categories.map((c, i) => (
+            <li class="products-sidebar__item">
+              <button
+                class={`products-sidebar__link${i === 0 ? ' is-active' : ''}`}
+                data-filter={c.key}
+              >{c.label}</button>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      <!-- 제품 그리드 -->
+      <main class="products-main">
+        <div class="products-grid">
+          {products.map((p) => <ProductCard {...p} />)}
+        </div>
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // 사이드바 카테고리 필터 — 표시/숨김만 (최소 동작)
+  const links = document.querySelectorAll<HTMLElement>('.products-sidebar__link');
+  const cards = document.querySelectorAll<HTMLElement>('.products-grid .product-card');
+
+  links.forEach((link) => {
+    link.addEventListener('click', () => {
+      const filter = link.dataset.filter;
+      links.forEach((l) => l.classList.remove('is-active'));
+      link.classList.add('is-active');
+      cards.forEach((card) => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>

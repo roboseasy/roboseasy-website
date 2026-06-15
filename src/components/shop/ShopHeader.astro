@@ -1,0 +1,78 @@
+---
+// 더블 헤더의 하단 바 — SHOP 섹션 전용 서브 네비게이션.
+// 기존 MainHeader 바로 아래에 붙으며 /shop·/products 페이지에서만 사용.
+// 검색/로그인/장바구니/찜 없음. 좌측 정렬.
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path === `${href}/`;
+---
+<nav class="shop-header" aria-label="쇼핑 메뉴">
+  <div class="shop-header__container">
+    <ul class="shop-header__list">
+      <li class="shop-header__item">
+        <a class:list={['shop-header__link', isActive('/shop') && 'shop-header__link--active']} href="/shop">SHOP</a>
+      </li>
+      <li class="shop-header__item">
+        <a class:list={['shop-header__link', isActive('/products') && 'shop-header__link--active']} href="/products">PRODUCTS</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .shop-header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-ash-border);
+    padding: 0 20px;
+    position: sticky;
+    top: 85px;
+    z-index: 99;
+  }
+
+  .shop-header__container {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .shop-header__list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .shop-header__link {
+    display: inline-block;
+    color: var(--color-medium-gray);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.02em;
+    padding: 16px 16px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .shop-header__link:hover {
+    color: var(--color-bright-gray);
+  }
+
+  .shop-header__link--active {
+    color: var(--color-amethyst);
+    border-bottom-color: var(--color-amethyst);
+  }
+
+  @media (max-width: 768px) {
+    .shop-header {
+      position: static;
+    }
+    .shop-header__link {
+      padding: 12px;
+      font-size: var(--text-body-sm);
+    }
+  }
+</style>

@@ -325,7 +325,7 @@ body {
     /* 푸터 텍스트/테두리는 테마 무관하게 항상 다크 아일랜드로 고정 */
     --color-abyss: #171717;
     --color-bright-gray: #eeeeee;
-    --color-medium-gray: #bcbcbc;
+    --color-medium-gray: #a3a3a3;
     --color-muted-gray: #a3a3a3;
     --color-ash-border: rgba(255, 255, 255, 0.08);
     --color-lavender: #a78bfa;
@@ -347,10 +347,14 @@ body {
 
 /* 라이트 모드: 푸터 about 섹션 텍스트를 #f8fafc로 빛나게(글로우) */
 :root[data-theme='light'] .footer__section--about .footer__title,
-:root[data-theme='light'] .footer__section--about .footer__list-item,
-:root[data-theme='light'] .footer__section--about .footer__list-item span {
+:root[data-theme='light'] .footer__section--about .footer__list-item {
     color: #f8fafc;
     text-shadow: 0 0 10px rgba(248, 250, 252, 0.55), 0 0 20px rgba(248, 250, 252, 0.3);
+}
+
+:root[data-theme='light'] .footer__section--about .footer__list-item span {
+    color: #a3a3a3;
+    text-shadow: none;
 }
 
 .footer__container {

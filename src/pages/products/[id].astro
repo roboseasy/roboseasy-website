@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ShopHeader from '../../components/shop/ShopHeader.astro';
+import BrandPlaceholder from '../../components/shop/BrandPlaceholder.astro';
+import { products, CATEGORY_LABELS, NAVER_STORE_URL } from '../../data/products';
+import type { Product } from '../../data/products';
+import '../../styles/pages/product-detail.css';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { id: p.id }, props: { product: p } }));
+}
+
+interface Props { product: Product }
+const { product } = Astro.props;
+const { name, category, price, summary, image, gallery, detailImages, naverUrl, comingSoon } = product;
+
+const buyUrl = naverUrl ?? NAVER_STORE_URL;
+// 이미지 미확보 — 갤러리/상세는 데이터가 없으면 플레이스홀더 슬롯으로 채움
+const thumbs = gallery && gallery.length ? gallery : Array.from({ length: 4 }, () => null);
+const details = detailImages && detailImages.length ? detailImages : Array.from({ length: 2 }, () => null);
+
+const title = `${name} - RoboSEasy | 로보시지`;
+const description = summary ?? `${name} 제품 정보와 구매 안내.`;
+---
+<BaseLayout title={title} description={description} path={`/products/${product.id}`} lockTheme="light">
+  <ShopHeader />
+
+  <article class="pdp">
+    <div class="pdp__container">
+      <!-- 상단: 좌측 갤러리 / 우측 정보 -->
+      <div class="pdp__top">
+        <!-- 갤러리 -->
+        <div class="pdp__gallery">
+          <div class="pdp__main">
+            {image ? (
+              <img class="pdp__main-img" src={image} alt={name} />
+            ) : (
+              <BrandPlaceholder />
+            )}
+          </div>
+          <div class="pdp__thumbs">
+            {thumbs.map((thumb, i) => (
+              <div class={`pdp__thumb${i === 0 ? ' is-active' : ''}`}>
+                {thumb ? <img src={thumb} alt={`${name} ${i + 1}`} /> : <BrandPlaceholder />}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- 정보 (sticky) -->
+        <div class="pdp__info">
+          <span class="pdp__category">{CATEGORY_LABELS[category]}</span>
+          <h1 class="pdp__name">{name}</h1>
+          <p class="pdp__price">{comingSoon ? '가격 미정' : `${price.toLocaleString('ko-KR')}원`}</p>
+          {summary && <p class="pdp__summary">{summary}</p>}
+          <div class="pdp__actions">
+            {comingSoon ? (
+              <span class="pdp__buy pdp__buy--disabled" aria-disabled="true">출시 예정</span>
+            ) : (
+              <a class="pdp__buy" href={buyUrl} target="_blank" rel="noopener noreferrer">구매하기 →</a>
+            )}
+            <a class="pdp__quote" href="/contact">견적 보기</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단: 상세 이미지 -->
+      <section class="pdp__detail">
+        <h2 class="pdp__detail-heading">상세 정보</h2>
+        <div class="pdp__detail-list">
+          {details.map((d, i) => (
+            <div class="pdp__detail-item">
+              {d ? <img src={d} alt={`${name} 상세 ${i + 1}`} loading="lazy" /> : <BrandPlaceholder />}
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  </article>
+</BaseLayout>

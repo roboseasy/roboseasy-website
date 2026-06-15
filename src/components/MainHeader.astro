@@ -2,8 +2,8 @@
 // 모든 페이지 상단의 공통 네비게이션.
 // 마크업·인터랙션은 기존 js/components/main-header.js에서 1:1 포팅.
 interface Props {
-  /** true면 테마 토글 버튼을 숨김 (다크 고정 페이지) */
-  lockTheme?: boolean;
+  /** truthy면 테마 토글 버튼을 숨김 (다크/라이트 고정 페이지) */
+  lockTheme?: boolean | 'light';
 }
 const { lockTheme = false } = Astro.props;
 ---
@@ -24,10 +24,10 @@ const { lockTheme = false } = Astro.props;
       </button>
       <ul class="header__nav-list">
         <li class="header__nav-item"><a class="header__nav-link" href="/">Home</a></li>
-        <li class="header__nav-item"><a class="header__nav-link" href="/documents">Documents</a></li>
+        <li class="header__nav-item"><a class="header__nav-link" href="/shop">Shop</a></li>
         <li class="header__nav-item"><a class="header__nav-link" href="/programs">Programs</a></li>
+        <li class="header__nav-item"><a class="header__nav-link" href="/documents">Documents</a></li>
         <li class="header__nav-item"><a class="header__nav-link" href="/news">News</a></li>
-        <li class="header__nav-item"><a class="header__nav-link" href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener noreferrer">Shop</a></li>
         <li class="header__nav-item"><a class="header__nav-link" href="/contact">Contact Us</a></li>
         {!lockTheme && (
           <li class="header__nav-item header__theme-item">

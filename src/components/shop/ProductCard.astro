@@ -1,0 +1,102 @@
+---
+// SHOP·PRODUCTS 공용 제품 카드 — 이미지 오버레이 룩북.
+// 이미지가 카드 전체, 하단 그라데이션 위에 제품명·가격 오버레이.
+import type { Product } from '../../data/products';
+import BrandPlaceholder from './BrandPlaceholder.astro';
+
+type Props = Product;
+const { id, name, category, price, image, comingSoon } = Astro.props;
+---
+<a class="product-card" href={`/products/${id}`} data-category={category}>
+  <div class="product-card__media">
+    {image ? (
+      <img class="product-card__image" src={image} alt={name} loading="lazy" />
+    ) : (
+      <BrandPlaceholder />
+    )}
+  </div>
+  {comingSoon && <span class="product-card__badge">곧 출시</span>}
+  <div class="product-card__overlay">
+    <h3 class="product-card__name">{name}</h3>
+    <p class="product-card__price">
+      {comingSoon ? '가격 미정' : `${price.toLocaleString('ko-KR')}원`}
+    </p>
+  </div>
+</article>
+
+<style>
+  .product-card {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius-cards);
+    overflow: hidden;
+    box-shadow: var(--shadow-subtle-3);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .product-card__media {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.4s ease;
+  }
+
+  .product-card:hover .product-card__media {
+    transform: scale(1.05);
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    padding: 4px 10px;
+    font-size: var(--text-caption);
+    font-weight: var(--fw-semibold);
+    color: var(--color-white);
+    background-color: var(--color-amethyst);
+    border-radius: var(--radius-tags);
+  }
+
+  .product-card__overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-20);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 55%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .product-card__name {
+    margin: 0;
+    font-size: var(--text-subheading);
+    font-weight: var(--fw-semibold);
+    color: var(--color-white);
+    line-height: 1.35;
+  }
+
+  .product-card__price {
+    margin: 0;
+    font-size: var(--text-heading-sm);
+    font-weight: var(--fw-bold);
+    color: var(--color-white);
+  }
+</style>

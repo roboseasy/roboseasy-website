@@ -1,0 +1,324 @@
+/* SHOP 페이지 — 라이트 고정 (lockTheme="light"). 모든 색은 토큰 참조. */
+
+/* ─── 히어로: 대표 상품 슬라이드 (이미지 풀필 + 오버레이) + 하단 홍보 바 ─── */
+.shop-hero {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 143px); /* 메인헤더(85) + 서브헤더(약 58) 제외 */
+  background-color: var(--color-surface-2);
+}
+
+.shop-hero__slider {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.shop-hero__slide {
+  display: none;
+  position: absolute;
+  inset: 0;
+}
+
+.shop-hero__slide.is-active {
+  display: block;
+}
+
+.shop-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 이미지 위 오버레이 — 제품명·가격·버튼 횡 정렬 */
+.shop-hero__overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-24);
+  padding: var(--spacing-48) var(--spacing-48) var(--spacing-40);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+}
+
+.shop-hero__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-heading-lg);
+  color: var(--color-white);
+  line-height: 1.2;
+}
+
+.shop-hero__price {
+  margin: 0;
+  font-size: var(--text-heading);
+  font-weight: var(--fw-bold);
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+.shop-hero__buy {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: 14px 36px;
+  background-color: var(--color-amethyst);
+  color: var(--color-white);
+  font-weight: var(--fw-semibold);
+  font-size: var(--text-body);
+  text-decoration: none;
+  border-radius: var(--radius-buttons);
+  transition: opacity 0.2s ease;
+}
+
+.shop-hero__buy:hover {
+  opacity: 0.88;
+}
+
+/* 슬라이더 컨트롤 — 랜딩 뉴스 섹션 버튼(.news-feature__side-btn)과 동일 디자인 */
+.shop-hero__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--surface-card);
+  box-shadow: var(--shadow-subtle);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-body);
+  color: var(--color-medium-gray);
+  transition: color 0.2s ease;
+}
+
+.shop-hero__nav:hover {
+  color: #a78bfa;
+}
+
+.shop-hero__nav--prev { left: 20px; }
+.shop-hero__nav--next { right: 20px; }
+
+/* ─── 홍보 바 (히어로 하단) ─── */
+.shop-promos {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-ash-border);
+  padding: var(--spacing-24) 20px;
+}
+
+.shop-promos__container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-24);
+}
+
+.shop-promo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-12);
+}
+
+.shop-promo__icon {
+  font-size: var(--text-heading);
+  color: var(--color-amethyst);
+  flex-shrink: 0;
+}
+
+.shop-promo__title {
+  font-size: var(--text-body);
+  font-weight: var(--fw-semibold);
+  color: var(--color-bright-gray);
+}
+
+/* ─── 주요 제품 섹션 (1×4) ─── */
+.shop-featured {
+  padding: var(--spacing-80) 20px;
+}
+
+.shop-featured__container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
+.shop-featured__header {
+  text-align: center;
+  margin-bottom: var(--spacing-48);
+}
+
+.shop-featured__heading {
+  margin: 0 0 var(--spacing-8);
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-heading-lg);
+  color: var(--color-bright-gray);
+}
+
+.shop-featured__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-24);
+}
+
+/* ─── 곧 출시 — 스포트라이트 쇼케이스 (다크 "섬") ─── */
+.shop-coming {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-12);
+  margin-top: var(--spacing-32);
+  padding: var(--spacing-64) var(--spacing-32) var(--spacing-80);
+  text-align: center;
+  text-decoration: none;
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+  background: radial-gradient(110% 78% at 50% -8%, #2b2545 0%, #1a1626 42%, #110e18 100%);
+}
+
+/* 무대 — 제품 타일 + 스포트라이트 광추 + 받침 그림자 */
+.shop-coming__stage {
+  position: relative;
+  width: min(260px, 62%);
+  margin-bottom: var(--spacing-24);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 천장 스포트라이트 — 위 좁고 아래 넓은 빛줄기 */
+.shop-coming__spotlight {
+  position: absolute;
+  top: -130%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150%;
+  height: 230%;
+  background: linear-gradient(to bottom, rgba(196, 181, 253, 0.32), rgba(196, 181, 253, 0.06) 55%, rgba(196, 181, 253, 0));
+  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  filter: blur(6px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 제품 타일 — 스포트라이트 받는 주인공 */
+.shop-coming__product {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-images);
+  overflow: hidden;
+  box-shadow:
+    0 24px 48px -12px rgba(138, 92, 245, 0.55),
+    0 0 0 1px rgba(167, 139, 250, 0.28);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shop-coming:hover .shop-coming__product {
+  transform: translateY(-6px);
+  box-shadow:
+    0 32px 64px -12px rgba(138, 92, 245, 0.78),
+    0 0 0 1px rgba(167, 139, 250, 0.5);
+}
+
+/* 받침 그림자 */
+.shop-coming__pedestal {
+  width: 72%;
+  height: 22px;
+  margin-top: 14px;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0) 72%);
+  filter: blur(4px);
+}
+
+.shop-coming__eyebrow {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: var(--text-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #b9a7f5;
+}
+
+.shop-coming__label {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: 0.14em;
+  line-height: 1;
+  background: linear-gradient(100deg, #ffffff 0%, #c4b5fd 25%, #ffffff 50%, #c4b5fd 75%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shop-coming-shimmer 5s linear infinite;
+}
+
+.shop-coming__sub {
+  position: relative;
+  font-size: var(--text-body);
+  color: rgba(238, 238, 238, 0.78);
+}
+
+@keyframes shop-coming-shimmer {
+  to { background-position: 200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-coming__label { animation: none; }
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 980px) {
+  .shop-featured__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-hero {
+    min-height: auto;
+  }
+  .shop-hero__slider {
+    height: 60vh;
+  }
+  .shop-hero__overlay {
+    flex-wrap: wrap;
+    gap: var(--spacing-12);
+    padding: var(--spacing-24);
+  }
+  .shop-hero__name { font-size: var(--text-heading); }
+  .shop-hero__price { font-size: var(--text-heading-sm); }
+  .shop-hero__buy {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+  .shop-promos__container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-16) var(--spacing-20);
+  }
+  .shop-coming__label { font-size: var(--text-heading); }
+}
+
+@media (max-width: 480px) {
+  .shop-featured__grid {
+    grid-template-columns: 1fr;
+  }
+}
