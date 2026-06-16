@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "id": "so-arm-open-gripper",
+      "name": "LeRobot SO-ARM Open Gripper",
+      "category": "so-arm101",
+      "price": 88000,
+      "tags": [
+        "#so-arm",
+        "#gripper"
+      ],
+      "summary": "(완조립품) 르르봇 그리퍼",
+      "image": "/img/uploads/21823396272049845_2029614228.jpeg",
+      "gallery": [],
+      "detailImages": [
+        "/img/uploads/오픈그리퍼_손목카메라4x.jpeg"
+      ],
+      "naverUrl": "https://smartstore.naver.com/roboseasy/products/13156884121#ZOOM",
+      "featured": true,
+      "hero": true,
+      "representative": false,
+      "comingSoon": false
+    }
+  ]
+}
