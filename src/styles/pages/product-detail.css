@@ -145,20 +145,49 @@
   background-color: var(--color-tag-bg);
 }
 
-/* ─── 하단 상세 이미지 ─── */
+/* ─── 하단 상세 정보 탭 (설명 / 제원) ─── */
 .pdp__detail {
   margin-top: var(--spacing-80);
-  padding-top: var(--spacing-48);
-  border-top: 1px solid var(--color-ash-border);
 }
 
-.pdp__detail-heading {
-  margin: 0 0 var(--spacing-32);
+/* 탭 네비게이션 — 줄(border)을 탭 아래로 */
+.pdp__tabs {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-32);
+  border-bottom: 1px solid var(--color-ash-border);
+  margin-bottom: var(--spacing-32);
+}
+
+.pdp__tab {
+  padding: 0 0 var(--spacing-12);
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
   font-family: var(--font-display);
   font-size: var(--text-heading-sm);
   font-weight: var(--fw-bold);
+  color: var(--color-muted-gray);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.pdp__tab:hover {
   color: var(--color-bright-gray);
-  text-align: center;
+}
+
+.pdp__tab.is-active {
+  color: var(--color-bright-gray);
+  border-bottom-color: var(--color-amethyst);
+}
+
+.pdp__tab-panel {
+  display: none;
+}
+
+.pdp__tab-panel.is-active {
+  display: block;
 }
 
 .pdp__detail-list {

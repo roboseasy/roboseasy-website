@@ -10,6 +10,9 @@
 # 옛 hackaton-2026 OG image (T 빠진 오타 파일명) → 통일된 철자
 /img/hackaton-2026.png            /img/hackathon-2026.png      301
 
+# 옛 SHOP 페이지(디자인 1안) → PRODUCTS 통합
+/shop                             /products                    301
+
 # 옛 .html 진입 URL (Netlify pretty URL 사용 전 직접 링크된 경우)
 /index.html                       /                            301
 /programs.html                    /programs                    301

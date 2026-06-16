@@ -26,6 +26,8 @@ export interface Product {
   featured?: boolean;
   /** SHOP 히어로 슬라이드에 노출 */
   hero?: boolean;
+  /** PRODUCTS 카테고리 섹션의 대표 상품(큰 이미지). 카테고리당 1개 */
+  representative?: boolean;
   /** '곧 출시' 배지 */
   comingSoon?: boolean;
 }
@@ -50,6 +52,7 @@ export const products: Product[] = [
     summary: 'SO-ARM101 리더+팔로워 풀세트. LeRobot 학습을 바로 시작할 수 있는 교육용 로봇 암 키트입니다.',
     featured: true,
     hero: true,
+    representative: true,
   },
   {
     id: 'so-arm101-follower',
@@ -78,6 +81,7 @@ export const products: Product[] = [
     summary: '옴니휠 기반 LeKiwi 모바일 베이스 키트. 자율주행 로봇 플랫폼의 기반입니다.',
     featured: true,
     hero: true,
+    representative: true,
   },
   {
     id: 'lekiwi-full-kit',
