@@ -1,0 +1,81 @@
+# Sveltia CMS 설정 — Decap CMS 호환 문법
+# 운영자는 /admin 에서 GitHub 로그인 후 아래 컬렉션을 편집한다.
+
+backend:
+  name: github
+  repo: roboseasy/roboseasy-website   # GitHub <owner>/<repo>
+  branch: main
+  # 인증: Netlify 내장 OAuth 사용 (base_url 기본값 api.netlify.com).
+  # GitHub OAuth App을 만들어 Netlify 사이트 설정에 Client ID/Secret 등록 필요.
+
+# 저장 시 바로 main에 커밋하지 않고 PR(검수) 생성 → 승인 후 반영
+# ⚠️ 로컬 테스트용으로 임시 비활성화 — main 병합 전 반드시 주석 해제할 것!
+# publish_mode: editorial_workflow
+
+# 로컬 편집 모드: `npx decap-server` 실행 후 localhost에서 /admin 접속 시
+# GitHub 인증 없이 로컬 파일을 직접 편집/저장 (프로덕션 도메인에서는 무시됨)
+local_backend: true
+
+# 이미지 업로드 위치 — 실제 저장 경로(media_folder) / 사이트 참조 경로(public_folder)
+media_folder: "public/img/uploads"
+public_folder: "/img/uploads"
+
+# UI 언어
+locale: ko
+
+collections:
+  # ─────────────────────────────────────────────────────────────
+  # 제품 (SHOP) — src/data/products.json 의 products 배열을 관리
+  # ─────────────────────────────────────────────────────────────
+  - name: products
+    label: "제품 (SHOP)"
+    files:
+      - name: list
+        label: "제품 목록"
+        file: "src/data/products.json"
+        description: "판매 제품 목록. 위에서부터 페이지에 표시되는 순서입니다."
+        fields:
+          - name: products
+            label: "제품"
+            label_singular: "제품"
+            widget: list
+            summary: "{{fields.name}} ({{fields.category}})"
+            fields:
+              - { name: id, label: "식별자(URL)", widget: string, hint: "영문 소문자·하이픈. 예: so-arm101-edu-kit (변경 시 URL이 바뀜)" }
+              - { name: name, label: "제품명", widget: string }
+              - name: category
+                label: "카테고리"
+                widget: select
+                options:
+                  - { label: "SO-ARM101", value: "so-arm101" }
+                  - { label: "LeKiwi", value: "lekiwi" }
+                  - { label: "기타", value: "etc" }
+              - { name: price, label: "가격(원)", widget: number, value_type: int, min: 0, hint: "출시 예정 제품은 0으로 두고 아래 '곧 출시'를 켜세요" }
+              - { name: tags, label: "태그", widget: list, required: false, field: { label: "태그", name: tag, widget: string }, hint: "예: #SO-ARM101" }
+              - { name: summary, label: "한 줄 설명", widget: text, required: false }
+              - { name: image, label: "대표 이미지", widget: image, required: false }
+              - { name: gallery, label: "갤러리 이미지(상세)", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
+              - { name: detailImages, label: "상세 설명 이미지", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
+              - { name: naverUrl, label: "구매 링크(스마트스토어)", widget: string, required: false, hint: "비우면 스토어 메인으로 연결" }
+              - { name: featured, label: "주요 제품 노출", widget: boolean, required: false, default: false }
+              - { name: hero, label: "히어로 노출", widget: boolean, required: false, default: false }
+              - { name: representative, label: "카테고리 대표(큰 이미지)", widget: boolean, required: false, default: false, hint: "카테고리당 1개만" }
+              - { name: comingSoon, label: "곧 출시 배지", widget: boolean, required: false, default: false }
+
+  # ─────────────────────────────────────────────────────────────
+  # 뉴스 — src/data/news.json 의 임베드 ID 목록을 관리
+  # ─────────────────────────────────────────────────────────────
+  - name: news
+    label: "뉴스"
+    files:
+      - name: feed
+        label: "뉴스 피드"
+        file: "src/data/news.json"
+        description: "Instagram/YouTube 임베드 ID 목록. 위에서부터 표시됩니다."
+        fields:
+          - { name: instagramPosts, label: "Instagram 포스트 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "게시물 URL의 /p/ 뒤 코드. 예: DRXkNIsErNk" }
+          - { name: instagramReels, label: "Instagram 릴스 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "릴스 URL의 /reel/ 뒤 코드" }
+          - { name: youtubeVideos, label: "YouTube 영상 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "영상 URL의 v= 뒤 코드. 예: ILz0K2XjZF8" }
+
+# 이미지 라이브러리만 따로 관리하고 싶을 때를 위한 안내:
+# 위 image/gallery 필드에서 업로드하면 public/img/uploads 에 저장되고 즉시 선택 가능합니다.

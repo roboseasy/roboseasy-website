@@ -1,6 +1,7 @@
-// 판매 제품 하드코딩 데이터.
-// 백엔드/CMS 미구현 단계 — 추후 어드민/DB 연결 시 이 파일만 교체한다.
+// 판매 제품 데이터. 목록 자체는 Sveltia CMS가 관리하는 products.json에 저장되고,
+// 이 파일은 타입 정의·상수·정렬된 export 인터페이스만 제공한다 (페이지는 이 모듈만 import).
 // 실제 상품 사진은 카탈로그 작성 중이라 image를 비워두면 "?" placeholder로 렌더된다.
+import productsData from './products.json';
 
 export type ProductCategory = 'so-arm101' | 'lekiwi' | 'etc';
 
@@ -42,87 +43,5 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   etc: '기타',
 };
 
-export const products: Product[] = [
-  {
-    id: 'so-arm101-edu-kit',
-    name: 'AI Robot ARM Edu Kit (SO-ARM101)',
-    category: 'so-arm101',
-    price: 680000,
-    tags: ['#SO-ARM101', '#LeRobot'],
-    summary: 'SO-ARM101 리더+팔로워 풀세트. LeRobot 학습을 바로 시작할 수 있는 교육용 로봇 암 키트입니다.',
-    featured: true,
-    hero: true,
-    representative: true,
-  },
-  {
-    id: 'so-arm101-follower',
-    name: 'SO-ARM101 Follower 단품',
-    category: 'so-arm101',
-    price: 390000,
-    tags: ['#SO-ARM101', '#Follower'],
-    summary: '동작을 수행하는 SO-ARM101 팔로워 6축 로봇 암 단품입니다.',
-    featured: true,
-  },
-  {
-    id: 'so-arm101-leader',
-    name: 'SO-ARM101 Leader 단품',
-    category: 'so-arm101',
-    price: 330000,
-    tags: ['#SO-ARM101', '#Leader'],
-    summary: '텔레오퍼레이션용 SO-ARM101 리더(마스터) 암 단품입니다.',
-    featured: true,
-  },
-  {
-    id: 'lekiwi-mobile-base',
-    name: 'LeKiwi 모바일 베이스 키트',
-    category: 'lekiwi',
-    price: 590000,
-    tags: ['#LeKiwi', '#Mobile'],
-    summary: '옴니휠 기반 LeKiwi 모바일 베이스 키트. 자율주행 로봇 플랫폼의 기반입니다.',
-    featured: true,
-    hero: true,
-    representative: true,
-  },
-  {
-    id: 'lekiwi-full-kit',
-    name: 'LeKiwi Full Kit (Base + ARM)',
-    category: 'lekiwi',
-    price: 1150000,
-    tags: ['#LeKiwi', '#LeRobot'],
-    summary: 'LeKiwi 모바일 베이스와 로봇 암을 결합한 풀 키트입니다.',
-    featured: true,
-  },
-  {
-    id: 'sts3215-motor',
-    name: 'STS3215 스마트 서보 모터',
-    category: 'etc',
-    price: 23000,
-    tags: ['#Servo', '#STS3215'],
-    summary: 'STS3215 스마트 시리얼 버스 서보 모터. SO-ARM·LeKiwi 호환.',
-  },
-  {
-    id: 'pla-filament-bambu',
-    name: '뱀부랩 정품 PLA 필라멘트 1kg',
-    category: 'etc',
-    price: 35000,
-    tags: ['#PLA', '#BambuLab'],
-    summary: '뱀부랩 정품 PLA 필라멘트 1kg. 안정적인 3D 출력 품질을 제공합니다.',
-  },
-  {
-    id: 'control-board',
-    name: '모터 컨트롤 보드',
-    category: 'etc',
-    price: 45000,
-    tags: ['#Board'],
-    summary: '로봇 구동을 위한 모터 제어용 컨트롤 보드입니다.',
-  },
-  {
-    id: 'xlerobot-kit',
-    name: 'XLeRobot 듀얼암 플랫폼',
-    category: 'etc',
-    price: 0,
-    tags: ['#XLeRobot'],
-    summary: '듀얼암 Physical AI 플랫폼 XLeRobot. 곧 출시 예정입니다.',
-    comingSoon: true,
-  },
-];
+// products.json은 CMS가 쓰는 데이터 파일. JSON 배열 순서가 곧 표시 순서.
+export const products = productsData.products as Product[];

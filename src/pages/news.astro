@@ -1,21 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/pages/news.css';
+// 뉴스 ID 목록은 Sveltia CMS가 관리하는 news.json에 저장됨.
+import { instagramPosts, instagramReels, youtubeVideos } from '../data/news.json';
 
 const title = 'News - RoboSEasy | 로보시지';
 const description = '로보시지의 최신 소식을 확인하세요. Instagram 포스트, 릴스, YouTube 영상을 한눈에 볼 수 있습니다';
-
-const instagramPosts = [
-  'DRXkNIsErNk', 'DRXj_ZlEnUx', 'DRXjv7okkvd', 'DRXjGDdEkDZ',
-  'DO6CDqlkhOX', 'DO58UVyEmag', 'DO56jIpErDt', 'DO52PySkhjF',
-];
-
-const instagramReels = ['DSpYGQckv96', 'DSANn-YknOQ'];
-
-const youtubeVideos = [
-  'ILz0K2XjZF8', 'Ape2Qg_waGA', 'x55GjA5352U', 'vDS5eLKd9lM',
-  'cu2dFLND0go', 'WuzyrXT91Qg', 'I2O7ipTH5VI', '2Dxv1VEfRjs',
-];
 ---
 <BaseLayout title={title} description={description} path="/news">
   <section class="page-intro">
