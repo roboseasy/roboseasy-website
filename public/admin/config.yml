@@ -9,8 +9,7 @@ backend:
   # GitHub OAuth App을 만들어 Netlify 사이트 설정에 Client ID/Secret 등록 필요.
 
 # 저장 시 바로 main에 커밋하지 않고 PR(검수) 생성 → 승인 후 반영
-# ⚠️ 로컬 테스트용으로 임시 비활성화 — main 병합 전 반드시 주석 해제할 것!
-# publish_mode: editorial_workflow
+publish_mode: editorial_workflow
 
 # 로컬 편집 모드: `npx decap-server` 실행 후 localhost에서 /admin 접속 시
 # GitHub 인증 없이 로컬 파일을 직접 편집/저장 (프로덕션 도메인에서는 무시됨)
@@ -58,24 +57,43 @@ collections:
               - { name: detailImages, label: "상세 설명 이미지", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
               - { name: naverUrl, label: "구매 링크(스마트스토어)", widget: string, required: false, hint: "비우면 스토어 메인으로 연결" }
               - { name: featured, label: "주요 제품 노출", widget: boolean, required: false, default: false }
-              - { name: hero, label: "히어로 노출", widget: boolean, required: false, default: false }
               - { name: representative, label: "카테고리 대표(큰 이미지)", widget: boolean, required: false, default: false, hint: "카테고리당 1개만" }
               - { name: comingSoon, label: "곧 출시 배지", widget: boolean, required: false, default: false }
 
   # ─────────────────────────────────────────────────────────────
-  # 뉴스 — src/data/news.json 의 임베드 ID 목록을 관리
+  # 랜딩 뉴스 (메인 화면 News 섹션) — src/data/landing-news.json 카드 관리
+  # ─────────────────────────────────────────────────────────────
+  - name: landing_news
+    label: "랜딩 뉴스 (메인 화면)"
+    files:
+      - name: items
+        label: "랜딩 뉴스 카드"
+        file: "src/data/landing-news.json"
+        description: "메인(홈) 화면 News 섹션 카드. 위에서부터 순서대로 표시됩니다."
+        fields:
+          - name: items
+            label: "뉴스 카드"
+            label_singular: "뉴스 카드"
+            widget: list
+            summary: "{{fields.title}} ({{fields.date}})"
+            fields:
+              - { name: title, label: "제목", widget: string }
+              - { name: date, label: "날짜", widget: string, hint: "예: 2026.05.13" }
+              - { name: image, label: "이미지", widget: image, required: false, hint: "비우면 ? 플레이스홀더로 표시" }
+
+  # ─────────────────────────────────────────────────────────────
+  # 뉴스 (Instagram) — src/data/news.json 의 게시물 ID 목록을 관리
+  # ⚠️ 블로그·YouTube는 빌드 시 자동 수집(피드)이라 CMS 입력 대상 아님.
   # ─────────────────────────────────────────────────────────────
   - name: news
-    label: "뉴스"
+    label: "뉴스 (Instagram)"
     files:
       - name: feed
-        label: "뉴스 피드"
+        label: "Instagram 게시물"
         file: "src/data/news.json"
-        description: "Instagram/YouTube 임베드 ID 목록. 위에서부터 표시됩니다."
+        description: "News 페이지 Instagram 탭에 노출. 위에서부터 순서대로, 상위 3개가 1×3으로 표시됩니다."
         fields:
-          - { name: instagramPosts, label: "Instagram 포스트 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "게시물 URL의 /p/ 뒤 코드. 예: DRXkNIsErNk" }
-          - { name: instagramReels, label: "Instagram 릴스 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "릴스 URL의 /reel/ 뒤 코드" }
-          - { name: youtubeVideos, label: "YouTube 영상 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "영상 URL의 v= 뒤 코드. 예: ILz0K2XjZF8" }
+          - { name: instagramPosts, label: "Instagram 포스트 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "게시물 URL의 /p/ 뒤 코드. 예: DRXkNIsErNk (상위 3개만 노출)" }
 
 # 이미지 라이브러리만 따로 관리하고 싶을 때를 위한 안내:
 # 위 image/gallery 필드에서 업로드하면 public/img/uploads 에 저장되고 즉시 선택 가능합니다.

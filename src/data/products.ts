@@ -25,8 +25,6 @@ export interface Product {
   detailImages?: string[];
   /** SHOP 주요 제품(1x5)에 노출 */
   featured?: boolean;
-  /** SHOP 히어로 슬라이드에 노출 */
-  hero?: boolean;
   /** PRODUCTS 카테고리 섹션의 대표 상품(큰 이미지). 카테고리당 1개 */
   representative?: boolean;
   /** '곧 출시' 배지 */

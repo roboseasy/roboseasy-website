@@ -458,9 +458,14 @@ body {
 
 /* ─── Tella Page Intro (shared — documents, news, programs) ─── */
 .page-intro {
-    background: var(--color-chalk);
+    background-color: #16131f;
+    background-image:
+        linear-gradient(rgba(15, 13, 22, 0.5), rgba(15, 13, 22, 0.5)),
+        url('/img/page-intro-bg.webp');
+    background-size: cover;
+    background-position: center;
     padding: 80px 20px 56px;
-    border-bottom: 1px solid var(--color-ash-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     text-align: center;
 }
 
@@ -473,7 +478,7 @@ body {
     font-family: var(--font-display);
     font-size: clamp(36px, 5vw, 56px);
     font-weight: var(--fw-bold);
-    color: var(--color-ink);
+    color: #ffffff;
     letter-spacing: var(--tracking-heading-lg);
     margin: 0 0 16px;
     line-height: 1.1;
@@ -483,7 +488,7 @@ body {
 
 .page-intro__description {
     font-size: var(--text-subheading);
-    color: var(--color-slate);
+    color: rgba(255, 255, 255, 0.82);
     margin: 0;
     opacity: 0;
     animation: fadeInUp 0.7s ease forwards 0.25s;

@@ -23,6 +23,8 @@ const sections = CATEGORY_ORDER.map((key) => {
 <BaseLayout title={title} description={description} path="/products" lockTheme="light">
   <!-- 히어로: Product Center — 모든 제품 이미지가 섹션 전체를 덮고 텍스트 오버레이 -->
   <section class="products-hero">
+    <!-- 좌측 파티클 배너 — 중앙으로 갈수록 페이드 -->
+    <img class="products-hero__bg" src="/img/products-hero-bg.webp" alt="" aria-hidden="true" />
     <div class="products-hero__media">
       <!-- 모든 제품 대표 이미지 1장 (이미지 미확보 → placeholder) -->
       <BrandPlaceholder />

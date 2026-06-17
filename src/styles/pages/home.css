@@ -20,6 +20,31 @@
     z-index: 0;
 }
 
+/* ─── Hero Korea Map (우측 상단 → 대중화 텍스트 방향) ─── */
+.hero-map {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 72%;
+    aspect-ratio: 1.6;          /* 가로로 넓은 박스 → 정사각 원본의 상단(중국)을 크롭 */
+    width: auto;
+    object-fit: cover;
+    object-position: 50% 100%;  /* 하단(대한민국) 기준 정렬 → 상단 중국 영토를 잘라냄 */
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: 0.85;
+    /* 우측 상단은 그대로 두고 좌측으로 갈수록 페이드 → 어두운 배경에 자연스럽게 융화 */
+    -webkit-mask-image:
+        linear-gradient(to left, #000 35%, transparent 100%),
+        linear-gradient(to bottom, #000 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(to left, #000 35%, transparent 100%),
+        linear-gradient(to bottom, #000 90%, transparent 100%);
+    mask-composite: intersect;
+}
+
 /* ─── Hero Arc Glow ─── */
 .hero-arc {
     position: absolute;
@@ -734,6 +759,8 @@
 @media screen and (max-width: 1024px) {
     .hero-viewport { height: auto; min-height: calc(100vh - 85px); }
 
+    .hero-map { height: 58%; opacity: 0.55; }
+
     .content-section { padding: 64px 20px; }
 
     .about-tabs {
@@ -749,6 +776,8 @@
 @media screen and (max-width: 768px) {
     /* 모바일: 돔·아크 라인 전체 숨김 (글로우만 유지) */
     .hero-arc { display: none; }
+
+    .hero-map { height: 42%; opacity: 0.4; }
 
     .content-section { padding: 48px 16px; }
 

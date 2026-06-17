@@ -5,12 +5,32 @@
   position: relative;
   min-height: 420px;
   overflow: hidden;
+  background: #ffffff;
 }
 
-/* 모든 제품 이미지가 히어로 전체를 덮음 */
+/* 좌측 파티클 배너 — 좌측은 또렷, 중앙으로 갈수록 페이드되어 흰 배경에 녹아듦 */
+.products-hero__bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 50%, transparent 70%);
+  mask-image: linear-gradient(to right, #000 0%, #000 50%, transparent 70%);
+}
+
+/* 전체 상품 이미지 — 중앙~우측, 흰 배경 위 */
 .products-hero__media {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 70%;
 }
 
 .products-hero__media img {
@@ -18,14 +38,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-/* 텍스트 가독성용 그라데이션 오버레이 */
-.products-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 55%, rgba(0, 0, 0, 0) 100%);
 }
 
 .products-hero__inner {
@@ -46,8 +58,7 @@
   font-weight: var(--fw-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-white);
-  opacity: 0.85;
+  color: var(--brand-roboseasy);
 }
 
 .products-hero__title {
@@ -55,7 +66,7 @@
   font-family: var(--font-display);
   font-size: var(--text-display);
   font-weight: var(--fw-bold);
-  color: var(--color-white);
+  color: var(--color-ink);
   line-height: 1.1;
 }
 
