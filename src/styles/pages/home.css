@@ -13,11 +13,36 @@
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 75% 60% at 50% 88%, rgba(138, 92, 245, 0.52) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 50% at 10% 96%, rgba(0, 44, 95, 0.44) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 50% at 90% 96%, rgba(4, 158, 216, 0.38) 0%, transparent 60%);
+        radial-gradient(ellipse 75% 60% at 50% 88%, rgba(var(--brand-roboseasy-rgb), 0.52) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 50% at 10% 96%, rgba(var(--brand-hyundai-rgb), 0.44) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 90% 96%, rgba(var(--brand-hansung-rgb), 0.38) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
+}
+
+/* ─── Hero Korea Map (우측 상단 → 대중화 텍스트 방향) ─── */
+.hero-map {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 72%;
+    aspect-ratio: 1.6;          /* 가로로 넓은 박스 → 정사각 원본의 상단(중국)을 크롭 */
+    width: auto;
+    object-fit: cover;
+    object-position: 50% 100%;  /* 하단(대한민국) 기준 정렬 → 상단 중국 영토를 잘라냄 */
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: 0.85;
+    /* 우측 상단은 그대로 두고 좌측으로 갈수록 페이드 → 어두운 배경에 자연스럽게 융화 */
+    -webkit-mask-image:
+        linear-gradient(to left, #000 35%, transparent 100%),
+        linear-gradient(to bottom, #000 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(to left, #000 35%, transparent 100%),
+        linear-gradient(to bottom, #000 90%, transparent 100%);
+    mask-composite: intersect;
 }
 
 /* ─── Hero Arc Glow ─── */
@@ -154,10 +179,10 @@
     z-index: 0;
     background: conic-gradient(
         from 0deg at 50% 50%,
-        rgba(0, 44, 95, 0.20),
-        rgba(138, 92, 245, 0.16),
-        rgba(4, 158, 216, 0.16),
-        rgba(0, 44, 95, 0.20)
+        rgba(var(--brand-hyundai-rgb), 0.20),
+        rgba(var(--brand-roboseasy-rgb), 0.16),
+        rgba(var(--brand-hansung-rgb), 0.16),
+        rgba(var(--brand-hyundai-rgb), 0.20)
     );
     mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 70%);
     -webkit-mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 70%);
@@ -246,7 +271,7 @@
 }
 
 .service-card__link {
-    color: #8a5cf5;
+    color: var(--brand-roboseasy);
     text-decoration: none;
     transition: color 0.2s ease;
 }
@@ -266,14 +291,6 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-}
-
-.service-card__placeholder-icon {
-    font-size: 72px;
-    color: var(--color-graphite);
-    user-select: none;
-    line-height: 1;
-    opacity: 0.7;
 }
 
 .service-card__image {
@@ -742,6 +759,8 @@
 @media screen and (max-width: 1024px) {
     .hero-viewport { height: auto; min-height: calc(100vh - 85px); }
 
+    .hero-map { height: 58%; opacity: 0.55; }
+
     .content-section { padding: 64px 20px; }
 
     .about-tabs {
@@ -757,6 +776,8 @@
 @media screen and (max-width: 768px) {
     /* 모바일: 돔·아크 라인 전체 숨김 (글로우만 유지) */
     .hero-arc { display: none; }
+
+    .hero-map { height: 42%; opacity: 0.4; }
 
     .content-section { padding: 48px 16px; }
 

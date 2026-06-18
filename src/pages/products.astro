@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/shop/ProductCard.astro';
+import BrandPlaceholder from '../components/shop/BrandPlaceholder.astro';
+import { products, CATEGORY_LABELS } from '../data/products';
+import type { ProductCategory } from '../data/products';
+import '../styles/pages/products.css';
+
+const title = 'Products - RoboSEasy | 로보시지';
+const description = 'RoboSEasy 전체 제품. SO-ARM101, LeKiwi 등 카테고리별로 둘러보세요.';
+
+// 사이드바·섹션 노출 순서
+const CATEGORY_ORDER: ProductCategory[] = ['so-arm101', 'lekiwi', 'etc'];
+
+// 카테고리별로 대표 상품(큰 이미지) 1개 + 나머지(1×5 카드)로 분리
+const sections = CATEGORY_ORDER.map((key) => {
+  const items = products.filter((p) => p.category === key);
+  const representative = items.find((p) => p.representative) ?? null;
+  const cards = representative ? items.filter((p) => p !== representative) : items;
+  return { key, label: CATEGORY_LABELS[key], anchor: `cat-${key}`, representative, cards };
+});
+---
+<BaseLayout title={title} description={description} path="/products" lockTheme="light">
+  <!-- 히어로: Product Center — 모든 제품 이미지가 섹션 전체를 덮고 텍스트 오버레이 -->
+  <section class="products-hero">
+    <!-- 좌측 파티클 배너 — 중앙으로 갈수록 페이드 -->
+    <img class="products-hero__bg" src="/img/products-hero-bg.webp" alt="" aria-hidden="true" />
+    <div class="products-hero__inner">
+      <div class="products-hero__text">
+        <span class="products-hero__eyebrow">RoboSEasy</span>
+        <h1 class="products-hero__title">Product Center</h1>
+      </div>
+    </div>
+  </section>
+
+  <div class="products-layout">
+    <!-- 좌측 사이드바 (앵커 스크롤) -->
+    <aside class="products-sidebar">
+      <nav class="products-sidebar__nav" aria-label="제품 카테고리">
+        <h2 class="products-sidebar__heading">카테고리</h2>
+        <ul class="products-sidebar__list">
+          {sections.map((s, i) => (
+            <li class="products-sidebar__item">
+              <button
+                type="button"
+                class={`products-sidebar__link${i === 0 ? ' is-active' : ''}`}
+                data-target={s.anchor}
+              >{s.label}</button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- 카테고리 섹션 -->
+    <main class="products-main">
+      {sections.map((s, i) => (
+        <section class={`product-cat${i === 0 ? ' is-active' : ''}`} id={s.anchor}>
+          <header class="product-cat__header">
+            <h2 class="product-cat__title">{s.label}</h2>
+          </header>
+
+          {s.representative && (
+            <a class="product-rep" href={`/products/${s.representative.id}`}>
+              <div class="product-rep__media">
+                {s.representative.image ? (
+                  <img class="product-rep__image" src={s.representative.image} alt={s.representative.name} />
+                ) : (
+                  <BrandPlaceholder />
+                )}
+              </div>
+              <div class="product-rep__overlay">
+                <h3 class="product-rep__name">{s.representative.name}</h3>
+                <span class="product-rep__cta">제품 보기 →</span>
+              </div>
+            </a>
+          )}
+
+          {s.cards.length > 0 && (
+            <div class="product-cat__grid">
+              {s.cards.map((p) => <ProductCard {...p} />)}
+            </div>
+          )}
+        </section>
+      ))}
+    </main>
+  </div>
+</BaseLayout>
+
+<script>
+  // 사이드바 탭 — 클릭 시 해당 카테고리 섹션만 표시
+  const links = document.querySelectorAll<HTMLButtonElement>('.products-sidebar__link');
+  const sections = document.querySelectorAll<HTMLElement>('.product-cat');
+
+  links.forEach((link) => {
+    link.addEventListener('click', () => {
+      const target = link.dataset.target;
+      links.forEach((l) => l.classList.toggle('is-active', l === link));
+      sections.forEach((s) => s.classList.toggle('is-active', s.id === target));
+    });
+  });
+</script>

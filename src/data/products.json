@@ -1,6 +1,41 @@
 {
   "products": [
     {
+      "id": "so-arm101-edu-kit",
+      "name": "AI Robot ARM Edu Kit (SO-ARM101)",
+      "category": "so-arm101",
+      "price": 680000,
+      "tags": [
+        "#SO-ARM101",
+        "#LeRobot"
+      ],
+      "summary": "SO-ARM101 리더+팔로워 풀세트. LeRobot 학습을 바로 시작할 수 있는 교육용 로봇 암 키트입니다.",
+      "naverUrl": "",
+      "featured": true,
+      "representative": true
+    },
+    {
+      "id": "lekiwi",
+      "name": "LeKiWi",
+      "category": "lekiwi",
+      "price": 1300000,
+      "tags": [
+        "#likiwi"
+      ],
+      "summary": "dd",
+      "image": "/img/uploads/lekiwi.png",
+      "gallery": [
+        "/img/uploads/21823396272049845_2029614228.jpeg"
+      ],
+      "detailImages": [
+        "/img/uploads/오픈그리퍼_손목카메라4x.jpeg"
+      ],
+      "naverUrl": "https://smartstore.naver.com/roboseasy/products/12605183674",
+      "featured": true,
+      "representative": true,
+      "comingSoon": false
+    },
+    {
       "id": "so-arm-open-grippe",
       "name": "LeRobot SO-ARM Open Gripper",
       "category": "so-arm101",
@@ -17,7 +52,6 @@
       ],
       "naverUrl": "https://smartstore.naver.com/roboseasy/products/13156884121#ZOOM",
       "featured": true,
-      "hero": true,
       "representative": false,
       "comingSoon": false
     }

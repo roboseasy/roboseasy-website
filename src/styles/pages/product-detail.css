@@ -1,0 +1,233 @@
+/* 제품 상세 페이지 (PDP) — 라이트 고정. 클래식 2단 + 하단 상세 이미지. */
+
+.pdp {
+  padding: var(--spacing-48) 20px var(--spacing-80);
+}
+
+.pdp__container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
+/* ─── 상단 2단 ─── */
+.pdp__top {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--spacing-48);
+  align-items: start;
+}
+
+/* 갤러리 */
+.pdp__main {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-images);
+  overflow: hidden;
+  background-color: var(--color-surface-2);
+}
+
+.pdp__main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.pdp__thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-12);
+  margin-top: var(--spacing-12);
+}
+
+.pdp__thumb {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-inputs);
+  overflow: hidden;
+  background-color: var(--color-surface-2);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.pdp__thumb.is-active {
+  border-color: var(--color-amethyst);
+}
+
+.pdp__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 정보 (sticky) */
+.pdp__info {
+  position: sticky;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pdp__category {
+  font-size: var(--text-body-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-muted-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pdp__name {
+  margin: var(--spacing-8) 0 var(--spacing-16);
+  font-family: var(--font-display);
+  font-size: var(--text-heading);
+  font-weight: var(--fw-bold);
+  color: var(--color-bright-gray);
+  line-height: 1.3;
+}
+
+.pdp__price {
+  margin: 0 0 var(--spacing-20);
+  font-size: var(--text-heading-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-amethyst);
+}
+
+.pdp__summary {
+  margin: 0 0 var(--spacing-32);
+  padding-top: var(--spacing-20);
+  border-top: 1px solid var(--color-ash-border);
+  font-size: var(--text-body);
+  color: var(--color-medium-gray);
+  line-height: 1.6;
+}
+
+/* 액션 버튼 */
+.pdp__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.pdp__buy,
+.pdp__quote {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  font-size: var(--text-body);
+  font-weight: var(--fw-semibold);
+  border-radius: var(--radius-buttons);
+  text-decoration: none;
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.pdp__buy {
+  background-color: var(--color-amethyst);
+  color: var(--color-white);
+}
+
+.pdp__buy:hover {
+  opacity: 0.88;
+}
+
+.pdp__buy--disabled {
+  background-color: var(--color-graphite);
+  color: var(--color-muted-gray);
+  cursor: not-allowed;
+}
+
+.pdp__quote {
+  background-color: transparent;
+  color: var(--color-amethyst);
+  border: 1px solid var(--color-amethyst);
+}
+
+.pdp__quote:hover {
+  background-color: var(--color-tag-bg);
+}
+
+/* ─── 하단 상세 정보 탭 (설명 / 제원) ─── */
+.pdp__detail {
+  margin-top: var(--spacing-80);
+}
+
+/* 탭 네비게이션 — 줄(border)을 탭 아래로. 스크롤 시 헤더(85px) 아래 고정 */
+.pdp__tabs {
+  position: sticky;
+  top: 85px;
+  z-index: 10;
+  background-color: var(--surface-page);
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-32);
+  padding-top: var(--spacing-16);
+  border-bottom: 1px solid var(--color-ash-border);
+  margin-bottom: var(--spacing-32);
+}
+
+.pdp__tab {
+  padding: 0 0 var(--spacing-12);
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-muted-gray);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.pdp__tab:hover {
+  color: var(--color-bright-gray);
+}
+
+.pdp__tab.is-active {
+  color: var(--color-bright-gray);
+  border-bottom-color: var(--color-amethyst);
+}
+
+.pdp__tab-panel {
+  display: none;
+}
+
+.pdp__tab-panel.is-active {
+  display: block;
+}
+
+.pdp__detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.pdp__detail-item {
+  border-radius: var(--radius-images);
+  overflow: hidden;
+  background-color: var(--color-surface-2);
+}
+
+/* 이미지가 없는 플레이스홀더 슬롯만 고정 비율 유지 */
+.pdp__detail-item:not(:has(img)) {
+  aspect-ratio: 16 / 9;
+}
+
+/* 긴 이미지도 잘리지 않고 전체 표시 (높이는 이미지 비율대로) */
+.pdp__detail-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 768px) {
+  .pdp__top {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-32);
+  }
+  .pdp__info {
+    position: static;
+  }
+}

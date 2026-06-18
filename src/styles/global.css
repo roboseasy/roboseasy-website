@@ -219,7 +219,7 @@ body {
 }
 
 .banner__title-accent {
-    color: #8a5cf5;
+    color: var(--brand-roboseasy);
 }
 
 .banner__subtitle {
@@ -325,14 +325,13 @@ body {
     /* 푸터 텍스트/테두리는 테마 무관하게 항상 다크 아일랜드로 고정 */
     --color-abyss: #171717;
     --color-bright-gray: #eeeeee;
-    --color-medium-gray: #bcbcbc;
+    --color-medium-gray: #a3a3a3;
     --color-muted-gray: #a3a3a3;
     --color-ash-border: rgba(255, 255, 255, 0.08);
     --color-lavender: #a78bfa;
     background: var(--color-abyss);
     color: var(--color-bright-gray);
-    padding: 64px 0 24px;
-    margin-top: var(--section-gap);
+    padding: 24px 0 24px;
 }
 
 /* 라이트 모드 페이지에서만 푸터 배경을 Deep Nebula로 (랜딩 등 다크 고정 페이지는 기존 #171717 유지) */
@@ -347,10 +346,14 @@ body {
 
 /* 라이트 모드: 푸터 about 섹션 텍스트를 #f8fafc로 빛나게(글로우) */
 :root[data-theme='light'] .footer__section--about .footer__title,
-:root[data-theme='light'] .footer__section--about .footer__list-item,
-:root[data-theme='light'] .footer__section--about .footer__list-item span {
+:root[data-theme='light'] .footer__section--about .footer__list-item {
     color: #f8fafc;
     text-shadow: 0 0 10px rgba(248, 250, 252, 0.55), 0 0 20px rgba(248, 250, 252, 0.3);
+}
+
+:root[data-theme='light'] .footer__section--about .footer__list-item span {
+    color: #a3a3a3;
+    text-shadow: none;
 }
 
 .footer__container {
@@ -365,7 +368,6 @@ body {
     flex-wrap: wrap;
     gap: 48px;
     margin-bottom: 48px;
-    padding-bottom: 48px;
     border-bottom: 1px solid var(--color-ash-border);
 }
 
@@ -381,14 +383,13 @@ body {
 .footer__section--about::before {
     content: '';
     position: absolute;
-    /* 푸터 상단 패딩(64px)까지 위로, 하단은 구분선+저작권 영역까지 커버 */
-    top: -64px;
-    bottom: -108px;
+    top: -24px;
+    bottom: -24px;
     left: -40px;
     right: -120px;
     background:
-        radial-gradient(ellipse 85% 80% at 25% 48%, rgba(138, 92, 245, 0.38) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 55% at 10% 50%, rgba(0, 44, 95, 0.32) 0%, transparent 55%);
+        radial-gradient(ellipse 85% 80% at 25% 48%, rgba(var(--brand-roboseasy-rgb), 0.38) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 55% at 10% 50%, rgba(var(--brand-hyundai-rgb), 0.32) 0%, transparent 55%);
     pointer-events: none;
     z-index: 0;
 }
@@ -408,6 +409,7 @@ body {
     font-size: var(--text-body-sm);
     font-weight: var(--fw-semibold);
     color: var(--color-bright-gray);
+    margin-top: var(--spacing-16);
     margin-bottom: var(--spacing-16);
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -454,9 +456,14 @@ body {
 
 /* ─── Tella Page Intro (shared — documents, news, programs) ─── */
 .page-intro {
-    background: var(--color-chalk);
+    background-color: #16131f;
+    background-image:
+        linear-gradient(rgba(15, 13, 22, 0.5), rgba(15, 13, 22, 0.5)),
+        url('/img/page-intro-bg.webp');
+    background-size: cover;
+    background-position: center;
     padding: 80px 20px 56px;
-    border-bottom: 1px solid var(--color-ash-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     text-align: center;
 }
 
@@ -469,7 +476,7 @@ body {
     font-family: var(--font-display);
     font-size: clamp(36px, 5vw, 56px);
     font-weight: var(--fw-bold);
-    color: var(--color-ink);
+    color: #ffffff;
     letter-spacing: var(--tracking-heading-lg);
     margin: 0 0 16px;
     line-height: 1.1;
@@ -479,7 +486,7 @@ body {
 
 .page-intro__description {
     font-size: var(--text-subheading);
-    color: var(--color-slate);
+    color: rgba(255, 255, 255, 0.82);
     margin: 0;
     opacity: 0;
     animation: fadeInUp 0.7s ease forwards 0.25s;
