@@ -992,18 +992,27 @@
 
 /* 변형(variant) 매트릭스 — 작은 칩 링크 */
 .studio-download__rows {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;            /* 모든 행이 라벨/칩 컬럼 트랙을 공유 → 칩 시작 위치 정렬 */
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  row-gap: 8px;
+  align-items: center;
   width: max-content;       /* 가장 넓은 행에 맞춰 자연 너비. 칩이 줄바꿈되지 않도록 */
   font-size: 13px;
 }
 
 .studio-download__row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
-  align-items: center;
+  display: contents;        /* 행 래퍼를 풀어 자식이 직접 공유 그리드에 배치 */
+}
+
+/* 우분투(Linux) 컬럼은 칩이 3개라 가운데 정렬 시 시각적으로 우측으로 치우쳐 보임 → 살짝 좌측 이동 */
+.studio-download__column--linux .studio-download__rows {
+  transform: translateX(-28px);
+}
+
+/* 맥(Mac) 컬럼도 칩이 길어 우측으로 치우쳐 보임 → 좌측 이동 */
+.studio-download__column--mac .studio-download__rows {
+  transform: translateX(-24px);
 }
 
 .studio-download__row-label {

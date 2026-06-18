@@ -1,0 +1,41 @@
+---
+// 제품 사진 확보 전 임시 브랜드 플레이스홀더.
+// 회색 "?" 대신 보라 그라데이션 타일 + 로고 마크 + '이미지 준비 중'으로 정돈.
+// 부모 컨테이너를 가득 채운다(카드·히어로·스포트라이트 공용).
+---
+<div class="brand-ph">
+  <img class="brand-ph__mark" src="/img/logo.png" alt="" aria-hidden="true" />
+  <span class="brand-ph__label">이미지 준비 중</span>
+</div>
+
+<style>
+  .brand-ph {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background:
+      radial-gradient(115% 115% at 50% 28%, rgba(138, 92, 245, 0.22), rgba(138, 92, 245, 0.05) 55%, rgba(138, 92, 245, 0) 78%),
+      linear-gradient(160deg, #f4f1ff 0%, #e7e1fb 100%);
+  }
+
+  .brand-ph__mark {
+    width: 30%;
+    max-width: 80px;
+    min-width: 40px;
+    height: auto;
+    opacity: 0.9;
+    /* 로고를 브랜드 바이올렛으로 (MainHeader 로고 필터와 동일) */
+    filter: brightness(0) saturate(100%) invert(36%) sepia(82%) saturate(750%) hue-rotate(224deg) brightness(101%) contrast(100%);
+  }
+
+  .brand-ph__label {
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    letter-spacing: 0.04em;
+    color: var(--color-muted-gray);
+  }
+</style>

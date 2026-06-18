@@ -1,21 +1,76 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/pages/news.css';
+// Instagram은 운영자가 CMS(news.json)에 ID를 입력 → 공식 임베드. 상위 3개 노출.
+import { instagramPosts } from '../data/news.json';
 
 const title = 'News - RoboSEasy | 로보시지';
-const description = '로보시지의 최신 소식을 확인하세요. Instagram 포스트, 릴스, YouTube 영상을 한눈에 볼 수 있습니다';
+const description = '로보시지의 최신 소식을 확인하세요. Instagram, 블로그, YouTube를 한눈에 볼 수 있습니다';
 
-const instagramPosts = [
-  'DRXkNIsErNk', 'DRXj_ZlEnUx', 'DRXjv7okkvd', 'DRXjGDdEkDZ',
-  'DO6CDqlkhOX', 'DO58UVyEmag', 'DO56jIpErDt', 'DO52PySkhjF',
-];
+// ── HTML 엔티티 디코드 (피드 제목용) ──
+const decode = (s: string) =>
+  s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+   .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&#x27;/g, "'");
 
-const instagramReels = ['DSpYGQckv96', 'DSANn-YknOQ'];
+// ── 블로그(Blogger) 최신 6개 — 빌드 시 공식 JSON 피드에서 수집 ──
+interface BlogPost { title: string; url: string; date: string; excerpt: string; thumb: string | null; }
+async function loadBlogPosts(): Promise<BlogPost[]> {
+  try {
+    const res = await fetch(
+      'https://roboseasy.blogspot.com/feeds/posts/default?alt=json&max-results=6',
+      { signal: AbortSignal.timeout(8000) }
+    );
+    const data = await res.json();
+    return (data.feed?.entry ?? []).map((e: any): BlogPost => {
+      const html: string = e.content?.$t ?? e.summary?.$t ?? '';
+      const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      const imgMatch = html.match(/<img[^>]+src="([^"]+)"/);
+      const thumb: string | null =
+        e['media$thumbnail']?.url?.replace(/\/s72-c\//, '/w640/') ?? imgMatch?.[1] ?? null;
+      const link = (e.link ?? []).find((l: any) => l.rel === 'alternate');
+      return {
+        title: decode(e.title?.$t ?? ''),
+        url: link?.href ?? 'https://roboseasy.blogspot.com/',
+        date: (e.published?.$t ?? '').slice(0, 10).replace(/-/g, '.'),
+        excerpt: text.slice(0, 100),
+        thumb,
+      };
+    });
+  } catch (err) {
+    console.error('[news] Blogger 피드 수집 실패:', err);
+    return [];
+  }
+}
 
-const youtubeVideos = [
-  'ILz0K2XjZF8', 'Ape2Qg_waGA', 'x55GjA5352U', 'vDS5eLKd9lM',
-  'cu2dFLND0go', 'WuzyrXT91Qg', 'I2O7ipTH5VI', '2Dxv1VEfRjs',
-];
+// ── YouTube 최신 6개 — 빌드 시 채널 RSS에서 수집 (API 키 불필요) ──
+const YT_CHANNEL_ID = 'UCPZgh6XSJRDo3HJM-RDdlXQ';
+interface YtVideo { id: string; title: string; }
+// YouTube RSS는 이 서버/IP에 대해 간헐적으로 404/500을 반환한다.
+// ⚠️ 커스텀 User-Agent를 보내면 오히려 차단되므로 '헤더 없이' 요청하고,
+//    일시적 오류에 대비해 짧은 백오프로 최대 4회 재시도한다.
+async function loadYtVideos(): Promise<YtVideo[]> {
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    if (attempt > 1) await new Promise((r) => setTimeout(r, 250 * attempt));
+    try {
+      const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`, {
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const xml = await res.text();
+      const videos = xml.split('<entry>').slice(1, 7).map((entry): YtVideo => ({
+        id: entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1] ?? '',
+        title: decode(entry.match(/<title>([^<]*)<\/title>/)?.[1] ?? ''),
+      })).filter((v) => v.id);
+      if (videos.length > 0) return videos;
+    } catch (err) {
+      if (attempt === 4) console.error('[news] YouTube 피드 수집 실패(재시도 소진):', err);
+    }
+  }
+  return [];
+}
+
+// 두 피드는 서로 독립 → 병렬로 가져와 블로킹 시간을 합산이 아닌 최댓값으로 단축
+const [blogPosts, ytVideos] = await Promise.all([loadBlogPosts(), loadYtVideos()]);
 ---
 <BaseLayout title={title} description={description} path="/news">
   <section class="page-intro">
@@ -28,16 +83,17 @@ const youtubeVideos = [
   <section class="news">
     <div class="news__tabs-wrap">
       <div class="news__tabs">
-        <button class="news__tab news__tab--active" data-tab="posts">Instagram Posts</button>
-        <button class="news__tab" data-tab="reels">Instagram Reels</button>
-        <button class="news__tab" data-tab="youtube">YouTube Videos</button>
+        <button class="news__tab news__tab--active" data-tab="instagram">Instagram</button>
+        <button class="news__tab" data-tab="blog">Blog</button>
+        <button class="news__tab" data-tab="youtube">YouTube</button>
       </div>
     </div>
 
     <div class="news__content">
-      <div class="news__panel news__panel--active" data-panel="posts">
+      <!-- Instagram: 공식 임베드 1×3 (상위 3개) -->
+      <div class="news__panel news__panel--active" data-panel="instagram">
         <div class="instagram-feed">
-          {instagramPosts.map((id) => (
+          {instagramPosts.slice(0, 3).map((id) => (
             <div class="instagram-feed__post">
               <blockquote
                 class="instagram-media instagram-feed__embed"
@@ -50,42 +106,50 @@ const youtubeVideos = [
         </div>
       </div>
 
-      <div class="news__panel" data-panel="reels">
-        <div class="instagram-feed">
-          {instagramReels.map((id) => (
-            <div class="instagram-feed__post">
-              <blockquote
-                class="instagram-media instagram-feed__embed"
-                data-instgrm-captioned
-                data-instgrm-permalink={`https://www.instagram.com/reel/${id}/?img_index=1/`}
-                data-instgrm-version="14"
-              ></blockquote>
-            </div>
-          ))}
-        </div>
+      <!-- 블로그: 최신 글 3개 (Blogger 피드 자동 수집) -->
+      <div class="news__panel" data-panel="blog">
+        {blogPosts.length > 0 ? (
+          <div class="blog-feed">
+            {blogPosts.map((post) => (
+              <a class="blog-card" href={post.url} target="_blank" rel="noopener noreferrer">
+                <div class="blog-card__media">
+                  {post.thumb ? (
+                    <img src={post.thumb} alt={post.title} class="blog-card__img" loading="lazy" />
+                  ) : (
+                    <div class="blog-card__placeholder"><span>RoboSEasy</span></div>
+                  )}
+                </div>
+                <div class="blog-card__body">
+                  <h3 class="blog-card__title">{post.title}</h3>
+                  <p class="blog-card__excerpt">{post.excerpt}…</p>
+                  <time class="blog-card__date">{post.date}</time>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="news__empty">블로그 글을 불러오지 못했습니다. <a href="https://roboseasy.blogspot.com/" target="_blank" rel="noopener noreferrer">블로그 바로가기 →</a></p>
+        )}
       </div>
 
+      <!-- YouTube: 영상만 2×3 (최신 6개, RSS 자동 수집) -->
       <div class="news__panel" data-panel="youtube">
-        <div class="instagram-feed">
-          {youtubeVideos.map((videoId) => (
-            <div class="instagram-feed__post youtube-video" data-video-id={videoId}>
+        {ytVideos.length > 0 ? (
+          <div class="instagram-feed">
+            {ytVideos.map((video) => (
               <iframe
                 class="youtube-video__iframe"
-                src={`https://www.youtube.com/embed/${videoId}`}
-                title="YouTube video player"
+                src={`https://www.youtube.com/embed/${video.id}`}
+                title={video.title}
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
               ></iframe>
-              <a
-                class="youtube-video__title"
-                href={`https://www.youtube.com/watch?v=${videoId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >Loading...</a>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p class="news__empty">영상을 불러오지 못했습니다. <a href="https://www.youtube.com/@RoboSEasy" target="_blank" rel="noopener noreferrer">YouTube 채널 →</a></p>
+        )}
       </div>
     </div>
   </section>
@@ -105,28 +169,6 @@ const youtubeVideos = [
       targetPanel?.classList.add('news__panel--active');
     });
   });
-
-  async function loadYouTubeTitles() {
-    const videos = document.querySelectorAll<HTMLElement>('.youtube-video[data-video-id]');
-    for (const el of videos) {
-      const videoId = el.getAttribute('data-video-id');
-      const titleEl = el.querySelector<HTMLElement>('.youtube-video__title');
-      if (!videoId || !titleEl) continue;
-      try {
-        const res = await fetch(
-          `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
-        );
-        if (!res.ok) throw new Error('oembed failed');
-        const data = await res.json();
-        titleEl.textContent = data.title || 'YouTube Video';
-      } catch (err) {
-        console.error(`Error loading title for video ${videoId}:`, err);
-        titleEl.textContent = 'YouTube Video';
-      }
-    }
-  }
-
-  loadYouTubeTitles();
 </script>
 
 <!-- Instagram embed -->
