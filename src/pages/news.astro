@@ -14,43 +14,63 @@ const decode = (s: string) =>
 
 // ── 블로그(Blogger) 최신 6개 — 빌드 시 공식 JSON 피드에서 수집 ──
 interface BlogPost { title: string; url: string; date: string; excerpt: string; thumb: string | null; }
-let blogPosts: BlogPost[] = [];
-try {
-  const res = await fetch('https://roboseasy.blogspot.com/feeds/posts/default?alt=json&max-results=6');
-  const data = await res.json();
-  blogPosts = (data.feed?.entry ?? []).map((e: any): BlogPost => {
-    const html: string = e.content?.$t ?? e.summary?.$t ?? '';
-    const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-    const imgMatch = html.match(/<img[^>]+src="([^"]+)"/);
-    const thumb: string | null =
-      e['media$thumbnail']?.url?.replace(/\/s72-c\//, '/w640/') ?? imgMatch?.[1] ?? null;
-    const link = (e.link ?? []).find((l: any) => l.rel === 'alternate');
-    return {
-      title: decode(e.title?.$t ?? ''),
-      url: link?.href ?? 'https://roboseasy.blogspot.com/',
-      date: (e.published?.$t ?? '').slice(0, 10).replace(/-/g, '.'),
-      excerpt: text.slice(0, 100),
-      thumb,
-    };
-  });
-} catch (err) {
-  console.error('[news] Blogger 피드 수집 실패:', err);
+async function loadBlogPosts(): Promise<BlogPost[]> {
+  try {
+    const res = await fetch(
+      'https://roboseasy.blogspot.com/feeds/posts/default?alt=json&max-results=6',
+      { signal: AbortSignal.timeout(8000) }
+    );
+    const data = await res.json();
+    return (data.feed?.entry ?? []).map((e: any): BlogPost => {
+      const html: string = e.content?.$t ?? e.summary?.$t ?? '';
+      const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      const imgMatch = html.match(/<img[^>]+src="([^"]+)"/);
+      const thumb: string | null =
+        e['media$thumbnail']?.url?.replace(/\/s72-c\//, '/w640/') ?? imgMatch?.[1] ?? null;
+      const link = (e.link ?? []).find((l: any) => l.rel === 'alternate');
+      return {
+        title: decode(e.title?.$t ?? ''),
+        url: link?.href ?? 'https://roboseasy.blogspot.com/',
+        date: (e.published?.$t ?? '').slice(0, 10).replace(/-/g, '.'),
+        excerpt: text.slice(0, 100),
+        thumb,
+      };
+    });
+  } catch (err) {
+    console.error('[news] Blogger 피드 수집 실패:', err);
+    return [];
+  }
 }
 
 // ── YouTube 최신 6개 — 빌드 시 채널 RSS에서 수집 (API 키 불필요) ──
 const YT_CHANNEL_ID = 'UCPZgh6XSJRDo3HJM-RDdlXQ';
 interface YtVideo { id: string; title: string; }
-let ytVideos: YtVideo[] = [];
-try {
-  const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`);
-  const xml = await res.text();
-  ytVideos = xml.split('<entry>').slice(1, 7).map((entry): YtVideo => ({
-    id: entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1] ?? '',
-    title: decode(entry.match(/<title>([^<]*)<\/title>/)?.[1] ?? ''),
-  })).filter((v) => v.id);
-} catch (err) {
-  console.error('[news] YouTube 피드 수집 실패:', err);
+// YouTube RSS는 이 서버/IP에 대해 간헐적으로 404/500을 반환한다.
+// ⚠️ 커스텀 User-Agent를 보내면 오히려 차단되므로 '헤더 없이' 요청하고,
+//    일시적 오류에 대비해 짧은 백오프로 최대 4회 재시도한다.
+async function loadYtVideos(): Promise<YtVideo[]> {
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    if (attempt > 1) await new Promise((r) => setTimeout(r, 250 * attempt));
+    try {
+      const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`, {
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const xml = await res.text();
+      const videos = xml.split('<entry>').slice(1, 7).map((entry): YtVideo => ({
+        id: entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1] ?? '',
+        title: decode(entry.match(/<title>([^<]*)<\/title>/)?.[1] ?? ''),
+      })).filter((v) => v.id);
+      if (videos.length > 0) return videos;
+    } catch (err) {
+      if (attempt === 4) console.error('[news] YouTube 피드 수집 실패(재시도 소진):', err);
+    }
+  }
+  return [];
 }
+
+// 두 피드는 서로 독립 → 병렬로 가져와 블로킹 시간을 합산이 아닌 최댓값으로 단축
+const [blogPosts, ytVideos] = await Promise.all([loadBlogPosts(), loadYtVideos()]);
 ---
 <BaseLayout title={title} description={description} path="/news">
   <section class="page-intro">
@@ -64,7 +84,7 @@ try {
     <div class="news__tabs-wrap">
       <div class="news__tabs">
         <button class="news__tab news__tab--active" data-tab="instagram">Instagram</button>
-        <button class="news__tab" data-tab="blog">블로그</button>
+        <button class="news__tab" data-tab="blog">Blog</button>
         <button class="news__tab" data-tab="youtube">YouTube</button>
       </div>
     </div>

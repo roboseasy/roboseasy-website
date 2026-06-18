@@ -11,12 +11,18 @@ export function getStaticPaths() {
 
 interface Props { product: Product }
 const { product } = Astro.props;
-const { name, category, price, summary, image, gallery, detailImages, naverUrl, comingSoon } = product;
+const { name, category, price, summary, image, gallery, detailImages, specImages, naverUrl, comingSoon } = product;
 
 const buyUrl = naverUrl ?? NAVER_STORE_URL;
-// 이미지 미확보 — 갤러리/상세는 데이터가 없으면 플레이스홀더 슬롯으로 채움
-const thumbs = gallery && gallery.length ? gallery : Array.from({ length: 4 }, () => null);
+// 썸네일이 메인 이미지를 구동 — 대표 이미지를 첫 썸네일로 포함시켜
+// 다른 썸네일을 본 뒤 다시 메인(대표)으로 복귀할 수 있게 함
+const galleryImages = gallery && gallery.length ? gallery : [];
+const thumbSrcs = [image, ...galleryImages].filter(Boolean);
+const mainSrc = thumbSrcs[0] ?? null;
+// 이미지 미확보 — 데이터가 없으면 플레이스홀더 슬롯으로 채움
+const thumbs = thumbSrcs.length ? thumbSrcs : Array.from({ length: 4 }, () => null);
 const details = detailImages && detailImages.length ? detailImages : Array.from({ length: 2 }, () => null);
+const specs = specImages && specImages.length ? specImages : Array.from({ length: 1 }, () => null);
 
 const title = `${name} - RoboSEasy | 로보시지`;
 const description = summary ?? `${name} 제품 정보와 구매 안내.`;
@@ -29,8 +35,8 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
         <!-- 갤러리 -->
         <div class="pdp__gallery">
           <div class="pdp__main">
-            {image ? (
-              <img class="pdp__main-img" src={image} alt={name} />
+            {mainSrc ? (
+              <img class="pdp__main-img" src={mainSrc} alt={name} />
             ) : (
               <BrandPlaceholder />
             )}
@@ -80,7 +86,11 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
 
         <div class="pdp__tab-panel" data-panel="spec">
           <div class="pdp__detail-list">
-            <div class="pdp__detail-item"><BrandPlaceholder /></div>
+            {specs.map((s, i) => (
+              <div class="pdp__detail-item">
+                {s ? <img src={s} alt={`${name} 제원 ${i + 1}`} loading="lazy" /> : <BrandPlaceholder />}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -96,6 +106,21 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
     tab.addEventListener('click', () => {
       tabs.forEach((t) => t.classList.toggle('is-active', t === tab));
       panels.forEach((p) => p.classList.toggle('is-active', p.dataset.panel === tab.dataset.tab));
+    });
+  });
+
+  // 갤러리 — 하위(썸네일) 이미지 클릭 시 메인 이미지로 교체
+  const mainImg = document.querySelector<HTMLImageElement>('.pdp__main-img');
+  const thumbItems = document.querySelectorAll<HTMLElement>('.pdp__thumb');
+  thumbItems.forEach((thumb) => {
+    const img = thumb.querySelector('img');
+    if (!img) return; // 플레이스홀더(이미지 없음) 슬롯은 건너뜀
+    thumb.addEventListener('click', () => {
+      if (mainImg) {
+        mainImg.src = img.src;
+        mainImg.alt = img.alt;
+      }
+      thumbItems.forEach((t) => t.classList.toggle('is-active', t === thumb));
     });
   });
 </script>

@@ -55,6 +55,7 @@ collections:
               - { name: image, label: "대표 이미지", widget: image, required: false }
               - { name: gallery, label: "갤러리 이미지(상세)", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
               - { name: detailImages, label: "상세 설명 이미지", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
+              - { name: specImages, label: "제원 이미지", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
               - { name: naverUrl, label: "구매 링크(스마트스토어)", widget: string, required: false, hint: "비우면 스토어 메인으로 연결" }
               - { name: featured, label: "주요 제품 노출", widget: boolean, required: false, default: false }
               - { name: representative, label: "카테고리 대표(큰 이미지)", widget: boolean, required: false, default: false, hint: "카테고리당 1개만" }
