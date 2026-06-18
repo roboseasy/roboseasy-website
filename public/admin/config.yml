@@ -7,7 +7,10 @@ backend:
   branch: main
   # 인증: Netlify 내장 OAuth 사용 (base_url 기본값 api.netlify.com).
   # GitHub OAuth App을 만들어 Netlify 사이트 설정에 Client ID/Secret 등록 필요.
-
+  # 커스텀 도메인(roboseasy.ai)에서 접속 시 Netlify OAuth가 사이트를 식별하도록
+  # Netlify 기본 도메인으로 site_id를 고정 (없으면 location.hostname=roboseasy.ai → Not Found)
+  site_domain: roboseasy.netlify.app
+  
 # 저장 시 바로 main에 커밋하지 않고 PR(검수) 생성 → 승인 후 반영
 publish_mode: editorial_workflow
 
