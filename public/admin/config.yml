@@ -7,7 +7,10 @@ backend:
   branch: main
   # 인증: Netlify 내장 OAuth 사용 (base_url 기본값 api.netlify.com).
   # GitHub OAuth App을 만들어 Netlify 사이트 설정에 Client ID/Secret 등록 필요.
-
+  # 커스텀 도메인(roboseasy.ai)에서 접속 시 Netlify OAuth가 사이트를 식별하도록
+  # Netlify 기본 도메인으로 site_id를 고정 (없으면 location.hostname=roboseasy.ai → Not Found)
+  site_domain: roboseasy.netlify.app
+  
 # 저장 시 바로 main에 커밋하지 않고 PR(검수) 생성 → 승인 후 반영
 publish_mode: editorial_workflow
 
@@ -57,6 +60,9 @@ collections:
               - { name: detailImages, label: "상세 설명 이미지", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
               - { name: specImages, label: "제원 이미지", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
               - { name: naverUrl, label: "구매 링크(스마트스토어)", widget: string, required: false, hint: "비우면 스토어 메인으로 연결" }
+              - { name: productNumber, label: "상품번호", widget: string, required: false, hint: "상품정보 표에 표시" }
+              - { name: brand, label: "브랜드", widget: string, required: false, hint: "상품정보 표에 표시" }
+              - { name: origin, label: "원산지", widget: string, required: false, hint: "상품정보 표에 표시" }
               - { name: featured, label: "주요 제품 노출", widget: boolean, required: false, default: false }
               - { name: representative, label: "카테고리 대표(큰 이미지)", widget: boolean, required: false, default: false, hint: "카테고리당 1개만" }
               - { name: comingSoon, label: "곧 출시 배지", widget: boolean, required: false, default: false }

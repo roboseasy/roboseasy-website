@@ -84,6 +84,55 @@
   line-height: 1.3;
 }
 
+/* 이름 아래 구분선 + 배송/상품 정보 표 */
+.pdp__divider {
+  border: none;
+  border-top: 1px solid var(--color-ash-border);
+  margin: 0 0 var(--spacing-20);
+}
+
+.pdp__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+  margin: 0 0 var(--spacing-24);
+}
+
+.pdp__meta-title {
+  margin: 0 0 var(--spacing-8);
+  font-family: var(--font-display);
+  font-size: var(--text-subheading);
+  font-weight: var(--fw-bold);
+  color: var(--color-bright-gray);
+}
+
+/* 그룹(배송정보/상품정보) 사이에만 구분선 */
+.pdp__meta-group + .pdp__meta-group {
+  border-top: 1px solid var(--color-ash-border);
+  padding-top: var(--spacing-24);
+}
+
+.pdp__meta-list {
+  margin: 0;
+}
+
+.pdp__meta-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--spacing-16);
+  padding: var(--spacing-8) 0;
+  font-size: var(--text-body-sm);
+}
+
+.pdp__meta-row dt {
+  color: var(--color-muted-gray);
+}
+
+.pdp__meta-row dd {
+  margin: 0;
+  color: var(--color-medium-gray);
+}
+
 .pdp__price {
   margin: 0 0 var(--spacing-20);
   font-size: var(--text-heading-lg);
