@@ -26,22 +26,18 @@
       "id": "lekiwi",
       "name": "LeKiWi",
       "category": "lekiwi",
-      "price": 1300000,
+      "price": 0,
       "tags": [
         "#likiwi"
       ],
-      "summary": "dd",
+      "summary": "",
       "image": "/img/uploads/lekiwi.png",
-      "gallery": [
-        "/img/uploads/21823396272049845_2029614228.jpeg"
-      ],
-      "detailImages": [
-        "/img/uploads/오픈그리퍼_손목카메라4x.jpeg"
-      ],
-      "naverUrl": "https://smartstore.naver.com/roboseasy/products/12605183674",
+      "gallery": [],
+      "detailImages": [],
+      "naverUrl": "",
       "featured": true,
       "representative": true,
-      "comingSoon": false
+      "comingSoon": true
     }
   ]
 }
