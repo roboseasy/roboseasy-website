@@ -25,6 +25,12 @@ export interface Product {
   detailImages?: string[];
   /** 제원 탭 이미지들 (세로 스택). 없으면 placeholder */
   specImages?: string[];
+  /** 상품정보 표 — 상품번호 */
+  productNumber?: string;
+  /** 상품정보 표 — 브랜드 */
+  brand?: string;
+  /** 상품정보 표 — 원산지 */
+  origin?: string;
   /** SHOP 주요 제품(1x5)에 노출 */
   featured?: boolean;
   /** PRODUCTS 카테고리 섹션의 대표 상품(큰 이미지). 카테고리당 1개 */
