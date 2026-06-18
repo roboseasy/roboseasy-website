@@ -11,7 +11,8 @@ export function getStaticPaths() {
 
 interface Props { product: Product }
 const { product } = Astro.props;
-const { name, category, price, summary, image, gallery, detailImages, specImages, naverUrl, comingSoon } = product;
+const { name, category, price, summary, image, gallery, detailImages, specImages, naverUrl, comingSoon, productNumber, brand, origin } = product;
+const hasProductInfo = Boolean(productNumber || brand || origin);
 
 const buyUrl = naverUrl ?? NAVER_STORE_URL;
 // 썸네일이 메인 이미지를 구동 — 대표 이미지를 첫 썸네일로 포함시켜
@@ -55,6 +56,29 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
           <span class="pdp__category">{CATEGORY_LABELS[category]}</span>
           <h1 class="pdp__name">{name}</h1>
           <p class="pdp__price">{comingSoon ? '가격 미정' : `${price.toLocaleString('ko-KR')}원`}</p>
+
+          <hr class="pdp__divider" />
+          <div class="pdp__meta">
+            <section class="pdp__meta-group">
+              <h2 class="pdp__meta-title">배송정보</h2>
+              <dl class="pdp__meta-list">
+                <div class="pdp__meta-row"><dt>배송 기간</dt><dd>평균 3일 이내 도착 확률 100%</dd></div>
+                <div class="pdp__meta-row"><dt>배송비</dt><dd>무료배송 (100,000원 이상 무료)</dd></div>
+                <div class="pdp__meta-row"><dt>배송/출고</dt><dd>GSPostbox택배</dd></div>
+              </dl>
+            </section>
+            {hasProductInfo && (
+              <section class="pdp__meta-group">
+                <h2 class="pdp__meta-title">상품정보</h2>
+                <dl class="pdp__meta-list">
+                  {productNumber && <div class="pdp__meta-row"><dt>상품번호</dt><dd>{productNumber}</dd></div>}
+                  {brand && <div class="pdp__meta-row"><dt>브랜드</dt><dd>{brand}</dd></div>}
+                  {origin && <div class="pdp__meta-row"><dt>원산지</dt><dd>{origin}</dd></div>}
+                </dl>
+              </section>
+            )}
+          </div>
+
           {summary && <p class="pdp__summary">{summary}</p>}
           <div class="pdp__actions">
             {comingSoon ? (
