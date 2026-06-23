@@ -41,7 +41,7 @@
 - **호스팅**: Netlify (`@astrojs/netlify` 어댑터가 SSR 엔드포인트를 Netlify Functions로 배포)
   - `netlify.toml`이 build/publish/Node 버전 지정
   - `public/_redirects`로 옛 URL의 SEO 리다이렉트
-- **도메인**: https://roboseasy.netlify.app
+- **도메인**: https://roboseasy.ai
 
 ## 로컬 개발
 

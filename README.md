@@ -2,7 +2,7 @@
 
 로보시지(RoboSEasy) 공식 웹사이트.
 
-- 배포: https://roboseasy.netlify.app
+- 배포: https://roboseasy.ai
 - 스택: [Astro](https://astro.build/) (정적 사이트 생성기) + Netlify
 
 ## 로컬에서 실행하기

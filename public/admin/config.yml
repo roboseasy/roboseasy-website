@@ -6,7 +6,7 @@ backend:
   repo: roboseasy/roboseasy-website   # GitHub <owner>/<repo>
   branch: main
   # 커스텀 도메인(roboseasy.ai)에서 접속 시 Netlify OAuth가 사이트를 식별하도록
-  site_domain: roboseasy.netlify.app
+  site_domain: roboseasy.ai
   
 # 저장 시 main 브랜치에 바로 커밋 (PR 검수 워크플로 미사용)
 # publish_mode: editorial_workflow
