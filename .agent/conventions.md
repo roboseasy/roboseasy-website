@@ -6,7 +6,7 @@
 - 컴포넌트: `src/components/<도메인>/<PascalCase>.astro` (예: `programs/Sts3215Detail.astro`)
 - CSS: `src/styles/pages/<페이지명>.css`
 - 콘텐츠: `src/content/<collection>/<slug>.<json|md>`
-- 이미지: `public/img/<kebab-case>.png` (또는 카테고리 폴더)
+- 이미지: `public/img/<page>_img/<kebab-case>.webp` (페이지별 폴더). 공용 자산은 `common_img/`, docs/CMS는 기존 폴더(`assembly/`, `so_arm/`, `uploads/`)
 - 비디오: `public/videos/<name>.mp4`
 
 ## CSS 클래스 네이밍
@@ -26,6 +26,7 @@ BEM 컨벤션 — `.block__element--modifier`
 - 페이지 인터랙션은 Astro `<script>` (모듈 스코프) 또는 `<script is:inline>` (전역 함수, 옛 onclick 호환용)
 - 새 코드는 가능하면 모듈 `<script>`. 외부 onclick 어트리뷰트와 호환이 필요할 때만 `is:inline`
 - jQuery 미사용 (Phase 6에서 제거 완료)
+- 서버 코드: SSR 엔드포인트는 `src/pages/api/*.ts`, 공용 로직은 `src/lib/`, 컬렉션 외 데이터는 `src/data/`(JSON/TS)
 
 ## Astro 컴포넌트
 
@@ -57,7 +58,9 @@ BEM 컨벤션 — `.block__element--modifier`
 ## 이미지 / 미디어
 
 - 자산은 `public/img/`, `public/videos/`에 위치 — URL은 `/img/...`, `/videos/...` 절대경로
-- OpenGraph 배너: `public/img/banner.png` (1200×630)
+- 이미지는 페이지별 폴더(`{page}_img/`)로 관리, 공용 자산(로고·파비콘·OG·파트너 로고)은 `common_img/`
+- 포맷: 콘텐츠 이미지는 **webp 권장**. favicon/OG/CMS 업로드는 원본 유지 (소셜 미리보기·CMS 호환 때문)
+- OpenGraph 배너: `public/img/common_img/banner.png` (1200×630)
 - 큰 비디오는 외부 호스팅(YouTube/Vimeo) 고려
 
 ## 새 페이지를 만들 때 체크리스트
@@ -70,6 +73,7 @@ BEM 컨벤션 — `.block__element--modifier`
 
 ## 새 콘텐츠를 추가할 때
 
-- 프로그램: `src/content/programs/<slug>.json` (썸네일은 `public/img/`)
+- 프로그램: `src/content/programs/<slug>.json` (썸네일은 `public/img/programs_img/`)
 - docs: `src/content/docs/<category>/<slug>.md` (frontmatter에 title/category/group/order 필수)
+- 컬렉션 외 데이터(news·products 등): `src/data/`의 JSON/TS에 추가
 - 자세한 절차: [workflows.md](workflows.md)

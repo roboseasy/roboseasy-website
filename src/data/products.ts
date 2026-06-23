@@ -11,8 +11,6 @@ export interface Product {
   category: ProductCategory;
   /** 가격(원). toLocaleString으로 표시 */
   price: number;
-  /** 해시태그 (예: '#SO-ARM101') */
-  tags?: string[];
   /** 대표 이미지 경로. 없으면 placeholder */
   image?: string;
   /** 한 줄 제품 정보 요약 (상세 페이지) */
@@ -31,8 +29,6 @@ export interface Product {
   brand?: string;
   /** 상품정보 표 — 원산지 */
   origin?: string;
-  /** SHOP 주요 제품(1x5)에 노출 */
-  featured?: boolean;
   /** PRODUCTS 카테고리 섹션의 대표 상품(큰 이미지). 카테고리당 1개 */
   representative?: boolean;
   /** '곧 출시' 배지 */

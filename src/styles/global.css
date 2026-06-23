@@ -80,38 +80,6 @@ body {
     background-color: var(--color-ash-border);
 }
 
-/* ─── Theme toggle ─── */
-.header__theme-item {
-    display: flex;
-    align-items: center;
-}
-
-.header__theme-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    margin-left: 4px;
-    border: none;
-    border-radius: var(--radius-cards);
-    background-color: transparent;
-    color: var(--color-slate);
-    font-size: 20px;
-    cursor: pointer;
-    transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.header__theme-toggle:hover {
-    color: var(--color-bright-gray);
-    background-color: var(--color-ash-border);
-}
-
-.header__theme-icon--moon { display: none; }
-.header__theme-icon--sun { display: inline-flex; }
-:root[data-theme='light'] .header__theme-icon--moon { display: inline-flex; }
-:root[data-theme='light'] .header__theme-icon--sun { display: none; }
-
 
 /* ─── Hamburger toggle ─── */
 .header__menu-toggle {
@@ -332,6 +300,7 @@ body {
     background: var(--color-abyss);
     color: var(--color-bright-gray);
     padding: 24px 0 24px;
+    overflow: hidden;   /* about 글로우 ::before(좌-40/우-120px) 스필 클리핑 → 전 페이지 가로 스크롤 방지 */
 }
 
 /* 라이트 모드 페이지에서만 푸터 배경을 Deep Nebula로 (랜딩 등 다크 고정 페이지는 기존 #171717 유지) */
@@ -459,7 +428,7 @@ body {
     background-color: #16131f;
     background-image:
         linear-gradient(rgba(15, 13, 22, 0.5), rgba(15, 13, 22, 0.5)),
-        url('/img/page-intro-bg.webp');
+        url('/img/common_img/page-intro-bg.webp');
     background-size: cover;
     background-position: center;
     padding: 80px 20px 56px;

@@ -15,7 +15,7 @@ interface ContactPayload {
   email: string;
   phone: string;
   org?: string;
-  type: 'purchase' | 'corp_edu' | 'workshop' | 'etc';
+  type: 'purchase' | 'as' | 'workshop' | 'corp_edu' | 'etc';
   message: string;
   shipto?: string;
   items?: QuoteItem[];

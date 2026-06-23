@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 // /programs 페이지 — 다운로드 섹션과 "추가 프로그램" 사이의 "설치 방법" 섹션.
 // OS 탭(Windows/Linux/macOS) + 단계별 타임라인.
 //
@@ -26,7 +27,7 @@ interface Tip {
 interface OSPanel {
   key: 'windows' | 'linux' | 'mac';
   label: string;
-  iconClass: string;
+  iconName: string;
   status: 'ready' | 'soon';
   steps: Step[];
   tip?: Tip;
@@ -37,14 +38,14 @@ const panels: OSPanel[] = [
   {
     key: 'windows',
     label: 'Windows',
-    iconClass: 'fa-brands fa-windows',
+    iconName: 'fa6-brands:windows',
     status: 'soon',
     steps: [],
   },
   {
     key: 'linux',
     label: 'Linux',
-    iconClass: 'fa-brands fa-linux',
+    iconName: 'fa6-brands:linux',
     status: 'ready',
     steps: [
       {
@@ -83,7 +84,7 @@ const panels: OSPanel[] = [
   {
     key: 'mac',
     label: 'macOS',
-    iconClass: 'fa-brands fa-apple',
+    iconName: 'fa6-brands:apple',
     status: 'soon',
     steps: [],
   },
@@ -115,7 +116,7 @@ const panels: OSPanel[] = [
         aria-controls={`install-panel-${p.key}`}
         id={`install-tab-${p.key}`}
       >
-        <i class={p.iconClass} aria-hidden="true"></i>
+        <Icon name={p.iconName} aria-hidden="true" />
         <span class="install-guide__tab-label">{p.label}</span>
         {p.status === 'soon' && (
           <span class="install-guide__tab-badge">준비 중</span>
@@ -137,7 +138,7 @@ const panels: OSPanel[] = [
         <div class="install-guide__panel-inner">
         {p.status === 'soon' ? (
           <div class="install-guide__soon">
-            <i class="fa-regular fa-clock install-guide__soon-icon" aria-hidden="true"></i>
+            <Icon name="fa6-regular:clock" class="install-guide__soon-icon" aria-hidden="true" />
             <p class="install-guide__soon-title">{p.label} 빌드 준비 중입니다</p>
             <p class="install-guide__soon-text">
               정식 빌드가 출시되면 이곳에 설치 방법을 안내해 드릴게요.
@@ -152,10 +153,10 @@ const panels: OSPanel[] = [
                   <div class="install-guide__step-body">
                     <h3 class="install-guide__step-title">
                       {s.variant === 'gui' && (
-                        <i class="fa-solid fa-mouse-pointer install-guide__step-title-icon" aria-hidden="true"></i>
+                        <Icon name="fa6-solid:arrow-pointer" class="install-guide__step-title-icon" aria-hidden="true" />
                       )}
                       {s.variant === 'terminal' && (
-                        <i class="fa-solid fa-terminal install-guide__step-title-icon" aria-hidden="true"></i>
+                        <Icon name="fa6-solid:terminal" class="install-guide__step-title-icon" aria-hidden="true" />
                       )}
                       {s.title}
                     </h3>
@@ -168,7 +169,7 @@ const panels: OSPanel[] = [
                           data-copy-target={`code-${p.key}-${s.num}`}
                           aria-label="명령어 복사"
                         >
-                          <i class="fa-regular fa-copy" aria-hidden="true"></i>
+                          <Icon name="fa6-regular:copy" aria-hidden="true" />
                           <span class="install-guide__copy-label">복사</span>
                         </button>
                         <pre><code id={`code-${p.key}-${s.num}`}>{s.code}</code></pre>
@@ -181,7 +182,7 @@ const panels: OSPanel[] = [
 
             {p.tip && (
               <aside class="install-guide__tip" role="note">
-                <i class="fa-solid fa-circle-info install-guide__tip-icon" aria-hidden="true"></i>
+                <Icon name="fa6-solid:circle-info" class="install-guide__tip-icon" aria-hidden="true" />
                 <div class="install-guide__tip-body">
                   <p class="install-guide__tip-title">{p.tip.title}</p>
                   <p class="install-guide__tip-text">
@@ -191,7 +192,7 @@ const panels: OSPanel[] = [
                         {' '}
                         <a class="install-guide__tip-link" href={p.tip.href}>
                           {p.tip.hrefLabel ?? '자세히'}
-                          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                          <Icon name="fa6-solid:arrow-right" aria-hidden="true" />
                         </a>
                       </>
                     )}

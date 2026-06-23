@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sts3215Detail from '../../components/programs/Sts3215Detail.astro';
@@ -29,7 +30,7 @@ const title = `${data.title} - RoboSEasy | 로보시지`;
 <BaseLayout title={title} description={data.description.replace(/\n/g, ' ')} path={`/programs/${data.slug}`} image={data.thumbnail}>
   <section class="program-detail">
     <div class="program-detail__container">
-      <a href="/programs" class="program-detail__back"><i class="fas fa-arrow-left"></i> 프로그램 목록으로</a>
+      <a href="/programs" class="program-detail__back"><Icon name="fa6-solid:arrow-left" /> 프로그램 목록으로</a>
       <Detail />
     </div>
   </section>

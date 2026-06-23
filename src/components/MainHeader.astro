@@ -1,16 +1,12 @@
 ---
+import { Icon } from 'astro-icon/components';
 // 모든 페이지 상단의 공통 네비게이션.
 // 마크업·인터랙션은 기존 js/components/main-header.js에서 1:1 포팅.
-interface Props {
-  /** truthy면 테마 토글 버튼을 숨김 (다크/라이트 고정 페이지) */
-  lockTheme?: boolean | 'light';
-}
-const { lockTheme = false } = Astro.props;
 ---
 <header class="header">
   <div class="header__container">
     <a href="/" class="header__logo">
-      <img class="header__logo-image" src="/img/logo.png" alt="RoboSEasy Logo" />
+      <img class="header__logo-image" src="/img/common_img/logo.png" alt="RoboSEasy Logo" />
     </a>
     <button class="header__menu-toggle" aria-label="메뉴 열기">
       <span></span>
@@ -20,7 +16,7 @@ const { lockTheme = false } = Astro.props;
     <div class="header__overlay"></div>
     <nav class="header__nav">
       <button class="header__nav-close" aria-label="메뉴 닫기">
-        <i class="fa-solid fa-xmark"></i>
+        <Icon name="fa6-solid:xmark" />
       </button>
       <ul class="header__nav-list">
         <li class="header__nav-item"><a class="header__nav-link" href="/">Home</a></li>
@@ -29,14 +25,6 @@ const { lockTheme = false } = Astro.props;
         <li class="header__nav-item"><a class="header__nav-link" href="/documents">Documents</a></li>
         <li class="header__nav-item"><a class="header__nav-link" href="/news">News</a></li>
         <li class="header__nav-item"><a class="header__nav-link" href="/contact">Contact Us</a></li>
-        {!lockTheme && (
-          <li class="header__nav-item header__theme-item">
-            <button class="header__theme-toggle" type="button" aria-label="라이트/다크 모드 전환">
-              <iconify-icon class="header__theme-icon header__theme-icon--sun" icon="ph:sun-bold"></iconify-icon>
-              <iconify-icon class="header__theme-icon header__theme-icon--moon" icon="ph:moon-bold"></iconify-icon>
-            </button>
-          </li>
-        )}
       </ul>
     </nav>
   </div>
@@ -71,17 +59,6 @@ const { lockTheme = false } = Astro.props;
 
       header.querySelectorAll('.header__nav-link').forEach((link) => {
         link.addEventListener('click', closeMenu);
-      });
-    }
-
-    // 테마 토글 — data-theme 전환 + localStorage 저장
-    const themeToggle = header.querySelector('.header__theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        const root = document.documentElement;
-        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        root.setAttribute('data-theme', next);
-        try { localStorage.setItem('theme', next); } catch (e) {}
       });
     }
   }

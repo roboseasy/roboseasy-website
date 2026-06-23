@@ -1,59 +1,42 @@
 {
   "products": [
     {
-      "id": "so-arm101-edu-kit",
-      "name": "AI Robot ARM Edu Kit (SO-ARM101)",
+      "id": "so-arm101-max",
+      "name": "LeRobot SO-ARM101 MAX",
       "category": "so-arm101",
-      "price": 680000,
-      "tags": [
-        "#SO-ARM101",
-        "#LeRobot"
+      "price": 550000,
+      "summary": "",
+      "image": "/img/uploads/so-arm101-max.png",
+      "gallery": [
+        "/img/uploads/112851104212780333_856347944.jpg"
       ],
-      "summary": "SO-ARM101 리더+팔로워 풀세트. LeRobot 학습을 바로 시작할 수 있는 교육용 로봇 암 키트입니다.",
-      "naverUrl": "",
-      "featured": true,
-      "representative": true
+      "detailImages": [
+        "/img/uploads/Artboard_14x.jpeg",
+        "/img/uploads/Artboard_24x.jpeg",
+        "/img/uploads/Artboard_34x.jpeg",
+        "/img/uploads/Artboard_54x.jpeg",
+        "/img/uploads/Artboard_44x.jpeg"
+      ],
+      "specImages": [],
+      "naverUrl": "https://smartstore.naver.com/roboseasy/products/12169101368",
+      "productNumber": "12169101368",
+      "brand": "자체제작 상품",
+      "origin": "국산",
+      "representative": true,
+      "comingSoon": false
     },
     {
       "id": "lekiwi",
       "name": "LeKiWi",
       "category": "lekiwi",
-      "price": 1300000,
-      "tags": [
-        "#likiwi"
-      ],
-      "summary": "dd",
+      "price": 0,
+      "summary": "",
       "image": "/img/uploads/lekiwi.png",
-      "gallery": [
-        "/img/uploads/21823396272049845_2029614228.jpeg"
-      ],
-      "detailImages": [
-        "/img/uploads/오픈그리퍼_손목카메라4x.jpeg"
-      ],
-      "naverUrl": "https://smartstore.naver.com/roboseasy/products/12605183674",
-      "featured": true,
-      "representative": true,
-      "comingSoon": false
-    },
-    {
-      "id": "so-arm-open-grippe",
-      "name": "LeRobot SO-ARM Open Gripper",
-      "category": "so-arm101",
-      "price": 88000,
-      "tags": [
-        "#so-arm",
-        "#gripper"
-      ],
-      "summary": "(완조립품) 르르봇 그리퍼",
-      "image": "/img/uploads/21823396272049845_2029614228.jpeg",
       "gallery": [],
-      "detailImages": [
-        "/img/uploads/오픈그리퍼_손목카메라4x.jpeg"
-      ],
-      "naverUrl": "https://smartstore.naver.com/roboseasy/products/13156884121#ZOOM",
-      "featured": true,
-      "representative": false,
-      "comingSoon": false
+      "detailImages": [],
+      "naverUrl": "",
+      "representative": true,
+      "comingSoon": true
     }
   ]
 }

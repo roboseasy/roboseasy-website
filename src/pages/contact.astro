@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout
@@ -554,7 +555,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                   <label class="field-label">견적 항목</label>
                   <div id="quoteRows" class="quote-cards"><!-- cards injected by JS --></div>
                   <button type="button" id="addRowBtn" class="add-row-btn">
-                    <iconify-icon icon="solar:add-circle-linear" width="16"></iconify-icon>
+                    <Icon name="solar:add-circle-linear" width="16" />
                     <span>품목 행 추가</span>
                   </button>
 
@@ -578,11 +579,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <!-- 견적서 미리보기 / 다운로드 -->
                 <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
                   <button type="button" id="previewQuoteBtn" class="btn-quote-action btn-preview-quote">
-                    <iconify-icon icon="solar:eye-linear" width="16"></iconify-icon>
+                    <Icon name="solar:eye-linear" width="16" />
                     견적서 미리보기
                   </button>
                   <button type="button" id="downloadQuoteBtn" class="btn-quote-action btn-download-quote">
-                    <iconify-icon icon="solar:download-minimalistic-linear" width="16"></iconify-icon>
+                    <Icon name="solar:download-minimalistic-linear" width="16" />
                     견적서 다운로드
                   </button>
                 </div>
@@ -614,11 +615,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div>
               <label class="field-label" id="fileSectionLabel">파일 첨부</label>
               <div id="bizRegNote" style="display:none; align-items:center; gap:6px; font-size:0.82rem; color:var(--accent-pink); margin-bottom:8px; font-weight:500;">
-                <iconify-icon icon="solar:info-circle-linear" width="14" style="flex-shrink:0;"></iconify-icon>
+                <Icon name="solar:info-circle-linear" width="14" style="flex-shrink:0;" />
                 사업자 등록증 사본 업로드해주세요.
               </div>
               <label for="f-files" class="file-drop" id="fileDrop">
-                <iconify-icon icon="solar:upload-linear" width="22" style="color:var(--text-muted);"></iconify-icon>
+                <Icon name="solar:upload-linear" width="22" style="color:var(--text-muted);" />
                 <p style="margin-top:4px;font-size:0.875rem;color:var(--text-secondary);">
                   파일을 클릭하거나 드래그 앤 드롭으로 업로드하세요.
                   <span class="text-muted">(최대 25 MB)</span>
@@ -652,10 +653,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <div id="quoteModalOverlay" class="quote-modal-overlay" role="dialog" aria-modal="true" aria-label="견적서 미리보기">
   <div class="quote-modal-box">
     <button id="quoteModalClose" class="modal-close-btn" aria-label="닫기">
-      <iconify-icon icon="solar:close-circle-bold" width="22"></iconify-icon>
+      <Icon name="solar:close-circle-bold" width="22" />
     </button>
     <h3 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin:0 0 20px 0; padding-right:40px;">
-      <iconify-icon icon="solar:document-text-linear" width="18" style="vertical-align:middle; margin-right:6px;"></iconify-icon>
+      <Icon name="solar:document-text-linear" width="18" style="vertical-align:middle; margin-right:6px;" />
       견적서 미리보기
     </h3>
     <div id="quotePrintArea">
@@ -737,7 +738,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       '<div class="quote-card-head">' +
         '<span class="row-no">' + idx + '</span>' +
         '<select class="item-select q-item">' + itemOptions + '</select>' +
-        '<button type="button" class="row-del" aria-label="행 삭제"><iconify-icon icon="solar:trash-bin-trash-linear" width="16"></iconify-icon></button>' +
+        '<button type="button" class="row-del" aria-label="행 삭제"><Icon name="solar:trash-bin-trash-linear" width="16" /></button>' +
       '</div>' +
       '<div class="quote-card-body">' +
         '<div class="qc-field"><span class="qc-label">수량</span><input type="number" min="1" step="1" class="qc-input q-qty" placeholder="0" /></div>' +
@@ -795,9 +796,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const chip = document.createElement('span');
       chip.className = 'file-chip';
       chip.innerHTML =
-        '<iconify-icon icon="solar:document-linear" width="14"></iconify-icon>' +
+        '<Icon name="solar:document-linear" width="14" />' +
         '<span>' + f.name + ' <span class="text-muted">(' + (f.size/1024).toFixed(1) + ' KB)</span></span>' +
-        '<button type="button" aria-label="삭제"><iconify-icon icon="solar:close-circle-linear" width="14"></iconify-icon></button>';
+        '<button type="button" aria-label="삭제"><Icon name="solar:close-circle-linear" width="14" /></button>';
       chip.querySelector('button').addEventListener('click', () => { uploaded.splice(i, 1); refreshFileList(); });
       fileList.appendChild(chip);
     });

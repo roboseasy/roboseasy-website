@@ -1,9 +1,11 @@
 /* ─── Hero Viewport ─── */
 .hero-viewport {
     height: calc(100vh - 85px);
+    height: calc(100svh - 85px);  /* 안정적 뷰포트 높이 — 스크롤 시 주소창 변화로 흔들리지 않게 (vh 폴백) */
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;   /* 히어로 맵 등 absolute 요소 스필 클리핑 (가로 스크롤 방지) */
 }
 
 /* ─── Hero Bottom Radial Glow ─── */
@@ -25,7 +27,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    height: 72%;
+    height: 70%;                /* 히어로 상단 ~ ROBOSEASY 타이틀(세로 중앙 부근)까지 */
     aspect-ratio: 1.6;          /* 가로로 넓은 박스 → 정사각 원본의 상단(중국)을 크롭 */
     width: auto;
     object-fit: cover;
@@ -421,7 +423,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: 13px;
+    font-size: var(--text-caption);
     border: 2px solid rgba(255, 255, 255, 0.15);
     color: var(--color-medium-gray);
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
@@ -757,7 +759,7 @@
 
 /* ─── Responsive ─── */
 @media screen and (max-width: 1024px) {
-    .hero-viewport { height: auto; min-height: calc(100vh - 85px); }
+    .hero-viewport { height: auto; min-height: calc(100vh - 85px); min-height: calc(100svh - 85px); }
 
     .hero-map { height: 58%; opacity: 0.55; }
 
@@ -774,9 +776,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    /* 모바일: 돔·아크 라인 전체 숨김 (글로우만 유지) */
-    .hero-arc { display: none; }
-
+    /* 아크 라인: 모바일에서도 데스크탑과 동일 CSS로 풀폭 노출 (폭에 맞춰 곡선이 더 들어감) */
     .hero-map { height: 42%; opacity: 0.4; }
 
     .content-section { padding: 48px 16px; }
@@ -837,7 +837,7 @@
     .news-feature__side-btn {
         width: 36px;
         height: 36px;
-        font-size: 13px;
+        font-size: var(--text-caption);
     }
 
     .news-feature__side-btn--prev { order: 2; }
