@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 // /programs 페이지 상단 "Download RoboSEasy Studio" 섹션.
 // VSCode 다운로드 페이지와 동일한 3-OS 컬럼 레이아웃.
 //
@@ -180,7 +181,7 @@ const versionAssetsJson = JSON.stringify(
     {columns.map((col) => (
       <div class={`studio-download__column studio-download__column--${col.key}`}>
         <div class="studio-download__icon" aria-hidden="true">
-          <iconify-icon icon={col.iconName} width="80" height="80"></iconify-icon>
+          <Icon name={col.iconName} width="80" height="80" />
         </div>
 
         <div class="studio-download__buttons">
@@ -191,7 +192,7 @@ const versionAssetsJson = JSON.stringify(
               data-asset-key={btn.k}
               aria-label={`${col.iconAlt} ${btn.primary} 다운로드`}
             >
-              <span class="studio-download__btn-arrow"><iconify-icon icon="solar:alt-arrow-down-bold" width="22" height="22"></iconify-icon></span>
+              <span class="studio-download__btn-arrow"><Icon name="solar:alt-arrow-down-bold" width="22" height="22" /></span>
               <span class="studio-download__btn-primary">{btn.primary}</span>
               <span class="studio-download__btn-secondary">{btn.secondary}</span>
             </a>

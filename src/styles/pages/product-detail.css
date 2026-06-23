@@ -34,7 +34,8 @@
 
 .pdp__thumbs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* 폭에 맞춰 자동 줄바꿈 (모바일 4열 과밀 해소) — 썸네일 최소 72px */
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
   gap: var(--spacing-12);
   margin-top: var(--spacing-12);
 }

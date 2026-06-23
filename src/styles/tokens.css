@@ -65,10 +65,11 @@
   --fw-black: 900;
 
   /* ─── Type Scale ─── */
-  --text-caption: 12px;
-  --text-body-sm: 14px;
-  --text-body: 16px;
-  --text-subheading: 18px;
+  --text-caption-sm: 12px;
+  --text-caption: 14px;
+  --text-body-sm: 16px;
+  --text-body: 18px;
+  --text-subheading: 20px;
   --text-heading-sm: 24px;
   --text-heading: 28px;
   --text-heading-lg: 36px;

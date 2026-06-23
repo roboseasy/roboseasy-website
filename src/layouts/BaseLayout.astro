@@ -11,52 +11,32 @@ interface Props {
   description: string;
   /** 페이지 path. 예: '/programs'. SeoMeta가 canonical/og:url 합성에 사용 */
   path?: string;
-  /** OG/Twitter 이미지 (절대/상대 URL). 기본값은 '/img/banner.png' */
+  /** OG/Twitter 이미지 (절대/상대 URL). 기본값은 '/img/common_img/banner.png' */
   image?: string;
   /** body에 추가할 클래스 (페이지별 스타일 hook용) */
   bodyClass?: string;
   /** false면 공통 헤더/푸터를 렌더하지 않음 (자체 chrome을 가진 랜딩 페이지용) */
   chrome?: boolean;
-  /** true면 토글을 끄고 다크로 고정. 'light'면 라이트로 고정 (랜딩·해커톤=다크, shop=라이트) */
+  /** 페이지 테마 고정: 'light'면 라이트, 그 외(기본)는 다크 (shop=라이트, 나머지=다크) */
   lockTheme?: boolean | 'light';
 }
 
 const { title, description, path, image, bodyClass, chrome = true, lockTheme = false } = Astro.props;
 ---
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme={lockTheme === 'light' ? 'light' : 'dark'}>
   <head>
     <meta charset="UTF-8" />
-    {/* 페인트 전 테마 적용으로 FOUC 방지 — lockTheme=true→다크, 'light'→라이트 고정 */}
-    <script define:vars={{ lockTheme }}>
-      (function () {
-        try {
-          if (lockTheme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            return;
-          }
-          if (lockTheme) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            return;
-          }
-          var saved = localStorage.getItem('theme');
-          document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
-        } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'dark');
-        }
-      })();
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+    <link rel="icon" type="image/x-icon" href="/img/common_img/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/common_img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/common_img/favicon-16x16.png" />
 
     <SeoMeta title={title} description={description} path={path} image={image} />
-    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
     <slot name="head" />
   </head>
   <body class={bodyClass}>
-    {chrome && <MainHeader lockTheme={lockTheme} />}
+    {chrome && <MainHeader />}
     <slot />
     {chrome && <MainFooter />}
   </body>

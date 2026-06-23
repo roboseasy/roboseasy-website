@@ -1,17 +1,18 @@
 ---
+import { Icon } from 'astro-icon/components';
 // /programs/endeffector-teleop 라우트의 본문. [slug].astro가 BaseLayout으로 감싸 렌더.
 ---
             <div class="program-modal__content">
                 <div class="program-modal__header">
                     <div class="program-modal__image-section">
-                        <img src="/img/endeffector-teleop-gui.png" alt="End-Effector Teleop GUI" class="program-modal__image" >
+                        <img src="/img/programs_img/endeffector-teleop-gui.webp" alt="End-Effector Teleop GUI" class="program-modal__image" >
                     </div>
                     <div class="program-modal__info-section">
-                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
+                        <span class="program-modal__badge"><Icon name="fa6-solid:robot" /> RobosEasy</span>
                         <h2 class="program-modal__title">End-Effector Teleop GUI</h2>
                         <p class="program-modal__subtitle">SO-ARM 로봇 팔의 엔드이펙터를 키보드로 직접 제어하는 GUI. P-제어와 2D 역기구학(IK)을 기반으로 동작하며, 실시간 카메라 피드와 관절 상태 모니터링을 지원합니다.</p>
                         <a href="https://drive.google.com/file/d/1lAFLX7U60FygCjQlVMCf3TUf3wz3cC14/view?usp=sharing" target="_blank" class="program-modal__download-btn">
-                            <i class="fas fa-download"></i> AppImage 다운로드
+                            <Icon name="fa6-solid:download" /> AppImage 다운로드
                         </a>
                     </div>
                 </div>
@@ -27,42 +28,42 @@
                     <!-- 탭 1: 개요 -->
                     <div class="modal-tab-panel modal-tab-panel--active" data-tab="eef-개요">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:star" /> 주요 특징</div>
                             <div class="modal-badge-row">
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 카메라 피드</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 엔드이펙터 상태 모니터링</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> Waypoints 저장·재현</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> Excel 내보내기/불러오기</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 실시간 카메라 피드</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 엔드이펙터 상태 모니터링</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> Waypoints 저장·재현</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> Excel 내보내기/불러오기</span>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-layer-group"></i> 화면 구성</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:layer-group" /> 화면 구성</div>
                             <div class="modal-feature-grid">
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-plug"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:plug" /></div>
                                     <div class="modal-feature-card__title">연결 (Connection)</div>
                                     <div class="modal-feature-card__desc">포트 드롭다운에서 로봇의 시리얼 포트를 선택하고 Connect/Stop으로 연결을 제어합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-video"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:video" /></div>
                                     <div class="modal-feature-card__title">카메라 피드</div>
                                     <div class="modal-feature-card__desc">연결된 카메라를 자동 감지해 실시간 표시. 체크박스로 카메라별 on/off가 가능합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-bar"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:chart-bar" /></div>
                                     <div class="modal-feature-card__title">엔드이펙터 상태</div>
                                     <div class="modal-feature-card__desc">EEF X/Y 좌표와 각 관절 각도를 미니 바와 수치로 실시간 확인합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-keyboard"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:keyboard" /></div>
                                     <div class="modal-feature-card__title">키보드 제어</div>
                                     <div class="modal-feature-card__desc">키보드 단축키로 EEF XY 좌표를 이동하면 역기구학이 자동으로 관절각을 계산합니다.</div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:route" /> 기본 사용 흐름</div>
                             <div class="modal-timeline">
                                 <div class="modal-timeline__item">
                                     <div class="modal-timeline__num">1</div>
@@ -83,12 +84,12 @@
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:gear" /> 시스템 요구사항</div>
                             <div class="modal-spec-list">
-                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux x86_64 (Ubuntu 20.04 이상 권장)</span></div>
-                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
-                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, SO-ARM 101, 웹캠 (선택)</span></div>
-                                <div class="modal-spec-item"><i class="fas fa-file-alt"></i><span class="modal-spec-item__label">캘리브레이션</span><span class="modal-spec-item__value">lerobot 캘리브레이션 파일 필요</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-brands:linux" /><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux x86_64 (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-solid:memory" /><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-brands:usb" /><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, SO-ARM 101, 웹캠 (선택)</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-solid:file-lines" /><span class="modal-spec-item__label">캘리브레이션</span><span class="modal-spec-item__value">lerobot 캘리브레이션 파일 필요</span></div>
                             </div>
                         </div>
                     </div>
@@ -96,37 +97,37 @@
                     <!-- 탭 2: 키보드 조작법 -->
                     <div class="modal-tab-panel" data-tab="eef-조작법">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-keyboard"></i> 키 매핑</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:keyboard" /> 키 매핑</div>
                             <div class="modal-kv-grid">
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>Q</code> / <code>A</code></div><div class="modal-kv__value">shoulder_pan 감소/증가</div></div>
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>W</code> / <code>S</code></div><div class="modal-kv__value">EEF X 감소/증가 (IK 자동)</div></div>
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>E</code> / <code>D</code></div><div class="modal-kv__value">EEF Y 감소/증가 (IK 자동)</div></div>
-                                <div class="modal-kv"><i class="fas fa-redo"></i><div class="modal-kv__label"><code>R</code> / <code>F</code></div><div class="modal-kv__value">Pitch 증가/감소</div></div>
-                                <div class="modal-kv"><i class="fas fa-sync-alt"></i><div class="modal-kv__label"><code>T</code> / <code>G</code></div><div class="modal-kv__value">Roll 감소/증가</div></div>
-                                <div class="modal-kv"><i class="fas fa-hand-paper"></i><div class="modal-kv__label"><code>Y</code> / <code>H</code></div><div class="modal-kv__value">그리퍼 열기/닫기</div></div>
-                                <div class="modal-kv"><i class="fas fa-stop-circle"></i><div class="modal-kv__label"><code>X</code></div><div class="modal-kv__value">정지 및 초기 위치 복귀</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-left-right" /><div class="modal-kv__label"><code>Q</code> / <code>A</code></div><div class="modal-kv__value">shoulder_pan 감소/증가</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-left-right" /><div class="modal-kv__label"><code>W</code> / <code>S</code></div><div class="modal-kv__value">EEF X 감소/증가 (IK 자동)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-up-down" /><div class="modal-kv__label"><code>E</code> / <code>D</code></div><div class="modal-kv__value">EEF Y 감소/증가 (IK 자동)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrow-rotate-right" /><div class="modal-kv__label"><code>R</code> / <code>F</code></div><div class="modal-kv__value">Pitch 증가/감소</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-rotate" /><div class="modal-kv__label"><code>T</code> / <code>G</code></div><div class="modal-kv__value">Roll 감소/증가</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:hand" /><div class="modal-kv__label"><code>Y</code> / <code>H</code></div><div class="modal-kv__value">그리퍼 열기/닫기</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:circle-stop" /><div class="modal-kv__label"><code>X</code></div><div class="modal-kv__value">정지 및 초기 위치 복귀</div></div>
                             </div>
                         </div>
                         <div class="modal-callout modal-callout--warning">
-                            <i class="fas fa-info-circle modal-callout__icon"></i>
+                            <Icon name="fa6-solid:circle-info" class="modal-callout__icon" />
                             <div>
                                 <div class="modal-callout__title">키 홀드 동작</div>
                                 <p class="modal-callout__text">키를 <strong>누르고 있으면</strong> 해당 방향으로 계속 이동합니다 (50Hz 제어 루프). GUI 창에 포커스가 있어야 키 입력이 동작합니다.</p>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-tachometer-alt"></i> 엔드이펙터 상태 모니터</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:gauge-high" /> 엔드이펙터 상태 모니터</div>
                             <div class="modal-kv-grid">
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label">EEF X</div><div class="modal-kv__value">말단 X 좌표 (m)</div></div>
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label">EEF Y</div><div class="modal-kv__value">말단 Y 좌표 (m)</div></div>
-                                <div class="modal-kv"><i class="fas fa-compass"></i><div class="modal-kv__label">Pan / Lift / Elbow</div><div class="modal-kv__value">각 관절각 (°)</div></div>
-                                <div class="modal-kv"><i class="fas fa-sync-alt"></i><div class="modal-kv__label">W.Flex / W.Roll</div><div class="modal-kv__value">손목 관절각 (°)</div></div>
-                                <div class="modal-kv"><i class="fas fa-hand-paper"></i><div class="modal-kv__label">Gripper</div><div class="modal-kv__value">그리퍼 개폐율 (%)</div></div>
-                                <div class="modal-kv"><i class="fas fa-redo"></i><div class="modal-kv__label">Pitch</div><div class="modal-kv__value">피치 오프셋 (°)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-left-right" /><div class="modal-kv__label">EEF X</div><div class="modal-kv__value">말단 X 좌표 (m)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-up-down" /><div class="modal-kv__label">EEF Y</div><div class="modal-kv__value">말단 Y 좌표 (m)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:compass" /><div class="modal-kv__label">Pan / Lift / Elbow</div><div class="modal-kv__value">각 관절각 (°)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-rotate" /><div class="modal-kv__label">W.Flex / W.Roll</div><div class="modal-kv__value">손목 관절각 (°)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:hand" /><div class="modal-kv__label">Gripper</div><div class="modal-kv__value">그리퍼 개폐율 (%)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrow-rotate-right" /><div class="modal-kv__label">Pitch</div><div class="modal-kv__value">피치 오프셋 (°)</div></div>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-play-circle"></i> 실행 명령</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:circle-play" /> 실행 명령</div>
                             <div class="modal-code"><code>chmod +x endeffector-teleop-gui-x86_64.AppImage
 ./endeffector-teleop-gui-x86_64.AppImage</code></div>
                         </div>
@@ -135,7 +136,7 @@
                     <!-- 탭 3: Waypoints -->
                     <div class="modal-tab-panel" data-tab="eef-웨이포인트">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-map-marker-alt"></i> Waypoints 모드란</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:location-dot" /> Waypoints 모드란</div>
                             <p style="color:var(--text-secondary,#b0b8c1);margin-bottom:12px">주요 위치를 슬롯(1~20)에 저장하고, 저장된 위치로 즉시 이동하거나 순서대로 자동 실행할 수 있습니다.</p>
                             <div class="modal-timeline">
                                 <div class="modal-timeline__item">
@@ -153,22 +154,22 @@
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-file-excel"></i> Excel 내보내기 / 불러오기</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:file-excel" /> Excel 내보내기 / 불러오기</div>
                             <div class="modal-feature-grid">
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-upload"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:upload" /></div>
                                     <div class="modal-feature-card__title">📤 Excel 내보내기</div>
                                     <div class="modal-feature-card__desc">현재 저장된 모든 Waypoints를 <code>.xlsx</code> 파일로 저장합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-download"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:download" /></div>
                                     <div class="modal-feature-card__title">📥 Excel 불러오기</div>
                                     <div class="modal-feature-card__desc">저장된 <code>.xlsx</code> 파일에서 Waypoints를 불러옵니다.</div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-callout modal-callout--warning">
-                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <Icon name="fa6-solid:triangle-exclamation" class="modal-callout__icon" />
                             <div><div class="modal-callout__title">연결 필요</div><p class="modal-callout__text">이동 버튼과 전체 순차 실행은 로봇이 <strong>Connected</strong> 상태에서만 동작합니다.</p></div>
                         </div>
                     </div>
@@ -178,9 +179,9 @@
                         <div class="modal-accordion">
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">포트가 목록에 나타나지 않는다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -192,9 +193,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">연결 시 캘리브레이션 오류 발생</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -204,9 +205,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">키보드 입력이 동작하지 않는다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -216,9 +217,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">카메라가 감지되지 않는다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -228,9 +229,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">AppImage가 실행되지 않는다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">

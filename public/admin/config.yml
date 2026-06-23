@@ -5,18 +5,11 @@ backend:
   name: github
   repo: roboseasy/roboseasy-website   # GitHub <owner>/<repo>
   branch: main
-  # 인증: Netlify 내장 OAuth 사용 (base_url 기본값 api.netlify.com).
-  # GitHub OAuth App을 만들어 Netlify 사이트 설정에 Client ID/Secret 등록 필요.
   # 커스텀 도메인(roboseasy.ai)에서 접속 시 Netlify OAuth가 사이트를 식별하도록
-  # Netlify 기본 도메인으로 site_id를 고정 (없으면 location.hostname=roboseasy.ai → Not Found)
   site_domain: roboseasy.netlify.app
   
-# 저장 시 바로 main에 커밋하지 않고 PR(검수) 생성 → 승인 후 반영
-publish_mode: editorial_workflow
-
-# 로컬 편집 모드: `npx decap-server` 실행 후 localhost에서 /admin 접속 시
-# GitHub 인증 없이 로컬 파일을 직접 편집/저장 (프로덕션 도메인에서는 무시됨)
-local_backend: true
+# 저장 시 main 브랜치에 바로 커밋 (PR 검수 워크플로 미사용)
+# publish_mode: editorial_workflow
 
 # 이미지 업로드 위치 — 실제 저장 경로(media_folder) / 사이트 참조 경로(public_folder)
 media_folder: "public/img/uploads"
@@ -30,7 +23,7 @@ collections:
   # 제품 (SHOP) — src/data/products.json 의 products 배열을 관리
   # ─────────────────────────────────────────────────────────────
   - name: products
-    label: "제품 (SHOP)"
+    label: "제품"
     files:
       - name: list
         label: "제품 목록"
@@ -53,7 +46,6 @@ collections:
                   - { label: "LeKiwi", value: "lekiwi" }
                   - { label: "기타", value: "etc" }
               - { name: price, label: "가격(원)", widget: number, value_type: int, min: 0, hint: "출시 예정 제품은 0으로 두고 아래 '곧 출시'를 켜세요" }
-              - { name: tags, label: "태그", widget: list, required: false, field: { label: "태그", name: tag, widget: string }, hint: "예: #SO-ARM101" }
               - { name: summary, label: "한 줄 설명", widget: text, required: false }
               - { name: image, label: "대표 이미지", widget: image, required: false }
               - { name: gallery, label: "갤러리 이미지(상세)", widget: list, required: false, field: { label: "이미지", name: image, widget: image } }
@@ -63,7 +55,6 @@ collections:
               - { name: productNumber, label: "상품번호", widget: string, required: false, hint: "상품정보 표에 표시" }
               - { name: brand, label: "브랜드", widget: string, required: false, hint: "상품정보 표에 표시" }
               - { name: origin, label: "원산지", widget: string, required: false, hint: "상품정보 표에 표시" }
-              - { name: featured, label: "주요 제품 노출", widget: boolean, required: false, default: false }
               - { name: representative, label: "카테고리 대표(큰 이미지)", widget: boolean, required: false, default: false, hint: "카테고리당 1개만" }
               - { name: comingSoon, label: "곧 출시 배지", widget: boolean, required: false, default: false }
 
@@ -71,10 +62,10 @@ collections:
   # 랜딩 뉴스 (메인 화면 News 섹션) — src/data/landing-news.json 카드 관리
   # ─────────────────────────────────────────────────────────────
   - name: landing_news
-    label: "랜딩 뉴스 (메인 화면)"
+    label: "뉴스"
     files:
       - name: items
-        label: "랜딩 뉴스 카드"
+        label: "뉴스 카드"
         file: "src/data/landing-news.json"
         description: "메인(홈) 화면 News 섹션 카드. 위에서부터 순서대로 표시됩니다."
         fields:
@@ -93,7 +84,7 @@ collections:
   # ⚠️ 블로그·YouTube는 빌드 시 자동 수집(피드)이라 CMS 입력 대상 아님.
   # ─────────────────────────────────────────────────────────────
   - name: news
-    label: "뉴스 (Instagram)"
+    label: "인스타그램"
     files:
       - name: feed
         label: "Instagram 게시물"
@@ -102,5 +93,3 @@ collections:
         fields:
           - { name: instagramPosts, label: "Instagram 포스트 ID", widget: list, field: { label: "ID", name: id, widget: string }, hint: "게시물 URL의 /p/ 뒤 코드. 예: DRXkNIsErNk (상위 3개만 노출)" }
 
-# 이미지 라이브러리만 따로 관리하고 싶을 때를 위한 안내:
-# 위 image/gallery 필드에서 업로드하면 public/img/uploads 에 저장되고 즉시 선택 가능합니다.

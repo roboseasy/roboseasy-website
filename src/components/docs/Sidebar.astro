@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
 
 interface Props {
@@ -60,7 +61,7 @@ function entryHref(entry: Entry): string {
     <ul class="docs-sidebar__list">
       <li class="docs-sidebar__item">
         <a class="docs-sidebar__link" href="https://github.com/huggingface/lerobot" target="_blank" rel="noopener">
-          <i class="fa-brands fa-github"></i> GitHub
+          <Icon name="fa6-brands:github" /> GitHub
         </a>
       </li>
       <li class="docs-sidebar__item">
@@ -68,7 +69,7 @@ function entryHref(entry: Entry): string {
       </li>
       <li class="docs-sidebar__item">
         <a class="docs-sidebar__link" href="https://discord.com/invite/s3KuuzsPFb" target="_blank" rel="noopener">
-          <i class="fa-brands fa-discord"></i> Discord
+          <Icon name="fa6-brands:discord" /> Discord
         </a>
       </li>
     </ul>

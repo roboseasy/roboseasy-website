@@ -30,7 +30,7 @@
 }
 
 .docs-sidebar__group-title {
-  font-size: 11px;
+  font-size: var(--text-caption-sm);
   font-weight: var(--fw-bold);
   color: #9ca3af;
   text-transform: uppercase;
