@@ -222,11 +222,11 @@
     .news { padding: 0 16px 48px; }
     .news__tabs-wrap { padding: 32px 16px 0; }
     .news__tabs { gap: 4px; padding: 4px; }
-    .news__tab { padding: 8px 14px; font-size: 12px; }
+    .news__tab { padding: 8px 14px; font-size: var(--text-caption); }
     .instagram-feed { grid-template-columns: 1fr; gap: 16px; }
     .blog-feed { grid-template-columns: 1fr; gap: 16px; }
 }
 
 @media (max-width: 480px) {
-    .news__tab { padding: 8px 10px; font-size: 11px; }
+    .news__tab { padding: 8px 10px; font-size: var(--text-caption-sm); }
 }

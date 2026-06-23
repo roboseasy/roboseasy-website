@@ -206,23 +206,12 @@
 /* ─── 하위 제품 1×5 그리드 ─── */
 .product-cat__grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* 폭에 맞춰 열 수 자동 (브레이크포인트 없이 모든 폰 폭에 적응) — 카드 최소 160px */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: var(--spacing-24);
 }
 
-/* ─── 반응형 ─── */
-@media (max-width: 1200px) {
-  .product-cat__grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 980px) {
-  .product-cat__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
+/* ─── 반응형 (레이아웃 구조 전환만 유지) ─── */
 @media (max-width: 768px) {
   .products-layout {
     grid-template-columns: 1fr;
@@ -243,10 +232,19 @@
   .product-rep__overlay {
     padding: var(--spacing-24);
   }
-}
 
-@media (max-width: 640px) {
-  .product-cat__grid {
-    grid-template-columns: repeat(2, 1fr);
+  /* 히어로: 모바일은 상단·정중앙 정렬 + 타이틀 축소 (중앙~하단은 비워 배경 노출) */
+  .products-hero__inner {
+    align-items: flex-start;     /* 상단 */
+    justify-content: center;     /* 가로 정중앙 */
+    text-align: center;
+    padding-top: var(--spacing-32);
+  }
+  .products-hero__title {
+    font-size: clamp(24px, 7vw, 32px);
+  }
+  .product-cat__title,
+  .product-rep__name {
+    font-size: var(--text-subheading);   /* 28px → 18px (모바일 축소) */
   }
 }

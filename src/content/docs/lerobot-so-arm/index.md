@@ -14,7 +14,7 @@ SO-ARM은 LeRobot 생태계에서 지원하는 저가형 로봇 팔입니다.
 <br>교육 및 연구 목적으로 설계되었으며, LeRobot의 모든 기능을 실습할 수 있습니다.
 
 <div style="text-align: center;">
-  <img src="https://roboseasy.netlify.app/img/lerobot-so-arm.png" alt="LeRobot SO-ARM 101" width="500px">
+  <img src="https://roboseasy.netlify.app/img/documents_img/lerobot-so-arm.webp" alt="LeRobot SO-ARM 101" width="500px">
 </div>
 
 > ⚠️ **최신 버전**

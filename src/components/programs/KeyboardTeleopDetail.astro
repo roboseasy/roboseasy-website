@@ -1,17 +1,18 @@
 ---
+import { Icon } from 'astro-icon/components';
 // /programs/keyboard-teleop 라우트의 본문. [slug].astro가 BaseLayout으로 감싸 렌더.
 ---
             <div class="program-modal__content">
                 <div class="program-modal__header">
                     <div class="program-modal__image-section">
-                        <img src="/img/keyboard-teleop-gui.png" alt="SO-ARM Keyboard Teleop GUI" class="program-modal__image" >
+                        <img src="/img/programs_img/keyboard-teleop-gui.webp" alt="SO-ARM Keyboard Teleop GUI" class="program-modal__image" >
                     </div>
                     <div class="program-modal__info-section">
-                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
+                        <span class="program-modal__badge"><Icon name="fa6-solid:robot" /> RobosEasy</span>
                         <h2 class="program-modal__title">Keyboard Teleop GUI</h2>
                         <p class="program-modal__subtitle">SO-ARM 로봇 팔을 키보드로 직접 조작하는 데스크탑 GUI. 실시간 카메라 피드를 보면서 각 관절을 제어하고 관절 상태를 화면에서 바로 확인할 수 있습니다.</p>
                         <a href="https://drive.google.com/file/d/1YkyZgD2pH8bYAVkHUgAy7rjMjtyFHiVC/view?usp=sharing" target="_blank" class="program-modal__download-btn">
-                            <i class="fas fa-download"></i> AppImage 다운로드
+                            <Icon name="fa6-solid:download" /> AppImage 다운로드
                         </a>
                     </div>
                 </div>
@@ -26,42 +27,42 @@
                     <!-- 탭 1: 개요 -->
                     <div class="modal-tab-panel modal-tab-panel--active" data-tab="개요">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:star" /> 주요 특징</div>
                             <div class="modal-badge-row">
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 카메라 피드</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 관절 상태 모니터링</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 비상 정지 기능</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 직관적인 키보드 제어</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 실시간 카메라 피드</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 관절 상태 모니터링</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 비상 정지 기능</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 직관적인 키보드 제어</span>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-layer-group"></i> 화면 구성</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:layer-group" /> 화면 구성</div>
                             <div class="modal-feature-grid">
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-plug"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:plug" /></div>
                                     <div class="modal-feature-card__title">연결 (Connection)</div>
                                     <div class="modal-feature-card__desc">포트 드롭다운에서 로봇의 시리얼 포트를 선택하고 Connect/Disconnect로 연결을 제어합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-video"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:video" /></div>
                                     <div class="modal-feature-card__title">카메라 피드</div>
                                     <div class="modal-feature-card__desc">연결된 카메라를 자동 감지해 실시간 표시. 체크박스로 카메라별 on/off가 가능합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-bar"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:chart-bar" /></div>
                                     <div class="modal-feature-card__title">관절 상태</div>
                                     <div class="modal-feature-card__desc">6개 관절의 현재 위치를 바 차트와 수치로 실시간 확인합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-keyboard"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:keyboard" /></div>
                                     <div class="modal-feature-card__title">컨트롤 패드</div>
                                     <div class="modal-feature-card__desc">키보드 레이아웃을 시각화. 현재 누른 키가 하이라이트됩니다.</div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:route" /> 기본 사용 흐름</div>
                             <div class="modal-timeline">
                                 <div class="modal-timeline__item">
                                     <div class="modal-timeline__num">1</div>
@@ -86,11 +87,11 @@
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:gear" /> 시스템 요구사항</div>
                             <div class="modal-spec-list">
-                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux x86_64 (Ubuntu 20.04 이상 권장)</span></div>
-                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
-                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, SO-ARM 로봇, 웹캠 (선택)</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-brands:linux" /><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux x86_64 (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-solid:memory" /><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-brands:usb" /><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, SO-ARM 로봇, 웹캠 (선택)</span></div>
                             </div>
                         </div>
                     </div>
@@ -98,27 +99,27 @@
                     <!-- 탭 2: 키보드 조작법 -->
                     <div class="modal-tab-panel" data-tab="조작법">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-keyboard"></i> 키 매핑</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:keyboard" /> 키 매핑</div>
                             <div class="modal-kv-grid">
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>A</code> / <code>D</code></div><div class="modal-kv__value">shoulder_pan 좌/우</div></div>
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>W</code> / <code>S</code></div><div class="modal-kv__value">shoulder_lift 위/아래</div></div>
-                                <div class="modal-kv"><i class="fas fa-redo"></i><div class="modal-kv__label"><code>Q</code> / <code>E</code></div><div class="modal-kv__value">elbow_flex 굽힘/폄</div></div>
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-v"></i><div class="modal-kv__label"><code>↑</code> / <code>↓</code></div><div class="modal-kv__value">wrist_flex 위/아래</div></div>
-                                <div class="modal-kv"><i class="fas fa-arrows-alt-h"></i><div class="modal-kv__label"><code>←</code> / <code>→</code></div><div class="modal-kv__value">wrist_roll 좌/우</div></div>
-                                <div class="modal-kv"><i class="fas fa-hand-paper"></i><div class="modal-kv__label"><code>Z</code> / <code>C</code></div><div class="modal-kv__value">gripper 열기/닫기</div></div>
-                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label"><code>Shift</code> 홀드</div><div class="modal-kv__value">빠른 이동 (스텝 2×)</div></div>
-                                <div class="modal-kv"><i class="fas fa-stop-circle"></i><div class="modal-kv__label"><code>Space</code></div><div class="modal-kv__value">비상 정지</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-left-right" /><div class="modal-kv__label"><code>A</code> / <code>D</code></div><div class="modal-kv__value">shoulder_pan 좌/우</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-up-down" /><div class="modal-kv__label"><code>W</code> / <code>S</code></div><div class="modal-kv__value">shoulder_lift 위/아래</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrow-rotate-right" /><div class="modal-kv__label"><code>Q</code> / <code>E</code></div><div class="modal-kv__value">elbow_flex 굽힘/폄</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-up-down" /><div class="modal-kv__label"><code>↑</code> / <code>↓</code></div><div class="modal-kv__value">wrist_flex 위/아래</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:arrows-left-right" /><div class="modal-kv__label"><code>←</code> / <code>→</code></div><div class="modal-kv__value">wrist_roll 좌/우</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:hand" /><div class="modal-kv__label"><code>Z</code> / <code>C</code></div><div class="modal-kv__value">gripper 열기/닫기</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:gauge-high" /><div class="modal-kv__label"><code>Shift</code> 홀드</div><div class="modal-kv__value">빠른 이동 (스텝 2×)</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:circle-stop" /><div class="modal-kv__label"><code>Space</code></div><div class="modal-kv__value">비상 정지</div></div>
                             </div>
                         </div>
                         <div class="modal-callout modal-callout--danger">
-                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <Icon name="fa6-solid:triangle-exclamation" class="modal-callout__icon" />
                             <div>
                                 <div class="modal-callout__title">비상 정지</div>
                                 <p class="modal-callout__text"><strong>Space</strong> 키를 누르면 즉시 연결이 해제됩니다. 로봇이 의도치 않게 움직일 경우 Space 키를 누르세요.</p>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-play-circle"></i> 실행 명령</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:circle-play" /> 실행 명령</div>
                             <div class="modal-code"><code>chmod +x keyboard-teleop-gui.AppImage
 ./keyboard-teleop-gui.AppImage</code></div>
                         </div>
@@ -129,9 +130,9 @@
                         <div class="modal-accordion">
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">AppImage가 실행되지 않는다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -142,9 +143,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">포트 목록이 비어 있다 (no ports found)</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -155,9 +156,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">Connect를 눌렀는데 연결에 실패한다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -167,9 +168,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">카메라가 감지되지 않는다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -179,9 +180,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">키보드 입력이 반응하지 않는다</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">

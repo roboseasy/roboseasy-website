@@ -14,7 +14,15 @@
     "@astrojs/netlify": "^5.5.4",
     "@astrojs/sitemap": "^3.2.1",
     "astro": "^4.16.19",
+    "astro-icon": "^1.1.5",
     "exceljs": "^4.4.0",
     "resend": "^6.12.3"
+  },
+  "devDependencies": {
+    "@iconify-json/fa6-brands": "^1.2.6",
+    "@iconify-json/fa6-regular": "^1.2.4",
+    "@iconify-json/fa6-solid": "^1.2.4",
+    "@iconify-json/simple-icons": "^1.2.86",
+    "@iconify-json/solar": "^1.2.5"
   }
 }

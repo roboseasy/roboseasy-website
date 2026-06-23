@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MainBanner from '../components/MainBanner.astro';
 import '../styles/pages/home.css';
@@ -11,7 +12,7 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
 <BaseLayout title={title} description={description} path="/" lockTheme>
   <div class="hero-viewport">
     <!-- 대한민국 야경 지도 배경 (우측 상단 고정, 대중화 텍스트까지 닿게) -->
-    <img src="/img/hero-korea-map.webp" alt="" aria-hidden="true" class="hero-map" />
+    <img src="/img/index_img/hero-korea-map.webp" alt="" aria-hidden="true" class="hero-map" />
     <!-- 히어로 아크 글로우 (배너 뒤에 렌더링) -->
     <div class="hero-arc" aria-hidden="true">
       <svg class="hero-arc__svg" viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,40 +90,40 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
         <div class="service-card" data-stagger-delay="0">
           <div class="service-card__content">
             <h3 class="service-card__title">Hardware</h3>
-            <p class="service-card__desc">TheRobotStudio 공식 파트너. SO-ARM100 대한민국 공식 판매처. Physical AI를 시작하기 좋은 초저가 로봇 플랫폼입니다. <a href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener noreferrer" class="service-card__link">자세히 보기.</a></p>
+            <p class="service-card__desc">TheRobotStudio 공식 파트너 및 SO-ARM100 대한민국 공식 판매처로 국내 초저가 로봇를 선보이고 있습니다. <a href="https://smartstore.naver.com/roboseasy" target="_blank" rel="noopener noreferrer" class="service-card__link">자세히 보기.</a></p>
           </div>
           <div class="service-card__media">
-            <img src="/img/service-hardware.png" alt="로봇 하드웨어" class="service-card__image" loading="lazy" />
+            <img src="/img/index_img/service-hardware.webp" alt="로봇 하드웨어" class="service-card__image" loading="lazy" />
           </div>
         </div>
 
         <div class="service-card" data-stagger-delay="150">
           <div class="service-card__content">
             <h3 class="service-card__title">Software</h3>
-            <p class="service-card__desc">GUI 환경의 RoboSEasy-Studio 배포. 어떤 OS에서도 가능한 로봇 데이터 수집부터 학습까지 전 과정을 진행합니다. <a href="/programs" class="service-card__link">자세히 보기.</a></p>
+            <p class="service-card__desc">어떤 환경에서든 가능한 로봇 데이터 수집부터 학습까지 전 과정을 RoboSEasy-Studio로 진행합니다. <a href="/programs" class="service-card__link">자세히 보기.</a></p>
           </div>
           <div class="service-card__media">
-            <img src="/img/service-software.png" alt="RoboSEasy-Studio 소프트웨어" class="service-card__image" loading="lazy" />
+            <img src="/img/index_img/service-software.webp" alt="RoboSEasy-Studio 소프트웨어" class="service-card__image" loading="lazy" />
           </div>
         </div>
 
         <div class="service-card" data-stagger-delay="0">
           <div class="service-card__content">
             <h3 class="service-card__title">Education</h3>
-            <p class="service-card__desc">글로벌 최신 Physical AI 기술을 한국어로 정리한 Documents. 개인부터 기업까지 다양한 고객에게 제공하는 교육 시스템이 있습니다. <a href="/documents" class="service-card__link">자세히 보기.</a></p>
+            <p class="service-card__desc">개인부터 학교, 기업까지 다양한 고객에게 제공하는 교육 시스템과 워크샵 서비스를 제공하고 있습니다. <a href="/documents" class="service-card__link">자세히 보기.</a></p>
           </div>
           <div class="service-card__media">
-            <img src="/img/service-education.png" alt="Physical AI Hackathon" class="service-card__image" loading="lazy" />
+            <img src="/img/index_img/service-education.webp" alt="Physical AI Hackathon" class="service-card__image" loading="lazy" />
           </div>
         </div>
 
         <div class="service-card" data-stagger-delay="150">
           <div class="service-card__content">
             <h3 class="service-card__title">Community</h3>
-            <p class="service-card__desc">Physical AI 커뮤니티 1,000명+ 운영. 협업과 블로그로 대한민국의 Physical AI를 선도하는 기업입니다. <a href="https://roboseasy.blogspot.com/" target="_blank" rel="noopener noreferrer" class="service-card__link">참여하기.</a></p>
+            <p class="service-card__desc">Physical AI 1000+명 커뮤니티부터 유튜브, SNS, 블로그까지 다양한 커뮤니티를 준비했습니다. <a href="https://roboseasy.blogspot.com/" target="_blank" rel="noopener noreferrer" class="service-card__link">참여하기.</a></p>
           </div>
           <div class="service-card__media">
-            <img src="/img/service-community.png" alt="Physical AI 커뮤니티" class="service-card__image" loading="lazy" />
+            <img src="/img/index_img/service-community.webp" alt="Physical AI 커뮤니티" class="service-card__image" loading="lazy" />
           </div>
         </div>
 
@@ -140,19 +141,19 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
 
           <div class="about-tabs__panel is-active" data-panel="hardware">
             <div class="about-tabs__media">
-              <img src="/img/about-hardware.png" alt="Physical AI Hardware" class="about-tabs__image" loading="lazy" />
+              <img src="/img/index_img/about-hardware.webp" alt="Physical AI Hardware" class="about-tabs__image" loading="lazy" />
             </div>
           </div>
 
           <div class="about-tabs__panel" data-panel="software">
             <div class="about-tabs__media">
-              <img src="/img/about-software.png" alt="Physical AI Platform Software" class="about-tabs__image" loading="lazy" />
+              <img src="/img/index_img/about-software.webp" alt="Physical AI Platform Software" class="about-tabs__image" loading="lazy" />
             </div>
           </div>
 
           <div class="about-tabs__panel" data-panel="education">
             <div class="about-tabs__media">
-              <img src="/img/about-education.png" alt="Physical AI Education" class="about-tabs__image" loading="lazy" />
+              <img src="/img/index_img/about-education.webp" alt="Physical AI Education" class="about-tabs__image" loading="lazy" />
             </div>
           </div>
 
@@ -167,8 +168,8 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
             <div class="about-tabs__item is-active" data-tab="hardware">
               <div class="about-tabs__item-header">
                 <span class="about-tabs__icon">
-                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
-                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
+                  <Icon name="solar:check-circle-bold" class="about-tabs__icon-check" />
+                  <Icon name="solar:add-circle-bold" class="about-tabs__icon-plus" />
                 </span>
                 <span class="about-tabs__title">모두를 위한 로봇</span>
               </div>
@@ -180,8 +181,8 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
             <div class="about-tabs__item" data-tab="software">
               <div class="about-tabs__item-header">
                 <span class="about-tabs__icon">
-                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
-                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
+                  <Icon name="solar:check-circle-bold" class="about-tabs__icon-check" />
+                  <Icon name="solar:add-circle-bold" class="about-tabs__icon-plus" />
                 </span>
                 <span class="about-tabs__title">모두를 위한 SW·AI</span>
               </div>
@@ -193,8 +194,8 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
             <div class="about-tabs__item" data-tab="education">
               <div class="about-tabs__item-header">
                 <span class="about-tabs__icon">
-                  <iconify-icon icon="solar:check-circle-bold" class="about-tabs__icon-check"></iconify-icon>
-                  <iconify-icon icon="solar:add-circle-bold" class="about-tabs__icon-plus"></iconify-icon>
+                  <Icon name="solar:check-circle-bold" class="about-tabs__icon-check" />
+                  <Icon name="solar:add-circle-bold" class="about-tabs__icon-plus" />
                 </span>
                 <span class="about-tabs__title">모두를 위한 교육</span>
               </div>
@@ -247,7 +248,7 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
       <div class="news-feature">
 
         <button class="news-feature__side-btn news-feature__side-btn--prev" aria-label="이전">
-          <iconify-icon icon="solar:alt-arrow-left-bold"></iconify-icon>
+          <Icon name="solar:alt-arrow-left-bold" />
         </button>
 
         <div class="news-feature__content">
@@ -273,7 +274,7 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
         </div>
 
         <button class="news-feature__side-btn news-feature__side-btn--next" aria-label="다음">
-          <iconify-icon icon="solar:alt-arrow-right-bold"></iconify-icon>
+          <Icon name="solar:alt-arrow-right-bold" />
         </button>
 
       </div>

@@ -80,7 +80,7 @@
 
 /* 제목 */
 .program-card__title {
-    font-size: 20px;
+    font-size: var(--text-subheading);
     font-weight: 700;
     color: var(--color-bright-gray);
     margin-bottom: 12px;
@@ -88,7 +88,7 @@
 
 /* 설명 */
 .program-card__description {
-    font-size: 14px;
+    font-size: var(--text-caption);
     color: var(--color-muted-gray);
     line-height: 1.6;
     margin-bottom: 20px;
@@ -114,7 +114,7 @@
     text-decoration: none;
     font-family: var(--font-display);
     font-weight: var(--fw-semibold);
-    font-size: 12px;
+    font-size: var(--text-caption);
     transition: background 0.2s ease;
 }
 
@@ -212,7 +212,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: var(--text-body-sm);
     color: var(--color-medium-gray);
     transition: all 0.2s ease;
     z-index: 10;
@@ -273,14 +273,14 @@
     color: white;
     padding: 4px 11px;
     border-radius: 14px;
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
     font-weight: 600;
     width: fit-content;
     margin-bottom: 8px;
 }
 
 .program-modal__title {
-    font-size: 24px;
+    font-size: var(--text-heading-sm);
     font-weight: 700;
     color: var(--color-bright-gray);
     margin-bottom: 6px;
@@ -288,7 +288,7 @@
 }
 
 .program-modal__subtitle {
-    font-size: 13px;
+    font-size: var(--text-caption);
     color: var(--color-medium-gray);
     line-height: 1.6;
     margin-bottom: 14px;
@@ -304,7 +304,7 @@
     border-radius: 22px;
     text-decoration: none;
     font-weight: 600;
-    font-size: 13px;
+    font-size: var(--text-caption);
     transition: all 0.25s ease;
     width: fit-content;
 }
@@ -333,7 +333,7 @@
     border: 1.5px solid transparent;
     background: rgba(255, 255, 255, 0.06);
     border-radius: 18px;
-    font-size: 13px;
+    font-size: var(--text-caption);
     font-weight: 600;
     color: var(--color-muted-gray);
     cursor: pointer;
@@ -375,7 +375,7 @@
 }
 
 .modal-section__title {
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
@@ -387,7 +387,7 @@
 }
 
 .modal-section__title i {
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
 }
 
 .modal-section__title::after {
@@ -412,7 +412,7 @@
     background: var(--color-tag-bg);
     border: 1.5px solid rgba(167, 139, 250, 0.3);
     border-radius: 16px;
-    font-size: 12px;
+    font-size: var(--text-caption);
     font-weight: 500;
     color: var(--color-lavender);
 }
@@ -452,18 +452,18 @@
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 12px;
+    font-size: var(--text-caption);
     flex-shrink: 0;
 }
 
 .modal-feature-card__title {
-    font-size: 13px;
+    font-size: var(--text-caption);
     font-weight: 700;
     color: var(--color-bright-gray);
 }
 
 .modal-feature-card__desc {
-    font-size: 12px;
+    font-size: var(--text-caption);
     color: var(--color-medium-gray);
     line-height: 1.5;
 }
@@ -501,7 +501,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 13px;
+    font-size: var(--text-caption);
     position: relative;
     z-index: 1;
     flex-shrink: 0;
@@ -514,14 +514,14 @@
 }
 
 .modal-timeline__title {
-    font-size: 13px;
+    font-size: var(--text-caption);
     font-weight: 700;
     color: var(--color-bright-gray);
     margin-bottom: 3px;
 }
 
 .modal-timeline__desc {
-    font-size: 12px;
+    font-size: var(--text-caption);
     color: var(--color-medium-gray);
     line-height: 1.5;
 }
@@ -551,20 +551,20 @@
 }
 
 .modal-kv i {
-    font-size: 18px;
+    font-size: var(--text-body);
     color: var(--color-amethyst);
     margin-bottom: 5px;
     display: block;
 }
 
 .modal-kv__label {
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
     color: var(--color-muted-gray);
     margin-bottom: 3px;
 }
 
 .modal-kv__value {
-    font-size: 12px;
+    font-size: var(--text-caption);
     font-weight: 600;
     color: var(--color-bright-gray);
 }
@@ -591,18 +591,18 @@
     width: 18px;
     text-align: center;
     color: var(--color-amethyst);
-    font-size: 14px;
+    font-size: var(--text-caption);
 }
 
 .modal-spec-item__label {
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
     color: var(--color-muted-gray);
     width: 68px;
     flex-shrink: 0;
 }
 
 .modal-spec-item__value {
-    font-size: 13px;
+    font-size: var(--text-caption);
     color: var(--color-medium-gray);
     font-weight: 500;
 }
@@ -642,14 +642,14 @@
 .modal-callout--info    .modal-callout__icon { color: var(--color-amethyst); }
 
 .modal-callout__title {
-    font-size: 12px;
+    font-size: var(--text-caption);
     font-weight: 700;
     color: var(--color-bright-gray);
     margin-bottom: 3px;
 }
 
 .modal-callout__text {
-    font-size: 12px;
+    font-size: var(--text-caption);
     color: var(--color-medium-gray);
     line-height: 1.6;
 }
@@ -659,7 +659,7 @@
     padding: 1px 5px;
     border-radius: 3px;
     font-family: monospace;
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
 }
 
 /* ===== 코드 블록 ===== */
@@ -674,7 +674,7 @@
 .modal-code code {
     color: #eeeeee;
     font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 12px;
+    font-size: var(--text-caption);
     line-height: 1.6;
     white-space: pre;
 }
@@ -690,7 +690,7 @@
     position: relative;
     padding-left: 15px;
     margin-bottom: 4px;
-    font-size: 12px;
+    font-size: var(--text-caption);
     color: var(--color-medium-gray);
     line-height: 1.5;
 }
@@ -740,13 +740,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
     flex-shrink: 0;
 }
 
 .modal-accordion__title {
     flex: 1;
-    font-size: 13px;
+    font-size: var(--text-caption);
     font-weight: 600;
     color: var(--color-bright-gray);
 }
@@ -754,7 +754,7 @@
 .modal-accordion__toggle {
     color: var(--color-muted-gray);
     transition: transform 0.3s;
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
 }
 
 .modal-accordion__item.active .modal-accordion__toggle {
@@ -774,7 +774,7 @@
 }
 
 .modal-accordion__solution {
-    font-size: 12px;
+    font-size: var(--text-caption);
     color: var(--color-medium-gray);
     line-height: 1.7;
 }
@@ -788,8 +788,8 @@
     .programs { padding: 0 20px 64px; }
     .programs-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 700px; }
     .program-card { padding: 25px; }
-    .program-card__title { font-size: 18px; }
-    .program-card__description { font-size: 13px; }
+    .program-card__title { font-size: var(--text-body); }
+    .program-card__description { font-size: var(--text-caption); }
     .modal-kv-grid { grid-template-columns: repeat(2, 1fr); }
     .modal-kv-grid--3 { grid-template-columns: repeat(2, 1fr); }
 }
@@ -802,9 +802,9 @@
     .program-card { padding: 20px; }
     .program-card__image-container { margin-bottom: 15px; }
     .program-card__title { font-size: 17px; margin-bottom: 10px; }
-    .program-card__description { font-size: 13px; margin-bottom: 15px; }
+    .program-card__description { font-size: var(--text-caption); margin-bottom: 15px; }
     .program-card__buttons { gap: 8px; }
-    .program-card__button { width: auto; justify-content: center; padding: 10px 16px; font-size: 12px; border-radius: 20px; }
+    .program-card__button { width: auto; justify-content: center; padding: 10px 16px; font-size: var(--text-caption); border-radius: 20px; }
     .program-modal { width: 95%; max-height: 95vh; border-radius: 15px; }
     .program-modal__header { grid-template-columns: 1fr; }
     .program-modal__image-section { padding: 18px; }
@@ -822,9 +822,9 @@
     .programs { padding: 0 16px 32px; }
     .programs-grid { max-width: 300px; }
     .program-card { padding: 18px; }
-    .program-card__title { font-size: 16px; }
-    .program-card__description { font-size: 12px; }
-    .program-card__button { padding: 10px 16px; font-size: 12px; }
+    .program-card__title { font-size: var(--text-body-sm); }
+    .program-card__description { font-size: var(--text-caption); }
+    .program-card__button { padding: 10px 16px; font-size: var(--text-caption); }
     .program-modal__title { font-size: 17px; }
     .modal-feature-grid--3 { grid-template-columns: 1fr; }
 }
@@ -855,7 +855,7 @@
 }
 
 .studio-download__subtitle {
-  font-size: 18px;
+  font-size: var(--text-body);
   color: var(--color-medium-gray);
   margin: 0;
   line-height: 1.6;
@@ -871,7 +871,7 @@
 }
 
 .studio-download__version-label {
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-weight: var(--fw-semibold);
   color: var(--color-bright-gray);
   letter-spacing: 0.3px;
@@ -888,7 +888,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
   padding: 6px 30px 6px 12px;
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-weight: var(--fw-medium);
   color: var(--color-bright-gray);
   cursor: pointer;
@@ -983,7 +983,7 @@
 }
 
 .studio-download__btn-secondary {
-  font-size: 12px;
+  font-size: var(--text-caption);
   font-weight: var(--fw-regular);
   text-align: left;
   opacity: 0.85;
@@ -998,7 +998,7 @@
   row-gap: 8px;
   align-items: center;
   width: max-content;       /* 가장 넓은 행에 맞춰 자연 너비. 칩이 줄바꿈되지 않도록 */
-  font-size: 13px;
+  font-size: var(--text-caption);
 }
 
 .studio-download__row {
@@ -1037,7 +1037,7 @@
   color: white;
   text-decoration: underline;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: var(--text-caption);
   font-weight: var(--fw-medium);
   transition: background-color 0.15s ease;
 }
@@ -1069,10 +1069,10 @@
     padding: 60px 20px 30px;
   }
   .studio-download__title {
-    font-size: 36px;
+    font-size: var(--text-heading-lg);
   }
   .studio-download__subtitle {
-    font-size: 16px;
+    font-size: var(--text-body-sm);
   }
   .studio-download__grid {
     grid-template-columns: 1fr;
@@ -1090,10 +1090,10 @@
     padding: 40px 16px 20px;
   }
   .studio-download__title {
-    font-size: 28px;
+    font-size: var(--text-heading);
   }
   .studio-download__subtitle {
-    font-size: 14px;
+    font-size: var(--text-caption);
   }
   .studio-download__toolbar {
     margin-top: 14px;
@@ -1106,7 +1106,7 @@
     font-size: 15px;
   }
   .studio-download__btn-secondary {
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
   }
   .studio-download__icon {
     font-size: 64px;
@@ -1179,7 +1179,7 @@
 }
 
 .install-guide__description {
-  font-size: 18px;
+  font-size: var(--text-body);
   color: var(--color-medium-gray);
   margin: 0;
   line-height: 1.6;
@@ -1212,7 +1212,7 @@
 }
 
 .install-guide__tab i {
-  font-size: 16px;
+  font-size: var(--text-body-sm);
 }
 
 .install-guide__tab:hover {
@@ -1253,7 +1253,7 @@
   background: rgba(0, 0, 0, 0.08);
   color: inherit;
   border-radius: 10px;
-  font-size: 11px;
+  font-size: var(--text-caption-sm);
   font-weight: 600;
   letter-spacing: 0.2px;
 }
@@ -1326,14 +1326,14 @@
 }
 
 .install-guide__soon-title {
-  font-size: 16px;
+  font-size: var(--text-body-sm);
   font-weight: 700;
   color: var(--color-primary);
   margin: 0;
 }
 
 .install-guide__soon-text {
-  font-size: 14px;
+  font-size: var(--text-caption);
   color: #777;
   margin: 0;
   line-height: 1.6;
@@ -1389,7 +1389,7 @@
 
 .install-guide__step--gui .install-guide__step-num,
 .install-guide__step--terminal .install-guide__step-num {
-  font-size: 13px;
+  font-size: var(--text-caption);
 }
 
 .install-guide__step-body {
@@ -1401,7 +1401,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 16px;
+  font-size: var(--text-body-sm);
   font-weight: 700;
   color: #1d1238;
   margin: 0 0 8px;
@@ -1417,12 +1417,12 @@
   border-radius: 6px;
   background: #f3eefb;
   color: var(--color-secondary);
-  font-size: 11px;
+  font-size: var(--text-caption-sm);
   flex-shrink: 0;
 }
 
 .install-guide__step-text {
-  font-size: 14px;
+  font-size: var(--text-caption);
   color: #555;
   line-height: 1.7;
   margin: 0 0 10px;
@@ -1446,7 +1446,7 @@
 .install-guide__code code {
   color: #e4e4f0;
   font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
-  font-size: 13px;
+  font-size: var(--text-caption);
   line-height: 1.7;
   white-space: pre;
 }
@@ -1463,7 +1463,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #d4d4e8;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: var(--text-caption-sm);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
@@ -1476,7 +1476,7 @@
 }
 
 .install-guide__copy-btn i {
-  font-size: 11px;
+  font-size: var(--text-caption-sm);
 }
 
 /* ===== Tip (info callout) ===== */
@@ -1491,7 +1491,7 @@
 }
 
 .install-guide__tip-icon {
-  font-size: 16px;
+  font-size: var(--text-body-sm);
   color: #2563eb;
   margin-top: 2px;
   flex-shrink: 0;
@@ -1503,14 +1503,14 @@
 }
 
 .install-guide__tip-title {
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-weight: 700;
   color: #1d1238;
   margin: 0 0 4px;
 }
 
 .install-guide__tip-text {
-  font-size: 13px;
+  font-size: var(--text-caption);
   color: #444;
   line-height: 1.6;
   margin: 0;
@@ -1532,7 +1532,7 @@
 }
 
 .install-guide__tip-link i {
-  font-size: 11px;
+  font-size: var(--text-caption-sm);
 }
 
 /* ===== Toast (복사 알림) ===== */
@@ -1545,7 +1545,7 @@
   color: white;
   padding: 10px 20px;
   border-radius: 22px;
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-weight: 600;
   opacity: 0;
   pointer-events: none;
@@ -1565,10 +1565,10 @@
     padding: 50px 20px 30px;
   }
   .install-guide__heading {
-    font-size: 36px;
+    font-size: var(--text-heading-lg);
   }
   .install-guide__description {
-    font-size: 16px;
+    font-size: var(--text-body-sm);
   }
 }
 
@@ -1577,17 +1577,17 @@
     padding: 40px 16px 24px;
   }
   .install-guide__heading {
-    font-size: 28px;
+    font-size: var(--text-heading);
   }
   .install-guide__description {
-    font-size: 14px;
+    font-size: var(--text-caption);
   }
   .install-guide__tabs {
     gap: 6px;
   }
   .install-guide__tab {
     padding: 8px 16px;
-    font-size: 13px;
+    font-size: var(--text-caption);
   }
   .install-guide__panel {
     padding: 22px 18px 20px;
@@ -1605,29 +1605,29 @@
   .install-guide__step-num {
     width: 36px;
     height: 36px;
-    font-size: 13px;
+    font-size: var(--text-caption);
   }
   .install-guide__step--gui .install-guide__step-num,
   .install-guide__step--terminal .install-guide__step-num {
-    font-size: 11px;
+    font-size: var(--text-caption-sm);
   }
   .install-guide__step-title {
     font-size: 15px;
   }
   .install-guide__step-text {
-    font-size: 13px;
+    font-size: var(--text-caption);
   }
   .install-guide__code code {
-    font-size: 12px;
+    font-size: var(--text-caption);
   }
 }
 
 @media (max-width: 480px) {
   .install-guide__tab {
     padding: 7px 13px;
-    font-size: 12px;
+    font-size: var(--text-caption);
   }
   .install-guide__tab i {
-    font-size: 14px;
+    font-size: var(--text-caption);
   }
 }

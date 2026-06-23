@@ -1,17 +1,18 @@
 ---
+import { Icon } from 'astro-icon/components';
 // /programs/sts3215-motor-test 라우트의 본문. [slug].astro가 BaseLayout으로 감싸 렌더.
 ---
             <div class="program-modal__content">
                 <div class="program-modal__header">
                     <div class="program-modal__image-section">
-                        <img src="/img/sts3215-motor-test.png" alt="STS3215 Motor Test & ID Setup" class="program-modal__image">
+                        <img src="/img/programs_img/sts3215-motor-test.webp" alt="STS3215 Motor Test & ID Setup" class="program-modal__image">
                     </div>
                     <div class="program-modal__info-section">
-                        <span class="program-modal__badge"><i class="fas fa-robot"></i> RobosEasy</span>
+                        <span class="program-modal__badge"><Icon name="fa6-solid:robot" /> RobosEasy</span>
                         <h2 class="program-modal__title">Motor Test & ID Setup</h2>
                         <p class="program-modal__subtitle">Feetech STS3215 서보 모터 제어·테스트 애플리케이션. 단일 모터 세부 제어(모드 1)와 SO-ARM 101 전체 모터 동시 제어(모드 2)를 지원합니다.</p>
                         <a href="#" class="program-modal__download-btn" onclick="return handleDownload('https://drive.google.com/file/d/15tKCtkd2pcynmDJRcnbhutiWKotM1D19/view?usp=sharing');">
-                            <i class="fas fa-download"></i> AppImage 다운로드
+                            <Icon name="fa6-solid:download" /> AppImage 다운로드
                         </a>
                     </div>
                 </div>
@@ -27,42 +28,42 @@
                     <!-- 탭 1: 개요 -->
                     <div class="modal-tab-panel modal-tab-panel--active" data-tab="개요">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-star"></i> 주요 특징</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:star" /> 주요 특징</div>
                             <div class="modal-badge-row">
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 단일 파일 실행</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 두 가지 테스트 모드</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 실시간 모니터링</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 충돌 감지 기능</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 모터 ID 설정</span>
-                                <span class="modal-badge-chip"><i class="fas fa-check"></i> 모든 Linux 배포판 지원</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 단일 파일 실행</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 두 가지 테스트 모드</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 실시간 모니터링</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 충돌 감지 기능</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 모터 ID 설정</span>
+                                <span class="modal-badge-chip"><Icon name="fa6-solid:check" /> 모든 Linux 배포판 지원</span>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-th-large"></i> 모드 선택</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:table-cells-large" /> 모드 선택</div>
                             <div class="modal-feature-grid">
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-microchip"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:microchip" /></div>
                                     <div class="modal-feature-card__title">모드 1 — 단일 모터 테스트</div>
                                     <div class="modal-feature-card__desc">하나의 모터를 선택해 세부 제어(위치·속도·가속도·토크) 및 실시간 모니터링을 수행합니다.</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-robot"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:robot" /></div>
                                     <div class="modal-feature-card__title">모드 2 — SO-ARM 101 전체</div>
                                     <div class="modal-feature-card__desc">SO-ARM 101의 6개 모터를 동시에 모니터링·제어하며 충돌 감지로 안전하게 운용합니다.</div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-play-circle"></i> 실행 방법</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:circle-play" /> 실행 방법</div>
                             <div class="modal-code"><code>chmod +x motor-test-id-setup.AppImage
 ./motor-test-id-setup.AppImage</code></div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-cog"></i> 시스템 요구사항</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:gear" /> 시스템 요구사항</div>
                             <div class="modal-spec-list">
-                                <div class="modal-spec-item"><i class="fab fa-linux"></i><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux (Ubuntu 20.04 이상 권장)</span></div>
-                                <div class="modal-spec-item"><i class="fas fa-memory"></i><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
-                                <div class="modal-spec-item"><i class="fas fa-usb"></i><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, STS3215 모터 및 USB-TTL 어댑터</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-brands:linux" /><span class="modal-spec-item__label">운영체제</span><span class="modal-spec-item__value">Linux (Ubuntu 20.04 이상 권장)</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-solid:memory" /><span class="modal-spec-item__label">권장 사양</span><span class="modal-spec-item__value">RAM 4GB 이상</span></div>
+                                <div class="modal-spec-item"><Icon name="fa6-brands:usb" /><span class="modal-spec-item__label">하드웨어</span><span class="modal-spec-item__value">USB 포트, STS3215 모터 및 USB-TTL 어댑터</span></div>
                             </div>
                         </div>
                     </div>
@@ -70,42 +71,42 @@
                     <!-- 탭 2: 모드 1 -->
                     <div class="modal-tab-panel" data-tab="모드1">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-layer-group"></i> 화면 구성</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:layer-group" /> 화면 구성</div>
                             <div class="modal-feature-grid modal-feature-grid--3">
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-plug"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:plug" /></div>
                                     <div class="modal-feature-card__title">연결</div>
                                     <div class="modal-feature-card__desc">포트 선택 및 연결/해제</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-search"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:magnifying-glass" /></div>
                                     <div class="modal-feature-card__title">모터 선택</div>
                                     <div class="modal-feature-card__desc">모터 스캔 및 선택 (ID 1~29)</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-edit"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:pen-to-square" /></div>
                                     <div class="modal-feature-card__title">모터 ID 설정</div>
                                     <div class="modal-feature-card__desc">모터 ID 변경 (0~253)</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-sliders-h"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:sliders" /></div>
                                     <div class="modal-feature-card__title">모터 제어</div>
                                     <div class="modal-feature-card__desc">위치·속도·가속도·토크 제어</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-chart-line"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:chart-line" /></div>
                                     <div class="modal-feature-card__title">상태 모니터</div>
                                     <div class="modal-feature-card__desc">위치·속도·온도·전압·전류·부하 실시간 확인</div>
                                 </div>
                                 <div class="modal-feature-card">
-                                    <div class="modal-feature-card__icon"><i class="fas fa-list-alt"></i></div>
+                                    <div class="modal-feature-card__icon"><Icon name="fa6-solid:rectangle-list" /></div>
                                     <div class="modal-feature-card__title">로그</div>
                                     <div class="modal-feature-card__desc">작업 기록 및 오류 메시지</div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:route" /> 기본 사용 흐름</div>
                             <div class="modal-timeline">
                                 <div class="modal-timeline__item">
                                     <div class="modal-timeline__num">1</div>
@@ -130,26 +131,26 @@
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-sliders-h"></i> 모터 제어 파라미터</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:sliders" /> 모터 제어 파라미터</div>
                             <div class="modal-kv-grid modal-kv-grid--3">
-                                <div class="modal-kv"><i class="fas fa-crosshairs"></i><div class="modal-kv__label">위치</div><div class="modal-kv__value">0 ~ 4095</div></div>
-                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label">속도</div><div class="modal-kv__value">0 ~ 3400</div></div>
-                                <div class="modal-kv"><i class="fas fa-rocket"></i><div class="modal-kv__label">가속도</div><div class="modal-kv__value">0 ~ 254</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:crosshairs" /><div class="modal-kv__label">위치</div><div class="modal-kv__value">0 ~ 4095</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:gauge-high" /><div class="modal-kv__label">속도</div><div class="modal-kv__value">0 ~ 3400</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:rocket" /><div class="modal-kv__label">가속도</div><div class="modal-kv__value">0 ~ 254</div></div>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-chart-bar"></i> 실시간 모니터링 항목</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:chart-bar" /> 실시간 모니터링 항목</div>
                             <div class="modal-kv-grid">
-                                <div class="modal-kv"><i class="fas fa-compass"></i><div class="modal-kv__label">위치</div><div class="modal-kv__value">0~4095</div></div>
-                                <div class="modal-kv"><i class="fas fa-tachometer-alt"></i><div class="modal-kv__label">속도</div><div class="modal-kv__value">rpm</div></div>
-                                <div class="modal-kv"><i class="fas fa-thermometer-half"></i><div class="modal-kv__label">온도</div><div class="modal-kv__value">°C</div></div>
-                                <div class="modal-kv"><i class="fas fa-car-battery"></i><div class="modal-kv__label">전압</div><div class="modal-kv__value">V</div></div>
-                                <div class="modal-kv"><i class="fas fa-bolt"></i><div class="modal-kv__label">전류</div><div class="modal-kv__value">mA</div></div>
-                                <div class="modal-kv"><i class="fas fa-weight-hanging"></i><div class="modal-kv__label">부하</div><div class="modal-kv__value">%</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:compass" /><div class="modal-kv__label">위치</div><div class="modal-kv__value">0~4095</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:gauge-high" /><div class="modal-kv__label">속도</div><div class="modal-kv__value">rpm</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:temperature-half" /><div class="modal-kv__label">온도</div><div class="modal-kv__value">°C</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:car-battery" /><div class="modal-kv__label">전압</div><div class="modal-kv__value">V</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:bolt" /><div class="modal-kv__label">전류</div><div class="modal-kv__value">mA</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:weight-hanging" /><div class="modal-kv__label">부하</div><div class="modal-kv__value">%</div></div>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-edit"></i> ID 변경 방법</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:pen-to-square" /> ID 변경 방법</div>
                             <ul class="modal-list">
                                 <li>변경할 모터를 선택합니다 (현재 ID 표시됨).</li>
                                 <li>새 ID 입력란에 변경할 ID를 입력합니다 (0~253).</li>
@@ -158,7 +159,7 @@
                             </ul>
                         </div>
                         <div class="modal-callout modal-callout--warning">
-                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <Icon name="fa6-solid:triangle-exclamation" class="modal-callout__icon" />
                             <div><div class="modal-callout__title">ID 변경 후 재스캔 필수</div><p class="modal-callout__text">ID 변경 후에는 반드시 모터를 <strong>다시 스캔</strong>해야 목록이 갱신됩니다.</p></div>
                         </div>
                     </div>
@@ -166,7 +167,7 @@
                     <!-- 탭 3: 모드 2 -->
                     <div class="modal-tab-panel" data-tab="모드2">
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-route"></i> 기본 사용 흐름</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:route" /> 기본 사용 흐름</div>
                             <div class="modal-timeline">
                                 <div class="modal-timeline__item">
                                     <div class="modal-timeline__num">1</div>
@@ -191,28 +192,28 @@
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-shield-alt"></i> 충돌 감지 설정</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:shield-halved" /> 충돌 감지 설정</div>
                             <div class="modal-kv-grid modal-kv-grid--3">
-                                <div class="modal-kv"><i class="fas fa-toggle-on"></i><div class="modal-kv__label">충돌 감지</div><div class="modal-kv__value">기본 ON</div></div>
-                                <div class="modal-kv"><i class="fas fa-weight-hanging"></i><div class="modal-kv__label">부하 임계값</div><div class="modal-kv__value">1300 / 1300</div></div>
-                                <div class="modal-kv"><i class="fas fa-bolt"></i><div class="modal-kv__label">전류 임계값</div><div class="modal-kv__value">800 mA</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:toggle-on" /><div class="modal-kv__label">충돌 감지</div><div class="modal-kv__value">기본 ON</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:weight-hanging" /><div class="modal-kv__label">부하 임계값</div><div class="modal-kv__value">1300 / 1300</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:bolt" /><div class="modal-kv__label">전류 임계값</div><div class="modal-kv__value">800 mA</div></div>
                             </div>
                         </div>
                         <div class="modal-callout modal-callout--warning">
-                            <i class="fas fa-exclamation-triangle modal-callout__icon"></i>
+                            <Icon name="fa6-solid:triangle-exclamation" class="modal-callout__icon" />
                             <div>
                                 <div class="modal-callout__title">임계값 초과 시 동작</div>
                                 <p class="modal-callout__text">해당 모터 토크가 자동 차단되고 카드 테두리가 빨간색으로 변합니다. 슬라이더를 움직이면 충돌 상태가 해제되고 토크가 재활성화됩니다.</p>
                             </div>
                         </div>
                         <div class="modal-section">
-                            <div class="modal-section__title"><i class="fas fa-th"></i> 모터 카드 — 모니터링 항목</div>
+                            <div class="modal-section__title"><Icon name="fa6-solid:table-cells" /> 모터 카드 — 모니터링 항목</div>
                             <p style="font-size:12px;color:#666;margin-bottom:10px;">연결된 각 모터마다 개별 카드가 표시되며, 100ms 주기로 자동 업데이트됩니다.</p>
                             <div class="modal-kv-grid">
-                                <div class="modal-kv"><i class="fas fa-compass"></i><div class="modal-kv__label">현재 위치</div><div class="modal-kv__value">0~4095</div></div>
-                                <div class="modal-kv"><i class="fas fa-weight-hanging"></i><div class="modal-kv__label">부하</div><div class="modal-kv__value">70% 초과 → 주황</div></div>
-                                <div class="modal-kv"><i class="fas fa-bolt"></i><div class="modal-kv__label">전류</div><div class="modal-kv__value">70% 초과 → 주황</div></div>
-                                <div class="modal-kv"><i class="fas fa-sliders-h"></i><div class="modal-kv__label">슬라이더</div><div class="modal-kv__value">목표 위치 설정</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:compass" /><div class="modal-kv__label">현재 위치</div><div class="modal-kv__value">0~4095</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:weight-hanging" /><div class="modal-kv__label">부하</div><div class="modal-kv__value">70% 초과 → 주황</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:bolt" /><div class="modal-kv__label">전류</div><div class="modal-kv__value">70% 초과 → 주황</div></div>
+                                <div class="modal-kv"><Icon name="fa6-solid:sliders" /><div class="modal-kv__label">슬라이더</div><div class="modal-kv__value">목표 위치 설정</div></div>
                             </div>
                         </div>
                     </div>
@@ -222,9 +223,9 @@
                         <div class="modal-accordion">
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">포트가 목록에 나타나지 않음</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -239,9 +240,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">모터가 스캔되지 않음 (모드 1)</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -255,9 +256,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">모터가 움직이지 않음</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -271,9 +272,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">SO-ARM 101 연결 후 카드가 표시되지 않음</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -286,9 +287,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">연결이 불안정함</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">
@@ -302,9 +303,9 @@
                             </div>
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
-                                    <div class="modal-accordion__icon"><i class="fas fa-exclamation"></i></div>
+                                    <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
                                     <div class="modal-accordion__title">프로그램이 실행되지 않음 (Linux)</div>
-                                    <i class="fas fa-chevron-down modal-accordion__toggle"></i>
+                                    <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">
                                     <div class="modal-accordion__solution">

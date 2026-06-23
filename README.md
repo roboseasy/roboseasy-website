@@ -20,23 +20,33 @@ npm run preview    # 프로덕션 번들 미리보기
 
 ```
 roboseasy-website/
-├── astro.config.mjs            # Astro 설정 + sitemap 통합
+├── astro.config.mjs            # Astro 설정 (output: hybrid, netlify 어댑터, sitemap·astro-icon 통합)
 ├── netlify.toml                # Netlify 빌드 (dist 배포, Node 20)
 ├── public/                     # 그대로 dist로 복사되는 정적 자산
-│   ├── img/, videos/
-│   ├── _redirects              # 옛 docsify URL → 새 라우트 (SEO)
+│   ├── admin/                  # Sveltia CMS (/admin 콘텐츠 편집)
+│   ├── img/                    # 페이지별 이미지 폴더 (common_img/, index_img/, ...)
+│   ├── videos/                 # 조립 가이드 mp4
+│   ├── _redirects              # 옛 docsify/.html URL → 새 라우트 (SEO)
+│   ├── robots.txt              # sitemap-index.xml 가리킴
 │   └── google*.html, naver*.html  # 검증 파일
 ├── src/
 │   ├── layouts/BaseLayout.astro       # 공통 head/header/footer
-│   ├── components/                    # 헤더/푸터/배너 + 도메인별 컴포넌트
-│   ├── pages/                         # 파일 기반 라우팅
+│   ├── components/                    # 헤더/푸터/배너, docs/, programs/, shop/
+│   ├── pages/                         # 파일 기반 라우팅 (+ SSR API)
 │   │   ├── index.astro               → /
+│   │   ├── products.astro            → /products
+│   │   ├── products/[id].astro       → /products/<id> 상세
 │   │   ├── programs.astro            → /programs (카드 그리드)
 │   │   ├── programs/[slug].astro     → /programs/sts3215-motor-test 등
-│   │   └── docs/[...slug].astro      → /docs/lerobot-so-arm/setup-... 등
+│   │   ├── contact.astro             → /contact
+│   │   ├── docs/[...slug].astro      → /docs/lerobot-so-arm/setup-... 등
+│   │   └── api/                      # SSR 엔드포인트 (contact, quote-download)
 │   ├── content/                       # Content Collections
 │   │   ├── programs/*.json           # 카드 메타데이터
 │   │   └── docs/<category>/*.md      # 마크다운 + frontmatter
+│   ├── data/                          # 컬렉션 외 데이터 (news, products)
+│   ├── lib/                           # 서버 로직 (견적서 엑셀 생성)
+│   ├── excel/                         # 견적서 템플릿(xlsx)
 │   └── styles/                        # 토큰/리셋/페이지별 CSS
 └── .agent/                            # 개발 가이드 (아래 참고)
 ```

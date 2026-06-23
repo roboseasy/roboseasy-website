@@ -1,5 +1,14 @@
 # RoboSEasy Website 리팩터링 기획서
 
+> ✅ **완료 — 역사 기록.** 이 문서는 Astro 마이그레이션 *당시의 계획*이며 마이그레이션은 완료되었습니다. **현재 구조·스택의 정확한 기준은 [architecture.md](architecture.md) · [tech-stack.md](tech-stack.md)** 입니다. 아래 본문은 당시 의도 기록으로 보존하되, 일부는 실제 구현과 다릅니다:
+>
+> - **Astro 5+ → 실제 4.16** (Node 호환 위해 4 고정)
+> - **MDX → 미채택** (programs = JSON `type:data`, docs = 일반 `.md`)
+> - **`astro:assets` 자동 최적화 → 미채택** (`public/img/<page>_img/` + 수동 webp 변환, 아이콘은 astro-icon)
+> - **Pagefind 검색 → 미도입** (선택 TODO)
+> - **`src/assets` 분리 · PageLayout/DocsLayout · `ui/` 폴더 → 미채택** (전부 `public/img`, 레이아웃은 BaseLayout 하나)
+> - **기획 이후 추가됨**: Sveltia CMS, 제품(SHOP)/products, contact + `/api/*` SSR, 라이트/다크 테마
+
 > **방향 결정 (사용자 확정):**
 > 1. **Astro**로 마이그레이션
 > 2. 기술 문서는 사이트와 **통합** (docsify 제거)

@@ -5,9 +5,6 @@
       "name": "LeRobot SO-ARM101 MAX",
       "category": "so-arm101",
       "price": 550000,
-      "tags": [
-        "#SO-ARM101"
-      ],
       "summary": "",
       "image": "/img/uploads/so-arm101-max.png",
       "gallery": [
@@ -25,7 +22,6 @@
       "productNumber": "12169101368",
       "brand": "자체제작 상품",
       "origin": "국산",
-      "featured": true,
       "representative": true,
       "comingSoon": false
     },
@@ -34,15 +30,11 @@
       "name": "LeKiWi",
       "category": "lekiwi",
       "price": 0,
-      "tags": [
-        "#likiwi"
-      ],
       "summary": "",
       "image": "/img/uploads/lekiwi.png",
       "gallery": [],
       "detailImages": [],
       "naverUrl": "",
-      "featured": true,
       "representative": true,
       "comingSoon": true
     }
