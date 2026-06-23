@@ -5,7 +5,7 @@ import netlify from '@astrojs/netlify';
 import icon from 'astro-icon';
 
 export default defineConfig({
-  site: 'https://roboseasy.netlify.app',
+  site: 'https://roboseasy.ai',
   output: 'hybrid',
   adapter: netlify(),
   integrations: [sitemap(), icon()],

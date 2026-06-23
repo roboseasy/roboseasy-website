@@ -1,4 +1,4 @@
 User-agent: *
 Allow:/
 
-Sitemap: https://roboseasy.netlify.app/sitemap-index.xml
+Sitemap: https://roboseasy.ai/sitemap-index.xml

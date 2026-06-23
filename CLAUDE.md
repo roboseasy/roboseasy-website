@@ -2,7 +2,7 @@
 
 로보시지(RoboSEasy) 공식 웹사이트. 로봇 교육·제품·기술 콘텐츠를 제공.
 
-- **배포**: Netlify (https://roboseasy.netlify.app)
+- **배포**: Netlify (https://roboseasy.ai)
 - **스택**: [Astro](https://astro.build/) 4 + Vanilla CSS/JS — 빌드 타임 정적 HTML
 - **언어**: 한국어 우선, 영어 보조
 
