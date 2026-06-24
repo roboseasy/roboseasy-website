@@ -8,6 +8,74 @@ import { items as newsItems } from '../data/landing-news.json';
 
 const title = 'RoboSEasy | 로보시지';
 const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제품·교육·기술을 통해 전국민의 Physical AI 접근성 향상에 기여합니다';
+
+// About 섹션 — 핵심 기술 6분야 (좌 3 / 우 3)
+const aboutServices = [
+  {
+    icon: 'solar:gamepad-bold',
+    title: '리드 디바이스 기반 실시간 제어',
+    points: [
+      '사람의 손동작을 로봇 관절로 변환하는 입력–행동 매핑 기술',
+      '역기구학(IK) 기반 실시간 제어 알고리즘 개발',
+      '글로브 & 스틱 형태의 직관적 인터페이스 설계',
+    ],
+  },
+  {
+    icon: 'mdi:robot-industrial',
+    title: '양팔 로봇 매니퓰레이션',
+    points: [
+      '모빌리티 플랫폼과 양팔 매니퓰레이터의 통합 제어',
+      'ROS2 기반 모듈화 제어 소프트웨어 아키텍처',
+      'RTOS 환경에서의 고정밀 실시간 제어 구현',
+    ],
+  },
+  {
+    icon: 'solar:routing-2-bold',
+    title: 'SLAM 기반 자율주행',
+    points: [
+      'LiDAR · 카메라 융합 SLAM으로 정밀 지도 생성 및 위치 추정',
+      '동적 장애물 회피 및 실시간 경로 재계획',
+      '실내외 복합 환경에서의 안정적인 내비게이션',
+    ],
+  },
+  {
+    icon: 'solar:server-square-bold',
+    title: 'FMS (Fleet Management System)',
+    points: [
+      '다수 로봇의 실시간 위치·상태 통합 모니터링',
+      '작업 스케줄링 및 충돌 없는 다중 로봇 경로 조율',
+      '클라우드 연동 원격 관제 대시보드',
+    ],
+  },
+  {
+    icon: 'solar:eye-scan-bold',
+    title: '3D 비전 및 객체 인식',
+    points: [
+      '깊이 카메라 기반 3D 포인트 클라우드 처리',
+      '물체 위치·자세 추정으로 정밀 파지(Grasping) 지원',
+      '의료영상 처리 경험을 바탕으로 한 고정밀 영상 분석',
+    ],
+  },
+  {
+    icon: 'solar:compass-bold',
+    title: '3D 오도메트리 & 포즈 추정',
+    points: [
+      'IMU · 카메라 · LiDAR 융합 기반 6-DoF 포즈 추정',
+      '누적 오차 보정을 통한 장거리 정밀 이동 경로 추적',
+      '피지컬 AI 로봇의 공간 인식 핵심 모듈',
+    ],
+  },
+];
+const aboutLeft = aboutServices.slice(0, 3);
+const aboutRight = aboutServices.slice(3);
+
+// 스탯 카드 (중앙 정렬, 정적 값) — sub는 날짜/부가설명을 아랫줄로
+const aboutStats = [
+  { icon: 'solar:flag-2-bold', value: '2025.06', label: '김현우·왕한세 공동창업', highlight: true },
+  { icon: 'solar:graph-up-bold', value: '₩125M', label: '2026년 누적 매출', sub: '2026.01~05', highlight: true },
+  { icon: 'solar:cart-check-bold', value: '200+', label: '2026년 누적 판매 대수', sub: '2026.01~05', highlight: false },
+  { icon: 'solar:translation-bold', value: '100%', label: '한국어 기술 지원', sub: '', highlight: true },
+];
 ---
 <BaseLayout title={title} description={description} path="/" lockTheme>
   <div class="hero-viewport">
@@ -110,7 +178,7 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
         <div class="service-card" data-stagger-delay="0">
           <div class="service-card__content">
             <h3 class="service-card__title">Education</h3>
-            <p class="service-card__desc">개인부터 학교, 기업까지 다양한 고객에게 제공하는 교육 시스템과 워크샵 서비스를 제공하고 있습니다. <a href="/documents" class="service-card__link">자세히 보기.</a></p>
+            <p class="service-card__desc">개인부터 학교, 기업까지 다양한 고객에게 제공하는 교육 시스템과 워크샵 서비스를 제공하고 있습니다. <a href="/contact" class="service-card__link">자세히 보기.</a></p>
           </div>
           <div class="service-card__media">
             <img src="/img/index_img/service-education.webp" alt="Physical AI Hackathon" class="service-card__image" loading="lazy" />
@@ -120,7 +188,7 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
         <div class="service-card" data-stagger-delay="150">
           <div class="service-card__content">
             <h3 class="service-card__title">Community</h3>
-            <p class="service-card__desc">Physical AI 1000+명 커뮤니티부터 유튜브, SNS, 블로그까지 다양한 커뮤니티를 준비했습니다. <a href="https://roboseasy.blogspot.com/" target="_blank" rel="noopener noreferrer" class="service-card__link">참여하기.</a></p>
+            <p class="service-card__desc">Physical AI 1000+명 커뮤니티부터 유튜브, SNS, 블로그까지 다양한 커뮤니티를 준비했습니다. <a href="/news" class="service-card__link">참여하기.</a></p>
           </div>
           <div class="service-card__media">
             <img src="/img/index_img/service-community.webp" alt="Physical AI 커뮤니티" class="service-card__image" loading="lazy" />
@@ -132,81 +200,56 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
   </section>
 
   <!-- About Us 섹션 -->
-  <section class="content-section">
-    <div class="content-section__container">
-      <div class="about-tabs">
+  <section class="about-section" id="about-section">
+    <div class="about__container">
+      <!-- 헤더 -->
+      <div class="about__header" data-reveal>
+        <h2 class="about__title">About Us</h2>
+        <span class="about__rule" aria-hidden="true"></span>
+      </div>
 
-        <!-- 우: 탭별 패널 -->
-        <div class="about-tabs__panels">
-
-          <div class="about-tabs__panel is-active" data-panel="hardware">
-            <div class="about-tabs__media">
-              <img src="/img/index_img/about-hardware.webp" alt="Physical AI Hardware" class="about-tabs__image" loading="lazy" />
+      <div class="about__grid">
+        <!-- 중앙 이미지 (전 행 span) -->
+        <div class="about__media-col">
+          <div class="about__media" data-reveal data-stagger-delay="150">
+            <span class="about__media-border" aria-hidden="true"></span>
+            <div class="about__media-frame">
+              <img src="/img/index_img/about-tech.webp" alt="로보시지 핵심 기술 — 실시간 제어·매니퓰레이션·자율주행·FMS·3D 비전·포즈 추정" class="about__media-img" loading="lazy" />
             </div>
-          </div>
-
-          <div class="about-tabs__panel" data-panel="software">
-            <div class="about-tabs__media">
-              <img src="/img/index_img/about-software.webp" alt="Physical AI Platform Software" class="about-tabs__image" loading="lazy" />
-            </div>
-          </div>
-
-          <div class="about-tabs__panel" data-panel="education">
-            <div class="about-tabs__media">
-              <img src="/img/index_img/about-education.webp" alt="Physical AI Education" class="about-tabs__image" loading="lazy" />
-            </div>
-          </div>
-
-        </div>
-
-        <!-- 좌: 탭 네비게이션 -->
-        <div class="about-tabs__nav">
-          <h2 class="about-tabs__label">About Us</h2>
-
-          <div class="about-tabs__list">
-
-            <div class="about-tabs__item is-active" data-tab="hardware">
-              <div class="about-tabs__item-header">
-                <span class="about-tabs__icon">
-                  <Icon name="solar:check-circle-bold" class="about-tabs__icon-check" />
-                  <Icon name="solar:add-circle-bold" class="about-tabs__icon-plus" />
-                </span>
-                <span class="about-tabs__title">모두를 위한 로봇</span>
-              </div>
-              <div class="about-tabs__body">
-                <p>학생·메이커도 다루는, 누구나의 Physical AI 하드웨어</p>
-              </div>
-            </div>
-
-            <div class="about-tabs__item" data-tab="software">
-              <div class="about-tabs__item-header">
-                <span class="about-tabs__icon">
-                  <Icon name="solar:check-circle-bold" class="about-tabs__icon-check" />
-                  <Icon name="solar:add-circle-bold" class="about-tabs__icon-plus" />
-                </span>
-                <span class="about-tabs__title">모두를 위한 SW·AI</span>
-              </div>
-              <div class="about-tabs__body">
-                <p>CLI가 아닌 GUI로, 누구나 쉽게 다루는 로봇 지능</p>
-              </div>
-            </div>
-
-            <div class="about-tabs__item" data-tab="education">
-              <div class="about-tabs__item-header">
-                <span class="about-tabs__icon">
-                  <Icon name="solar:check-circle-bold" class="about-tabs__icon-check" />
-                  <Icon name="solar:add-circle-bold" class="about-tabs__icon-plus" />
-                </span>
-                <span class="about-tabs__title">모두를 위한 교육</span>
-              </div>
-              <div class="about-tabs__body">
-                <p>글로벌 최신 기술을 한국어로 — 진입장벽 없는 배움</p>
-              </div>
-            </div>
-
           </div>
         </div>
 
+        <!-- 좌·우 항목을 행별로 교차 배치 → 같은 행을 공유해 제목 줄 정렬 -->
+        {[0, 1, 2].map((row) => [
+          { s: aboutLeft[row], dir: 'left' },
+          { s: aboutRight[row], dir: 'right' },
+        ].map(({ s, dir }) => (
+          <article class="about-item" data-reveal data-dir={dir} data-stagger-delay={row * 120}>
+            <div class="about-item__header">
+              <span class="about-item__icon">
+                <Icon name={s.icon} />
+              </span>
+              <h3 class="about-item__title">{s.title}</h3>
+            </div>
+            <ul class="about-item__body">
+              {s.points.map((p) => <li>{p}</li>)}
+            </ul>
+          </article>
+        )))}
+      </div>
+
+      <!-- 스탯 -->
+      <div class="about__stats">
+        {aboutStats.map((stat, i) => (
+          <div class="about-stat" data-reveal data-stagger-delay={i * 100}>
+            <span class="about-stat__icon"><Icon name={stat.icon} /></span>
+            <span class={`about-stat__value${stat.highlight ? ' about-stat__value--accent' : ''}`}>{stat.value}</span>
+            <span class="about-stat__label">
+              {stat.label}
+              {stat.sub && <span class="about-stat__sub">{stat.sub}</span>}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -224,18 +267,18 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
       <div class="vision-cards">
         <div class="vision-card">
           <span class="vision-card__num">Vision 01</span>
-          <h3 class="vision-card__title">진입장벽을 낮추다</h3>
-          <p class="vision-card__desc">전문가만의 영역이던 Physical AI를 모두의 영역으로 넓힙니다</p>
+          <h3 class="vision-card__title">Accessibilty</h3>
+          <p class="vision-card__desc">초저가 하드웨어와 소프트웨어로 로봇 진입 장벽을 허뭅니다.</p>
         </div>
         <div class="vision-card">
           <span class="vision-card__num">Vision 02</span>
-          <h3 class="vision-card__title">함께 만들다</h3>
-          <p class="vision-card__desc">더 많은 플레이어가 참여해 함께 키우는 Physical AI 생태계</p>
+          <h3 class="vision-card__title">Ecosystem</h3>
+          <p class="vision-card__desc">제품·교육·커뮤니티를 잇는 선순환으로 Physical AI 생태계를 키웁니다.</p>
         </div>
         <div class="vision-card">
           <span class="vision-card__num">Vision 03</span>
-          <h3 class="vision-card__title">주권을 세우다</h3>
-          <p class="vision-card__desc">해외 기술에 기대지 않고 우리 손으로 설계하는 대한민국 Physical AI</p>
+          <h3 class="vision-card__title">Leadership</h3>
+          <p class="vision-card__desc">대한민국 Physical AI 기술로 세계 시장을 선도하는 기업으로 키웁니다.</p>
         </div>
       </div>
     </div>
@@ -291,16 +334,20 @@ const description = '로봇이 더 쉽고, 더 가까워지도록. 우리는 제
 </BaseLayout>
 
 <script>
-  // About 탭
-  document.querySelectorAll('.about-tabs__item').forEach((item) => {
-    item.addEventListener('click', () => {
-      const tab = (item as HTMLElement).dataset.tab;
-      document.querySelectorAll('.about-tabs__item').forEach((i) => i.classList.remove('is-active'));
-      document.querySelectorAll('.about-tabs__panel').forEach((p) => p.classList.remove('is-active'));
-      item.classList.add('is-active');
-      document.querySelector(`.about-tabs__panel[data-panel="${tab}"]`)?.classList.add('is-active');
-    });
-  });
+  // About 섹션 — 리빌 / 스탯 카운터 / 배경 패럴럭스
+  const aboutSection = document.querySelector('.about-section');
+  if (aboutSection) {
+    const aboutReveal = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const el = e.target as HTMLElement;
+        const delay = parseInt(el.dataset.staggerDelay ?? '0', 10);
+        setTimeout(() => el.classList.add('is-visible'), delay);
+        aboutReveal.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+    aboutSection.querySelectorAll('[data-reveal]').forEach((el) => aboutReveal.observe(el));
+  }
 
   // 뉴스 피처 슬라이더
   const newsItems = document.querySelectorAll<HTMLElement>('.news-feature__item');
