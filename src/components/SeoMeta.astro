@@ -18,7 +18,7 @@ const {
   type = 'website',
 } = Astro.props;
 
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://roboseasy.netlify.app';
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://roboseasy.ai';
 const canonical = `${siteUrl}${path}`;
 const absoluteImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 ---
