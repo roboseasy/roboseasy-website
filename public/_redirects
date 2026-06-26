@@ -1,3 +1,6 @@
+# netlify.app → roboseasy.ai 전체 도메인 통합 (SEO 색인 이전)
+https://roboseasy.netlify.app/*   https://roboseasy.ai/:splat   301!
+
 # Astro 라우트가 모든 새 URL을 직접 서빙하므로 pretty URL 매핑은 더 이상 필요 없음.
 # 아래는 Astro 마이그레이션 이전 외부에 노출된 URL의 SEO 호환을 위한 영구 리다이렉트.
 
