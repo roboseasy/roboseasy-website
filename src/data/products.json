@@ -37,6 +37,23 @@
       "naverUrl": "",
       "representative": true,
       "comingSoon": true
+    },
+    {
+      "id": "sts3215",
+      "name": "서보 모터 STS3215",
+      "category": "etc",
+      "price": 40000,
+      "summary": "",
+      "image": "/img/uploads/92080566702035437_410740015.jpg",
+      "gallery": [],
+      "detailImages": [],
+      "specImages": [],
+      "naverUrl": "https://smartstore.naver.com/roboseasy/products/12407315664#ZOOM",
+      "productNumber": "12407315664",
+      "brand": "자체제작 상품",
+      "origin": "국산",
+      "representative": false,
+      "comingSoon": false
     }
   ]
 }
