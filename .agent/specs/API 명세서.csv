@@ -1,0 +1,38 @@
+﻿기능,API Path,HTTP Method,index,개발 현황,담당자,프론트 개발 현황
+,,,[회원],,,
+회원가입,/api/users/signup,POST,,시작 전,,시작 전
+로그인,/api/users/login,POST,,시작 전,,시작 전
+로그아웃,/api/users/logout,POST,,시작 전,,시작 전
+내 정보 조회,/api/users/me,GET,,시작 전,,시작 전
+회원정보 수정,/api/users/me,PATCH,,시작 전,,시작 전
+회원탈퇴,/api/users/me,DELETE,,시작 전,,시작 전
+비밀번호 변경,/api/users/password,PATCH,,완료,기호 김,완료
+비밀번호 재설정 요청,/api/users/reset-password-request,POST,,완료,기호 김,완료
+비밀번호 재설정 확정,/api/users/reset-password,POST,,완료,기호 김,완료
+마케팅 수신거부,/api/marketing/unsubscribe,GET,,시작 전,,시작 전
+,,,[문의],,,
+문의하기 (B2B),/api/contact,POST,,완료,기호 김,완료
+견적서 다운로드,/api/quote-download,POST,,완료,기호 김,완료
+개인 문의 등록 (B2C),/api/inquiries,POST,,시작 전,,시작 전
+내 문의 내역 조회 (B2C),/api/inquiries,GET,,시작 전,,시작 전
+,,,[쇼핑],,,
+장바구니 조회,/api/cart_items,GET,,시작 전,,시작 전
+장바구니 추가,/api/cart_items,POST,,시작 전,,시작 전
+장바구니 수정,/api/cart_items/{id},PATCH,,시작 전,,시작 전
+장바구니 삭제,/api/cart_items/{id},DELETE,,시작 전,,시작 전
+찜 조회,/api/dibs,GET,,시작 전,,시작 전
+찜 추가,/api/dibs,POST,,시작 전,,시작 전
+찜 삭제,/api/dibs/{id},DELETE,,시작 전,,시작 전
+주문,/api/orders,POST,,시작 전,,시작 전
+주문 내역,/api/orders,GET,,시작 전,,시작 전
+주문 취소,/api/orders/{id}/cancel,POST,,시작 전,,시작 전
+결제 승인,/api/payments/confirm,POST,,시작 전,,시작 전
+토스 웹훅 (상태 동기화 안전망 — 2차 후순위),/api/payments/webhook,POST,,시작 전,,시작 전
+,,,[관리자],,,
+전체 주문 내역 조회,/api/admin/orders,GET,,시작 전,,시작 전
+개별 주문 내역 조회,/api/admin/orders/{id},GET,,시작 전,,시작 전
+전체 유저 조회,/api/admin/users,GET,,시작 전,,시작 전
+개별 유저 조회,/api/admin/users/{id},GET,,시작 전,,시작 전
+주문 배달 관리,/api/admin/orders/{id}/delivery,PATCH,,시작 전,,시작 전
+문의 내역 조회 (B2B·B2C),/api/admin/contacts,GET,,시작 전,,시작 전
+문의 상태 관리,/api/admin/contacts/{id},PATCH,,시작 전,,시작 전

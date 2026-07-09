@@ -1,0 +1,35 @@
+﻿비고,ID,index,상세 설명,예외 처리,우선순위,주 기능,편집자,하위 기능
+,,[회원],,,,,기호 김,
+profiles 자동 생성은 auth.users insert 트리거,USR-01,,"supabase.auth.signUp() — 이름·전화·주소는 options.data로 전달, 트리거가 profiles 생성",이메일 중복 시 가입 실패 표출,상,이메일 가입,기호 김,"이메일 확인, 약관·개인정보 동의 일시 저장(terms/privacy_agreed_at), 마케팅 수신 동의(선택)"
+세션은 httpOnly 쿠키,USR-02,,supabase.auth.signInWithPassword() → profiles.role 조회 → 세션 쿠키 생성,이메일 미인증·자격 증명 오류 시 실패 표출,상,이메일 로그인,기호 김,
+이메일 변경은 DB 트리거로 차단,USR-03,,supabase.auth.updateUser() + profiles 수정,,상,회원정보 수정,기호 김,마케팅 수신 동의 변경 (marketing_consent + _at 갱신)
+"거래기록 5년 분리 보관(전자상거래법). 본인 문의 기록은 일반=익명화, 분쟁=3년 보존",USR-04,,"주문 이력 없으면 auth.admin.deleteUser()(hard delete), 있으면 updateUserById로 이메일 스크램블 + ban + profiles 익명화",배송 미완료 주문 있으면 탈퇴 보류,상,회원탈퇴,기호 김,
+,USR-05,,supabase.auth.signOut() + 세션 쿠키 삭제,,상,로그아웃,기호 김,
+,,[문의],,,,,기호 김,
+"contacts 테이블 기록(channel=b2b) 병행, 메일이 기록 원본",CON-01,,resend api - /api/contact + contacts insert,DB insert 실패 시에도 메일 발송은 유지(로깅),하,문의 (B2B),기호 김,일반 문의 폼
+첨부(사업자등록증)는 DB 미저장 — 메일 첨부 전용,CON-02,,resend api - /api/contact + contacts insert,,하,로봇 구매 문의 (B2B),기호 김,"로봇 견적 폼, 첨부 최대 5MB"
+,CON-03,,resend api - /api/contact + contacts insert,,하,로봇 AS 문의 (B2B),기호 김,구매 여부 폼
+,CON-04,,exceljs - /api/quote-download,,하,로봇 견적서 다운로드,기호 김,
+,CON-05,,프론트엔드 구현,,하,로봇 견적서 미리보기,기호 김,
+"requireAuth — 이름·연락처는 profiles에서 자동, DB가 기록 원본·메일은 알림",CON-06,,POST /api/inquiries — contacts insert(channel=b2c) + [개인문의] 알림 메일,비로그인 401,중,개인 문의 등록 (B2C),기호 김,"제품 선택(product_sku), 주문 연계(order_id — 2차)"
+RLS로 본인 문의만(contacts_select_own_b2c),CON-07,,GET /api/inquiries — 마이페이지 문의 내역,,중,개인 문의 내역 (B2C),기호 김,
+,,[쇼핑],,,,,기호 김,
+RLS: 본인 데이터만,ORD-01,,장바구니 페이지에서 조회,,중,장바구니 조회,기호 김,
+"UNIQUE(user_id, product_sku) — 중복 담기 방지",ORD-02,,제품 상세 페이지에서 추가,is_active=false 제품 추가 불가,중,장바구니 추가,기호 김,
+,ORD-03,,장바구니 페이지에서 수정,,중,장바구니 수정,기호 김,
+,ORD-04,,장바구니 페이지에서 삭제,,중,장바구니 삭제,기호 김,
+,ORD-05,,찜 페이지에서 조회,,중,찜 조회,기호 김,
+"UNIQUE(user_id, product_sku)",ORD-06,,제품 목록 페이지에서 추가,,중,찜 추가,기호 김,
+,ORD-07,,찜 페이지에서 제거,,중,찜 삭제,기호 김,
+"profiles.marketing_consent(+_at, 2년 재확인 기준점) — (광고) 표기 필수",ORD-08,,마케팅 동의 회원에게 찜 할인 이메일 발송,,중,마케팅 수신,기호 김,"수신거부 링크: GET /api/marketing/unsubscribe (서명 토큰, 로그인 불필요)"
+"서버 금액 재계산(클라이언트 금액 신뢰 금지), 배송지는 주문 시점 스냅샷",ORD-09,,POST /api/orders(PENDING) → 토스 결제위젯 → POST /api/payments/confirm(승인) → PAID,"confirm은 PENDING 가드 + 멱등 / 24시간 경과 PENDING은 pg_cron 정리(payments 없으면 DELETE, 있으면 CANCELLED)",중,주문,기호 김,"토스 페이먼츠 (카드·간편결제), 승인 성공 시 주문 품목 장바구니에서 제거"
+상태 전이 + 토스 취소 API — DELETE 아님,ORD-10,,"POST /api/orders/{id}/cancel — 상태 분기: PENDING(payments 없음)이면 주문 삭제(failUrl 복귀 정리 겸용), PAID면 토스 결제 취소 후 CANCELLED",배송 시작 후 취소 불가,중,주문 취소,기호 김,토스 페이먼츠
+,ORD-11,,orders 조회,,중,주문 내역 조회,기호 김,
+,,[관리자],,,,,기호 김,
+별도 로그인 엔드포인트 없음,ADM-01,,일반 로그인 + /api/admin/* 미들웨어 체인 requireAuth → requireAdmin(profiles.role=admin),권한 없으면 403,중,관리자 접근,기호 김,
+,ADM-02,,GET /api/admin/orders,,중,전체 주문 내역 조회,기호 김,
+,ADM-03,,GET /api/admin/orders/{id},,중,개별 주문 내역 조회,기호 김,
+,ADM-04,,GET /api/admin/users,,중,전체 유저 내역 조회,기호 김,
+,ADM-05,,GET /api/admin/users/{id},,중,개별 유저 조회,기호 김,
+배달 정보는 주문 하위 리소스,ADM-06,,PATCH /api/admin/orders/{id}/delivery — 배송 상태·택배사·운송장 수정,,중,주문 배달 관리,기호 김,
+is_dispute로 보유기간(1년/3년) 구분,ADM-07,,"GET /api/admin/contacts, PATCH /api/admin/contacts/{id} — 처리 상태·분쟁 표시",,중,문의 관리,기호 김,

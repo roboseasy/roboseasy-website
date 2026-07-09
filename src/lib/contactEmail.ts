@@ -1,15 +1,6 @@
-export const prerender = false;
+import type { QuoteItem } from './buildQuoteExcel';
 
-import type { APIRoute } from 'astro';
-import { Resend } from 'resend';
-import { buildQuoteExcel, type QuoteItem } from '../../lib/buildQuoteExcel';
-
-const getEnv = (key: string): string =>
-  (import.meta.env[key] as string | undefined) ?? process.env[key] ?? '';
-
-const resend = new Resend(getEnv('RESEND_API_KEY'));
-
-interface ContactPayload {
+export interface ContactPayload {
   name: string;
   title?: string;
   email: string;
@@ -18,13 +9,15 @@ interface ContactPayload {
   type: 'purchase' | 'as' | 'workshop' | 'corp_edu' | 'etc';
   message: string;
   shipto?: string;
+  isBuyer?: string;
+  purchaseMonth?: string;
   items?: QuoteItem[];
   supplySum?: number;
   vatSum?: number;
   total?: number;
 }
 
-const TYPE_LABEL: Record<string, string> = {
+export const TYPE_LABEL: Record<string, string> = {
   purchase: '로봇 구매 문의',
   as: '로봇 AS 문의',
   workshop: '워크샵 문의',
@@ -32,9 +25,16 @@ const TYPE_LABEL: Record<string, string> = {
   etc: '기타 문의',
 };
 
+// 사용자 입력은 전부 이스케이프 후 HTML에 삽입 (메일 HTML 주입 방지)
+export const esc = (v: unknown): string =>
+  String(v ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 
-function buildEmailHtml(data: ContactPayload): string {
-  const typeLabel = TYPE_LABEL[data.type] ?? data.type;
+export function buildEmailHtml(data: ContactPayload): string {
+  const typeLabel = TYPE_LABEL[data.type] ?? esc(data.type);
   const now = new Date();
   const pad = (n: number) => String(n).padStart(2, '0');
   const quoteNo = `Q-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
@@ -46,11 +46,13 @@ function buildEmailHtml(data: ContactPayload): string {
     </tr>`;
 
   const customerRows = [
-    td('성함', data.name + (data.title ? ` (${data.title})` : '')),
-    td('이메일', `<a href="mailto:${data.email}" style="color:#4472c4;">${data.email}</a>`),
-    td('연락처', data.phone),
-    data.org ? td('소속', data.org) : '',
-    data.type === 'purchase' && data.shipto ? td('배송 주소', data.shipto) : '',
+    td('성함', esc(data.name) + (data.title ? ` (${esc(data.title)})` : '')),
+    td('이메일', `<a href="mailto:${esc(data.email)}" style="color:#4472c4;">${esc(data.email)}</a>`),
+    td('연락처', esc(data.phone)),
+    data.org ? td('소속', esc(data.org)) : '',
+    data.type === 'purchase' && data.shipto ? td('배송 주소', esc(data.shipto)) : '',
+    data.type === 'as' && data.isBuyer ? td('구매자 여부', data.isBuyer === 'yes' ? '네' : '아니오') : '',
+    data.type === 'as' && data.purchaseMonth ? td('구매 날짜', esc(data.purchaseMonth)) : '',
   ].filter(Boolean).join('');
 
   let purchaseSection = '';
@@ -58,7 +60,7 @@ function buildEmailHtml(data: ContactPayload): string {
     const itemRows = data.items.map((it, i) => `
       <tr style="background:${i % 2 === 1 ? '#f9f9fb' : '#fff'};">
         <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #e8e5f5;">${i+1}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #e8e5f5;">${it.name}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e8e5f5;">${esc(it.name)}</td>
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.qty.toLocaleString('ko-KR')}</td>
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.unitPrice.toLocaleString('ko-KR')}</td>
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.supply.toLocaleString('ko-KR')}</td>
@@ -101,63 +103,8 @@ function buildEmailHtml(data: ContactPayload): string {
     <hr style="border:none;border-top:1px solid #e8e5f5;margin:0;" />
     <div style="padding:20px 32px 28px;">
       <h2 style="font-size:15px;font-weight:700;color:#1a0a3d;margin:0 0 10px 0;">문의 내용</h2>
-      <div style="font-size:14px;color:#333;line-height:1.8;white-space:pre-wrap;background:#f9f9fb;border-radius:6px;padding:14px 16px;">${data.message.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <div style="font-size:14px;color:#333;line-height:1.8;white-space:pre-wrap;background:#f9f9fb;border-radius:6px;padding:14px 16px;">${esc(data.message)}</div>
     </div>
   </div>
 </body></html>`;
 }
-
-export const POST: APIRoute = async ({ request }) => {
-  let body: ContactPayload;
-  let userFiles: File[] = [];
-  try {
-    const fd = await request.formData();
-    const raw = fd.get('data');
-    if (typeof raw !== 'string') throw new Error();
-    body = JSON.parse(raw);
-    userFiles = (fd.getAll('files') as File[]).filter(f => f.size > 0);
-  } catch {
-    return new Response(JSON.stringify({ success: false, error: '잘못된 요청입니다.' }), { status: 400 });
-  }
-
-  if (!body.name || !body.email || !body.phone || !body.type || !body.message) {
-    return new Response(JSON.stringify({ success: false, error: '필수 항목이 누락되었습니다.' }), { status: 400 });
-  }
-
-  const typeLabel = TYPE_LABEL[body.type] ?? body.type;
-  const attachments: { filename: string; content: string }[] = [];
-
-  if (body.type === 'purchase' && body.items && body.items.length > 0) {
-    try {
-      const buffer = await buildQuoteExcel(body);
-      const now = new Date();
-      const pad = (n: number) => String(n).padStart(2, '0');
-      const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}`;
-      attachments.push({ filename: `견적서_${body.name}_${stamp}.xlsx`, content: Buffer.from(buffer).toString('base64') });
-    } catch (err) {
-      console.error('Excel 생성 오류:', err);
-    }
-  }
-
-  const userAttachments = await Promise.all(
-    userFiles.map(async f => {
-      const buf = await f.arrayBuffer();
-      return { filename: f.name, content: Buffer.from(buf).toString('base64') };
-    })
-  );
-
-  const { error } = await resend.emails.send({
-    from: getEnv('QUOTE_FROM'),
-    to: getEnv('QUOTE_TO'),
-    subject: `[로보시지 문의] ${typeLabel} — ${body.name}`,
-    html: buildEmailHtml(body),
-    attachments: [...attachments, ...userAttachments],
-  });
-
-  if (error) {
-    console.error('Resend 오류:', error);
-    return new Response(JSON.stringify({ success: false, error: '이메일 전송에 실패했습니다.' }), { status: 500 });
-  }
-
-  return new Response(JSON.stringify({ success: true }), { status: 200 });
-};

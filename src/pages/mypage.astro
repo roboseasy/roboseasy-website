@@ -1,0 +1,458 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/mypage.css';
+---
+<BaseLayout
+  title="마이페이지 - RoboSEasy | 로보시지"
+  description="로보시지 마이페이지"
+  path="/mypage"
+  lockTheme="light"
+  shopNav
+>
+  <meta name="robots" content="noindex" slot="head" />
+  <!-- 카카오(다음) 우편번호 서비스 — 키·과금 없음 -->
+  <script is:inline src="https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer slot="head"></script>
+
+  <main class="mypage">
+    <div id="loading" class="mypage__loading">불러오는 중...</div>
+
+    <div id="content" hidden>
+      <!-- 프로필 헤더 -->
+      <header class="mypage__profile">
+        <div class="mypage__avatar" id="avatar" aria-hidden="true"></div>
+        <div>
+          <h1 class="mypage__name" id="u-name"></h1>
+          <p class="mypage__email" id="u-email"></p>
+        </div>
+        <button type="button" id="logoutBtn" class="mypage__logout">로그아웃</button>
+      </header>
+
+      <!-- 프로필 -->
+      <section class="mypage__group" aria-label="프로필">
+        <h2 class="mypage__group-title">프로필</h2>
+        <div class="mypage__list">
+          <div class="mypage__row">
+            <span class="mypage__row-label">이름</span>
+            <span class="mypage__row-value" id="v-name"></span>
+            <button type="button" class="mypage__row-btn" data-edit="name" aria-expanded="false">변경</button>
+          </div>
+          <form class="mypage__editor" data-editor="name" id="nameForm" novalidate hidden>
+            <div id="nameMsg" class="mypage__msg" role="alert"></div>
+            <input id="e-name" class="mypage__input" type="text" autocomplete="name" aria-label="이름" />
+            <button type="submit" id="nameBtn" class="mypage__btn">저장</button>
+          </form>
+
+          <div class="mypage__row">
+            <span class="mypage__row-label">전화번호</span>
+            <span class="mypage__row-value" id="v-phone"></span>
+            <button type="button" class="mypage__row-btn" data-edit="phone" aria-expanded="false">변경</button>
+          </div>
+          <form class="mypage__editor" data-editor="phone" id="phoneForm" novalidate hidden>
+            <div id="phoneMsg" class="mypage__msg" role="alert"></div>
+            <input id="e-phone" class="mypage__input" type="tel" autocomplete="tel" aria-label="전화번호" />
+            <button type="submit" id="phoneBtn" class="mypage__btn">저장</button>
+          </form>
+
+          <div class="mypage__row">
+            <span class="mypage__row-label">배송지</span>
+            <span class="mypage__row-value" id="v-address"></span>
+            <button type="button" class="mypage__row-btn" data-edit="address" aria-expanded="false">변경</button>
+          </div>
+          <form class="mypage__editor" data-editor="address" id="addressForm" novalidate hidden>
+            <div id="addressMsg" class="mypage__msg" role="alert"></div>
+            <div class="mypage__zip-row">
+              <input id="e-zipcode" class="mypage__input mypage__input--zip" type="text" placeholder="우편번호" readonly />
+              <button type="button" id="zipBtn" class="mypage__zip-btn">주소 검색</button>
+            </div>
+            <input id="e-address" class="mypage__input" type="text" placeholder="기본 주소 — 주소 검색으로 입력" readonly />
+            <input id="e-addressDetail" class="mypage__input" type="text" autocomplete="address-line2" placeholder="상세 주소 (동·호수 등)" />
+            <button type="submit" id="addressBtn" class="mypage__btn">저장</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- 보안 · 알림 -->
+      <section class="mypage__group" aria-label="보안 및 알림">
+        <h2 class="mypage__group-title">보안 · 알림</h2>
+        <div class="mypage__list">
+          <div class="mypage__row">
+            <span class="mypage__row-label">비밀번호</span>
+            <span class="mypage__row-value">········</span>
+            <button type="button" class="mypage__row-btn" data-edit="password" aria-expanded="false">변경</button>
+          </div>
+          <form class="mypage__editor" data-editor="password" id="pwForm" novalidate hidden>
+            <div id="pwMsg" class="mypage__msg" role="alert"></div>
+            <input id="pw-current" class="mypage__input" type="password" autocomplete="current-password" placeholder="현재 비밀번호" aria-label="현재 비밀번호" />
+            <input id="pw-new" class="mypage__input" type="password" autocomplete="new-password" placeholder="새 비밀번호 (8자 이상)" aria-label="새 비밀번호" />
+            <input id="pw-new2" class="mypage__input" type="password" autocomplete="new-password" placeholder="새 비밀번호 확인" aria-label="새 비밀번호 확인" />
+            <button type="submit" id="pwBtn" class="mypage__btn">비밀번호 변경</button>
+          </form>
+
+          <div class="mypage__row">
+            <span class="mypage__row-label">마케팅 수신</span>
+            <span class="mypage__row-value">할인·이벤트 알림 (선택)</span>
+            <label class="mypage__switch">
+              <input type="checkbox" id="e-marketing" aria-label="마케팅 정보 수신 동의" />
+              <span class="mypage__switch-track"></span>
+            </label>
+          </div>
+          <div id="marketingMsg" class="mypage__msg mypage__msg--row" role="alert"></div>
+        </div>
+      </section>
+
+      <!-- 쇼핑 -->
+      <section class="mypage__group" aria-label="쇼핑">
+        <h2 class="mypage__group-title">쇼핑</h2>
+        <div class="mypage__list">
+          <div class="mypage__row">
+            <span class="mypage__row-label">주문 내역</span>
+            <span class="mypage__badge">준비 중</span>
+          </div>
+          <div class="mypage__row">
+            <span class="mypage__row-label">찜</span>
+            <span class="mypage__badge">준비 중</span>
+          </div>
+          <div class="mypage__row">
+            <span class="mypage__row-label">장바구니</span>
+            <span class="mypage__badge">준비 중</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 지원 -->
+      <section class="mypage__group" aria-label="지원">
+        <h2 class="mypage__group-title">지원</h2>
+        <div class="mypage__list">
+          <div class="mypage__row">
+            <span class="mypage__row-label">1:1 문의</span>
+            <span class="mypage__row-value" id="v-inquiry">불러오는 중...</span>
+            <button type="button" class="mypage__row-btn" data-edit="inquiry" aria-expanded="false">보기</button>
+          </div>
+          <div class="mypage__editor" data-editor="inquiry" hidden>
+            <form id="inquiryForm" class="mypage__inquiry-form" novalidate>
+              <div id="inquiryMsg" class="mypage__msg" role="alert"></div>
+              <select id="q-type" class="mypage__select" aria-label="문의 유형">
+                <option value="product">제품 문의</option>
+                <option value="delivery">배송 문의</option>
+                <option value="as">AS 문의</option>
+                <option value="refund">환불·취소 문의</option>
+              </select>
+              <textarea id="q-message" class="mypage__textarea" placeholder="문의 내용을 입력해 주세요" aria-label="문의 내용"></textarea>
+              <button type="submit" id="inquiryBtn" class="mypage__btn">문의 등록</button>
+            </form>
+            <div id="inquiryList" class="mypage__inquiry-list">
+              <p class="mypage__empty">불러오는 중...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 회원탈퇴 -->
+      <section class="mypage__group mypage__group--danger" aria-label="회원탈퇴">
+        <div class="mypage__list">
+          <div class="mypage__row">
+            <span class="mypage__row-label">회원탈퇴</span>
+            <span class="mypage__row-value">계정과 개인정보가 삭제됩니다</span>
+            <button type="button" class="mypage__row-btn" data-edit="withdraw" aria-expanded="false">탈퇴</button>
+          </div>
+          <div class="mypage__editor" data-editor="withdraw" hidden>
+            <p class="mypage__danger-desc">
+              탈퇴 시 계정과 개인정보는 즉시 삭제(주문 이력이 있는 경우 익명화)되며 복구할 수 없습니다.<br />
+              전자상거래법에 따라 거래 기록은 5년, 불만·분쟁 처리 기록은 3년간 분리 보관 후 파기됩니다.
+            </p>
+            <div id="withdrawMsg" class="mypage__msg" role="alert"></div>
+            <button type="button" id="withdrawBtn" class="mypage__btn mypage__btn--danger">탈퇴하기</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const showMsg = (id: string, type: 'error' | 'success', text: string) => {
+    const el = $(id);
+    el.className = el.className.includes('mypage__msg--row')
+      ? `mypage__msg mypage__msg--row mypage__msg--${type}`
+      : `mypage__msg mypage__msg--${type}`;
+    el.textContent = text;
+  };
+  const clearMsg = (id: string) => {
+    const el = $(id);
+    el.className = el.className.includes('mypage__msg--row') ? 'mypage__msg mypage__msg--row' : 'mypage__msg';
+    el.textContent = '';
+  };
+
+  let me: {
+    email: string; name: string; phone: string;
+    postcode: string; address: string; addressDetail: string;
+    marketingConsent: boolean;
+  };
+
+  /* ── 인라인 편집 영역 열기/닫기 ── */
+  const editorEl = (key: string) => document.querySelector<HTMLElement>(`[data-editor="${key}"]`)!;
+  const setEditor = (key: string, open: boolean) => {
+    const btn = document.querySelector<HTMLButtonElement>(`[data-edit="${key}"]`)!;
+    editorEl(key).hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? '닫기' : btn.dataset.label!;
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-edit]').forEach((btn) => {
+    btn.dataset.label = btn.textContent ?? '변경';
+    btn.addEventListener('click', () => setEditor(btn.dataset.edit!, editorEl(btn.dataset.edit!).hidden));
+  });
+
+  /* ── 값 렌더 — me 상태를 행 값·편집 폼 초기값에 반영 ── */
+  function renderProfile() {
+    $('avatar').textContent = (me.name || '?').charAt(0);
+    $('u-name').textContent = `${me.name} 님`;
+    $('u-email').textContent = me.email;
+    $('v-name').textContent = me.name;
+    $('v-phone').textContent = me.phone || '미등록';
+    $('v-address').textContent = me.address
+      ? `${me.address}${me.addressDetail ? `, ${me.addressDetail}` : ''}`
+      : '배송지를 등록해 주세요';
+    ($('e-name') as HTMLInputElement).value = me.name;
+    ($('e-phone') as HTMLInputElement).value = me.phone;
+    ($('e-zipcode') as HTMLInputElement).value = me.postcode;
+    ($('e-address') as HTMLInputElement).value = me.address;
+    ($('e-addressDetail') as HTMLInputElement).value = me.addressDetail;
+    ($('e-marketing') as HTMLInputElement).checked = me.marketingConsent;
+  }
+
+  /* ── 초기 로드: 내 정보 (401이면 로그인으로) ── */
+  async function init() {
+    const res = await fetch('/api/users/me');
+    if (res.status === 401) { location.href = '/login?redirect=/mypage'; return; }
+    if (!res.ok) { $('loading').textContent = '정보를 불러오지 못했습니다. 새로고침해 주세요.'; return; }
+    const json = await res.json();
+
+    // 관리자는 마이페이지 대신 관리자 페이지로 (헤더 '마이페이지' 링크 포함)
+    if (json.role === 'admin') { location.replace('/manage'); return; }
+
+    me = json;
+    renderProfile();
+    $('loading').style.display = 'none';
+    ($('content') as HTMLElement).hidden = false;
+    loadInquiries();
+  }
+
+  /* ── 회원정보 부분 저장 — PATCH는 보낸 필드만 갱신 ── */
+  async function patchMe(body: Record<string, unknown>): Promise<string | null> {
+    try {
+      const res = await fetch('/api/users/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const json = await res.json().catch(() => null);
+        return json?.error ?? '저장에 실패했습니다.';
+      }
+      return null;
+    } catch {
+      return '네트워크 오류가 발생했습니다.';
+    }
+  }
+
+  /* ── 이름 ── */
+  $('nameForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = ($('e-name') as HTMLInputElement).value.trim();
+    if (!name) { showMsg('nameMsg', 'error', '이름을 입력해 주세요.'); return; }
+    const btn = $('nameBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    const err = await patchMe({ name });
+    btn.disabled = false;
+    if (err) { showMsg('nameMsg', 'error', err); return; }
+    me.name = name;
+    renderProfile();
+    clearMsg('nameMsg');
+    setEditor('name', false);
+  });
+
+  /* ── 전화번호 ── */
+  $('phoneForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const phone = ($('e-phone') as HTMLInputElement).value.trim();
+    if (!phone) { showMsg('phoneMsg', 'error', '전화번호를 입력해 주세요.'); return; }
+    const btn = $('phoneBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    const err = await patchMe({ phone });
+    btn.disabled = false;
+    if (err) { showMsg('phoneMsg', 'error', err); return; }
+    me.phone = phone;
+    renderProfile();
+    clearMsg('phoneMsg');
+    setEditor('phone', false);
+  });
+
+  /* ── 배송지 — 카카오 우편번호 검색 → 우편번호·기본주소 채움 (상세주소는 직접 입력) ── */
+  $('zipBtn').addEventListener('click', () => {
+    const daum = (window as any).daum;
+    if (!daum?.Postcode) { showMsg('addressMsg', 'error', '주소 검색을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.'); return; }
+    new daum.Postcode({
+      oncomplete: (data: { zonecode: string; roadAddress: string; jibunAddress: string }) => {
+        ($('e-zipcode') as HTMLInputElement).value = data.zonecode;
+        ($('e-address') as HTMLInputElement).value = data.roadAddress || data.jibunAddress;
+        ($('e-addressDetail') as HTMLInputElement).focus();
+      },
+    }).open();
+  });
+
+  $('addressForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const postcode = ($('e-zipcode') as HTMLInputElement).value.trim();
+    const address = ($('e-address') as HTMLInputElement).value.trim();
+    const addressDetail = ($('e-addressDetail') as HTMLInputElement).value.trim();
+    if (!postcode || !address) { showMsg('addressMsg', 'error', '주소 검색으로 기본 주소를 입력해 주세요.'); return; }
+    const btn = $('addressBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    const err = await patchMe({ postcode, address, addressDetail });
+    btn.disabled = false;
+    if (err) { showMsg('addressMsg', 'error', err); return; }
+    me.postcode = postcode;
+    me.address = address;
+    me.addressDetail = addressDetail;
+    renderProfile();
+    clearMsg('addressMsg');
+    setEditor('address', false);
+  });
+
+  /* ── 비밀번호 변경 — 현재 비밀번호 재확인 후 변경 ── */
+  $('pwForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const current = ($('pw-current') as HTMLInputElement).value;
+    const next = ($('pw-new') as HTMLInputElement).value;
+    const next2 = ($('pw-new2') as HTMLInputElement).value;
+
+    if (!current || !next) { showMsg('pwMsg', 'error', '현재 비밀번호와 새 비밀번호를 입력해 주세요.'); return; }
+    if (next.length < 8) { showMsg('pwMsg', 'error', '새 비밀번호는 8자 이상이어야 합니다.'); return; }
+    if (next !== next2) { showMsg('pwMsg', 'error', '새 비밀번호가 일치하지 않습니다.'); return; }
+
+    const btn = $('pwBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/users/password', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: current, newPassword: next }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showMsg('pwMsg', 'error', json.error ?? '비밀번호 변경에 실패했습니다.'); return; }
+      showMsg('pwMsg', 'success', '비밀번호가 변경되었습니다.');
+      ['pw-current', 'pw-new', 'pw-new2'].forEach((id) => (($(id) as HTMLInputElement).value = ''));
+    } catch {
+      showMsg('pwMsg', 'error', '네트워크 오류가 발생했습니다.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  /* ── 마케팅 수신 토글 — 변경 즉시 저장, 실패 시 되돌림 ── */
+  $('e-marketing').addEventListener('change', async () => {
+    const input = $('e-marketing') as HTMLInputElement;
+    const on = input.checked;
+    input.disabled = true;
+    const err = await patchMe({ marketingConsent: on });
+    input.disabled = false;
+    if (err) { input.checked = !on; showMsg('marketingMsg', 'error', err); return; }
+    me.marketingConsent = on;
+    clearMsg('marketingMsg');
+  });
+
+  /* ── 문의 ── */
+  const TYPE_LABEL: Record<string, string> = { product: '제품', delivery: '배송', as: 'AS', refund: '환불·취소' };
+  const STATUS_LABEL: Record<string, { text: string; cls: string }> = {
+    RECEIVED: { text: '접수됨', cls: '' },
+    IN_PROGRESS: { text: '처리 중', cls: 'mypage__badge--progress' },
+    DONE: { text: '답변 완료', cls: 'mypage__badge--done' },
+  };
+
+  async function loadInquiries() {
+    const list = $('inquiryList');
+    const res = await fetch('/api/inquiries');
+    if (!res.ok) {
+      list.innerHTML = '<p class="mypage__empty">문의 내역을 불러오지 못했습니다.</p>';
+      $('v-inquiry').textContent = '—';
+      return;
+    }
+    const { inquiries } = await res.json();
+    if (!inquiries.length) {
+      list.innerHTML = '<p class="mypage__empty">등록된 문의가 없습니다.</p>';
+      $('v-inquiry').textContent = '등록된 문의 없음';
+      return;
+    }
+
+    const done = inquiries.filter((q: { status: string }) => q.status === 'DONE').length;
+    $('v-inquiry').textContent = `${inquiries.length}건${done ? ` · 답변 완료 ${done}건` : ''}`;
+
+    list.innerHTML = '';
+    for (const q of inquiries) {
+      const st = STATUS_LABEL[q.status] ?? { text: q.status, cls: '' };
+      const item = document.createElement('div');
+      item.className = 'mypage__inquiry';
+      const head = document.createElement('div');
+      head.className = 'mypage__inquiry-head';
+      head.innerHTML = `<span class="mypage__badge ${st.cls}"></span><span></span><span></span>`;
+      const [badge, type, date] = head.children as unknown as HTMLElement[];
+      badge.textContent = st.text;
+      type.textContent = `${TYPE_LABEL[q.contactType] ?? q.contactType} 문의`;
+      date.textContent = new Date(q.createdAt).toLocaleDateString('ko-KR');
+      const msg = document.createElement('p');
+      msg.className = 'mypage__inquiry-msg';
+      msg.textContent = q.message;
+      item.append(head, msg);
+      list.appendChild(item);
+    }
+  }
+
+  $('inquiryForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = ($('q-message') as HTMLTextAreaElement).value.trim();
+    if (!message) { showMsg('inquiryMsg', 'error', '문의 내용을 입력해 주세요.'); return; }
+    const btn = $('inquiryBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contactType: ($('q-type') as HTMLSelectElement).value, message }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showMsg('inquiryMsg', 'error', json.error ?? '문의 등록에 실패했습니다.'); return; }
+      showMsg('inquiryMsg', 'success', '문의가 접수되었습니다.');
+      ($('q-message') as HTMLTextAreaElement).value = '';
+      loadInquiries();
+    } catch {
+      showMsg('inquiryMsg', 'error', '네트워크 오류가 발생했습니다.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  /* ── 로그아웃 / 탈퇴 ── */
+  $('logoutBtn').addEventListener('click', async () => {
+    await fetch('/api/users/logout', { method: 'POST' });
+    location.href = '/products';
+  });
+
+  $('withdrawBtn').addEventListener('click', async () => {
+    if (!confirm('정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+    const btn = $('withdrawBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/users/me', { method: 'DELETE' });
+      const json = await res.json();
+      if (!res.ok) { showMsg('withdrawMsg', 'error', json.error ?? '탈퇴 처리에 실패했습니다.'); btn.disabled = false; return; }
+      alert('탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.');
+      location.href = '/';
+    } catch {
+      showMsg('withdrawMsg', 'error', '네트워크 오류가 발생했습니다.');
+      btn.disabled = false;
+    }
+  });
+
+  init();
+</script>

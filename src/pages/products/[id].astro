@@ -28,7 +28,7 @@ const specs = specImages && specImages.length ? specImages : Array.from({ length
 const title = `${name} - RoboSEasy | 로보시지`;
 const description = summary ?? `${name} 제품 정보와 구매 안내.`;
 ---
-<BaseLayout title={title} description={description} path={`/products/${product.id}`} lockTheme="light">
+<BaseLayout title={title} description={description} path={`/products/${product.id}`} lockTheme="light" shopNav>
   <article class="pdp">
     <div class="pdp__container">
       <!-- 상단: 좌측 갤러리 / 우측 정보 -->

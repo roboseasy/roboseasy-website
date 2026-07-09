@@ -1,0 +1,413 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/manage.css';
+---
+<BaseLayout
+  title="관리자 - RoboSEasy"
+  description="로보시지 관리자 페이지"
+  path="/manage"
+  lockTheme="light"
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="adm">
+    <div id="loading" class="adm__loading">권한 확인 중...</div>
+
+    <div id="content" hidden>
+      <div class="adm__top">
+        <h1 class="adm__title">관리자</h1>
+        <div class="adm__seg" role="tablist">
+          <button type="button" class="adm__seg-btn is-active" data-panel="contacts">문의 <span id="seg-ct"></span></button>
+          <button type="button" class="adm__seg-btn" data-panel="users">유저 <span id="seg-us"></span></button>
+          <button type="button" class="adm__seg-btn" data-panel="orders">주문 <span id="seg-or"></span></button>
+        </div>
+        <button type="button" id="logoutBtn" class="adm__logout">로그아웃</button>
+      </div>
+
+      <!-- 문의 관리 — 목록 + 상세 분할 뷰 -->
+      <section class="adm__panel is-active" data-panel="contacts">
+        <div class="adm__split">
+          <div class="adm__list-card">
+            <div class="adm__filters">
+              <select id="f-status" class="adm__select">
+                <option value="">상태 전체</option>
+                <option value="RECEIVED">접수됨</option>
+                <option value="IN_PROGRESS">처리 중</option>
+                <option value="DONE">완료</option>
+              </select>
+              <select id="f-channel" class="adm__select">
+                <option value="">채널 전체</option>
+                <option value="b2b">B2B</option>
+                <option value="b2c">B2C</option>
+              </select>
+              <select id="f-dispute" class="adm__select">
+                <option value="">분쟁 전체</option>
+                <option value="true">분쟁만</option>
+                <option value="false">일반만</option>
+              </select>
+            </div>
+            <div id="contactList"></div>
+            <div id="contactsEmpty" class="adm__empty" hidden>문의가 없습니다.</div>
+            <div class="adm__pager">
+              <button type="button" id="ct-prev">이전</button>
+              <span id="ct-page">1</span>
+              <button type="button" id="ct-next">다음</button>
+              <span class="adm__pager-total" id="ct-total"></span>
+            </div>
+          </div>
+
+          <div class="adm__detail">
+            <p id="detailPlaceholder" class="adm__placeholder">문의를 선택하세요.</p>
+            <div id="detailBody" hidden>
+              <div class="adm__detail-head">
+                <h2 class="adm__detail-title" id="d-title"></h2>
+                <span class="adm__badge" id="d-channel"></span>
+                <span class="adm__badge" id="d-status"></span>
+                <span class="adm__detail-date" id="d-date"></span>
+              </div>
+              <div class="adm__detail-contact">
+                <span><b>이름</b><span id="d-name"></span></span>
+                <span><b>이메일</b><span id="d-email"></span></span>
+                <span><b>전화</b><span id="d-phone"></span></span>
+              </div>
+              <p class="adm__detail-msg" id="d-msg"></p>
+              <div class="adm__detail-actions">
+                <label>상태
+                  <select id="d-statusSel" class="adm__select">
+                    <option value="RECEIVED">접수됨</option>
+                    <option value="IN_PROGRESS">처리 중</option>
+                    <option value="DONE">완료</option>
+                  </select>
+                </label>
+                <label><input type="checkbox" id="d-dispute" /> 분쟁 (기록 3년 보관)</label>
+                <button type="button" id="d-done" class="adm__done-btn">완료로 표시</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 유저 -->
+      <section class="adm__panel" data-panel="users">
+        <div class="adm__table-wrap">
+          <table class="adm__table">
+            <thead>
+              <tr><th>가입일</th><th>이메일</th><th>이름</th><th>전화번호</th><th>주소</th><th>마케팅</th><th>권한</th></tr>
+            </thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+          <div id="usersEmpty" class="adm__empty" hidden>유저가 없습니다.</div>
+          <div class="adm__pager adm__table-pager">
+            <button type="button" id="us-prev">이전</button>
+            <span id="us-page">1</span>
+            <button type="button" id="us-next">다음</button>
+            <span class="adm__pager-total" id="us-total"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 주문 -->
+      <section class="adm__panel" data-panel="orders">
+        <div class="adm__table-wrap">
+          <table class="adm__table">
+            <thead>
+              <tr><th>주문일</th><th>주문번호</th><th>금액</th><th>수령인</th><th>배송지</th><th>상태</th></tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+          <div id="ordersEmpty" class="adm__empty" hidden>주문이 없습니다. (판매 기능은 2차 오픈)</div>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+
+  /* ── 권한 확인 ── */
+  async function guard() {
+    const res = await fetch('/api/users/me');
+    if (res.status === 401) { location.href = '/login?redirect=/manage'; return false; }
+    const me = res.ok ? await res.json() : null;
+    if (!me || me.role !== 'admin') { location.href = '/'; return false; }
+    return true;
+  }
+
+  /* ── 세그먼트 패널 전환 ── */
+  const segBtns = document.querySelectorAll<HTMLButtonElement>('.adm__seg-btn');
+  const panels = document.querySelectorAll<HTMLElement>('.adm__panel');
+  segBtns.forEach((t) =>
+    t.addEventListener('click', () => {
+      segBtns.forEach((x) => x.classList.toggle('is-active', x === t));
+      panels.forEach((p) => p.classList.toggle('is-active', p.dataset.panel === t.dataset.panel));
+    })
+  );
+
+  const fmtDate = (s: string) => new Date(s).toLocaleDateString('ko-KR');
+  const td = (text: string, cls = '') => {
+    const el = document.createElement('td');
+    if (cls) el.className = cls;
+    el.textContent = text;
+    return el;
+  };
+
+  /* ── 문의 관리 — 목록 + 상세 ── */
+  const CT_TYPE: Record<string, string> = {
+    purchase: '로봇 구매', as: 'AS', workshop: '워크샵', corp_edu: '교육', etc: '기타',
+    product: '제품', delivery: '배송', refund: '환불·취소',
+  };
+  const CT_STATUS: Record<string, { text: string; cls: string }> = {
+    RECEIVED: { text: '접수됨', cls: 'adm__badge--new' },
+    IN_PROGRESS: { text: '처리 중', cls: 'adm__badge--progress' },
+    DONE: { text: '완료', cls: 'adm__badge--done' },
+  };
+
+  type Contact = {
+    contactId: string; createdAt: string; channel: string; contactType: string;
+    name: string; email: string; phone: string; message: string;
+    isDispute: boolean; status: string;
+  };
+  let contacts: Contact[] = [];
+  let ctPage = 1;
+  let selectedId: string | null = null;
+
+  function statusBadge(el: HTMLElement, status: string) {
+    const st = CT_STATUS[status] ?? { text: status, cls: '' };
+    el.className = `adm__badge ${st.cls}`;
+    el.textContent = st.text;
+  }
+
+  function renderContactList() {
+    const list = $('contactList');
+    list.innerHTML = '';
+    $('contactsEmpty').hidden = contacts.length > 0;
+
+    for (const q of contacts) {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = `adm__item${q.contactId === selectedId ? ' is-active' : ''}`;
+
+      const row = document.createElement('span');
+      row.className = 'adm__item-row';
+      const ch = document.createElement('span');
+      ch.className = `adm__badge${q.channel === 'b2c' ? ' adm__badge--b2c' : ''}`;
+      ch.textContent = q.channel.toUpperCase();
+      const name = document.createElement('span');
+      name.className = 'adm__item-name';
+      name.textContent = `${q.name} · ${CT_TYPE[q.contactType] ?? q.contactType}`;
+      row.append(ch, name);
+      const st = document.createElement('span');
+      statusBadge(st, q.status);
+      row.append(st);
+      if (q.isDispute) {
+        const d = document.createElement('span');
+        d.className = 'adm__badge adm__badge--dispute';
+        d.textContent = '분쟁';
+        row.append(d);
+      }
+      const date = document.createElement('span');
+      date.className = 'adm__item-date';
+      date.textContent = fmtDate(q.createdAt);
+      row.append(date);
+
+      const snippet = document.createElement('span');
+      snippet.className = 'adm__item-snippet';
+      snippet.textContent = q.message;
+
+      item.append(row, snippet);
+      item.addEventListener('click', () => selectContact(q.contactId));
+      list.appendChild(item);
+    }
+  }
+
+  function selectContact(id: string | null) {
+    selectedId = id;
+    const q = contacts.find((x) => x.contactId === id);
+    $('detailPlaceholder').hidden = !!q;
+    ($('detailBody') as HTMLElement).hidden = !q;
+    document.querySelectorAll<HTMLElement>('.adm__item').forEach((el, i) =>
+      el.classList.toggle('is-active', contacts[i]?.contactId === id)
+    );
+    if (!q) return;
+
+    $('d-title').textContent = `${CT_TYPE[q.contactType] ?? q.contactType} 문의`;
+    const ch = $('d-channel');
+    ch.className = `adm__badge${q.channel === 'b2c' ? ' adm__badge--b2c' : ''}`;
+    ch.textContent = q.channel.toUpperCase();
+    statusBadge($('d-status'), q.status);
+    $('d-date').textContent = `${fmtDate(q.createdAt)} 접수`;
+    $('d-name').textContent = q.name;
+    $('d-email').textContent = q.email;
+    $('d-phone').textContent = q.phone || '-';
+    $('d-msg').textContent = q.message;
+    ($('d-statusSel') as HTMLSelectElement).value = q.status;
+    ($('d-dispute') as HTMLInputElement).checked = q.isDispute;
+    ($('d-done') as HTMLButtonElement).disabled = q.status === 'DONE';
+  }
+
+  async function loadContacts() {
+    const params = new URLSearchParams({ page: String(ctPage) });
+    const channel = ($('f-channel') as HTMLSelectElement).value;
+    const status = ($('f-status') as HTMLSelectElement).value;
+    const dispute = ($('f-dispute') as HTMLSelectElement).value;
+    if (channel) params.set('channel', channel);
+    if (status) params.set('status', status);
+    if (dispute) params.set('is_dispute', dispute);
+
+    const res = await fetch(`/api/admin/contacts?${params}`);
+    if (!res.ok) return;
+    const { contacts: rows, total } = await res.json();
+    contacts = rows;
+
+    $('seg-ct').textContent = String(total);
+    $('ct-total').textContent = `총 ${total}건`;
+    $('ct-page').textContent = String(ctPage);
+    ($('ct-prev') as HTMLButtonElement).disabled = ctPage <= 1;
+    ($('ct-next') as HTMLButtonElement).disabled = ctPage * 50 >= total;
+
+    // 선택 유지 — 현재 페이지에 없으면 첫 항목 선택
+    if (!contacts.some((q) => q.contactId === selectedId)) {
+      selectedId = contacts[0]?.contactId ?? null;
+    }
+    renderContactList();
+    selectContact(selectedId);
+  }
+
+  async function patchContact(id: string, patch: object, el: HTMLInputElement | HTMLSelectElement | HTMLButtonElement) {
+    el.disabled = true;
+    try {
+      const res = await fetch(`/api/admin/contacts/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) { alert('변경에 실패했습니다.'); return false; }
+      return true;
+    } catch {
+      alert('네트워크 오류가 발생했습니다.');
+      return false;
+    } finally {
+      el.disabled = false;
+    }
+  }
+
+  /* 상세 패널 처리 컨트롤 — 성공 시 로컬 상태·목록·배지 갱신 */
+  $('d-statusSel').addEventListener('change', async () => {
+    const q = contacts.find((x) => x.contactId === selectedId);
+    if (!q) return;
+    const sel = $('d-statusSel') as HTMLSelectElement;
+    const prev = q.status;
+    if (await patchContact(q.contactId, { status: sel.value }, sel)) {
+      q.status = sel.value;
+    } else {
+      sel.value = prev;
+    }
+    renderContactList();
+    selectContact(q.contactId);
+  });
+
+  $('d-dispute').addEventListener('change', async () => {
+    const q = contacts.find((x) => x.contactId === selectedId);
+    if (!q) return;
+    const chk = $('d-dispute') as HTMLInputElement;
+    if (await patchContact(q.contactId, { isDispute: chk.checked }, chk)) {
+      q.isDispute = chk.checked;
+    } else {
+      chk.checked = q.isDispute;
+    }
+    renderContactList();
+    selectContact(q.contactId);
+  });
+
+  $('d-done').addEventListener('click', async () => {
+    const q = contacts.find((x) => x.contactId === selectedId);
+    if (!q) return;
+    const btn = $('d-done') as HTMLButtonElement;
+    if (await patchContact(q.contactId, { status: 'DONE' }, btn)) {
+      q.status = 'DONE';
+    }
+    renderContactList();
+    selectContact(q.contactId);
+  });
+
+  ['f-channel', 'f-status', 'f-dispute'].forEach((id) =>
+    $(id).addEventListener('change', () => { ctPage = 1; loadContacts(); })
+  );
+  $('ct-prev').addEventListener('click', () => { ctPage--; loadContacts(); });
+  $('ct-next').addEventListener('click', () => { ctPage++; loadContacts(); });
+
+  /* ── 유저 ── */
+  let usPage = 1;
+  async function loadUsers() {
+    const res = await fetch(`/api/admin/users?page=${usPage}`);
+    if (!res.ok) return;
+    const { users, total } = await res.json();
+    const body = $('usersBody');
+    body.innerHTML = '';
+    $('usersEmpty').hidden = users.length > 0;
+    $('seg-us').textContent = String(total);
+    $('us-total').textContent = `총 ${total}명`;
+    $('us-page').textContent = String(usPage);
+    ($('us-prev') as HTMLButtonElement).disabled = usPage <= 1;
+    ($('us-next') as HTMLButtonElement).disabled = usPage * 50 >= total;
+
+    for (const u of users) {
+      const tr = document.createElement('tr');
+      tr.append(
+        td(fmtDate(u.createdAt), 'adm__nowrap'),
+        td(u.email, 'adm__nowrap'),
+        td(u.name, 'adm__nowrap'),
+        td(u.phone, 'adm__nowrap'),
+        td([u.postcode && `(${u.postcode})`, u.address, u.addressDetail].filter(Boolean).join(' ')),
+        td(u.marketingConsent ? '동의' : '-', 'adm__nowrap'),
+        td(u.role, 'adm__nowrap'),
+      );
+      body.appendChild(tr);
+    }
+  }
+  $('us-prev').addEventListener('click', () => { usPage--; loadUsers(); });
+  $('us-next').addEventListener('click', () => { usPage++; loadUsers(); });
+
+  /* ── 주문 (1차: 빈 목록) ── */
+  const ORDER_STATUS: Record<string, string> = {
+    PENDING: '결제 대기', PAID: '결제 완료', SHIPPING: '배송 중', DELIVERED: '배송 완료', CANCELLED: '취소됨',
+  };
+  async function loadOrders() {
+    const res = await fetch('/api/admin/orders');
+    if (!res.ok) return;
+    const { orders } = await res.json();
+    const body = $('ordersBody');
+    body.innerHTML = '';
+    $('ordersEmpty').hidden = orders.length > 0;
+    $('seg-or').textContent = String(orders.length);
+    for (const o of orders) {
+      const tr = document.createElement('tr');
+      tr.append(
+        td(fmtDate(o.createdAt), 'adm__nowrap'),
+        td(o.orderId.slice(0, 8), 'adm__nowrap'),
+        td(Number(o.totalPrice).toLocaleString('ko-KR') + '원', 'adm__nowrap'),
+        td(o.receiverName, 'adm__nowrap'),
+        td(o.shippingAddress),
+        td(ORDER_STATUS[o.status] ?? o.status, 'adm__nowrap'),
+      );
+      body.appendChild(tr);
+    }
+  }
+
+  /* ── 로그아웃 ── */
+  $('logoutBtn').addEventListener('click', async () => {
+    await fetch('/api/users/logout', { method: 'POST' });
+    location.href = '/login';
+  });
+
+  /* ── 초기화 ── */
+  (async () => {
+    if (!(await guard())) return;
+    $('loading').style.display = 'none';
+    ($('content') as HTMLElement).hidden = false;
+    loadContacts();
+    loadUsers();
+    loadOrders();
+  })();
+</script>
