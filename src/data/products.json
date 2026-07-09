@@ -37,6 +37,13 @@
       "naverUrl": "",
       "representative": true,
       "comingSoon": true
+    },
+    {
+      "id": "sts3215-motor",
+      "name": "STS3215 스마트 서보 모터",
+      "category": "etc",
+      "price": 23000,
+      "summary": "STS3215 스마트 시리얼 버스 서보 모터. SO-ARM·LeKiwi 호환."
     }
   ]
 }

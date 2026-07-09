@@ -2,17 +2,18 @@
 import { Icon } from 'astro-icon/components';
 // 모든 페이지 상단의 공통 네비게이션.
 // 마크업·인터랙션은 기존 js/components/main-header.js에서 1:1 포팅.
+// shopNav: 판매 동선 페이지(/products, 회원 페이지)에서만 우측 아이콘(마이페이지·장바구니·찜) 표시
+
+interface Props {
+  shopNav?: boolean;
+}
+const { shopNav = false } = Astro.props;
 ---
 <header class="header">
   <div class="header__container">
     <a href="/" class="header__logo">
       <img class="header__logo-image" src="/img/common_img/logo.png" alt="RoboSEasy Logo" />
     </a>
-    <button class="header__menu-toggle" aria-label="메뉴 열기">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
     <div class="header__overlay"></div>
     <nav class="header__nav">
       <button class="header__nav-close" aria-label="메뉴 닫기">
@@ -27,6 +28,24 @@ import { Icon } from 'astro-icon/components';
         <li class="header__nav-item"><a class="header__nav-link" href="/contact">Contact Us</a></li>
       </ul>
     </nav>
+    {shopNav && (
+      <div class="header__icons">
+        <a id="header-icon-user" class="header__icon-link" href="/mypage" aria-label="마이페이지" title="마이페이지">
+          <Icon name="solar:user-circle-linear" width="26" />
+        </a>
+        <a class="header__icon-link" href="/cart" data-soon="장바구니" aria-label="장바구니" title="장바구니">
+          <Icon name="solar:cart-large-2-linear" width="26" />
+        </a>
+        <a class="header__icon-link" href="/dibs" data-soon="찜" aria-label="찜" title="찜">
+          <Icon name="solar:heart-linear" width="26" />
+        </a>
+      </div>
+    )}
+    <button class="header__menu-toggle" aria-label="메뉴 열기">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </header>
 
@@ -61,5 +80,26 @@ import { Icon } from 'astro-icon/components';
         link.addEventListener('click', closeMenu);
       });
     }
+
+    // 판매 아이콘 (shopNav 페이지만 렌더됨)
+    // 비로그인 시 마이페이지 아이콘은 로그인으로 (rb-auth: 로그인 시 서버가 심는 표시용 쿠키)
+    const userIcon = header.querySelector<HTMLAnchorElement>('#header-icon-user');
+    if (userIcon && !document.cookie.split('; ').some((c) => c === 'rb-auth=1')) {
+      userIcon.href = '/login?redirect=/mypage';
+    }
+
+    // 장바구니·찜 — 2차 구현 전까지 준비 중 안내
+    header.querySelectorAll<HTMLAnchorElement>('.header__icon-link[data-soon]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector('.header__toast')?.remove();
+        const toast = document.createElement('div');
+        toast.className = 'header__toast';
+        toast.textContent = `${el.dataset.soon} 기능은 준비 중입니다.`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('is-visible'), 10);
+        setTimeout(() => { toast.classList.remove('is-visible'); setTimeout(() => toast.remove(), 300); }, 2200);
+      });
+    });
   }
 </script>

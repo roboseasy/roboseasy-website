@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/auth.css';
+---
+<BaseLayout
+  title="로그인 - RoboSEasy | 로보시지"
+  description="로보시지 판매 사이트 로그인"
+  path="/login"
+  lockTheme="light"
+  chrome={false}
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="auth auth--bare">
+    <div class="auth__stack">
+      <img class="auth__logo" src="/img/common_img/favicon.ico" alt="RoboSEasy" width="48" height="48" />
+      <div class="auth__card">
+      <div class="auth__head">
+        <h1 class="auth__title">로그인</h1>
+      </div>
+
+      <form id="loginForm" class="auth__form" novalidate>
+        <div id="loginMsg" class="auth__msg" role="alert"></div>
+
+        <div class="auth__field">
+          <label class="auth__label" for="f-email">이메일</label>
+          <input id="f-email" class="auth__input" type="email" autocomplete="email" placeholder="you@example.com" required />
+        </div>
+        <div class="auth__field">
+          <div class="auth__label-row">
+            <label class="auth__label" for="f-password">비밀번호</label>
+            <a class="auth__link" href="/reset-password">비밀번호를 잊으셨나요?</a>
+          </div>
+          <input id="f-password" class="auth__input" type="password" autocomplete="current-password" placeholder="비밀번호" required />
+        </div>
+
+        <button type="submit" id="loginBtn" class="auth__submit">로그인</button>
+      </form>
+
+      <p class="auth__footer">
+        아직 계정이 없으신가요? <a href="/signup">회원가입</a>
+      </p>
+      </div>
+    </div>
+
+    <nav class="auth__legal" aria-label="법적 고지">
+      <a href="/terms">이용약관</a>
+      <span aria-hidden="true">·</span>
+      <a href="/privacy">개인정보처리방침</a>
+    </nav>
+  </main>
+</BaseLayout>
+
+<style>
+  /* 헤더/푸터가 없는 로그인 전용 — 카드는 수직 중앙, 약관 링크는 화면 하단 중앙 */
+  .auth--bare {
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px 24px;
+  }
+  .auth__stack {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .auth__stack .auth__card {
+    max-width: 400px;
+  }
+  .auth__logo {
+    width: 48px;
+    height: 48px;
+    display: block;
+  }
+
+  .auth__head { text-align: center; }
+  .auth__head .auth__title { margin-top: 0; }
+
+  .auth__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .auth__link {
+    font-size: 0.8rem;
+    color: var(--color-amethyst);
+    text-decoration: none;
+  }
+  .auth__link:hover { text-decoration: underline; }
+
+  .auth__legal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--color-muted-gray);
+  }
+  .auth__legal a {
+    color: var(--color-muted-gray);
+    text-decoration: none;
+  }
+  .auth__legal a:hover { text-decoration: underline; }
+</style>
+
+<script>
+  const form = document.getElementById('loginForm') as HTMLFormElement;
+  const msg = document.getElementById('loginMsg') as HTMLElement;
+  const btn = document.getElementById('loginBtn') as HTMLButtonElement;
+
+  const showMsg = (type: 'error' | 'info', text: string) => {
+    msg.className = `auth__msg auth__msg--${type}`;
+    msg.textContent = text;
+  };
+
+  // redirect 파라미터를 안전한 내부 경로로만 허용 (open redirect 방지).
+  // URL 파서로 origin을 비교해 //evil.com·/\evil.com(백슬래시 정규화 우회)·절대 URL을 모두 차단.
+  const safeInternalPath = (raw: string | null): string | null => {
+    if (!raw) return null;
+    try {
+      const u = new URL(raw, location.origin);
+      return u.origin === location.origin ? u.pathname + u.search + u.hash : null;
+    } catch {
+      return null;
+    }
+  };
+
+  // 이메일 확인 링크에서 리다이렉트되어 온 경우 안내 (Supabase가 hash에 토큰/타입을 실어 보냄)
+  if (location.hash.includes('access_token') || location.hash.includes('type=signup')) {
+    showMsg('info', '이메일 인증이 완료되었습니다. 로그인해 주세요.');
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (document.getElementById('f-email') as HTMLInputElement).value.trim();
+    const password = (document.getElementById('f-password') as HTMLInputElement).value;
+    if (!email || !password) { showMsg('error', '이메일과 비밀번호를 입력해 주세요.'); return; }
+
+    btn.disabled = true; btn.textContent = '로그인 중...';
+    try {
+      const res = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showMsg('error', json.error ?? '로그인에 실패했습니다.'); return; }
+
+      // ?redirect= 가 내부 경로일 때만 사용 (open redirect 방지). 기본 목적지는 관리자면 /manage, 일반 회원은 판매 페이지
+      const fallback = json.role === 'admin' ? '/manage' : '/products';
+      location.href = safeInternalPath(new URLSearchParams(location.search).get('redirect')) ?? fallback;
+    } catch {
+      showMsg('error', '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      btn.disabled = false; btn.textContent = '로그인';
+    }
+  });
+</script>

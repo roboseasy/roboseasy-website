@@ -1,0 +1,221 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/auth.css';
+---
+<BaseLayout
+  title="회원가입 - RoboSEasy | 로보시지"
+  description="로보시지 판매 사이트 회원가입"
+  path="/signup"
+  lockTheme="light"
+  chrome={false}
+>
+  <meta name="robots" content="noindex" slot="head" />
+  <!-- 카카오(다음) 우편번호 서비스 — 키·과금 없음 -->
+  <script is:inline src="https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer slot="head"></script>
+
+  <main class="auth auth--bare">
+    <div class="auth__stack">
+      <img class="auth__logo" src="/img/common_img/favicon.ico" alt="RoboSEasy" width="48" height="48" />
+      <div class="auth__card">
+      <div id="signupWrap">
+        <div class="auth__head">
+          <h1 class="auth__title">회원가입</h1>
+          <p class="auth__desc">가입 후 확인 메일의 링크를 누르면 가입이 완료됩니다.</p>
+        </div>
+
+        <form id="signupForm" class="auth__form" novalidate>
+          <div id="signupMsg" class="auth__msg" role="alert"></div>
+
+          <div class="auth__field">
+            <label class="auth__label auth__label--req" for="f-email">이메일</label>
+            <input id="f-email" class="auth__input" type="email" autocomplete="email" placeholder="you@example.com" required />
+          </div>
+          <div class="auth__row">
+            <div class="auth__field">
+              <label class="auth__label auth__label--req" for="f-name">이름</label>
+              <input id="f-name" class="auth__input" type="text" autocomplete="name" placeholder="홍길동" required />
+            </div>
+            <div class="auth__field">
+              <label class="auth__label auth__label--req" for="f-phone">전화번호</label>
+              <input id="f-phone" class="auth__input" type="tel" autocomplete="tel" placeholder="010-0000-0000" required />
+            </div>
+          </div>
+          <div class="auth__row">
+            <div class="auth__field">
+              <label class="auth__label auth__label--req" for="f-password">비밀번호</label>
+              <input id="f-password" class="auth__input" type="password" autocomplete="new-password" placeholder="8자 이상" required />
+            </div>
+            <div class="auth__field">
+              <label class="auth__label auth__label--req" for="f-password2">비밀번호 확인</label>
+              <input id="f-password2" class="auth__input" type="password" autocomplete="new-password" placeholder="비밀번호 재입력" required />
+            </div>
+          </div>
+          <div class="auth__field">
+            <label class="auth__label auth__label--req" for="f-zipcode">주소</label>
+            <div class="auth__zip-row">
+              <input id="f-zipcode" class="auth__input auth__input--zip" type="text" placeholder="우편번호" readonly required />
+              <button type="button" id="zipBtn" class="auth__zip-btn">주소 검색</button>
+            </div>
+            <input id="f-address" class="auth__input" type="text" placeholder="기본 주소" readonly required />
+            <input id="f-addressDetail" class="auth__input" type="text" autocomplete="address-line2" placeholder="상세 주소"/>
+          </div>
+
+          <div class="auth__consents">
+            <label class="auth__consent">
+              <input type="checkbox" id="c-terms" />
+              <span>(필수) <a href="/terms" target="_blank" rel="noopener">이용약관</a>에 동의합니다.</span>
+            </label>
+            <label class="auth__consent">
+              <input type="checkbox" id="c-privacy" />
+              <span>(필수) <a href="/privacy" target="_blank" rel="noopener">개인정보 수집·이용</a>에 동의합니다.</span>
+            </label>
+            <label class="auth__consent">
+              <input type="checkbox" id="c-marketing" />
+              <span>(선택) 할인·이벤트 등 마케팅 정보 수신에 동의합니다.</span>
+            </label>
+          </div>
+
+          <button type="submit" id="signupBtn" class="auth__submit">가입하기</button>
+        </form>
+
+        <p class="auth__footer">이미 계정이 있으신가요? <a href="/login">로그인</a></p>
+      </div>
+
+      <!-- 가입 성공: 확인 메일 안내 -->
+      <div id="signupDone" class="auth__done">
+        <div class="auth__done-icon">📮</div>
+        <h2 class="auth__done-title">확인 메일을 보냈습니다</h2>
+        <p class="auth__done-desc" id="doneDesc">
+          받은 편지함에서 인증 링크를 눌러 가입을 완료해 주세요.<br />
+          메일이 보이지 않으면 스팸함도 확인해 주세요.
+        </p>
+        <p class="auth__footer"><a href="/login">로그인 페이지로</a></p>
+      </div>
+      </div>
+    </div>
+
+    <nav class="auth__legal" aria-label="법적 고지">
+      <a href="/terms">이용약관</a>
+      <span aria-hidden="true">·</span>
+      <a href="/privacy">개인정보처리방침</a>
+    </nav>
+  </main>
+</BaseLayout>
+
+<style>
+  /* 헤더/푸터가 없는 회원가입 전용 — login 페이지와 동일한 레이아웃 */
+  .auth--bare {
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px 24px;
+  }
+  .auth__stack {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .auth__stack .auth__card {
+    max-width: 400px;
+  }
+  .auth__logo {
+    width: 48px;
+    height: 48px;
+    display: block;
+  }
+
+  .auth__head { text-align: center; }
+  .auth__head .auth__title { margin-top: 0; }
+
+  /* 2단 필드 행 — 좁은 화면에서는 1단으로 */
+  .auth__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .auth__row .auth__field { min-width: 0; }
+  @media (max-width: 480px) {
+    .auth__row { grid-template-columns: 1fr; }
+  }
+
+  .auth__legal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--color-muted-gray);
+  }
+  .auth__legal a {
+    color: var(--color-muted-gray);
+    text-decoration: none;
+  }
+  .auth__legal a:hover { text-decoration: underline; }
+</style>
+
+<script>
+  const form = document.getElementById('signupForm') as HTMLFormElement;
+  const msg = document.getElementById('signupMsg') as HTMLElement;
+  const btn = document.getElementById('signupBtn') as HTMLButtonElement;
+
+  const val = (id: string) => (document.getElementById(id) as HTMLInputElement).value.trim();
+  const checked = (id: string) => (document.getElementById(id) as HTMLInputElement).checked;
+  const showError = (text: string) => {
+    msg.className = 'auth__msg auth__msg--error';
+    msg.textContent = text;
+    msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  /* ── 카카오 우편번호 검색 → 우편번호·기본주소 채움 (상세주소는 직접 입력) ── */
+  document.getElementById('zipBtn')!.addEventListener('click', () => {
+    const daum = (window as any).daum;
+    if (!daum?.Postcode) { showError('주소 검색을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.'); return; }
+    new daum.Postcode({
+      oncomplete: (data: { zonecode: string; roadAddress: string; jibunAddress: string }) => {
+        (document.getElementById('f-zipcode') as HTMLInputElement).value = data.zonecode;
+        (document.getElementById('f-address') as HTMLInputElement).value = data.roadAddress || data.jibunAddress;
+        (document.getElementById('f-addressDetail') as HTMLInputElement).focus();
+      },
+    }).open();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = val('f-name'), email = val('f-email'), phone = val('f-phone');
+    const postcode = val('f-zipcode'), address = val('f-address'), addressDetail = val('f-addressDetail');
+    const password = (document.getElementById('f-password') as HTMLInputElement).value;
+    const password2 = (document.getElementById('f-password2') as HTMLInputElement).value;
+
+    if (!name || !email || !password || !phone) { showError('필수 항목을 모두 입력해 주세요.'); return; }
+    if (!postcode || !address) { showError('주소 검색으로 주소를 입력해 주세요.'); return; }
+    if (password.length < 8) { showError('비밀번호는 8자 이상이어야 합니다.'); return; }
+    if (password !== password2) { showError('비밀번호가 일치하지 않습니다.'); return; }
+    if (!checked('c-terms') || !checked('c-privacy')) { showError('필수 약관에 동의해 주세요.'); return; }
+
+    btn.disabled = true; btn.textContent = '가입 처리 중...';
+    try {
+      const res = await fetch('/api/users/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email, password, name, phone, postcode, address, addressDetail,
+          termsAgreed: checked('c-terms'),
+          privacyAgreed: checked('c-privacy'),
+          marketingConsent: checked('c-marketing'),
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showError(json.error ?? '가입 처리 중 오류가 발생했습니다.'); return; }
+
+      (document.getElementById('signupWrap') as HTMLElement).style.display = 'none';
+      (document.getElementById('signupDone') as HTMLElement).style.display = 'block';
+    } catch {
+      showError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      btn.disabled = false; btn.textContent = '가입하기';
+    }
+  });
+</script>

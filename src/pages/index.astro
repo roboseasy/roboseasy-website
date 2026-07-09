@@ -67,11 +67,13 @@ const aboutServices = [
 const aboutLeft = aboutServices.slice(0, 3);
 const aboutRight = aboutServices.slice(3);
 
-// 스탯 카드 (중앙 정렬, 정적 값) — sub는 날짜/부가설명을 아랫줄로
+// 스탯 카드 (중앙 정렬) — sub는 날짜/부가설명을 아랫줄로
+// 누적 매출/판매 대수는 수동 갱신 (기간 끝 월도 함께 갱신)
+const statsPeriod = '2026.01~05';
 const aboutStats = [
   { icon: 'solar:flag-2-bold', value: '2025.06', label: '김현우·왕한세 공동창업', highlight: true },
-  { icon: 'solar:graph-up-bold', value: '₩125M', label: '2026년 누적 매출', sub: '2026.01~05', highlight: true },
-  { icon: 'solar:cart-check-bold', value: '200+', label: '2026년 누적 판매 대수', sub: '2026.01~05', highlight: false },
+  { icon: 'solar:graph-up-bold', value: '₩125M', label: '2026년 누적 매출', sub: statsPeriod, highlight: true },
+  { icon: 'solar:cart-check-bold', value: '200+', label: '2026년 누적 판매 대수', sub: statsPeriod, highlight: false },
   { icon: 'solar:translation-bold', value: '100%', label: '한국어 기술 지원', sub: '', highlight: true },
 ];
 ---
