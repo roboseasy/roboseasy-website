@@ -14,6 +14,10 @@ export const app = new Hono().basePath('/api');
 // CSRF 방어 — 라우트보다 먼저 실행되도록 최상단에 등록 (변경 요청의 Origin/Referer 검증)
 app.use('*', csrfProtect);
 
+// 워밍 핑 대상 — pg_cron이 5분마다 호출해 Netlify Function 콜드 스타트(~2초)를 방지
+// (supabase/migrations/20260713000000_warm_function.sql)
+app.get('/health', (c) => c.json({ ok: true }));
+
 app.route('/', contact);
 app.route('/', quoteDownload);
 app.route('/', users);

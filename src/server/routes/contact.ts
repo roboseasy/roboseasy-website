@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { Resend } from 'resend';
 import { buildQuoteExcel } from '../../lib/buildQuoteExcel';
 import { buildEmailHtml, TYPE_LABEL, type ContactPayload } from '../../lib/contactEmail';
+import { priceQuoteItems, type PricedQuote } from '../../data/quoteItems';
 import { getEnv } from '../lib/env';
 import { getServiceClient } from '../lib/supabase';
 import { rateLimit, clientIp, consumeEmailBudget } from '../middleware/rateLimit';
@@ -34,6 +35,13 @@ contact.post('/contact', rateLimit({ name: 'contact', capacity: 5, refillPerSec:
     return json({ success: false, error: '잘못된 문의 유형입니다.' }, 400);
   }
 
+  // 견적 항목 검증·재계산 — 금액은 클라이언트 값을 쓰지 않고 단가표(quoteItems)로 서버가 계산
+  let quote: PricedQuote | null = null;
+  if (body.type === 'purchase' && body.items !== undefined) {
+    quote = priceQuoteItems(body.items);
+    if (!quote) return json({ success: false, error: '견적 항목이 올바르지 않습니다.' }, 400);
+  }
+
   const typeLabel = TYPE_LABEL[body.type] ?? body.type;
 
   // 접수 기록을 먼저 DB에 저장 — 메일이 예산 소진/실패로 못 가도 접수는 남는다(유실 방지, backend.md §3).
@@ -59,9 +67,9 @@ contact.post('/contact', rateLimit({ name: 'contact', capacity: 5, refillPerSec:
   const budgetOk = db ? await consumeEmailBudget(db) : true;
   if (budgetOk) {
     const attachments: { filename: string; content: string }[] = [];
-    if (body.type === 'purchase' && body.items && body.items.length > 0) {
+    if (quote && quote.items.length > 0) {
       try {
-        const buffer = await buildQuoteExcel(body);
+        const buffer = await buildQuoteExcel(body, quote);
         const now = new Date();
         const pad = (n: number) => String(n).padStart(2, '0');
         const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}`;
@@ -82,8 +90,9 @@ contact.post('/contact', rateLimit({ name: 'contact', capacity: 5, refillPerSec:
     const { error } = await resend.emails.send({
       from: getEnv('QUOTE_FROM'),
       to: getEnv('QUOTE_TO'),
+      replyTo: body.email, // 메일함에서 "답장"이 문의자에게 바로 가도록 (From은 검증 도메인만 가능)
       subject: `[로보시지 문의] ${typeLabel} — ${body.name}`,
-      html: buildEmailHtml(body),
+      html: buildEmailHtml(body, quote),
       attachments: [...attachments, ...userAttachments],
     });
     if (error) console.error('Resend 오류:', error);

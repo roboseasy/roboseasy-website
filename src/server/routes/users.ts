@@ -212,8 +212,15 @@ async function updateUserPassword(
   }
 }
 
-/* ── 비밀번호 변경 (로그인 상태, 마이페이지) — 현재 비밀번호 재확인 후 변경 ── */
-users.patch('/users/password', requireAuth, async (c) => {
+/* ── 비밀번호 변경 (로그인 상태, 마이페이지) — 현재 비밀번호 재확인 후 변경 ──
+   세션만 탈취한 공격자가 현재 비밀번호를 무차별 대입하면 재확인 방어가 뚫리므로
+   uid 기준 rate limit. GoTrue 자체 제한은 Netlify egress IP만 보여 무력 (backend.md §7) */
+users.patch(
+  '/users/password',
+  requireAuth,
+  rateLimit({ name: 'pw-change', capacity: 5, refillPerSec: 1 / 300,
+    keyFn: (c) => (c.get('user') as { id?: string } | undefined)?.id ?? null }),
+  async (c) => {
   let body: { currentPassword?: string; newPassword?: string };
   try {
     body = await c.req.json();

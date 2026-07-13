@@ -649,26 +649,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </div>
 
 <script>
-  const ITEMS = [
-    { name: 'LeRobot SO-ARM 101 Max', price: 500000 },
-    { name: 'Top 카메라홀더 + 카메라모듈 + 셀카봉', price: 50000 },
-    { name: 'Wrist 카메라홀더 + 카메라모듈', price: 40000 },
-    { name: 'Belly 카메라홀더 + 카메라모듈', price: 40000 },
-    { name: '고급형 클램프 4pcs', price: 20000 },
-    { name: 'LeRobot SO-ARM 101 Open Gripper', price: 70000 },
-    { name: 'LeRobot SO-ARM 101 Max - 서보 모터 STS3215 (7.4v/19kg)', price: 30000 },
-    { name: 'LeRobot SO-ARM 101 Max - 서보 모터 STS3215 (12v/30kg)', price: 35000 },
-    { name: 'Dual SO-ARM (Only Bridge)', price: 230000 },
-    { name: 'Dual SO-ARM Full Set', price: 1230000 },
-    { name: 'LeRobot SO-ARM101 Max - 3D 프린팅 부품 제외', price: 440000 },
-    { name: 'LeRobot SO-ARM101 Max - 3D 프린팅 부품', price: 70000 },
-    { name: '리더암 모터 세트 (7.4v/19kg)', price: 180000 },
-    { name: '팔로워암 모터 세트 (12v/30kg)', price: 210000 },
-    { name: '모터드라이브 모듈', price: 10000 },
-    { name: '전원 어댑터', price: 10000 },
-    { name: 'USB to C 케이블', price: 2000 },
-    { name: '조립서비스', price: 90000 },
-  ];
+  // 단가표는 서버와 공유하는 단일 원본(src/data/quoteItems.ts) — 여기 값은 표시용이고,
+  // 서버가 /api/contact·/api/quote-download에서 같은 표로 금액을 재계산한다.
+  import { QUOTE_ITEMS as ITEMS, lineAmounts } from '../data/quoteItems';
 
   const fmt = n => (n || 0).toLocaleString('ko-KR');
   const pad = n => String(n).padStart(2, '0');
@@ -759,8 +742,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const qty = parseInt(card.querySelector('.q-qty').value, 10) || 0;
       const i = sel.value !== '' ? parseInt(sel.value, 10) : -1;
       const unit = i >= 0 ? ITEMS[i].price : 0;
-      const supply = qty * unit;
-      const vat = unit && qty ? Math.round((supply * 0.1) / 10) * 10 : 0;
+      const { supply, vat } = lineAmounts(unit, qty);
       card.querySelector('.q-unit').textContent   = unit   ? fmt(unit)   + ' 원' : '—';
       card.querySelector('.q-supply').textContent = supply ? fmt(supply) + ' 원' : '—';
       card.querySelector('.q-vat').textContent    = (unit && qty) ? fmt(vat) + ' 원' : '—';
@@ -826,8 +808,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const idx = sel.value !== '' ? parseInt(sel.value, 10) : -1;
       if (idx < 0 || qty <= 0) return;
       const unit = ITEMS[idx].price;
-      const supply = qty * unit;
-      const vat = Math.round((supply * 0.1) / 10) * 10;
+      const { supply, vat } = lineAmounts(unit, qty);
       supplySum += supply; vatSum += vat;
       items.push({ name: ITEMS[idx].name, qty, unitPrice: unit, supply, vat });
     });
@@ -920,7 +901,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   async function handleExcelDownload(btn) {
     const name = document.getElementById('f-name').value.trim();
-    const { items, supplySum, vatSum } = collectQuoteItems();
+    // 금액은 서버가 단가표로 재계산 — 품목명·수량만 전송
+    const { items } = collectQuoteItems();
     const payload = {
       name,
       title:     document.getElementById('f-title').value.trim() || undefined,
@@ -928,10 +910,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       phone:     document.getElementById('f-phone').value.trim(),
       org:       orgInput.value.trim() || undefined,
       shipto:    document.getElementById('f-shipto').value.trim() || undefined,
-      items:     items.length > 0 ? items : undefined,
-      supplySum: supplySum || undefined,
-      vatSum:    vatSum || undefined,
-      total:     (supplySum + vatSum) || undefined,
+      items:     items.length > 0 ? items.map(it => ({ name: it.name, qty: it.qty })) : undefined,
     };
     const origHTML = btn.innerHTML;
     btn.disabled = true;
@@ -998,7 +977,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     btn.disabled = true; btn.textContent = '전송 중...';
     clearResult();
 
-    const { items, supplySum, vatSum } = typeSelect.value === 'purchase' ? collectQuoteItems() : { items: [], supplySum: 0, vatSum: 0 };
+    // 금액은 서버가 단가표로 재계산 — 품목명·수량만 전송
+    const { items } = typeSelect.value === 'purchase' ? collectQuoteItems() : { items: [] };
 
     const payload = {
       name:      document.getElementById('f-name').value.trim(),
@@ -1011,10 +991,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       type:      typeSelect.value,
       message:   document.getElementById('f-message').value.trim(),
       shipto:    document.getElementById('f-shipto')?.value.trim() || undefined,
-      items:     items.length > 0 ? items : undefined,
-      supplySum: supplySum || undefined,
-      vatSum:    vatSum || undefined,
-      total:     (supplySum + vatSum) || undefined,
+      items:     items.length > 0 ? items.map(it => ({ name: it.name, qty: it.qty })) : undefined,
     };
 
     try {

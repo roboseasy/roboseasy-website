@@ -93,6 +93,7 @@ inquiries.post(
       const { error: mailError } = await resend.emails.send({
         from: getEnv('QUOTE_FROM'),
         to: getEnv('QUOTE_TO'),
+        replyTo: profile.user_email, // 메일함에서 "답장"이 문의 회원에게 바로 가도록
         subject: `[개인문의] ${typeLabel} — ${profile.user_name}`,
         html: `<!DOCTYPE html><html lang="ko"><body style="font-family:system-ui,sans-serif;font-size:14px;color:#333;">
           <h2 style="font-size:16px;">[개인문의] ${typeLabel}</h2>

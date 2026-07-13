@@ -72,6 +72,7 @@ cron.post('/cron/marketing-reconfirm', async (c) => {
     const { error: mailError } = await resend.emails.send({
       from,
       to: u.user_email,
+      replyTo: 'roboseasy@gmail.com', // 회원이 "답장"하면 운영 메일함으로 (본문 안내 연락처와 동일)
       subject: '[로보시지] 광고성 정보 수신동의 확인 안내',
       html: reconfirmHtml(u.user_name, consentDate, siteUrl),
     });

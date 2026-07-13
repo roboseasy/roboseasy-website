@@ -1,4 +1,4 @@
-import type { QuoteItem } from './buildQuoteExcel';
+import type { PricedQuote } from '../data/quoteItems';
 
 export interface ContactPayload {
   name: string;
@@ -11,10 +11,8 @@ export interface ContactPayload {
   shipto?: string;
   isBuyer?: string;
   purchaseMonth?: string;
-  items?: QuoteItem[];
-  supplySum?: number;
-  vatSum?: number;
-  total?: number;
+  /** 클라이언트가 보낸 { name, qty }[] — 금액은 서버가 priceQuoteItems로 재계산 */
+  items?: unknown;
 }
 
 export const TYPE_LABEL: Record<string, string> = {
@@ -33,7 +31,8 @@ export const esc = (v: unknown): string =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-export function buildEmailHtml(data: ContactPayload): string {
+// quote: priceQuoteItems가 서버에서 재계산한 견적 (purchase 외 유형은 null)
+export function buildEmailHtml(data: ContactPayload, quote: PricedQuote | null): string {
   const typeLabel = TYPE_LABEL[data.type] ?? esc(data.type);
   const now = new Date();
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -56,8 +55,8 @@ export function buildEmailHtml(data: ContactPayload): string {
   ].filter(Boolean).join('');
 
   let purchaseSection = '';
-  if (data.type === 'purchase' && data.items && data.items.length > 0) {
-    const itemRows = data.items.map((it, i) => `
+  if (data.type === 'purchase' && quote && quote.items.length > 0) {
+    const itemRows = quote.items.map((it, i) => `
       <tr style="background:${i % 2 === 1 ? '#f9f9fb' : '#fff'};">
         <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #e8e5f5;">${i+1}</td>
         <td style="padding:8px 12px;border-bottom:1px solid #e8e5f5;">${esc(it.name)}</td>
@@ -66,7 +65,7 @@ export function buildEmailHtml(data: ContactPayload): string {
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.supply.toLocaleString('ko-KR')}</td>
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.vat.toLocaleString('ko-KR')}</td>
       </tr>`).join('');
-    const s = data.supplySum ?? 0, v = data.vatSum ?? 0, f = data.total ?? s + v;
+    const s = quote.supplySum, v = quote.vatSum, f = quote.total;
     purchaseSection = `
     <h2 style="font-size:15px;font-weight:700;color:#1a0a3d;margin:28px 0 10px 0;">견적 항목</h2>
     <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e8e5f5;">
