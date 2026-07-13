@@ -367,9 +367,9 @@ body {
     overflow: hidden;   /* about 글로우 ::before(좌-40/우-120px) 스필 클리핑 → 전 페이지 가로 스크롤 방지 */
 }
 
-/* 라이트 모드 페이지에서만 푸터 배경을 Deep Nebula로 (랜딩 등 다크 고정 페이지는 기존 #171717 유지) */
+/* 라이트 모드 페이지에서만 푸터 배경을 별도 지정 (랜딩 등 다크 고정 페이지는 기존 #171717 유지) */
 :root[data-theme='light'] .footer {
-    background: rgb(16 10 30);
+    background: #0C0A09;
 }
 
 /* 라이트 모드: 푸터 about 섹션의 보라색 radial 그라디언트 글로우 제거 */

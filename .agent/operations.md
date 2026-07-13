@@ -47,7 +47,20 @@ git push origin main
 | `RESEND_API_KEY` | 문의 메일 발송 | 빌드는 통과, 런타임에 폼 전송 실패 |
 | `QUOTE_FROM` / `QUOTE_TO` | 문의 메일 발신/수신 주소 | 〃 |
 | (1차 예정) `SUPABASE_URL` / `SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY` | 백엔드 — anon 키는 유저 토큰 클라이언트(RLS 적용) 생성용, service role은 RLS 우회 작업 전용·클라이언트 노출 금지 | backend.md §1 |
+| `CRON_SECRET` | 스케줄러 전용 엔드포인트(`/api/cron/*`) 인증 토큰. Supabase Vault의 `cron_secret`과 동일 값으로 설정 | 마케팅 재확인 배치가 401로 거부됨 |
 | (2차 예정) `TOSS_SECRET_KEY` | 결제 승인·취소 API | backend.md §4 |
+
+### 스케줄 작업 (pg_cron) 확인
+
+DB에 등록된 정기 작업은 SQL Editor에서 확인·검증한다. pg_cron은 Supabase DB(상시 가동)에서 돌아가며 Netlify 배포와 무관하다.
+
+- **최초 활성화**: Dashboard > Database > Extensions에서 `pg_cron`·`pg_net` 활성화(마이그레이션의 `create extension`으로도 시도되나, 권한 이슈 시 대시보드에서 확인).
+- **등록된 작업 조회**: `select jobid, jobname, schedule, active, command from cron.job;` → `purge-expired-contacts`, `marketing-reconfirm-notice`, `purge-rate-limit-buckets` 세 건이 보이면 정상.
+- **실행 이력**: `select jobname, status, return_message, start_time from cron.job_run_details order by start_time desc limit 20;` → `status = 'succeeded'` 확인. 실패면 `return_message`에 원인.
+- **HTTP 호출 결과(pg_net)**: 마케팅 재확인은 엔드포인트를 호출하므로 `select id, status_code, error_msg, created from net._http_response order by created desc limit 10;`로 응답 코드(200 기대) 확인.
+- **수동 실행(테스트)**: 파기는 `select public.purge_expired_contacts();`(삭제 건수 반환). 마케팅 재확인은 `select cron.schedule` 명령 본문을 직접 실행하거나 `curl -X POST https://roboseasy.ai/api/cron/marketing-reconfirm -H "Authorization: Bearer <CRON_SECRET>"`.
+- **Vault 시크릿 등록(재확인 배치 전제)**: `select vault.create_secret('<CRON_SECRET 값>', 'cron_secret');` (Netlify `CRON_SECRET`과 동일 값).
+- **주의**: cron 스케줄은 UTC 기준. `0 3 * * *` = KST 12:00, `0 4 1 * *` = 매월 1일 KST 13:00.
 
 ## CMS 운영 주의 (Sveltia — /admin)
 
@@ -72,6 +85,8 @@ git push origin main
 - 문의(B2B) 기록의 원본은 **수신 메일함** — 첨부(사업자등록증)는 서버·DB에 저장되지 않음
 - 보유기간 운영 규칙: 일반 문의 1년 / 불만·분쟁 3년 (개인정보처리방침 제3조) — 메일함 정리 시 준수
 - (1차부터) contacts 테이블에 병행 기록 — backend.md §3
+- **Rate limit (Token Bucket, `rate_limit_buckets` 테이블 + `consume_token` RPC)**: B2B 문의는 IP, B2C 문의는 user_id 기준으로 버스트 5회·이후 5분당 1회. 초과 시 429.
+- **Resend 무료 100/day 예산**: 전역 버킷(`global:resend`, capacity 100·1일 100충전)이 contact·inquiry·마케팅 cron의 모든 발송을 통과시킴. 소진 시 → B2B 문의는 DB에 접수 저장 후 "확인 후 연락" 안내(첨부만 유실), B2C 알림·마케팅 재확인은 스킵(재확인은 다음 실행 이월). **유료 전환 시 이 예산 상향**: `src/server/middleware/rateLimit.ts`의 `consumeEmailBudget` capacity·refill 조정
 
 ## 테스트
 

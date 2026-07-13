@@ -6,14 +6,20 @@ import { quoteDownload } from './routes/quoteDownload';
 import { users } from './routes/users';
 import { inquiries } from './routes/inquiries';
 import { admin } from './routes/admin';
+import { cron } from './routes/cron';
+import { csrfProtect } from './middleware/csrf';
 
 export const app = new Hono().basePath('/api');
+
+// CSRF 방어 — 라우트보다 먼저 실행되도록 최상단에 등록 (변경 요청의 Origin/Referer 검증)
+app.use('*', csrfProtect);
 
 app.route('/', contact);
 app.route('/', quoteDownload);
 app.route('/', users);
 app.route('/', inquiries);
 app.route('/admin', admin);
+app.route('/', cron);
 
 app.notFound((c) => c.json({ error: 'not found' }, 404));
 app.onError((err, c) => {

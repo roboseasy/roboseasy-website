@@ -43,7 +43,9 @@ const orderDto = (r: Record<string, unknown>) => ({
   status: r.status,
   receiverName: r.receiver_name,
   receiverPhone: r.receiver_phone,
+  shippingPostcode: r.shipping_postcode,
   shippingAddress: r.shipping_address,
+  shippingAddressDetail: r.shipping_address_detail,
   courier: r.courier,
   trackingNumber: r.tracking_number,
   createdAt: r.created_at,
@@ -71,9 +73,11 @@ const contactDto = (r: Record<string, unknown>) => ({
 /* ── 유저 조회 (ADM-04·05) ── */
 admin.get('/users', async (c) => {
   const { page, from, to } = pageOf(c);
+  // 탈퇴(익명화) 회원은 논리적 분리 보관 대상 — 활성 회원 목록에서 제외
   const { data, count, error } = await c.get('db')
     .from('profiles')
     .select('user_id, user_email, user_name, user_phone, user_postcode, user_address, user_address_detail, role, marketing_consent, created_at', { count: 'exact' })
+    .is('withdrawn_at', null)
     .order('created_at', { ascending: false })
     .range(from, to);
   if (error) {

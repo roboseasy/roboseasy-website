@@ -4,14 +4,16 @@ import { buildQuoteExcel } from '../../lib/buildQuoteExcel';
 import { buildEmailHtml, TYPE_LABEL, type ContactPayload } from '../../lib/contactEmail';
 import { getEnv } from '../lib/env';
 import { getServiceClient } from '../lib/supabase';
+import { rateLimit, clientIp, consumeEmailBudget } from '../middleware/rateLimit';
 
 export const contact = new Hono();
 
 const json = (body: unknown, status: 200 | 400 | 500) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
-// B2B 문의 접수 — 메일이 기록 원본(첨부 포함), contacts insert는 보유기간 관리용 병행 기록
-contact.post('/contact', async (c) => {
+// B2B 문의 접수 — 비회원이라 IP로 rate limit(버스트 5, 이후 5분당 1회).
+// 접수 기록은 contacts에 먼저 저장(유실 방지), 그다음 예산 내에서 메일 발송.
+contact.post('/contact', rateLimit({ name: 'contact', capacity: 5, refillPerSec: 1 / 300, keyFn: clientIp }), async (c) => {
   let body: ContactPayload;
   let userFiles: File[] = [];
   try {
@@ -33,43 +35,11 @@ contact.post('/contact', async (c) => {
   }
 
   const typeLabel = TYPE_LABEL[body.type] ?? body.type;
-  const attachments: { filename: string; content: string }[] = [];
 
-  if (body.type === 'purchase' && body.items && body.items.length > 0) {
-    try {
-      const buffer = await buildQuoteExcel(body);
-      const now = new Date();
-      const pad = (n: number) => String(n).padStart(2, '0');
-      const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}`;
-      attachments.push({ filename: `견적서_${body.name}_${stamp}.xlsx`, content: Buffer.from(buffer).toString('base64') });
-    } catch (err) {
-      console.error('Excel 생성 오류:', err);
-    }
-  }
-
-  const userAttachments = await Promise.all(
-    userFiles.map(async (f) => {
-      const buf = await f.arrayBuffer();
-      return { filename: f.name, content: Buffer.from(buf).toString('base64') };
-    })
-  );
-
-  const resend = new Resend(getEnv('RESEND_API_KEY'));
-  const { error } = await resend.emails.send({
-    from: getEnv('QUOTE_FROM'),
-    to: getEnv('QUOTE_TO'),
-    subject: `[로보시지 문의] ${typeLabel} — ${body.name}`,
-    html: buildEmailHtml(body),
-    attachments: [...attachments, ...userAttachments],
-  });
-
-  if (error) {
-    console.error('Resend 오류:', error);
-    return json({ success: false, error: '이메일 전송에 실패했습니다.' }, 500);
-  }
-
-  // 문의 기록 — 실패해도 접수(메일)는 성공이므로 로깅만 (backend.md §3)
+  // 접수 기록을 먼저 DB에 저장 — 메일이 예산 소진/실패로 못 가도 접수는 남는다(유실 방지, backend.md §3).
+  // (첨부·견적서 엑셀은 메일에만 실림 — 예산 소진 시 본문·연락처는 남고 첨부만 유실)
   const db = getServiceClient();
+  let recorded = false;
   if (db) {
     const { error: dbError } = await db.from('contacts').insert({
       channel: 'b2b',
@@ -81,7 +51,47 @@ contact.post('/contact', async (c) => {
       message: body.message,
     });
     if (dbError) console.error('contacts insert 오류:', dbError);
+    else recorded = true;
   }
 
-  return json({ success: true }, 200);
+  // 전역 일일 예산(Resend 무료 100/day) 확인 후 발송. db 없으면 검사 불가 → 발송 허용(fail-open).
+  let mailSent = false;
+  const budgetOk = db ? await consumeEmailBudget(db) : true;
+  if (budgetOk) {
+    const attachments: { filename: string; content: string }[] = [];
+    if (body.type === 'purchase' && body.items && body.items.length > 0) {
+      try {
+        const buffer = await buildQuoteExcel(body);
+        const now = new Date();
+        const pad = (n: number) => String(n).padStart(2, '0');
+        const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}`;
+        attachments.push({ filename: `견적서_${body.name}_${stamp}.xlsx`, content: Buffer.from(buffer).toString('base64') });
+      } catch (err) {
+        console.error('Excel 생성 오류:', err);
+      }
+    }
+
+    const userAttachments = await Promise.all(
+      userFiles.map(async (f) => {
+        const buf = await f.arrayBuffer();
+        return { filename: f.name, content: Buffer.from(buf).toString('base64') };
+      })
+    );
+
+    const resend = new Resend(getEnv('RESEND_API_KEY'));
+    const { error } = await resend.emails.send({
+      from: getEnv('QUOTE_FROM'),
+      to: getEnv('QUOTE_TO'),
+      subject: `[로보시지 문의] ${typeLabel} — ${body.name}`,
+      html: buildEmailHtml(body),
+      attachments: [...attachments, ...userAttachments],
+    });
+    if (error) console.error('Resend 오류:', error);
+    else mailSent = true;
+  }
+
+  // 메일 발송 성공이면 통상 성공. 예산 소진·발송 실패라도 DB에 접수됐으면 성공 안내(확인 후 연락).
+  if (mailSent) return json({ success: true }, 200);
+  if (recorded) return json({ success: true, message: '문의가 접수되었습니다. 확인 후 연락드리겠습니다.' }, 200);
+  return json({ success: false, error: '접수에 실패했습니다. 잠시 후 다시 시도해 주세요.' }, 500);
 });

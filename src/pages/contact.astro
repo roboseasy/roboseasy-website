@@ -835,13 +835,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   /* ─── Preview modal ─── */
+  // 미리보기는 innerHTML로 주입되므로 사용자 입력을 이스케이프 (XSS 방지 — 서버 contactEmail.ts esc와 동일)
+  const esc = (s) => String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
   function buildPreviewHtml() {
-    const name   = document.getElementById('f-name').value.trim() || '—';
-    const title  = document.getElementById('f-title').value.trim();
-    const email  = document.getElementById('f-email').value.trim() || '—';
-    const phone  = document.getElementById('f-phone').value.trim() || '—';
-    const org    = orgInput.value.trim() || '—';
-    const shipto = document.getElementById('f-shipto').value.trim() || '—';
+    const name   = esc(document.getElementById('f-name').value.trim() || '—');
+    const title  = esc(document.getElementById('f-title').value.trim());
+    const email  = esc(document.getElementById('f-email').value.trim() || '—');
+    const phone  = esc(document.getElementById('f-phone').value.trim() || '—');
+    const org    = esc(orgInput.value.trim() || '—');
+    const shipto = esc(document.getElementById('f-shipto').value.trim() || '—');
 
     const now = new Date();
     const dateStr = now.getFullYear() + '.' + pad(now.getMonth()+1) + '.' + pad(now.getDate());
@@ -853,7 +857,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const itemRowsHtml = items.length > 0 ? items.map((it, i) =>
       '<tr style="background:' + (i % 2 === 1 ? '#f9f9fb' : '#fff') + ';">' +
         '<td style="padding:8px 10px;text-align:center;border-bottom:1px solid #e8e5f5;">' + (i+1) + '</td>' +
-        '<td style="padding:8px 10px;border-bottom:1px solid #e8e5f5;">' + it.name + '</td>' +
+        '<td style="padding:8px 10px;border-bottom:1px solid #e8e5f5;">' + esc(it.name) + '</td>' +
         '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.qty.toLocaleString('ko-KR') + '</td>' +
         '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.unitPrice.toLocaleString('ko-KR') + '</td>' +
         '<td style="padding:8px 10px;text-align:right;border-bottom:1px solid #e8e5f5;">' + it.supply.toLocaleString('ko-KR') + '</td>' +

@@ -1,5 +1,9 @@
 /* PRODUCTS 페이지 — 라이트 고정. Product Center 히어로 + 좌측 카테고리 탭 + 카테고리 섹션. */
 
+body {
+  background-color: #ffffff;
+}
+
 /* ─── 히어로: Product Center (이미지 풀커버 + 텍스트 오버레이) ─── */
 .products-hero {
   position: relative;

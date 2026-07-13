@@ -4,6 +4,7 @@ import { esc } from '../../lib/contactEmail';
 import { getEnv } from '../lib/env';
 import { getServiceClient } from '../lib/supabase';
 import { requireAuth, type AuthEnv } from '../middleware/auth';
+import { rateLimit, consumeEmailBudget } from '../middleware/rateLimit';
 
 // B2C 개인 문의 (CON-06·07) — 로그인 전용. DB(contacts)가 기록 원본, 메일은 운영 알림.
 // 이름·연락처는 입력받지 않고 세션의 profiles에서 채운다 (backend.md §3).
@@ -23,7 +24,12 @@ const B2C_TYPE_LABEL: Record<B2cType, string> = {
 };
 
 /* ── 개인 문의 등록 ── */
-inquiries.post('/inquiries', async (c) => {
+// 회원 전용이므로 user_id로 rate limit(버스트 5, 이후 5분당 1회). requireAuth 뒤라 user 세팅됨.
+inquiries.post(
+  '/inquiries',
+  rateLimit({ name: 'inquiry', capacity: 5, refillPerSec: 1 / 300,
+    keyFn: (c) => (c.get('user') as { id?: string } | undefined)?.id ?? null }),
+  async (c) => {
   let body: { contactType?: string; message?: string; productSku?: string };
   try {
     body = await c.req.json();
@@ -78,25 +84,28 @@ inquiries.post('/inquiries', async (c) => {
     return c.json({ error: '문의 등록에 실패했습니다.' }, 500);
   }
 
-  // 운영 알림 메일 — DB가 원본이므로 실패해도 접수는 성공 (로깅만)
+  // 운영 알림 메일 — DB가 원본이므로 실패해도 접수는 성공 (로깅만).
+  // 전역 일일 예산(Resend 무료 100/day) 소진 시 알림만 스킵 — 접수(DB)는 이미 완료됨.
   try {
-    const typeLabel = B2C_TYPE_LABEL[body.contactType as B2cType];
-    const resend = new Resend(getEnv('RESEND_API_KEY'));
-    const { error: mailError } = await resend.emails.send({
-      from: getEnv('QUOTE_FROM'),
-      to: getEnv('QUOTE_TO'),
-      subject: `[개인문의] ${typeLabel} — ${profile.user_name}`,
-      html: `<!DOCTYPE html><html lang="ko"><body style="font-family:system-ui,sans-serif;font-size:14px;color:#333;">
-        <h2 style="font-size:16px;">[개인문의] ${typeLabel}</h2>
-        <table style="border-collapse:collapse;">
-          <tr><td style="padding:4px 12px 4px 0;font-weight:600;">회원</td><td>${esc(profile.user_name)} (${esc(profile.user_email)}, ${esc(profile.user_phone)})</td></tr>
-          ${body.productSku ? `<tr><td style="padding:4px 12px 4px 0;font-weight:600;">제품</td><td>${esc(body.productSku)}</td></tr>` : ''}
-          <tr><td style="padding:4px 12px 4px 0;font-weight:600;vertical-align:top;">내용</td><td style="white-space:pre-wrap;">${esc(body.message)}</td></tr>
-        </table>
-        <p style="color:#888;font-size:12px;">처리·상태 변경은 관리자 문의 관리에서. (문의 ID: ${row.contact_id})</p>
-      </body></html>`,
-    });
-    if (mailError) console.error('inquiries 알림 메일 오류(무시):', mailError);
+    if (await consumeEmailBudget(db)) {
+      const typeLabel = B2C_TYPE_LABEL[body.contactType as B2cType];
+      const resend = new Resend(getEnv('RESEND_API_KEY'));
+      const { error: mailError } = await resend.emails.send({
+        from: getEnv('QUOTE_FROM'),
+        to: getEnv('QUOTE_TO'),
+        subject: `[개인문의] ${typeLabel} — ${profile.user_name}`,
+        html: `<!DOCTYPE html><html lang="ko"><body style="font-family:system-ui,sans-serif;font-size:14px;color:#333;">
+          <h2 style="font-size:16px;">[개인문의] ${typeLabel}</h2>
+          <table style="border-collapse:collapse;">
+            <tr><td style="padding:4px 12px 4px 0;font-weight:600;">회원</td><td>${esc(profile.user_name)} (${esc(profile.user_email)}, ${esc(profile.user_phone)})</td></tr>
+            ${body.productSku ? `<tr><td style="padding:4px 12px 4px 0;font-weight:600;">제품</td><td>${esc(body.productSku)}</td></tr>` : ''}
+            <tr><td style="padding:4px 12px 4px 0;font-weight:600;vertical-align:top;">내용</td><td style="white-space:pre-wrap;">${esc(body.message)}</td></tr>
+          </table>
+          <p style="color:#888;font-size:12px;">처리·상태 변경은 관리자 문의 관리에서. (문의 ID: ${row.contact_id})</p>
+        </body></html>`,
+      });
+      if (mailError) console.error('inquiries 알림 메일 오류(무시):', mailError);
+    }
   } catch (err) {
     console.error('inquiries 알림 메일 오류(무시):', err);
   }

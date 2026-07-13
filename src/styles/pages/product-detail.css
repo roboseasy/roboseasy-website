@@ -1,5 +1,9 @@
 /* 제품 상세 페이지 (PDP) — 라이트 고정. 클래식 2단 + 하단 상세 이미지. */
 
+body {
+  background-color: #ffffff;
+}
+
 .pdp {
   padding: var(--spacing-48) 20px var(--spacing-80);
 }

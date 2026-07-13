@@ -8,6 +8,7 @@ import {
   getSessionTokens,
   type AuthEnv,
 } from '../middleware/auth';
+import { rateLimit, clientIp } from '../middleware/rateLimit';
 
 export const users = new Hono<AuthEnv>();
 
@@ -39,8 +40,12 @@ const withinLimits = (v: { name?: string; phone?: string; address?: string; addr
 
 /* ── 회원가입 (USR-01) ─────────────────────────────────────
    profiles 행은 auth.users insert 트리거가 user_metadata로 생성.
-   약관·개인정보 동의 일시는 profiles default now()로 기록됨. */
-users.post('/users/signup', async (c) => {
+   약관·개인정보 동의 일시는 profiles default now()로 기록됨.
+   비인증 + Supabase 확인 메일 발송 유발 → IP 기준 rate limit (backend.md §7). */
+users.post(
+  '/users/signup',
+  rateLimit({ name: 'signup', capacity: 5, refillPerSec: 1 / 300, keyFn: clientIp }),
+  async (c) => {
   let body: {
     email?: string; password?: string; name?: string; phone?: string;
     postcode?: string; address?: string; addressDetail?: string;
@@ -102,8 +107,13 @@ users.post('/users/signup', async (c) => {
   return c.json({ success: true, message: '확인 메일을 발송했습니다. 받은 편지함을 확인해 주세요.' });
 });
 
-/* ── 로그인 (USR-02) — 성공 시 httpOnly 세션 쿠키 발급 + role 반환 ── */
-users.post('/users/login', async (c) => {
+/* ── 로그인 (USR-02) — 성공 시 httpOnly 세션 쿠키 발급 + role 반환 ──
+   브루트포스 방어 — 서버 경유 호출이라 GoTrue가 보는 IP는 Netlify egress뿐이므로
+   Supabase 자체 IP 제한이 클라이언트를 식별하지 못함 → 자체 IP rate limit (backend.md §7) */
+users.post(
+  '/users/login',
+  rateLimit({ name: 'login', capacity: 10, refillPerSec: 1 / 60, keyFn: clientIp }),
+  async (c) => {
   let body: { email?: string; password?: string };
   try {
     body = await c.req.json();
@@ -242,8 +252,12 @@ users.patch('/users/password', requireAuth, async (c) => {
 });
 
 /* ── 비밀번호 재설정 요청 (비로그인) — 재설정 메일 발송.
-   미가입 이메일도 동일 응답: 계정 존재 여부 탐색 차단 ── */
-users.post('/users/reset-password-request', async (c) => {
+   미가입 이메일도 동일 응답: 계정 존재 여부 탐색 차단.
+   비인증 + 메일 발송 유발 → IP 기준 rate limit (backend.md §7) ── */
+users.post(
+  '/users/reset-password-request',
+  rateLimit({ name: 'reset-pw', capacity: 3, refillPerSec: 1 / 300, keyFn: clientIp }),
+  async (c) => {
   let body: { email?: string };
   try {
     body = await c.req.json();
@@ -396,6 +410,23 @@ users.delete('/users/me', requireAuth, async (c) => {
   const uid = c.get('user').id;
   const scrambled = anonEmail(uid);
 
+  // 배송 미완료(결제 완료·배송 중) 주문이 있으면 탈퇴 보류 (약관 제7조 1항 — 거래 완료 후 처리)
+  // PENDING(미결제 방치)·CANCELLED·DELIVERED는 진행 중 거래가 아니므로 차단 대상 아님.
+  // 어떤 변경도 하기 전에 먼저 확인 — 부분 처리 후 보류되는 상태 방지.
+  const { data: openOrder, error: openOrderError } = await admin
+    .from('orders').select('order_id').eq('user_id', uid)
+    .in('status', ['PAID', 'SHIPPING']).limit(1).maybeSingle();
+  if (openOrderError) {
+    console.error('탈퇴: 배송 미완료 주문 조회 오류:', openOrderError);
+    return c.json({ error: '탈퇴 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.' }, 500);
+  }
+  if (openOrder) {
+    return c.json(
+      { error: '배송이 완료되지 않은 주문이 있어 탈퇴할 수 없습니다. 배송 완료 후 다시 시도해 주세요.' },
+      409,
+    );
+  }
+
   // 일반 문의 익명화 (user_id가 SET NULL 되기 전에 — 분쟁 기록은 3년 보존 근거로 유지)
   // 실패 시 중단: hard delete 시 user_id가 SET NULL 되면 이 문의의 개인정보를 다시 익명화할 키가
   // 사라져 영구 고아 PII가 됨. 재실행은 멱등하므로 사용자가 재시도하면 복구 가능.
@@ -438,10 +469,20 @@ users.delete('/users/me', requireAuth, async (c) => {
         user_email: scrambled,
         marketing_consent: false,
         marketing_consent_at: null,
+        withdrawn_at: new Date().toISOString(), // 논리적 분리 보관 표시 — 운영 목록에서 제외
       })
       .eq('user_id', uid);
     if (profileError) {
       console.error('탈퇴: profiles 익명화 오류:', profileError);
+      return c.json({ error: '탈퇴 처리에 실패했습니다.' }, 500);
+    }
+
+    // 익명화 경로는 profiles 행이 남아 cart_items·dibs가 CASCADE되지 않음 → 명시적 파기
+    // (개인정보처리방침 제7조 — 보유 근거 없는 정보는 지체 없이 파기)
+    const { error: cartError } = await admin.from('cart_items').delete().eq('user_id', uid);
+    const { error: dibsError } = await admin.from('dibs').delete().eq('user_id', uid);
+    if (cartError || dibsError) {
+      console.error('탈퇴: 장바구니/찜 파기 오류:', cartError, dibsError);
       return c.json({ error: '탈퇴 처리에 실패했습니다.' }, 500);
     }
 
