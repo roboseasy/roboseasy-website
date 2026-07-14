@@ -1,6 +1,4 @@
-
-
-// 견적 단가표 — 클라이언트(contact.astro 견적 폼)와 서버(/api/contact·/api/quote-download)가
+// 견적 단가표 — 클라이언트(contact.astro 견적 폼)와 서버(/api/v1/contact·/api/v1/quote-download)가
 // 공유하는 단일 원본. 금액(단가·공급가액·부가세·합계)은 서버가 이 표로 재계산한다
 // — 클라이언트가 보낸 금액은 신뢰하지 않음(견적서 위조 방지).
 

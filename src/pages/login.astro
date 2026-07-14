@@ -142,7 +142,7 @@ import '../styles/pages/auth.css';
 
     btn.disabled = true; btn.textContent = '로그인 중...';
     try {
-      const res = await fetch('/api/users/login', {
+      const res = await fetch('/api/v1/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

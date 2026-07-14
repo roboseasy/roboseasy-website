@@ -650,7 +650,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <script>
   // 단가표는 서버와 공유하는 단일 원본(src/data/quoteItems.ts) — 여기 값은 표시용이고,
-  // 서버가 /api/contact·/api/quote-download에서 같은 표로 금액을 재계산한다.
+  // 서버가 /api/v1/contact·/api/v1/quote-download에서 같은 표로 금액을 재계산한다.
   import { QUOTE_ITEMS as ITEMS, lineAmounts } from '../data/quoteItems';
 
   const fmt = n => (n || 0).toLocaleString('ko-KR');
@@ -916,7 +916,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     btn.disabled = true;
     btn.textContent = '생성 중...';
     try {
-      const res = await fetch('/api/quote-download', {
+      const res = await fetch('/api/v1/quote-download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -999,7 +999,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       fd.append('data', JSON.stringify(payload));
       uploaded.forEach(f => fd.append('files', f));
 
-      const res  = await fetch('/api/contact', { method: 'POST', body: fd });
+      const res  = await fetch('/api/v1/contact', { method: 'POST', body: fd });
       const json = await res.json();
       if (json.success) {
         showResult('success', '문의가 접수되었습니다. 빠르게 답변드리겠습니다.');

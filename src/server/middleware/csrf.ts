@@ -21,9 +21,9 @@ function hostOf(url: string | undefined): string | null {
 export const csrfProtect = createMiddleware(async (c, next) => {
   if (SAFE_METHODS.has(c.req.method)) return next();
 
-  // 스케줄러 전용 엔드포인트(/api/cron/*)는 pg_net 서버-서버 호출이라 브라우저 Origin이 없고,
+  // 스케줄러 전용 엔드포인트(/api/v1/cron/*)는 pg_net 서버-서버 호출이라 브라우저 Origin이 없고,
   // CRON_SECRET Bearer 토큰으로 이미 인증되므로(추측 불가) CSRF 검증에서 제외.
-  if (c.req.path.startsWith('/api/cron/')) return next();
+  if (c.req.path.startsWith('/api/v1/cron/')) return next();
 
   // Origin 우선, 없으면 Referer로 판정 (구형 브라우저·일부 요청은 Origin 미첨부)
   const source = hostOf(c.req.header('origin')) ?? hostOf(c.req.header('referer'));

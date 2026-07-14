@@ -24,7 +24,7 @@
 ```
 User ──HTTPS──▶ Netlify (roboseasy.ai)
                  ├─ 정적 페이지 (빌드 타임 프리렌더 ◀── GitHub main ◀── Sveltia CMS)
-                 └─ /api/* — Hono 단일 앱 (Netlify Functions)
+                 └─ /api/v1/* — Hono 단일 앱 (Netlify Functions)
                       ├──▶ Supabase (Auth + Postgres, RLS)  ◀── pg_cron 배치
                       └──▶ Resend (메일)
 ```
@@ -71,7 +71,7 @@ User ──HTTPS──▶ Netlify (roboseasy.ai)
 
 Netlify의 Git 연동 자동 배포를 사용한다. main 브랜치에 병합되면 자동으로 빌드·배포된다.
 
-> ① 기능 브랜치에서 개발 → ② PR 생성 → ③ Deploy Preview로 확인 → ④ main 병합 → ⑤ Netlify 자동 배포 → ⑥ 배포 후 스모크(랜딩 로드 + `/api/health` 200, §4.2 신설 후)
+> ① 기능 브랜치에서 개발 → ② PR 생성 → ③ Deploy Preview로 확인 → ④ main 병합 → ⑤ Netlify 자동 배포 → ⑥ 배포 후 스모크(랜딩 로드 + `/api/v1/health` 200, §4.2 신설 후)
 
 #### 2.3.2 DB 마이그레이션 [확정 — 절차 준수]
 
@@ -141,7 +141,7 @@ Netlify의 Git 연동 자동 배포를 사용한다. main 브랜치에 병합되
 
 외부 의존성이 없는 로직을 대상으로 하고, 외부 호출(Supabase·Resend)은 모킹한다. Hono는 서버 기동 없이 `app.request()`로 인메모리 요청 테스트가 가능 — `src/server/` 분리 구조의 이점.
 
-- **대상 예시 (1차)**: 회원가입·문의 입력값 검증(누락·형식 오류 → 400), 인증/인가 분기(비로그인 401, 일반 유저의 `/api/admin/*` 403), rate limit 분기(토큰 소진 429), cron 라우트 `CRON_SECRET` 불일치 401, 견적서 데이터 조립(`buildQuoteExcel`), API 응답 camelCase 매핑
+- **대상 예시 (1차)**: 회원가입·문의 입력값 검증(누락·형식 오류 → 400), 인증/인가 분기(비로그인 401, 일반 유저의 `/api/v1/admin/*` 403), rate limit 분기(토큰 소진 429), cron 라우트 `CRON_SECRET` 불일치 401, 견적서 데이터 조립(`buildQuoteExcel`), API 응답 camelCase 매핑
 - **대상 예시 (2차)**: 장바구니 합계·주문 금액 계산, product_sku 매핑
 - **목표**: 핵심 유틸·검증 로직 커버리지 80% 이상
 
@@ -167,7 +167,7 @@ Hono API 핸들러가 Supabase와 올바르게 연동되는지 검증한다 — 
 |---|---|
 | 인증 | 미인증 요청이 401을 반환하는가 |
 | 권한(RLS) | 타 사용자의 profiles·contacts(2차: 장바구니·주문) 접근이 차단되는가 |
-| 관리자 권한 | role=admin이 아닌 계정의 `/api/admin/*` 접근이 403인가 |
+| 관리자 권한 | role=admin이 아닌 계정의 `/api/v1/admin/*` 접근이 403인가 |
 | 가입 트리거 | auth 가입 → profiles 자동 생성 + 동의 일시 기록되는가 |
 | rate limit | `consume_token` RPC 소진 시 429, anon의 `rate_limit_buckets` 직접 접근 차단되는가 |
 | 오류 처리 | 잘못된 body가 400과 오류 메시지를 반환하는가 |
@@ -206,7 +206,7 @@ Hono API 핸들러가 Supabase와 올바르게 연동되는지 검증한다 — 
 |---|---|---|---|
 | 웹 가용성 | 업타임·응답 상태·지연 | **n8n 외형 감시** (보조: UptimeRobot) | 계획 |
 | 프론트 (Astro) | 빌드 성공·트래픽·대역폭 | Netlify 대시보드/빌드 알림 | 확정 |
-| API (Hono 함수) | 함수 오류·응답 | Netlify Functions 로그 + `/api/health` | 부분 (health 신설 계획) |
+| API (Hono 함수) | 함수 오류·응답 | Netlify Functions 로그 + `/api/v1/health` | 부분 (health 구현됨 — n8n 연동 계획) |
 | 데이터베이스 | 쿼리 오류·연결·용량·egress | Supabase 대시보드/Logs | 확정 (수동 확인) |
 | 스케줄 배치 | pg_cron 성공/실패 | `cron.job_run_details` + pg_net 응답 코드 | 확정 (수동 확인) |
 | 오류 추적 | 런타임 예외·스택트레이스 | Sentry (무료 티어) | 계획 (2차 전 검토) |
@@ -218,14 +218,15 @@ n8n은 외부에서 주기적으로 HTTP 요청을 보내는 외형 감시 방�
 ```
 [Schedule Trigger 5분]
    ├─ HTTP Request: https://roboseasy.ai/            → 200 체크          (프론트/CDN)
-   ├─ HTTP Request: https://roboseasy.ai/api/health  → 200 + JSON 체크   (API 서버 + DB 연결)
+   ├─ HTTP Request: https://roboseasy.ai/api/v1/health  → 200 + JSON 체크   (API 서버 + DB 연결)
    └─ HTTP Request: https://<project>.supabase.co/auth/v1/health → 200   (Supabase Auth, 선택)
         │
         ▼ (IF: 실패 또는 응답 지연 임계 초과)
    [알림 노드] 이메일 / Slack / Discord / Telegram 등
 ```
 
-- **전제 — `GET /api/health` 신설**: Hono에 라우트 추가, 응답에 Supabase 연결 확인(가벼운 쿼리 1회) 포함 → 호출 한 번으로 "Netlify Functions 생존 + DB 연결"을 동시 검증. 인증 불필요, rate limit 제외 경로
+- **전제 — `GET /api/v1/health` [구현됨]**: 응답에 Supabase 연결 확인(products 1행 조회) 포함 → 호출 한 번으로 "Netlify Functions 생존 + DB 연결"을 동시 검증. 정상 200 `{ok, db}`, 장애 503 — 상태 코드만으로 판별. 인증 불필요, rate limit 제외 경로
+- **prod·develop 각각 감시**: 배포(사이트)마다 Netlify Function이 별개이므로 `https://roboseasy.ai`와 `https://develop.roboseasy.ai`의 `/api/v1/health`를 모두 핑한다. 5분 이하 간격이면 부수 효과로 함수 인스턴스 워밍(콜드 스타트 ~2초 방지)도 겸한다
 - **오탐 억제**: 1회 실패는 무시, **2회 연속 실패 시 알림**. 복구 시 회복 알림 1회
 - **n8n 호스팅**: 자체 호스팅(Docker, 무료) 또는 n8n Cloud(유료). **n8n 자체가 죽으면 감시 공백** → 자체 호스팅 시 UptimeRobot(무료)이 n8n의 `/healthz`를 역감시하는 이중화 권장. n8n 운영이 부담이면 UptimeRobot 단독으로 시작하는 것도 유효한 대안
 - **한계**: 외형 감시는 "느려짐·간헐 오류·내부 에러율"을 못 본다 — 그건 로그(§4.4)와 Sentry(계획)의 영역
@@ -315,7 +316,7 @@ n8n은 외부에서 주기적으로 HTTP 요청을 보내는 외형 감시 방�
 | 1 | 사이트 접속 불가 | n8n 알림 | netlifystatus.com 확인 → 플랫폼 장애면 대기(정적 페이지는 CDN 캐시로 상당 부분 서빙 지속), 배포 문제면 이전 배포로 롤백(§2.5). DNS/도메인 만료 여부 확인 |
 | 2 | 배포 후 기능 오동작 / API 오류 급증 | 스모크 실패, 함수 로그, (계획) Sentry | 최근 배포가 원인이면 즉시 롤백 → 원인은 로컬에서 수정 후 재배포. Supabase 장애 여부(연결·쿼터) 병행 확인 |
 | 3 | 빌드 실패 (CMS 오입력 포함) | Netlify 빌드 실패 메일 | 라이브는 기존 배포 유지되므로 급하지 않음. 원인 커밋 revert 또는 CMS 재수정 |
-| 4 | Supabase 장애 | n8n `/api/health` 실패 | status.supabase.com 확인 → 대기. 정적 페이지는 정상 — 로그인·문의만 영향. 장기화 시 문의 폼에 안내 문구 |
+| 4 | Supabase 장애 | n8n `/api/v1/health` 실패 | status.supabase.com 확인 → 대기. 정적 페이지는 정상 — 로그인·문의만 영향. 장기화 시 문의 폼에 안내 문구 |
 | 5 | DB 손상/오조작 (잘못된 삭제·업데이트) | 운영 중 발견 | Supabase Backups에서 복원. **주의: 복원은 DB 전체를 해당 시점으로 되돌림** — 이후 발생분(신규 가입·문의) 유실 감수 판단 → 가능하면 백업본을 **별도 프로젝트에 복원해 해당 행만 추출·수동 반영**. 복원 후 통합 테스트로 정합성 확인 |
 | 6 | 시크릿 유출 (service_role 키 등) | 코드 리뷰·이상 트래픽 | 즉시 로테이션: Supabase API 키 재발급 → Netlify 환경변수 교체 → 재배포. `CRON_SECRET`은 Vault(`cron_secret`)와 Netlify **양쪽 동시 교체**. Resend 키 재발급 |
 | 7 | Resend 발송 예산 소진 | 문의 접수 후 메일 미수신 | 자동 처리됨 — B2B는 DB 접수 저장 + 안내, 배치는 이월 (operations.md). 반복 시 유료 전환 + `consumeEmailBudget` 상향 |
@@ -337,7 +338,7 @@ n8n은 외부에서 주기적으로 HTTP 요청을 보내는 외형 감시 방�
 
 | 항목 | 우선순위 | 기대 효과 | 참조 |
 |---|---|---|---|
-| `GET /api/health` 라우트 신설 | 높음 | 가용성 감시의 전제 — Functions+DB 동시 검증 | §4.2 |
+| `GET /api/v1/health` 라우트 신설 | **완료** | 가용성 감시의 전제 — Functions+DB 동시 검증 | §4.2 |
 | n8n 가용성 감시 워크플로 (+UptimeRobot 이중화) | 높음 | 다운타임 즉시 인지 | §4.2 |
 | GitHub Actions CI (테스트·린트 게이트) | 높음 | 배포 전 품질 보증, 회귀 방지 | §2.3.3 |
 | 단위·통합 테스트 구축 (Vitest, 테스트 DB 격리) | 높음 | 안정성·리팩터링 안전성 | §3.2–3.3 |

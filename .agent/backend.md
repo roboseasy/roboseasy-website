@@ -25,11 +25,13 @@ User ──HTTPS──▶ Netlify (Astro hybrid)
 - **인증/DB**: Supabase (Auth: 이메일 가입·로그인, DB: Postgres + RLS)
 - **메일**: Resend (문의 메일 — 구현 완료)
 - **배포**: Netlify (서버 라우트는 Netlify Functions로 변환됨)
-- **스케줄 배치**: Supabase pg_cron — DB 내 배치(contacts 보유기간 파기, rate limit 버킷 정리)는 직접 실행, 메일 발송이 필요한 배치(마케팅 수신동의 재확인)는 pg_net으로 `POST /api/cron/*`(CRON_SECRET Bearer)를 호출해 Hono/Resend 레이어에서 처리
+- **스케줄 배치**: Supabase pg_cron — DB 내 배치(contacts 보유기간 파기, rate limit 버킷 정리)는 직접 실행, 메일 발송이 필요한 배치(마케팅 수신동의 재확인)는 pg_net으로 `POST /api/v1/cron/*`(CRON_SECRET Bearer)를 호출해 Hono/Resend 레이어에서 처리
 
 ### Hono 통합 방식 (확정)
 
 Astro catch-all 라우트 마운트 방식: `src/pages/api/[...path].ts`에서 `app.fetch(request)`로 위임하고, **Hono 앱 본체는 `src/server/`에 프레임워크 독립적으로 배치**한다. `npm run dev` 하나로 페이지+API 동시 개발이 가능하고 프론트와 API가 한 번에 빌드·배포되며, 나중에 별도 함수나 외부 호스트로 분리할 때도 마운트 파일 하나만 바꾸면 된다.
+
+**URL 버저닝**: 모든 API는 `/api/v1/*`로 서빙된다 (`new Hono().basePath('/api/v1')`). 구 `/api/*` 경로는 JSON 404. 모니터링용 `GET /api/v1/health`(인증 불필요)가 함수 생존 + DB 연결(products 1행 조회)을 한 번에 확인한다 — 정상 200 `{ok, db}`, 장애 503.
 
 ### 인증 방식
 - Supabase Auth 사용: `signUp()` / `signInWithPassword()` / `updateUser()` / 탈퇴는 서버에서 service role로 — 주문 이력 없으면 `admin.deleteUser()`, 있으면 `admin.updateUserById()`로 이메일 스크램블 + ban (§6 탈퇴 정책)
@@ -87,32 +89,32 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 ### 회원 (1차)
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 회원가입 | POST | /api/users/signup | 구현됨 — 약관·개인정보 동의 필수 검증, 중복 이메일 409 |
-| 로그인 | POST | /api/users/login | 구현됨 — httpOnly 쿠키 발급 + role 반환 |
-| 로그아웃 | POST | /api/users/logout | 구현됨 — 리프레시 토큰 폐기 + 쿠키 삭제 |
-| 내 정보 조회 | GET | /api/users/me | 구현됨 (마이페이지 초기값용 — 원 명세에 없어 추가) |
-| 회원정보 수정 | PATCH | /api/users/me | 구현됨 — 마케팅 동의 변경 시 marketing_consent_at 갱신 |
-| 회원탈퇴 | DELETE | /api/users/me | 구현됨 — §6 정책(주문 유무 분기 + 문의 기록 처리) |
-| 비밀번호 변경 | PATCH | /api/users/password | 구현됨 — 현재 비밀번호 재확인(signInWithPassword) 후 변경 (마이페이지) |
-| 비밀번호 재설정 요청 | POST | /api/users/reset-password-request | 구현됨 — 재설정 메일 발송. 미가입 이메일도 성공 응답(계정 존재 탐색 차단) |
-| 비밀번호 재설정 확정 | POST | /api/users/reset-password | 구현됨 — 메일 링크의 복구 토큰(1회용·1시간)으로 변경. /reset-password 페이지 |
-| 마케팅 수신거부 | GET | /api/marketing/unsubscribe | 시작 전 (서명 토큰 방식, 로그인 불필요 — 광고 메일 본문의 수신거부 링크용. 기존 POST /api/marketing 대체) |
+| 회원가입 | POST | /api/v1/users/signup | 구현됨 — 약관·개인정보 동의 필수 검증, 중복 이메일 409 |
+| 로그인 | POST | /api/v1/users/login | 구현됨 — httpOnly 쿠키 발급 + role 반환 |
+| 로그아웃 | POST | /api/v1/users/logout | 구현됨 — 리프레시 토큰 폐기 + 쿠키 삭제 |
+| 내 정보 조회 | GET | /api/v1/users/me | 구현됨 (마이페이지 초기값용 — 원 명세에 없어 추가) |
+| 회원정보 수정 | PATCH | /api/v1/users/me | 구현됨 — 마케팅 동의 변경 시 marketing_consent_at 갱신 |
+| 회원탈퇴 | DELETE | /api/v1/users/me | 구현됨 — §6 정책(주문 유무 분기 + 문의 기록 처리) |
+| 비밀번호 변경 | PATCH | /api/v1/users/password | 구현됨 — 현재 비밀번호 재확인(signInWithPassword) 후 변경 (마이페이지) |
+| 비밀번호 재설정 요청 | POST | /api/v1/users/reset-password-request | 구현됨 — 재설정 메일 발송. 미가입 이메일도 성공 응답(계정 존재 탐색 차단) |
+| 비밀번호 재설정 확정 | POST | /api/v1/users/reset-password | 구현됨 — 메일 링크의 복구 토큰(1회용·1시간)으로 변경. /reset-password 페이지 |
+| 마케팅 수신거부 | GET | /api/v1/marketing/unsubscribe | 시작 전 (서명 토큰 방식, 로그인 불필요 — 광고 메일 본문의 수신거부 링크용. 기존 POST /api/v1/marketing 대체) |
 
 ### 문의 — 입구 2개(B2B/B2C), 저장은 contacts 테이블 하나(channel 구분)
 
 **B2B — 기존 `/contact` 폼** (기관·기업, 비로그인 허용, 견적서·사업자등록증 첨부):
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 문의하기 | POST | /api/contact | **완료 (Hono 이식됨)** — contacts insert(b2b) 포함, 메일 HTML 전 필드 이스케이프 |
-| 견적서 다운로드 | POST | /api/quote-download | **완료 (Hono 이식됨)** (원 명세의 GET은 오기 — 구현은 POST) |
+| 문의하기 | POST | /api/v1/contact | **완료 (Hono 이식됨)** — contacts insert(b2b) 포함, 메일 HTML 전 필드 이스케이프 |
+| 견적서 다운로드 | POST | /api/v1/quote-download | **완료 (Hono 이식됨)** (원 명세의 GET은 오기 — 구현은 POST) |
 
 이식 원칙: 경로·요청/응답 스펙은 그대로 유지(프론트 수정 없음). 메일 HTML·`buildQuoteExcel` 등 로직은 `src/lib/`에서 재사용하고 라우트 핸들러만 Hono로 교체. 이식 완료 후 기존 `src/pages/api/contact.ts`, `quote-download.ts` 삭제. 이식 시 메일 발송과 함께 **contacts insert(channel='b2b')** 추가 — 첨부파일은 메일 첨부로만 전달하고 DB 미저장.
 
 **B2C — 판매 사이트 개인 문의** (로그인 전용, products 페이지·마이페이지에서 진입):
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 개인 문의 등록 | POST | /api/inquiries | 구현됨 — profiles에서 이름·연락처 자동, [개인문의] 알림 메일, FK 오류 400 |
-| 내 문의 내역 (마이페이지) | GET | /api/inquiries | 구현됨 — RLS(contacts_select_own_b2c)로 본인 것만 |
+| 개인 문의 등록 | POST | /api/v1/inquiries | 구현됨 — profiles에서 이름·연락처 자동, [개인문의] 알림 메일, FK 오류 400 |
+| 내 문의 내역 (마이페이지) | GET | /api/v1/inquiries | 구현됨 — RLS(contacts_select_own_b2c)로 본인 것만 |
 
 - 이름·연락처는 입력받지 않고 서버가 세션의 profiles에서 채움. 폼은 유형(제품/배송/AS/환불)·문의 내용·제품 선택(product_sku)만
 - 접수 시 운영 알림 메일 병행 발송(제목 `[개인문의]` prefix, 첨부 없음) — B2C는 DB가 기록 원본, 메일은 알림
@@ -121,33 +123,33 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 ### 쇼핑 (2차)
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 장바구니 조회/추가 | GET / POST | /api/cart_items | 시작 전 |
-| 장바구니 수정/삭제 | PATCH / DELETE | /api/cart_items/{id} | 시작 전 |
-| 찜 조회/추가 | GET / POST | /api/dibs | 시작 전 |
-| 찜 삭제 | DELETE | /api/dibs/{id} | 시작 전 |
-| 주문 생성 | POST | /api/orders | 시작 전 |
-| 주문 내역 | GET | /api/orders | 시작 전 |
-| 주문 취소 | POST | /api/orders/{id}/cancel | 시작 전 (상태 분기: PENDING+payments 없음 → 주문 삭제(failUrl 복귀 정리 겸용) / PAID → 토스 취소 + CANCELLED) |
-| 결제 승인 | POST | /api/payments/confirm | 시작 전 (토스 필수 — 승인 성공 시 장바구니 비우기 포함) |
-| 토스 웹훅 | POST | /api/payments/webhook | 2차 후순위 (가상계좌 제외로 필수 아님 — confirm 응답 유실 대비 상태 동기화 안전망) |
+| 장바구니 조회/추가 | GET / POST | /api/v1/cart_items | 시작 전 |
+| 장바구니 수정/삭제 | PATCH / DELETE | /api/v1/cart_items/{id} | 시작 전 |
+| 찜 조회/추가 | GET / POST | /api/v1/dibs | 시작 전 |
+| 찜 삭제 | DELETE | /api/v1/dibs/{id} | 시작 전 |
+| 주문 생성 | POST | /api/v1/orders | 시작 전 |
+| 주문 내역 | GET | /api/v1/orders | 시작 전 |
+| 주문 취소 | POST | /api/v1/orders/{id}/cancel | 시작 전 (상태 분기: PENDING+payments 없음 → 주문 삭제(failUrl 복귀 정리 겸용) / PAID → 토스 취소 + CANCELLED) |
+| 결제 승인 | POST | /api/v1/payments/confirm | 시작 전 (토스 필수 — 승인 성공 시 장바구니 비우기 포함) |
+| 토스 웹훅 | POST | /api/v1/payments/webhook | 2차 후순위 (가상계좌 제외로 필수 아님 — confirm 응답 유실 대비 상태 동기화 안전망) |
 
 ### 관리자 (1차)
 
-별도 관리자 로그인 없음(확정) — 일반 로그인 후 `/api/admin/*` 전체에 미들웨어 체인 `requireAuth → requireAdmin`(세션 검증 → profiles.role = 'admin' 검사) 적용.
+별도 관리자 로그인 없음(확정) — 일반 로그인 후 `/api/v1/admin/*` 전체에 미들웨어 체인 `requireAuth → requireAdmin`(세션 검증 → profiles.role = 'admin' 검사) 적용.
 
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 전체/개별 주문 조회 | GET | /api/admin/orders, /api/admin/orders/{id} | 구현됨 — status 필터, 상세는 order_items 포함 |
-| 전체/개별 유저 조회 | GET | /api/admin/users, /api/admin/users/{id} | 구현됨 — 페이지네이션(50/페이지) |
-| 주문 배달 관리 | PATCH | /api/admin/orders/{id}/delivery | 시작 전 (2차 — 배송 정책 확정 후) |
-| 문의 내역 조회 (B2B·B2C) | GET | /api/admin/contacts | 구현됨 — channel·status·is_dispute 필터 |
-| 문의 상태 관리 | PATCH | /api/admin/contacts/{id} | 구현됨 — 상태 전이 + is_dispute 표시(보유기간 1년/3년 구분 장치) |
+| 전체/개별 주문 조회 | GET | /api/v1/admin/orders, /api/v1/admin/orders/{id} | 구현됨 — status 필터, 상세는 order_items 포함 |
+| 전체/개별 유저 조회 | GET | /api/v1/admin/users, /api/v1/admin/users/{id} | 구현됨 — 페이지네이션(50/페이지) |
+| 주문 배달 관리 | PATCH | /api/v1/admin/orders/{id}/delivery | 시작 전 (2차 — 배송 정책 확정 후) |
+| 문의 내역 조회 (B2B·B2C) | GET | /api/v1/admin/contacts | 구현됨 — channel·status·is_dispute 필터 |
+| 문의 상태 관리 | PATCH | /api/v1/admin/contacts/{id} | 구현됨 — 상태 전이 + is_dispute 표시(보유기간 1년/3년 구분 장치) |
 
 ### 스케줄러 (pg_cron 전용 — 브라우저 진입 없음)
 
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 마케팅 수신동의 2년 재확인 발송 | POST | /api/cron/marketing-reconfirm | 구현됨 — CRON_SECRET Bearer 인증(pg_net 서버-서버 호출, CSRF 검증 예외). 매월 1일 실행, 대상: 최종 확인 시점(marketing_reconfirmed_at, 없으면 marketing_consent_at)이 2년 경과한 수신동의 회원. 발송 성공 시 marketing_reconfirmed_at 갱신, 실패·메일 예산 소진 건은 다음 실행에서 재시도 |
+| 마케팅 수신동의 2년 재확인 발송 | POST | /api/v1/cron/marketing-reconfirm | 구현됨 — CRON_SECRET Bearer 인증(pg_net 서버-서버 호출, CSRF 검증 예외). 매월 1일 실행, 대상: 최종 확인 시점(marketing_reconfirmed_at, 없으면 marketing_consent_at)이 2년 경과한 수신동의 회원. 발송 성공 시 marketing_reconfirmed_at 갱신, 실패·메일 예산 소진 건은 다음 실행에서 재시도 |
 
 CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 값으로 설정 — pg_cron job이 Vault에서 읽어 Bearer로 전달. DB 내부에서 끝나는 배치(contacts 파기·버킷 정리)는 HTTP 없이 pg_cron이 직접 실행.
 
@@ -179,16 +181,16 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 ### 결제 (2차 — 토스 페이먼츠)
 제출된 플로우차트는 일반 PG 구조(고객→가맹점→PG→VAN→카드사, 인증 실패 시 opt) 설명이며, 실제 구현은 토스 결제위젯 표준 플로우를 따른다:
 
-1. 주문서 페이지: 서버에 주문 생성(POST /api/orders, status=PENDING) → **서버가 금액 재계산** (클라이언트 금액 신뢰 금지)
+1. 주문서 페이지: 서버에 주문 생성(POST /api/v1/orders, status=PENDING) → **서버가 금액 재계산** (클라이언트 금액 신뢰 금지)
 2. 토스 결제위젯 호출 (orderId, amount) — 결제수단은 카드·간편결제만(가상계좌 미지원)
 3. 결제 인증 성공 → successUrl로 리다이렉트 (paymentKey, orderId, amount 쿼리)
 4. 서버: 주문이 존재하고 **PENDING 상태인지 검사(가드)** → 주문 금액 == amount 검증 → 토스 **결제 승인 API** 호출 (`POST /v1/payments/confirm`, 시크릿 키). 이미 DONE인 주문이면 성공 응답(멱등 — successUrl 새로고침 대응)
 5. 승인 성공: payments 기록 + orders.status=PAID + **주문 품목을 장바구니에서 제거** → 주문 완료 페이지 표시 (**약관 제12조 수신확인통지 역할** — 주문번호·품목·금액 표시) / 실패: 주문 실패 처리
-6. 주문 취소(`POST /api/orders/{id}/cancel` — 상태 분기): PAID면 토스 결제 취소 API 호출 후 CANCELLED (배송 전만 허용 — ORD-10) / PENDING + payments 없음이면 주문 삭제(아래 정리와 동일 규칙)
+6. 주문 취소(`POST /api/v1/orders/{id}/cancel` — 상태 분기): PAID면 토스 결제 취소 API 호출 후 CANCELLED (배송 전만 허용 — ORD-10) / PENDING + payments 없음이면 주문 삭제(아래 정리와 동일 규칙)
 
 미결제(PENDING) 주문 정리 — 위젯 이탈은 서버가 관측할 수 없으므로 시간 기반 정리(확정):
 - **pg_cron 매시간**: 생성 후 24시간 경과한 PENDING 주문 중 ① payments 행 없음 → **DELETE**(order_items는 CASCADE, 계약 미성립 건이라 보존 의무 없음) ② payments 행 있음(승인 실패 등) → **CANCELLED 전이**(결제사 대사·분쟁 기록 보존, FK도 삭제를 막음)
-- failUrl/결제 취소 복귀 페이지에서 `POST /api/orders/{id}/cancel` 호출로 즉시 정리 (best-effort 보조 — 별도 엔드포인트 없이 취소 API의 PENDING 분기 재사용)
+- failUrl/결제 취소 복귀 페이지에서 `POST /api/v1/orders/{id}/cancel` 호출로 즉시 정리 (best-effort 보조 — 별도 엔드포인트 없이 취소 API의 PENDING 분기 재사용)
 - 4번의 PENDING 가드가 안전망: 삭제된 orderId로 늦게 도착한 confirm은 "주문 없음"으로 거부
 
 ---
@@ -227,16 +229,16 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 - **확정 ERD**: [roboseasy-erd.sql](roboseasy-erd.sql) — Payments 테이블·배송 스냅샷·FK/UNIQUE 보강 반영 (§2 참조)
 - **products 데이터**: A안 — JSON(Sveltia CMS)이 원본 유지, 빌드 시 DB upsert 동기화. 재고 관리 없음, 삭제는 is_active=false (§2 "products 동기화" 참조. Sveltia는 Git 백엔드만 지원해 DB 직접 관리 불가)
 - **비회원 구매 불허**: 주문·장바구니·찜은 회원 전용 — 명세(회원 전제) 그대로. 게스트 주문 경로 없음
-- **관리자 로그인**: 별도 엔드포인트 없이 일반 로그인 + role 검사 — `/api/admin/*`은 `requireAuth → requireAdmin` 미들웨어 체인으로 보호. 감사 로그 등 관리자 전용 강화가 필요해지면 이 미들웨어 레벨에서 처리. **rate limit은 관리자 API에 걸지 않음** — 세션 필수 API는 대상 아님(§7 적용 기준 참조)
+- **관리자 로그인**: 별도 엔드포인트 없이 일반 로그인 + role 검사 — `/api/v1/admin/*`은 `requireAuth → requireAdmin` 미들웨어 체인으로 보호. 감사 로그 등 관리자 전용 강화가 필요해지면 이 미들웨어 레벨에서 처리. **rate limit은 관리자 API에 걸지 않음** — 세션 필수 API는 대상 아님(§7 적용 기준 참조)
 - **회원탈퇴 정책**: 탈퇴 전 게이트 — **배송 미완료(PAID·SHIPPING) 주문이 있으면 409로 보류**(약관 제7조, 거래 완료 후 처리. PENDING·CANCELLED·DELIVERED는 차단 대상 아님). 주문 이력 없는 회원은 즉시 hard delete(`auth.admin.deleteUser()` → profiles·cart_items·dibs CASCADE 삭제, contacts.user_id는 SET NULL이라 문의 이력이 삭제를 막지 않음). 주문 이력 있는 회원은 **익명화 방식** — auth 계정을 삭제하지 않고(삭제하면 profiles CASCADE가 orders FK에 막혀 실패) `updateUserById`로 이메일을 `deleted-{user_id}@removed.invalid`로 스크램블 + 영구 ban, profiles의 이름·전화·주소·이메일도 동일하게 익명화(행 유지) + **withdrawn_at 기록**(논리적 분리 보관 — 관리자 활성 목록·마케팅 발송 대상에서 제외), 익명화 경로는 CASCADE가 없으므로 cart_items·dibs를 명시 파기. 거래기록(orders/order_items/payments)은 5년 분리 보관 — 개인정보보호법 제21조 이행. 원본 이메일이 시스템에서 사라지므로 **같은 이메일 재가입 가능**. 이메일 익명화는 2-1 트리거의 예외 패턴으로 허용됨
 - **탈퇴 시 문의 기록 처리**: 탈퇴 유형과 무관하게 본인 contacts 행의 개인정보(name/email/phone)를 처리 — 일반 문의는 익명화, **분쟁 기록(is_dispute=true)은 전자상거래법 3년 보존 근거로 원본 유지**
-- **마케팅 수신 동의 UI**: 가입 폼 + 회원정보 수정 페이지의 선택 체크박스(사전 체크 금지) — profiles.marketing_consent + marketing_consent_at(2년 재확인 기준점)에 저장. 광고 이메일은 동의 회원에게만, 제목 "(광고)" 표기 + 수신거부 링크(`GET /api/marketing/unsubscribe`, 서명 토큰·로그인 불필요) 필수
-- **마케팅 수신동의 2년 재확인**: 정보통신망법 시행령 제62조의3 — 매월 1일 pg_cron→pg_net→`POST /api/cron/marketing-reconfirm`(§3 스케줄러)이 2년 경과 동의 회원에게 안내 발송, marketing_reconfirmed_at으로 발송 주기 관리. 재확인 안내는 광고가 아닌 법정 고지라 "(광고)" 미표기, 수신거부 안내는 마이페이지 링크(서명 토큰 링크는 광고 메일용 — 미구현 상태와 무관)
+- **마케팅 수신 동의 UI**: 가입 폼 + 회원정보 수정 페이지의 선택 체크박스(사전 체크 금지) — profiles.marketing_consent + marketing_consent_at(2년 재확인 기준점)에 저장. 광고 이메일은 동의 회원에게만, 제목 "(광고)" 표기 + 수신거부 링크(`GET /api/v1/marketing/unsubscribe`, 서명 토큰·로그인 불필요) 필수
+- **마케팅 수신동의 2년 재확인**: 정보통신망법 시행령 제62조의3 — 매월 1일 pg_cron→pg_net→`POST /api/v1/cron/marketing-reconfirm`(§3 스케줄러)이 2년 경과 동의 회원에게 안내 발송, marketing_reconfirmed_at으로 발송 주기 관리. 재확인 안내는 광고가 아닌 법정 고지라 "(광고)" 미표기, 수신거부 안내는 마이페이지 링크(서명 토큰 링크는 광고 메일용 — 미구현 상태와 무관)
 - **문의 기록 DB 저장**: 1차부터 contacts 테이블에 기록(메일 발송과 병행) — 법정 보유기간 관리(일반 1년/불만·분쟁 3년, is_dispute 구분). 첨부파일은 DB 미저장, 메일 첨부로만 전달
-- **문의 이원화(B2B/B2C)**: 입구 2개 + 테이블 1개(channel 구분) — B2B는 기존 `/contact` 폼(비로그인 허용, 견적·첨부), B2C는 판매 사이트 개인 문의(`/api/inquiries`, 로그인 전용, 이름·연락처 자동). B2C 문의는 마이페이지에서 본인 것만 조회 가능(RLS `contacts_select_own_b2c`) (§3 참조)
+- **문의 이원화(B2B/B2C)**: 입구 2개 + 테이블 1개(channel 구분) — B2B는 기존 `/contact` 폼(비로그인 허용, 견적·첨부), B2C는 판매 사이트 개인 문의(`/api/v1/inquiries`, 로그인 전용, 이름·연락처 자동). B2C 문의는 마이페이지에서 본인 것만 조회 가능(RLS `contacts_select_own_b2c`) (§3 참조)
 - **결제수단**: 카드·간편결제만 지원 — 가상계좌 미지원(입금 대기 상태·웹훅 필수화 등 복잡도 회피, 이용약관 제11조에서 제외). 기관 계좌이체 구매는 B2B 견적 문의 경로로 처리
 - **미결제 주문 정리**: pg_cron 매시간 — 24시간 경과 PENDING 중 payments 없으면 DELETE, 있으면 CANCELLED. failUrl 복귀 시 즉시 정리(best-effort), confirm은 PENDING 가드 + 멱등 처리 (§4 참조)
-- **주문 취소·배달 관리 경로**: `POST /api/orders/{id}/cancel`, `PATCH /api/admin/orders/{id}/delivery` — 취소는 리소스 삭제가 아닌 상태 전이(+토스 취소 API 호출)이므로 DELETE 대신 액션 POST, 배달 관리는 특정 주문에 속한 정보이므로 주문 하위 경로 (§3 참조)
+- **주문 취소·배달 관리 경로**: `POST /api/v1/orders/{id}/cancel`, `PATCH /api/v1/admin/orders/{id}/delivery` — 취소는 리소스 삭제가 아닌 상태 전이(+토스 취소 API 호출)이므로 DELETE 대신 액션 POST, 배달 관리는 특정 주문에 속한 정보이므로 주문 하위 경로 (§3 참조)
 
 ### 법무 문서 (초안 — 법률 검토 후 게시)
 - [이용약관 초안](terms-of-service-draft.md) — 전자상거래 표준약관 기반, 회원제 판매 반영
@@ -283,11 +285,11 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 
 | 대상 | 키 | 정책 (버스트 / 평균) | 근거 |
 |---|---|---|---|
-| POST /api/contact (B2B) | IP | 5 / 5분당 1 | 비로그인 폼 스팸 + 메일 발송 유발 |
-| POST /api/inquiries (B2C) | user_id | 5 / 5분당 1 | 악성·탈취 계정의 문의 스팸 → 메일 예산 소진 차단 |
-| POST /api/users/signup | IP | 5 / 5분당 1 | 확인 메일 발송 유발 |
-| POST /api/users/login | IP | 10 / 1분당 1 | 브루트포스 (위 "서버 경유의 함정") |
-| POST /api/users/reset-password-request | IP | 3 / 5분당 1 | 재설정 메일 발송 유발 |
+| POST /api/v1/contact (B2B) | IP | 5 / 5분당 1 | 비로그인 폼 스팸 + 메일 발송 유발 |
+| POST /api/v1/inquiries (B2C) | user_id | 5 / 5분당 1 | 악성·탈취 계정의 문의 스팸 → 메일 예산 소진 차단 |
+| POST /api/v1/users/signup | IP | 5 / 5분당 1 | 확인 메일 발송 유발 |
+| POST /api/v1/users/login | IP | 10 / 5분당 1 | 브루트포스 (위 "서버 경유의 함정") |
+| POST /api/v1/users/reset-password-request | IP | 3 / 5분당 1 | 재설정 메일 발송 유발 |
 | 전역 메일 예산 `global:resend` | 전역 1버킷 | 100 / 일 | Resend 무료 한도 보호 — 모든 발송 직전 소비 |
 
 - **적용 기준(확정)**: 비인증 공개 엔드포인트와 메일 등 외부 비용을 유발하는 경로만. **세션 필수 내부 API(마이페이지 조회·수정, 관리자)는 rate limit 없음** — 인증으로 식별 가능하고 남용은 계정 차단으로 사후 대응. B2C 문의만 예외적으로 유지(전역 메일 예산 보호)
@@ -301,7 +303,7 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 세션이 쿠키라 교차 사이트 요청에도 자동 첨부될 수 있음 → 이중 방어 (`src/server/middleware/csrf.ts`, 모든 라우트보다 먼저 전역 등록):
 1. 쿠키 자체가 SameSite=Lax (top-level GET 외 교차 전송 차단 — 단 예외 있음)
 2. `csrfProtect`: 상태 변경 메서드(POST/PATCH/PUT/DELETE)의 **Origin(없으면 Referer) host == 요청 host** 검증, 불일치·부재 시 403. 토큰 방식 불필요 — 우리 변경 요청은 전부 자사 페이지 fetch라 Origin이 항상 붙음
-3. 예외: `/api/cron/*` — pg_net 서버-서버 호출이라 Origin이 없고, CRON_SECRET Bearer(추측 불가)가 인증을 대신함
+3. 예외: `/api/v1/cron/*` — pg_net 서버-서버 호출이라 Origin이 없고, CRON_SECRET Bearer(추측 불가)가 인증을 대신함
 
 ### 입력 검증 구조 (3층)
 

@@ -199,7 +199,7 @@ import '../styles/pages/auth.css';
 
     btn.disabled = true; btn.textContent = '가입 처리 중...';
     try {
-      const res = await fetch('/api/users/signup', {
+      const res = await fetch('/api/v1/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

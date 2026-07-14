@@ -11,13 +11,13 @@
 ```
 User ──HTTPS──▶ Netlify
                  ├─ 정적 페이지 (빌드 타임 프리렌더 ◀── GitHub main ◀── Sveltia CMS)
-                 └─ /api/* (Netlify Functions — output: 'hybrid')
-                      ├─ /api/contact ────▶ Resend (문의 메일)
-                      └─ /api/quote-download (ExcelJS 견적서)
+                 └─ /api/v1/* — Hono 단일 앱 (Netlify Functions — output: 'hybrid')
+                      ├─ 문의·견적 ────▶ Resend (메일) / ExcelJS (견적서)
+                      └─ 회원·문의내역·관리자 ────▶ Supabase (Auth + Postgres/RLS)
 ```
 
 콘텐츠(제품·뉴스·docs)는 저장소가 원본(git-based) — CMS 저장 = main 커밋 = 자동 재배포.
-백엔드 1·2차 개발이 붙으면 `/api/*`가 Hono 단일 앱으로 통합되고 Supabase(Auth+DB)가 추가된다 (backend.md §1).
+백엔드 1차(회원·문의)로 `/api/v1/*`가 Hono 단일 앱으로 통합되고 Supabase(Auth+DB)가 추가됨 (backend.md §1). 2차(주문·결제)에서 토스 페이먼츠가 붙는다.
 
 ## 프론트엔드
 
@@ -39,11 +39,12 @@ User ──HTTPS──▶ Netlify
 
 ## 서버 / API (현재 운영분)
 
-`/api/*` 전체가 **Hono 단일 앱**(`src/server/app.ts`)으로 서빙됨 — Astro catch-all(`src/pages/api/[...path].ts`)이 위임. 새 API는 `src/server/routes/`에 추가.
+`/api/v1/*` 전체가 **Hono 단일 앱**(`src/server/app.ts`, `basePath('/api/v1')`)으로 서빙됨 — Astro catch-all(`src/pages/api/[...path].ts`)이 위임. 새 API는 `src/server/routes/`에 추가.
 
-- **POST /api/contact** — B2B 문의 폼. [Resend](https://resend.com/) 메일 발송(`RESEND_API_KEY`) + contacts 테이블 병행 기록(Supabase service role)
-- **POST /api/quote-download** — 견적서 엑셀 생성. [ExcelJS](https://github.com/exceljs/exceljs) (로직 `src/lib/buildQuoteExcel.ts`, 템플릿 `src/excel/`, netlify.toml `included_files`로 번들 포함)
-- 예정 API 전체 목록: backend.md §3 / `.agent/specs/API 명세서.csv`
+- **POST /api/v1/contact** — B2B 문의 폼. [Resend](https://resend.com/) 메일 발송(`RESEND_API_KEY`) + contacts 테이블 병행 기록(Supabase service role)
+- **POST /api/v1/quote-download** — 견적서 엑셀 생성. [ExcelJS](https://github.com/exceljs/exceljs) (로직 `src/lib/buildQuoteExcel.ts`, 템플릿 `src/excel/`, netlify.toml `included_files`로 번들 포함)
+- **GET /api/v1/health** — 모니터링용 헬스체크 (인증 불필요). 함수 생존 + DB 연결 확인 — 정상 200, 장애 503
+- 회원·문의·관리자 등 전체 API 목록: backend.md §3 / `.agent/specs/API 명세서.csv`
 
 ## CMS (콘텐츠 관리)
 
@@ -60,7 +61,7 @@ User ──HTTPS──▶ Netlify
 
 ## 외부 통합
 
-- **Resend** — 문의 메일 발송 (`/api/contact`)
+- **Resend** — 문의 메일 발송 (`/api/v1/contact`)
 - **Instagram embed** — 뉴스 페이지 (`instagram.com/embed.js`)
 - **Blogger JSON 피드** — 뉴스 페이지 Blog 탭, 빌드 시 수집
 - **YouTube RSS** — 뉴스 페이지 YouTube 탭, 빌드 시 수집

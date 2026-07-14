@@ -112,7 +112,7 @@ users.post(
    Supabase 자체 IP 제한이 클라이언트를 식별하지 못함 → 자체 IP rate limit (backend.md §7) */
 users.post(
   '/users/login',
-  rateLimit({ name: 'login', capacity: 10, refillPerSec: 1 / 60, keyFn: clientIp }),
+  rateLimit({ name: 'login', capacity: 10, refillPerSec: 1 / 300, keyFn: clientIp }),
   async (c) => {
   let body: { email?: string; password?: string };
   try {

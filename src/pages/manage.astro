@@ -127,7 +127,7 @@ import '../styles/pages/manage.css';
 
   /* ── 권한 확인 ── */
   async function guard() {
-    const res = await fetch('/api/users/me');
+    const res = await fetch('/api/v1/users/me');
     if (res.status === 401) { location.href = '/login?redirect=/manage'; return false; }
     const me = res.ok ? await res.json() : null;
     if (!me || me.role !== 'admin') { location.href = '/'; return false; }
@@ -255,7 +255,7 @@ import '../styles/pages/manage.css';
     if (status) params.set('status', status);
     if (dispute) params.set('is_dispute', dispute);
 
-    const res = await fetch(`/api/admin/contacts?${params}`);
+    const res = await fetch(`/api/v1/admin/contacts?${params}`);
     if (!res.ok) return;
     const { contacts: rows, total } = await res.json();
     contacts = rows;
@@ -277,7 +277,7 @@ import '../styles/pages/manage.css';
   async function patchContact(id: string, patch: object, el: HTMLInputElement | HTMLSelectElement | HTMLButtonElement) {
     el.disabled = true;
     try {
-      const res = await fetch(`/api/admin/contacts/${id}`, {
+      const res = await fetch(`/api/v1/admin/contacts/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(patch),
@@ -340,7 +340,7 @@ import '../styles/pages/manage.css';
   /* ── 유저 ── */
   let usPage = 1;
   async function loadUsers() {
-    const res = await fetch(`/api/admin/users?page=${usPage}`);
+    const res = await fetch(`/api/v1/admin/users?page=${usPage}`);
     if (!res.ok) return;
     const { users, total } = await res.json();
     const body = $('usersBody');
@@ -374,7 +374,7 @@ import '../styles/pages/manage.css';
     PENDING: '결제 대기', PAID: '결제 완료', SHIPPING: '배송 중', DELIVERED: '배송 완료', CANCELLED: '취소됨',
   };
   async function loadOrders() {
-    const res = await fetch('/api/admin/orders');
+    const res = await fetch('/api/v1/admin/orders');
     if (!res.ok) return;
     const { orders } = await res.json();
     const body = $('ordersBody');
@@ -397,17 +397,18 @@ import '../styles/pages/manage.css';
 
   /* ── 로그아웃 ── */
   $('logoutBtn').addEventListener('click', async () => {
-    await fetch('/api/users/logout', { method: 'POST' });
+    await fetch('/api/v1/users/logout', { method: 'POST' });
     location.href = '/login';
   });
 
   /* ── 초기화 ── */
   (async () => {
-    if (!(await guard())) return;
-    $('loading').style.display = 'none';
-    ($('content') as HTMLElement).hidden = false;
+    // 목록 로드를 권한 확인과 병렬로 시작 — 비관리자는 401/403으로 조용히 실패하고 곧 리다이렉트됨
     loadContacts();
     loadUsers();
     loadOrders();
+    if (!(await guard())) return;
+    $('loading').style.display = 'none';
+    ($('content') as HTMLElement).hidden = false;
   })();
 </script>

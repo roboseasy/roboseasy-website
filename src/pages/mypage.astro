@@ -223,7 +223,8 @@ import '../styles/pages/mypage.css';
 
   /* ── 초기 로드: 내 정보 (401이면 로그인으로) ── */
   async function init() {
-    const res = await fetch('/api/users/me');
+    loadInquiries(); // /users/me와 병렬 로드 — 미인증이면 같이 401이고 곧 리다이렉트되므로 무해
+    const res = await fetch('/api/v1/users/me');
     if (res.status === 401) { location.href = '/login?redirect=/mypage'; return; }
     if (!res.ok) { $('loading').textContent = '정보를 불러오지 못했습니다. 새로고침해 주세요.'; return; }
     const json = await res.json();
@@ -235,13 +236,12 @@ import '../styles/pages/mypage.css';
     renderProfile();
     $('loading').style.display = 'none';
     ($('content') as HTMLElement).hidden = false;
-    loadInquiries();
   }
 
   /* ── 회원정보 부분 저장 — PATCH는 보낸 필드만 갱신 ── */
   async function patchMe(body: Record<string, unknown>): Promise<string | null> {
     try {
-      const res = await fetch('/api/users/me', {
+      const res = await fetch('/api/v1/users/me', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -334,7 +334,7 @@ import '../styles/pages/mypage.css';
     const btn = $('pwBtn') as HTMLButtonElement;
     btn.disabled = true;
     try {
-      const res = await fetch('/api/users/password', {
+      const res = await fetch('/api/v1/users/password', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currentPassword: current, newPassword: next }),
@@ -372,7 +372,7 @@ import '../styles/pages/mypage.css';
 
   async function loadInquiries() {
     const list = $('inquiryList');
-    const res = await fetch('/api/inquiries');
+    const res = await fetch('/api/v1/inquiries');
     if (!res.ok) {
       list.innerHTML = '<p class="mypage__empty">문의 내역을 불러오지 못했습니다.</p>';
       $('v-inquiry').textContent = '—';
@@ -415,7 +415,7 @@ import '../styles/pages/mypage.css';
     const btn = $('inquiryBtn') as HTMLButtonElement;
     btn.disabled = true;
     try {
-      const res = await fetch('/api/inquiries', {
+      const res = await fetch('/api/v1/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contactType: ($('q-type') as HTMLSelectElement).value, message }),
@@ -434,7 +434,7 @@ import '../styles/pages/mypage.css';
 
   /* ── 로그아웃 / 탈퇴 ── */
   $('logoutBtn').addEventListener('click', async () => {
-    await fetch('/api/users/logout', { method: 'POST' });
+    await fetch('/api/v1/users/logout', { method: 'POST' });
     location.href = '/products';
   });
 
@@ -443,7 +443,7 @@ import '../styles/pages/mypage.css';
     const btn = $('withdrawBtn') as HTMLButtonElement;
     btn.disabled = true;
     try {
-      const res = await fetch('/api/users/me', { method: 'DELETE' });
+      const res = await fetch('/api/v1/users/me', { method: 'DELETE' });
       const json = await res.json();
       if (!res.ok) { showMsg('withdrawMsg', 'error', json.error ?? '탈퇴 처리에 실패했습니다.'); btn.disabled = false; return; }
       alert('탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.');

@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { requireAuth, requireAdmin, type AuthEnv } from '../middleware/auth';
 
-// 관리자 API — /api/admin/* 전체가 requireAuth → requireAdmin 체인으로 보호됨.
+// 관리자 API — /api/v1/admin/* 전체가 requireAuth → requireAdmin 체인으로 보호됨.
 // 조회는 유저 토큰(RLS의 admin 정책)으로 수행 — service role 불필요(이중 방어).
 export const admin = new Hono<AuthEnv>();
 

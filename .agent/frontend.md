@@ -28,7 +28,7 @@ roboseasy-website/
 │   │   ├── programs/           # ProgramCard + 프로그램별 Detail 컴포넌트
 │   │   └── shop/               # ProductCard, BrandPlaceholder
 │   ├── pages/                  # 파일 기반 라우팅 (아래 "라우팅")
-│   │   └── api/[...path].ts    # Hono 마운트 파일 — /api/* 전체를 src/server/로 위임
+│   │   └── api/[...path].ts    # Hono 마운트 파일 — /api/* 전체를 src/server/로 위임 (서빙 경로는 /api/v1/*)
 │   ├── server/                 # Hono 앱 본체 (app.ts, routes/, lib/) — backend.md §1
 │   ├── content/                # 콘텐츠 컬렉션 (config.ts에 zod 스키마)
 │   │   ├── programs/           # JSON (카드 메타데이터)
@@ -103,7 +103,7 @@ BEM 컨벤션 — `.block__element--modifier`. 페이지/도메인명 prefix로 
 
 - 페이지 인터랙션: Astro `<script>` (모듈 스코프) 우선. 옛 onclick 어트리뷰트 호환이 필요할 때만 `<script is:inline>`
 - **`<Icon>`(astro-icon)은 템플릿 전용** (세트는 [system-architecture.md](system-architecture.md) 참고) — 클라이언트 JS의 innerHTML에서는 렌더되지 않으므로 동적 마크업엔 인라인 SVG 사용 (contact.astro의 `ICON_*` 상수 참고)
-- 서버 코드: SSR 엔드포인트 `src/pages/api/*.ts`, 공용 로직 `src/lib/`, 데이터 `src/data/`
+- 서버 코드: API는 `src/server/`(Hono, `/api/v1/*` — backend.md §1), 공용 로직 `src/lib/`, 데이터 `src/data/`
 - jQuery 미사용
 
 ## Astro 컴포넌트

@@ -47,7 +47,7 @@ git push origin main
 | `RESEND_API_KEY` | 문의 메일 발송 | 빌드는 통과, 런타임에 폼 전송 실패 |
 | `QUOTE_FROM` / `QUOTE_TO` | 문의 메일 발신/수신 주소 | 〃 |
 | (1차 예정) `SUPABASE_URL` / `SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY` | 백엔드 — anon 키는 유저 토큰 클라이언트(RLS 적용) 생성용, service role은 RLS 우회 작업 전용·클라이언트 노출 금지 | backend.md §1 |
-| `CRON_SECRET` | 스케줄러 전용 엔드포인트(`/api/cron/*`) 인증 토큰. Supabase Vault의 `cron_secret`과 동일 값으로 설정 | 마케팅 재확인 배치가 401로 거부됨 |
+| `CRON_SECRET` | 스케줄러 전용 엔드포인트(`/api/v1/cron/*`) 인증 토큰. Supabase Vault의 `cron_secret`과 동일 값으로 설정 | 마케팅 재확인 배치가 401로 거부됨 |
 | (2차 예정) `TOSS_SECRET_KEY` | 결제 승인·취소 API | backend.md §4 |
 
 ### 스케줄 작업 (pg_cron) 확인
@@ -58,7 +58,7 @@ DB에 등록된 정기 작업은 SQL Editor에서 확인·검증한다. pg_cron�
 - **등록된 작업 조회**: `select jobid, jobname, schedule, active, command from cron.job;` → `purge-expired-contacts`, `marketing-reconfirm-notice`, `purge-rate-limit-buckets` 세 건이 보이면 정상.
 - **실행 이력**: `select jobname, status, return_message, start_time from cron.job_run_details order by start_time desc limit 20;` → `status = 'succeeded'` 확인. 실패면 `return_message`에 원인.
 - **HTTP 호출 결과(pg_net)**: 마케팅 재확인은 엔드포인트를 호출하므로 `select id, status_code, error_msg, created from net._http_response order by created desc limit 10;`로 응답 코드(200 기대) 확인.
-- **수동 실행(테스트)**: 파기는 `select public.purge_expired_contacts();`(삭제 건수 반환). 마케팅 재확인은 `select cron.schedule` 명령 본문을 직접 실행하거나 `curl -X POST https://roboseasy.ai/api/cron/marketing-reconfirm -H "Authorization: Bearer <CRON_SECRET>"`.
+- **수동 실행(테스트)**: 파기는 `select public.purge_expired_contacts();`(삭제 건수 반환). 마케팅 재확인은 `select cron.schedule` 명령 본문을 직접 실행하거나 `curl -X POST https://roboseasy.ai/api/v1/cron/marketing-reconfirm -H "Authorization: Bearer <CRON_SECRET>"`.
 - **Vault 시크릿 등록(재확인 배치 전제)**: `select vault.create_secret('<CRON_SECRET 값>', 'cron_secret');` (Netlify `CRON_SECRET`과 동일 값).
 - **주의**: cron 스케줄은 UTC 기준. `0 3 * * *` = KST 12:00, `0 4 1 * *` = 매월 1일 KST 13:00.
 

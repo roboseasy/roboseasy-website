@@ -10,7 +10,7 @@ import { rateLimit, consumeEmailBudget } from '../middleware/rateLimit';
 // 이름·연락처는 입력받지 않고 세션의 profiles에서 채운다 (backend.md §3).
 export const inquiries = new Hono<AuthEnv>();
 
-// '/'에 마운트되므로 '*'로 걸면 /api/* 전역 미들웨어가 되어 뒤에 등록된 admin 라우트까지 누수됨.
+// '/'에 마운트되므로 '*'로 걸면 /api/v1/* 전역 미들웨어가 되어 뒤에 등록된 admin 라우트까지 누수됨.
 // 이 서브앱의 실제 경로(/inquiries)로만 범위 제한 (backend.md §1 — 라우트 단위 인증).
 inquiries.use('/inquiries', requireAuth);
 
