@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/pages/order-result.css';
+---
+<BaseLayout
+  title="주문 완료 - RoboSEasy | 로보시지"
+  description="로보시지 주문 완료"
+  path="/order/success"
+  lockTheme="light"
+  shopNav
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="order-result">
+    <div id="pending" class="order-result__box">
+      <h1 class="order-result__title">결제를 확인하고 있습니다...</h1>
+      <p class="order-result__desc">잠시만 기다려 주세요. 창을 닫지 마세요.</p>
+    </div>
+
+    <!-- 주문 완료 화면 — 약관 제12조 수신확인통지 역할 (주문번호·품목·금액 표시) -->
+    <div id="done" class="order-result__box" hidden>
+      <h1 class="order-result__title">🎉 주문이 완료되었습니다</h1>
+      <dl class="order-result__list">
+        <div class="order-result__row"><dt>주문번호</dt><dd id="r-orderId"></dd></div>
+        <div class="order-result__row"><dt>주문 상품</dt><dd id="r-items"></dd></div>
+        <div class="order-result__row"><dt>결제 금액</dt><dd id="r-amount"></dd></div>
+      </dl>
+      <p class="order-result__desc">주문 상세와 배송 현황은 마이페이지 &gt; 주문 내역에서 확인할 수 있습니다.</p>
+      <div class="order-result__actions">
+        <a id="receiptLink" class="order-result__btn order-result__btn--ghost" target="_blank" rel="noopener noreferrer" hidden>영수증 보기</a>
+        <a class="order-result__btn" href="/mypage">주문 내역 보기</a>
+      </div>
+    </div>
+
+    <div id="error" class="order-result__box" hidden>
+      <h1 class="order-result__title">결제를 완료하지 못했습니다</h1>
+      <p id="errorMsg" class="order-result__desc"></p>
+      <div class="order-result__actions">
+        <a class="order-result__btn" href="/cart">장바구니로 돌아가기</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const show = (id: string) => {
+    ['pending', 'done', 'error'].forEach((k) => { $(k).hidden = k !== id; });
+  };
+
+  (async () => {
+    const params = new URLSearchParams(location.search);
+    const paymentKey = params.get('paymentKey') ?? '';
+    const orderId = params.get('orderId') ?? '';
+    const amount = parseInt(params.get('amount') ?? '', 10);
+    if (!paymentKey || !orderId || !Number.isInteger(amount)) {
+      $('errorMsg').textContent = '결제 정보가 올바르지 않습니다.';
+      show('error');
+      return;
+    }
+
+    // 장바구니-결제라면 checkout이 보관한 cart_id를 승인과 함께 넘겨 정리한다(1회성 — 즉시 제거).
+    // 저장값이 이 주문(orderId)의 것일 때만 사용 — 다른 결제의 옛 값으로 장바구니가 지워지지 않도록.
+    const clearRaw = sessionStorage.getItem('rb-cart-clear');
+    sessionStorage.removeItem('rb-cart-clear');
+    let cartItemIds: string[] = [];
+    if (clearRaw) {
+      try {
+        const parsed = JSON.parse(clearRaw);
+        if (parsed?.orderId === orderId && Array.isArray(parsed.ids)) {
+          cartItemIds = parsed.ids.filter((x: unknown) => typeof x === 'string');
+        }
+      } catch { /* 무시 — 장바구니 정리는 실패해도 결제엔 영향 없음 */ }
+    }
+
+    const res = await fetch('/api/v1/payments/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paymentKey, orderId, amount, cartItemIds }),
+    }).catch(() => null);
+    if (res?.status === 401) {
+      location.href = `/login?redirect=${encodeURIComponent(location.pathname + location.search)}`;
+      return;
+    }
+    const json = await res?.json().catch(() => null);
+    if (!res?.ok || !json?.success) {
+      $('errorMsg').textContent = json?.error ?? '결제 승인에 실패했습니다. 다시 시도해 주세요.';
+      show('error');
+      return;
+    }
+
+    $('r-orderId').textContent = orderId;
+    $('r-amount').textContent = `${amount.toLocaleString('ko-KR')}원`;
+    if (json.receiptUrl) {
+      const link = $('receiptLink') as HTMLAnchorElement;
+      link.href = json.receiptUrl;
+      link.hidden = false;
+    }
+    // 품목은 주문 단건 조회로 표시 (실패해도 완료 표시엔 지장 없음)
+    try {
+      const orderRes = await fetch(`/api/v1/orders/${encodeURIComponent(orderId)}`);
+      if (orderRes.ok) {
+        const order = await orderRes.json();
+        if (order?.items) {
+          $('r-items').textContent = order.items
+            .map((i: { productName: string; quantity: number }) => `${i.productName} × ${i.quantity}`)
+            .join(', ');
+        }
+      }
+    } catch { /* 표시 생략 */ }
+    show('done');
+  })();
+</script>

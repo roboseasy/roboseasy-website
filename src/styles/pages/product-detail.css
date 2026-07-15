@@ -199,6 +199,63 @@ body {
   background-color: var(--color-tag-bg);
 }
 
+.pdp__qty-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.pdp__qty-label {
+  font-size: var(--text-body);
+  color: var(--color-medium-gray);
+}
+
+.pdp__qty {
+  width: 88px;
+  padding: 10px 12px;
+  font-size: var(--text-body);
+  border: 1px solid var(--color-ash-border);
+  border-radius: var(--radius-buttons);
+  background-color: var(--color-white);
+  color: inherit;
+}
+
+.pdp__sub-actions {
+  display: flex;
+  gap: var(--spacing-12);
+}
+
+.pdp__sub-actions .pdp__quote {
+  flex: 1;
+  cursor: pointer;
+}
+
+/* 담김/찜 토글 — is-active면 채움 아이콘(검정)·♥ 표시 */
+.pdp__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pdp__ico--fill {
+  display: none;
+}
+
+.pdp__toggle.is-active .pdp__ico--line {
+  display: none;
+}
+
+.pdp__toggle.is-active .pdp__ico--fill {
+  display: inline;
+  color: var(--color-charcoal, #111);
+}
+
+.pdp__buy {
+  border: 0;
+  cursor: pointer;
+}
+
 /* ─── 하단 상세 정보 탭 (설명 / 제원) ─── */
 .pdp__detail {
   margin-top: var(--spacing-80);

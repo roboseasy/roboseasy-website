@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/cart.css';
+---
+<BaseLayout
+  title="장바구니 - RoboSEasy | 로보시지"
+  description="로보시지 장바구니"
+  path="/cart"
+  lockTheme="light"
+  shopNav
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="cart">
+    <h1 class="cart__title">장바구니</h1>
+    <p id="cartCount" class="cart__count" hidden></p>
+    <div id="loading" class="cart__loading">불러오는 중...</div>
+
+    <div id="content" hidden>
+      <div id="cartEmpty" class="cart__empty" hidden>
+        장바구니가 비어 있습니다. <a href="/products">제품 보러 가기</a>
+      </div>
+
+      <div id="cartBody" class="cart__body" hidden>
+        <ul id="cartList" class="cart__list"></ul>
+
+        <aside class="cart__summary">
+          <dl class="cart__summary-list">
+            <div class="cart__summary-row"><dt>상품 금액</dt><dd id="s-items"></dd></div>
+            <div class="cart__summary-row"><dt>배송비</dt><dd id="s-shipping"></dd></div>
+            <div class="cart__summary-row cart__summary-row--total"><dt>총 결제 금액</dt><dd id="s-total"></dd></div>
+          </dl>
+          <button type="button" id="orderBtn" class="cart__order-btn">주문하기</button>
+          <p class="cart__note">판매 중지된 제품은 주문에서 제외됩니다.</p>
+        </aside>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import { products } from '../data/products';
+  import { SHIPPING_FEE } from '../data/shipping';
+  import { MAX_QTY } from '../data/order';
+  import { $, won } from '../lib/dom';
+
+  const imageBySku = new Map(products.map((p) => [p.id, p.image ?? '']));
+
+  type CartItem = {
+    cartId: string; productSku: string; quantity: number;
+    productName: string; price: number; isActive: boolean;
+  };
+  let items: CartItem[] = [];
+
+  function render() {
+    const list = $('cartList');
+    list.innerHTML = '';
+    const empty = items.length === 0;
+    $('cartEmpty').hidden = !empty;
+    $('cartBody').hidden = empty;
+    $('cartCount').textContent = `${items.length}개 품목`;
+    $('cartCount').hidden = empty;
+    if (empty) return;
+
+    for (const it of items) {
+      const li = document.createElement('li');
+      li.className = `cart__item${it.isActive ? '' : ' cart__item--inactive'}`;
+
+      const img = document.createElement('a');
+      img.className = 'cart__item-img';
+      img.href = `/products/${it.productSku}`;
+      const src = imageBySku.get(it.productSku);
+      if (src) {
+        const el = document.createElement('img');
+        el.src = src;
+        el.alt = it.productName;
+        img.appendChild(el);
+      }
+
+      const info = document.createElement('div');
+      info.className = 'cart__item-info';
+      const name = document.createElement('a');
+      name.className = 'cart__item-name';
+      name.href = `/products/${it.productSku}`;
+      name.textContent = it.productName;
+      const price = document.createElement('p');
+      price.className = 'cart__item-price';
+      price.textContent = it.isActive ? won(it.price) : '판매 중지';
+      info.append(name, price);
+
+      const qty = document.createElement('div');
+      qty.className = 'cart__qty';
+      const minus = document.createElement('button');
+      minus.type = 'button';
+      minus.textContent = '−';
+      minus.disabled = it.quantity <= 1;
+      minus.addEventListener('click', () => setQty(it, it.quantity - 1));
+      const count = document.createElement('span');
+      count.textContent = String(it.quantity);
+      const plus = document.createElement('button');
+      plus.type = 'button';
+      plus.textContent = '+';
+      plus.disabled = it.quantity >= MAX_QTY;
+      plus.addEventListener('click', () => setQty(it, it.quantity + 1));
+      qty.append(minus, count, plus);
+
+      const line = document.createElement('p');
+      line.className = 'cart__item-total';
+      line.textContent = it.isActive ? won(it.price * it.quantity) : '—';
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'cart__item-del';
+      del.setAttribute('aria-label', '삭제');
+      del.textContent = '×';
+      del.addEventListener('click', () => removeItem(it));
+
+      li.append(img, info, qty, line, del);
+      list.appendChild(li);
+    }
+
+    const active = items.filter((i) => i.isActive);
+    const itemsTotal = active.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    $('s-items').textContent = won(itemsTotal);
+    $('s-shipping').textContent = active.length ? won(SHIPPING_FEE) : won(0);
+    $('s-total').textContent = won(active.length ? itemsTotal + SHIPPING_FEE : 0);
+    ($('orderBtn') as HTMLButtonElement).disabled = active.length === 0;
+  }
+
+  async function setQty(it: CartItem, next: number) {
+    if (next < 1 || next > MAX_QTY) return;
+    const res = await fetch(`/api/v1/cart_items/${it.cartId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quantity: next }),
+    }).catch(() => null);
+    if (!res?.ok) { alert('수량을 변경하지 못했습니다.'); return; }
+    it.quantity = next;
+    render();
+  }
+
+  async function removeItem(it: CartItem) {
+    const res = await fetch(`/api/v1/cart_items/${it.cartId}`, { method: 'DELETE' }).catch(() => null);
+    if (!res?.ok) { alert('삭제하지 못했습니다.'); return; }
+    items = items.filter((x) => x.cartId !== it.cartId);
+    render();
+  }
+
+  $('orderBtn').addEventListener('click', () => { location.href = '/checkout'; });
+
+  (async () => {
+    const res = await fetch('/api/v1/cart_items').catch(() => null);
+    if (!res) { $('loading').textContent = '장바구니를 불러오지 못했습니다. 새로고침해 주세요.'; return; }
+    if (res.status === 401) { location.href = '/login?redirect=/cart'; return; }
+    if (!res.ok) { $('loading').textContent = '장바구니를 불러오지 못했습니다. 새로고침해 주세요.'; return; }
+    items = (await res.json()).items;
+    $('loading').style.display = 'none';
+    ($('content') as HTMLElement).hidden = false;
+    render();
+  })();
+</script>

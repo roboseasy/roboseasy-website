@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { requireAuth, requireAdmin, type AuthEnv } from '../middleware/auth';
+import { UUID_RE } from '../lib/validation';
 
 // 관리자 API — /api/v1/admin/* 전체가 requireAuth → requireAdmin 체인으로 보호됨.
 // 조회는 유저 토큰(RLS의 admin 정책)으로 수행 — service role 불필요(이중 방어).
@@ -12,9 +13,6 @@ const pageOf = (c: { req: { query: (k: string) => string | undefined } }) => {
   const page = Math.max(1, parseInt(c.req.query('page') ?? '1', 10) || 1);
   return { page, from: (page - 1) * PAGE_SIZE, to: page * PAGE_SIZE - 1 };
 };
-
-// uuid 형식이 아닌 :id는 Postgres 캐스팅 에러(22P02 → 500)가 나기 전에 404로 처리
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const userDto = (r: Record<string, unknown>) => ({
   userId: r.user_id,
@@ -136,6 +134,73 @@ admin.get('/orders/:id', async (c) => {
     ...orderDto(data),
     items: ((data.order_items as Record<string, unknown>[]) ?? []).map(orderItemDto),
   });
+});
+
+/* ── 주문 배달 관리 (ADM-06, 2차) — 운송장 입력 + 상태 전이 ──
+   전이 규칙: PAID→SHIPPING(택배사·운송장 필수), SHIPPING→DELIVERED.
+   RLS orders_update_admin으로 관리자만 갱신 가능(이중 방어). */
+admin.patch('/orders/:id/delivery', async (c) => {
+  if (!UUID_RE.test(c.req.param('id'))) return c.json({ error: '존재하지 않는 주문입니다.' }, 404);
+  let body: { status?: string; courier?: string; trackingNumber?: string };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: '잘못된 요청입니다.' }, 400);
+  }
+
+  const courier = body.courier?.trim();
+  const trackingNumber = body.trackingNumber?.trim();
+  if ((courier && courier.length > 50) || (trackingNumber && trackingNumber.length > 50)) {
+    return c.json({ error: '입력값이 너무 깁니다.' }, 400);
+  }
+  if (body.status !== undefined && body.status !== 'SHIPPING' && body.status !== 'DELIVERED') {
+    return c.json({ error: 'status는 SHIPPING/DELIVERED 중 하나여야 합니다.' }, 400);
+  }
+  if (body.status === undefined && !courier && !trackingNumber) {
+    return c.json({ error: '수정할 항목이 없습니다.' }, 400);
+  }
+
+  const db = c.get('db');
+  const { data: order } = await db
+    .from('orders')
+    .select('order_id, status, courier, tracking_number')
+    .eq('order_id', c.req.param('id'))
+    .maybeSingle();
+  if (!order) return c.json({ error: '존재하지 않는 주문입니다.' }, 404);
+
+  const update: Record<string, unknown> = {};
+  if (courier) update.courier = courier;
+  if (trackingNumber) update.tracking_number = trackingNumber;
+
+  if (body.status === 'SHIPPING') {
+    if (order.status !== 'PAID') {
+      return c.json({ error: `결제 완료(PAID) 주문만 배송 시작할 수 있습니다. (현재: ${order.status})` }, 400);
+    }
+    if (!(courier ?? order.courier) || !(trackingNumber ?? order.tracking_number)) {
+      return c.json({ error: '배송 시작에는 택배사와 운송장 번호가 필요합니다.' }, 400);
+    }
+    update.status = 'SHIPPING';
+  } else if (body.status === 'DELIVERED') {
+    if (order.status !== 'SHIPPING') {
+      return c.json({ error: `배송 중(SHIPPING) 주문만 배송 완료할 수 있습니다. (현재: ${order.status})` }, 400);
+    }
+    update.status = 'DELIVERED';
+  } else if (order.status !== 'PAID' && order.status !== 'SHIPPING') {
+    // 운송장만 수정하는 경우도 배송 관리 대상 상태에서만
+    return c.json({ error: '배송 관리 대상 주문이 아닙니다.' }, 400);
+  }
+
+  const { data, error } = await db
+    .from('orders')
+    .update(update)
+    .eq('order_id', c.req.param('id'))
+    .select()
+    .maybeSingle();
+  if (error || !data) {
+    console.error('admin delivery 수정 오류:', error);
+    return c.json({ error: '배송 정보 변경에 실패했습니다.' }, 500);
+  }
+  return c.json({ success: true, order: orderDto(data) });
 });
 
 /* ── 문의 관리 (ADM-07) — channel·status·is_dispute 필터, 상태·분쟁 표시 갱신 ── */

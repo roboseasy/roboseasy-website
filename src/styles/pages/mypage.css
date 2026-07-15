@@ -255,7 +255,6 @@
     word-break: break-word;
 }
 .mypage__empty { font-size: 0.85rem; color: var(--color-muted-gray); padding: 4px 0; }
-
 /* 회원탈퇴 */
 .mypage__group--danger .mypage__row-label { width: auto; color: #dc2626; }
 .mypage__group--danger .mypage__row-value { font-size: 0.8rem; color: var(--color-muted-gray); }

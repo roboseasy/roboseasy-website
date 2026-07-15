@@ -1,5 +1,6 @@
 [build]
-  command = "npm run build"
+  # sync-products는 CONTEXT=production에서만 실제 동기화 (그 외 컨텍스트는 스크립트가 스킵)
+  command = "npm run sync-products && npm run build"
   publish = "dist"
 
 [build.environment]

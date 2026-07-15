@@ -1,0 +1,295 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/orders.css';
+---
+<BaseLayout
+  title="주문 내역 - RoboSEasy | 로보시지"
+  description="로보시지 주문 내역"
+  path="/orders"
+  lockTheme="light"
+  shopNav
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="orders">
+    <h1 class="orders__title">주문 내역</h1>
+    <div id="loading" class="orders__loading">불러오는 중...</div>
+
+    <div id="content" hidden>
+      <div id="ordersEmpty" class="orders__empty" hidden>
+        주문 내역이 없습니다. <a href="/products">제품 보러 가기</a>
+      </div>
+      <div id="orderFilters" class="orders__filters" hidden></div>
+      <div id="orderList" class="orders__list"></div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import { $, won } from '../lib/dom';
+  import { ORDER_STATUS_LABEL } from '../data/orderStatus';
+
+  // 배지 스타일은 이 페이지 전용 — 라벨(한글)은 공용 ORDER_STATUS_LABEL 사용
+  const STATUS_CLASS: Record<string, string> = {
+    PENDING: 'orders__badge--wait',
+    PAID: 'orders__badge--progress',
+    SHIPPING: 'orders__badge--progress',
+    DELIVERED: 'orders__badge--done',
+    CANCELLED: '',
+  };
+
+  // 진행 스텝 — 별도 "상품 준비" 상태값이 없어 PAID를 결제 완료·상품 준비 두 칸으로 표시
+  const STEP_LABELS = ['결제 완료', '상품 준비', '배송 중', '배송 완료'];
+  const STEP_DONE: Record<string, number> = { PAID: 2, SHIPPING: 3, DELIVERED: 4 };
+
+  // 배송 조회 — 로젠택배 공식 조회 페이지 딥링크 (운송장 숫자만)
+  const trackUrl = (no: string) => `https://www.ilogen.com/web/personal/trace/${no.replace(/\D/g, '')}`;
+
+  type Order = {
+    orderId: string; totalPrice: number; status: string; createdAt: string;
+    receiverName: string; shippingPostcode: string; shippingAddress: string; shippingAddressDetail: string;
+    courier: string | null; trackingNumber: string | null;
+    items: { productSku: string; productName: string; quantity: number; unitPrice: number }[];
+  };
+
+  const FILTERS: { key: string; label: string; match: (o: Order) => boolean }[] = [
+    { key: 'all', label: '전체', match: () => true },
+    { key: 'active', label: '진행 중', match: (o) => ['PENDING', 'PAID', 'SHIPPING'].includes(o.status) },
+    { key: 'done', label: '완료', match: (o) => o.status === 'DELIVERED' },
+    { key: 'cancelled', label: '취소', match: (o) => o.status === 'CANCELLED' },
+  ];
+
+  let orders: Order[] = [];
+  let filter = 'all';
+  let openId: string | null = null; // 펼쳐진 주문 — 재렌더 후에도 유지
+
+  function renderFilters() {
+    const wrap = $('orderFilters');
+    wrap.innerHTML = '';
+    wrap.hidden = orders.length === 0;
+    for (const f of FILTERS) {
+      const count = orders.filter(f.match).length;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `orders__chip${filter === f.key ? ' orders__chip--on' : ''}`;
+      btn.textContent = `${f.label} ${count}`;
+      btn.addEventListener('click', () => { filter = f.key; renderFilters(); render(); });
+      wrap.appendChild(btn);
+    }
+  }
+
+  function buildDetail(o: Order): HTMLElement {
+    const detail = document.createElement('div');
+    detail.className = 'orders__detail';
+
+    // ① 주문 품목 · 결제 금액 + ② 배송 정보
+    const grid = document.createElement('div');
+    grid.className = 'orders__detail-grid';
+
+    const itemsCol = document.createElement('div');
+    const itemsTitle = document.createElement('h2');
+    itemsTitle.className = 'orders__detail-label';
+    itemsTitle.textContent = '주문 품목';
+    const ul = document.createElement('ul');
+    ul.className = 'orders__detail-items';
+    let itemsSum = 0;
+    for (const i of o.items) {
+      itemsSum += i.unitPrice * i.quantity;
+      const li = document.createElement('li');
+      const name = document.createElement('a');
+      name.href = `/products/${i.productSku}`;
+      name.textContent = `${i.productName} × ${i.quantity}`;
+      const price = document.createElement('span');
+      price.textContent = won(i.unitPrice * i.quantity);
+      li.append(name, price);
+      ul.appendChild(li);
+    }
+    const shipFee = o.totalPrice - itemsSum;
+    if (shipFee > 0) {
+      const li = document.createElement('li');
+      li.className = 'orders__detail-ship';
+      li.append(Object.assign(document.createElement('span'), { textContent: '배송비' }),
+        Object.assign(document.createElement('span'), { textContent: won(shipFee) }));
+      ul.appendChild(li);
+    }
+    const total = document.createElement('li');
+    total.className = 'orders__detail-total';
+    total.append(Object.assign(document.createElement('span'), { textContent: '총 결제 금액' }),
+      Object.assign(document.createElement('span'), { textContent: won(o.totalPrice) }));
+    ul.appendChild(total);
+    itemsCol.append(itemsTitle, ul);
+
+    const shipCol = document.createElement('div');
+    const shipTitle = document.createElement('h2');
+    shipTitle.className = 'orders__detail-label';
+    shipTitle.textContent = '배송 정보';
+    const addr = document.createElement('p');
+    addr.className = 'orders__detail-addr';
+    addr.textContent = `${o.receiverName} · (${o.shippingPostcode}) ${o.shippingAddress}${o.shippingAddressDetail ? ` ${o.shippingAddressDetail}` : ''}`;
+    shipCol.append(shipTitle, addr);
+
+    grid.append(itemsCol, shipCol);
+    detail.appendChild(grid);
+
+    // ③ 진행 상황 — 결제 대기는 재결제 안내, 취소는 안내문, 그 외 4단계 스텝퍼
+    if (o.status === 'PENDING') {
+      const notice = document.createElement('div');
+      notice.className = 'orders__notice';
+      notice.textContent = '아직 결제가 완료되지 않은 주문입니다.';
+      const payBtn = document.createElement('a');
+      payBtn.className = 'orders__pay';
+      payBtn.href = `/checkout?orderId=${o.orderId}`;
+      payBtn.textContent = '결제하기';
+      notice.appendChild(payBtn);
+      detail.appendChild(notice);
+    } else if (o.status === 'CANCELLED') {
+      const note = document.createElement('p');
+      note.className = 'orders__detail-cancelled';
+      note.textContent = '결제 취소(환불)된 주문입니다.';
+      detail.appendChild(note);
+    } else if (STEP_DONE[o.status]) {
+      const doneCount = STEP_DONE[o.status];
+      const steps = document.createElement('div');
+      steps.className = 'orders__steps';
+      STEP_LABELS.forEach((label, idx) => {
+        const step = document.createElement('div');
+        step.className = 'orders__step';
+        if (idx < doneCount) step.classList.add('orders__step--on');
+        if (idx === doneCount - 1 && o.status !== 'DELIVERED') step.classList.add('orders__step--now');
+        const dot = document.createElement('i');
+        step.append(dot, document.createTextNode(label));
+        steps.appendChild(step);
+      });
+      detail.appendChild(steps);
+    }
+
+    // ④ 운송장 · 배송 조회 (로젠택배)
+    if (o.trackingNumber) {
+      const track = document.createElement('div');
+      track.className = 'orders__track';
+      const label = document.createElement('span');
+      label.textContent = o.courier ?? '로젠택배';
+      const no = document.createElement('b');
+      no.className = 'orders__track-no';
+      no.textContent = o.trackingNumber;
+      const link = document.createElement('a');
+      link.className = 'orders__track-btn';
+      link.href = trackUrl(o.trackingNumber);
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = '배송 조회';
+      track.append(label, no, link);
+      detail.appendChild(track);
+    }
+
+    // 취소: 결제 대기(미결제 정리)·결제 완료(배송 전 환불)만 — 배송 시작 후는 고객센터 경로
+    if (o.status === 'PENDING' || o.status === 'PAID') {
+      const acts = document.createElement('div');
+      acts.className = 'orders__detail-acts';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'orders__cancel';
+      btn.textContent = o.status === 'PAID' ? '주문 취소 (환불)' : '주문 취소';
+      btn.addEventListener('click', async () => {
+        if (!confirm(o.status === 'PAID' ? '결제가 취소(환불)됩니다. 주문을 취소할까요?' : '주문을 취소할까요?')) return;
+        btn.disabled = true;
+        try {
+          const r = await fetch(`/api/v1/orders/${o.orderId}/cancel`, { method: 'POST' });
+          const json = await r.json().catch(() => null);
+          if (!r.ok) { alert(json?.error ?? '취소하지 못했습니다.'); return; }
+          load();
+        } catch {
+          alert('네트워크 오류가 발생했습니다.');
+        } finally {
+          btn.disabled = false;
+        }
+      });
+      acts.appendChild(btn);
+      detail.appendChild(acts);
+    }
+
+    return detail;
+  }
+
+  function render() {
+    const list = $('orderList');
+    list.innerHTML = '';
+    $('ordersEmpty').hidden = orders.length > 0;
+    if (orders.length === 0) return;
+
+    const active = FILTERS.find((f) => f.key === filter) ?? FILTERS[0];
+    const filtered = orders.filter(active.match);
+    if (filtered.length === 0) {
+      const none = document.createElement('p');
+      none.className = 'orders__none';
+      none.textContent = '해당 상태의 주문이 없습니다.';
+      list.appendChild(none);
+      return;
+    }
+
+    for (const o of filtered) {
+      const stText = ORDER_STATUS_LABEL[o.status] ?? o.status;
+      const stCls = STATUS_CLASS[o.status] ?? '';
+      const open = openId === o.orderId;
+
+      const row = document.createElement('div');
+      row.className = `orders__row${open ? ' orders__row--open' : ''}${o.status === 'CANCELLED' ? ' orders__row--off' : ''}`;
+      row.tabIndex = 0;
+      row.setAttribute('role', 'button');
+      row.setAttribute('aria-expanded', String(open));
+
+      const date = document.createElement('span');
+      date.className = 'orders__row-date';
+      date.textContent = new Date(o.createdAt).toLocaleDateString('ko-KR');
+
+      const name = document.createElement('span');
+      name.className = 'orders__row-name';
+      name.textContent = `${o.items[0]?.productName ?? ''}${o.items.length > 1 ? ` 외 ${o.items.length - 1}건` : ''}`;
+      const no = document.createElement('span');
+      no.className = 'orders__row-no';
+      no.textContent = `주문번호 ${o.orderId.slice(0, 8)}`;
+      name.appendChild(no);
+
+      const amt = document.createElement('span');
+      amt.className = 'orders__row-amt';
+      amt.textContent = won(o.totalPrice);
+
+      const badge = document.createElement('span');
+      badge.className = `orders__badge ${stCls}`;
+      badge.textContent = stText;
+
+      const chev = document.createElement('span');
+      chev.className = 'orders__chev';
+      chev.textContent = '▶';
+
+      row.append(date, name, amt, badge, chev);
+
+      const toggle = () => { openId = open ? null : o.orderId; render(); };
+      row.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('a, button')) return;
+        toggle();
+      });
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+
+      list.appendChild(row);
+      if (open) list.appendChild(buildDetail(o));
+    }
+  }
+
+  async function load() {
+    const res = await fetch('/api/v1/orders').catch(() => null);
+    if (!res) { $('loading').textContent = '주문 내역을 불러오지 못했습니다. 새로고침해 주세요.'; return; }
+    if (res.status === 401) { location.href = '/login?redirect=/orders'; return; }
+    if (!res.ok) { $('loading').textContent = '주문 내역을 불러오지 못했습니다. 새로고침해 주세요.'; return; }
+    orders = ((await res.json()) as { orders: Order[] }).orders;
+
+    $('loading').style.display = 'none';
+    ($('content') as HTMLElement).hidden = false;
+    renderFilters();
+    render();
+  }
+
+  load();
+</script>

@@ -33,10 +33,10 @@ const { shopNav = false } = Astro.props;
         <a id="header-icon-user" class="header__icon-link" href="/mypage" aria-label="마이페이지" title="마이페이지">
           <Icon name="solar:user-circle-linear" width="26" />
         </a>
-        <a class="header__icon-link" href="/cart" data-soon="장바구니" aria-label="장바구니" title="장바구니">
+        <a class="header__icon-link" href="/cart" aria-label="장바구니" title="장바구니">
           <Icon name="solar:cart-large-2-linear" width="26" />
         </a>
-        <a class="header__icon-link" href="/dibs" data-soon="찜" aria-label="찜" title="찜">
+        <a class="header__icon-link" href="/dibs" aria-label="찜" title="찜">
           <Icon name="solar:heart-linear" width="26" />
         </a>
       </div>
@@ -87,19 +87,5 @@ const { shopNav = false } = Astro.props;
     if (userIcon && !document.cookie.split('; ').some((c) => c === 'rb-auth=1')) {
       userIcon.href = '/login?redirect=/mypage';
     }
-
-    // 장바구니·찜 — 2차 구현 전까지 준비 중 안내
-    header.querySelectorAll<HTMLAnchorElement>('.header__icon-link[data-soon]').forEach((el) => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelector('.header__toast')?.remove();
-        const toast = document.createElement('div');
-        toast.className = 'header__toast';
-        toast.textContent = `${el.dataset.soon} 기능은 준비 중입니다.`;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.classList.add('is-visible'), 10);
-        setTimeout(() => { toast.classList.remove('is-visible'); setTimeout(() => toast.remove(), 300); }, 2200);
-      });
-    });
   }
 </script>

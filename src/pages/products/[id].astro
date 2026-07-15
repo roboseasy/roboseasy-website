@@ -1,8 +1,10 @@
 ---
+import { Icon } from 'astro-icon/components';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BrandPlaceholder from '../../components/shop/BrandPlaceholder.astro';
-import { products, CATEGORY_LABELS, NAVER_STORE_URL } from '../../data/products';
+import { products, CATEGORY_LABELS } from '../../data/products';
 import type { Product } from '../../data/products';
+import { SHIPPING_FEE } from '../../data/shipping';
 import '../../styles/pages/product-detail.css';
 
 export function getStaticPaths() {
@@ -11,10 +13,11 @@ export function getStaticPaths() {
 
 interface Props { product: Product }
 const { product } = Astro.props;
-const { name, category, price, summary, image, gallery, detailImages, specImages, naverUrl, comingSoon, productNumber, brand, origin } = product;
+const { name, category, price, summary, image, gallery, detailImages, specImages, comingSoon, productNumber, brand, origin } = product;
+// 판매 가능 여부 — DB is_active(price>0 AND !comingSoon)와 일치시켜 구매 동선 게이트를 맞춘다
+const unavailable = comingSoon || price <= 0;
 const hasProductInfo = Boolean(productNumber || brand || origin);
 
-const buyUrl = naverUrl ?? NAVER_STORE_URL;
 // 썸네일이 메인 이미지를 구동 — 대표 이미지를 첫 썸네일로 포함시켜
 // 다른 썸네일을 본 뒤 다시 메인(대표)으로 복귀할 수 있게 함
 const galleryImages = gallery && gallery.length ? gallery : [];
@@ -55,7 +58,7 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
         <div class="pdp__info">
           <span class="pdp__category">{CATEGORY_LABELS[category]}</span>
           <h1 class="pdp__name">{name}</h1>
-          <p class="pdp__price">{comingSoon ? '가격 미정' : `${price.toLocaleString('ko-KR')}원`}</p>
+          <p class="pdp__price">{unavailable ? '가격 미정' : `${price.toLocaleString('ko-KR')}원`}</p>
 
           <hr class="pdp__divider" />
           <div class="pdp__meta">
@@ -63,7 +66,7 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
               <h2 class="pdp__meta-title">배송정보</h2>
               <dl class="pdp__meta-list">
                 <div class="pdp__meta-row"><dt>배송 기간</dt><dd>평균 3일 이내 도착 확률 100%</dd></div>
-                <div class="pdp__meta-row"><dt>배송비</dt><dd>무료배송 (100,000원 이상 무료)</dd></div>
+                <div class="pdp__meta-row"><dt>배송비</dt><dd>{SHIPPING_FEE.toLocaleString('ko-KR')}원 (전 주문 동일)</dd></div>
                 <div class="pdp__meta-row"><dt>배송/출고</dt><dd>GSPostbox택배</dd></div>
               </dl>
             </section>
@@ -80,11 +83,29 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
           </div>
 
           {summary && <p class="pdp__summary">{summary}</p>}
-          <div class="pdp__actions">
-            {comingSoon ? (
+          <div class="pdp__actions" data-sku={product.id}>
+            {unavailable ? (
               <span class="pdp__buy pdp__buy--disabled" aria-disabled="true">출시 예정</span>
             ) : (
-              <a class="pdp__buy" href={buyUrl} target="_blank" rel="noopener noreferrer">구매하기</a>
+              <>
+                <div class="pdp__qty-row">
+                  <label class="pdp__qty-label" for="pdp-qty">수량</label>
+                  <input id="pdp-qty" class="pdp__qty" type="number" min="1" max="99" value="1" inputmode="numeric" />
+                </div>
+                <button type="button" id="buyNowBtn" class="pdp__buy">구매하기</button>
+                <div class="pdp__sub-actions">
+                  <!-- 담김/찜 상태 토글 버튼 — is-active 클래스로 채움 아이콘·♥ 전환 (스크립트) -->
+                  <button type="button" id="addCartBtn" class="pdp__quote pdp__toggle" aria-pressed="false">
+                    <Icon name="solar:cart-large-2-linear" class="pdp__ico pdp__ico--line" width="18" />
+                    <Icon name="solar:cart-large-2-bold" class="pdp__ico pdp__ico--fill" width="18" />
+                    <span>장바구니</span>
+                  </button>
+                  <button type="button" id="addDibsBtn" class="pdp__quote pdp__toggle" aria-pressed="false">
+                    <span id="dibsHeart">♡</span>
+                    <span>찜</span>
+                  </button>
+                </div>
+              </>
             )}
             <a class="pdp__quote" href="/contact">견적보기</a>
           </div>
@@ -146,5 +167,110 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
       }
       thumbItems.forEach((t) => t.classList.toggle('is-active', t === thumb));
     });
+  });
+
+  // 구매 동선 — 자체 결제 (2차). 비로그인이면 API 401 → 로그인으로 유도
+  const sku = document.querySelector<HTMLElement>('.pdp__actions')?.dataset.sku ?? '';
+  const qtyInput = document.getElementById('pdp-qty') as HTMLInputElement | null;
+  const getQty = () => {
+    const q = parseInt(qtyInput?.value ?? '1', 10);
+    return Number.isInteger(q) && q >= 1 && q <= 99 ? q : 1;
+  };
+  const toLogin = () => {
+    location.href = `/login?redirect=${encodeURIComponent(location.pathname)}`;
+  };
+
+  document.getElementById('buyNowBtn')?.addEventListener('click', () => {
+    // 주문서에서 로그인 검사 — 비로그인이면 로그인 후 복귀
+    location.href = `/checkout?sku=${encodeURIComponent(sku)}&qty=${getQty()}`;
+  });
+
+  // 담김/찜 상태 — 로그인 상태면 초기 조회로 채우고, 클릭은 토글(담기/빼기, 찜/해제)
+  const cartBtn = document.getElementById('addCartBtn') as HTMLButtonElement | null;
+  const dibsBtn = document.getElementById('addDibsBtn') as HTMLButtonElement | null;
+  let cartId: string | null = null;
+  let dibsId: string | null = null;
+
+  function renderToggles() {
+    cartBtn?.classList.toggle('is-active', !!cartId);
+    cartBtn?.setAttribute('aria-pressed', String(!!cartId));
+    dibsBtn?.classList.toggle('is-active', !!dibsId);
+    dibsBtn?.setAttribute('aria-pressed', String(!!dibsId));
+    const heart = document.getElementById('dibsHeart');
+    if (heart) heart.textContent = dibsId ? '♥' : '♡';
+  }
+
+  async function loadStates() {
+    if (!cartBtn) return; // 출시 예정 — 버튼 없음
+    // rb-auth 표시 쿠키가 없으면 비로그인 — 조회 생략(기본 빈 상태)
+    if (!document.cookie.split('; ').some((c) => c === 'rb-auth=1')) return;
+    try {
+      const [cartRes, dibsRes] = await Promise.all([fetch('/api/v1/cart_items'), fetch('/api/v1/dibs')]);
+      if (cartRes.ok) {
+        const { items } = await cartRes.json();
+        cartId = items.find((i: { productSku: string }) => i.productSku === sku)?.cartId ?? null;
+      }
+      if (dibsRes.ok) {
+        const { items } = await dibsRes.json();
+        dibsId = items.find((i: { productSku: string }) => i.productSku === sku)?.dibsId ?? null;
+      }
+      renderToggles();
+    } catch { /* 상태 표시 실패는 무시 — 기본 상태 유지 */ }
+  }
+  loadStates();
+
+  cartBtn?.addEventListener('click', async () => {
+    cartBtn.disabled = true;
+    try {
+      if (cartId) {
+        // 이미 담김 → 장바구니에서 제거 (재담기·수량 변경은 /cart에서)
+        const res = await fetch(`/api/v1/cart_items/${cartId}`, { method: 'DELETE' });
+        if (res.status === 401) { toLogin(); return; }
+        if (!res.ok && res.status !== 404) { alert('장바구니에서 빼지 못했습니다.'); return; }
+        cartId = null;
+      } else {
+        const res = await fetch('/api/v1/cart_items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productSku: sku, quantity: getQty() }),
+        });
+        if (res.status === 401) { toLogin(); return; }
+        const json = await res.json().catch(() => null);
+        if (!res.ok) { alert(json?.error ?? '장바구니에 담지 못했습니다.'); return; }
+        cartId = json.cartId ?? null;
+      }
+      renderToggles();
+    } catch {
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      cartBtn.disabled = false;
+    }
+  });
+
+  dibsBtn?.addEventListener('click', async () => {
+    dibsBtn.disabled = true;
+    try {
+      if (dibsId) {
+        const res = await fetch(`/api/v1/dibs/${dibsId}`, { method: 'DELETE' });
+        if (res.status === 401) { toLogin(); return; }
+        if (!res.ok && res.status !== 404) { alert('찜을 해제하지 못했습니다.'); return; }
+        dibsId = null;
+      } else {
+        const res = await fetch('/api/v1/dibs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productSku: sku }),
+        });
+        if (res.status === 401) { toLogin(); return; }
+        const json = await res.json().catch(() => null);
+        if (!res.ok) { alert(json?.error ?? '찜하지 못했습니다.'); return; }
+        dibsId = json.dibsId ?? null;
+      }
+      renderToggles();
+    } catch {
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      dibsBtn.disabled = false;
+    }
   });
 </script>

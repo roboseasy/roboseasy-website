@@ -65,7 +65,7 @@ Astro catch-all 라우트 마운트 방식: `src/pages/api/[...path].ts`에서 `
 - 주소는 우편번호 + 기본주소(카카오 우편번호 서비스로 채움, 프론트에서 읽기전용) + 상세주소(직접 입력) 3필드. 배송지는 주문 시점 스냅샷으로 orders에 저장 (profiles 주소 변경과 무관하게 보존). orders.user_id는 거래기록 5년 보관 의무 때문에 CASCADE 삭제 없음 — 탈퇴 정책은 §6 확정 사항 참조
 - 가입 트리거(auth.users insert → profiles 생성)·updated_at 트리거·RLS 정책: [roboseasy-trigger-rls.sql](roboseasy-trigger-rls.sql) — 스키마 적용 후 실행. 일반 요청은 유저 토큰(RLS 적용), 결제 승인·상태 전이·회원탈퇴는 service role(RLS 우회)
 
-### products 동기화 (JSON → DB)
+### products 동기화 (JSON → DB) — 구현됨 (`scripts/sync-products.mjs`)
 
 Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백엔드는 로드맵상 우선순위 아님 — CMS가 DB를 직접 관리하는 방법은 없다. 따라서:
 
@@ -79,6 +79,7 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 2. **중복 id 방어**: JSON 내 중복 id 발견 시 **빌드 실패** 처리 (Sveltia는 항목 간 unique 검증을 못 함. 형식은 CMS `pattern`으로 검증: `^[a-z0-9-]{1,50}$`)
 3. **id는 판매 시작 후 불변**: id 변경 = DB에선 신규 sku 생성 + 옛 sku 비활성화이며, 기존 주문·장바구니·찜 FK는 옛 sku에 남음 (CMS hint에 경고 명시)
 4. 정적 페이지 가격과 DB 가격이 같은 커밋·배포에서 나오므로 불일치 최소화
+5. **실행 가드**: Netlify `CONTEXT=production` 빌드에서만 자동 실행(netlify.toml — develop·Preview 빌드가 prod DB를 덮어쓰지 않도록 스킵). 로컬은 `npm run sync-products`(.env → 테스트 DB). 검증 실패(중복·형식 오류 id)는 exit 1 = 빌드 실패
 
 ---
 
@@ -118,19 +119,20 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 
 - 이름·연락처는 입력받지 않고 서버가 세션의 profiles에서 채움. 폼은 유형(제품/배송/AS/환불)·문의 내용·제품 선택(product_sku)만
 - 접수 시 운영 알림 메일 병행 발송(제목 `[개인문의]` prefix, 첨부 없음) — B2C는 DB가 기록 원본, 메일은 알림
-- 주문 연계(order_id 선택)는 2차에서 추가. 불만·분쟁 표시(is_dispute)·처리 상태는 관리자가 갱신
+- 주문 연계(orderId 선택) 구현됨 — 본인 주문만 연결 가능(검증 후 contacts.order_id 저장), 내역 응답에 orderId 포함. 불만·분쟁 표시(is_dispute)·처리 상태는 관리자가 갱신
 
 ### 쇼핑 (2차)
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 장바구니 조회/추가 | GET / POST | /api/v1/cart_items | 시작 전 |
-| 장바구니 수정/삭제 | PATCH / DELETE | /api/v1/cart_items/{id} | 시작 전 |
-| 찜 조회/추가 | GET / POST | /api/v1/dibs | 시작 전 |
-| 찜 삭제 | DELETE | /api/v1/dibs/{id} | 시작 전 |
-| 주문 생성 | POST | /api/v1/orders | 시작 전 |
-| 주문 내역 | GET | /api/v1/orders | 시작 전 |
-| 주문 취소 | POST | /api/v1/orders/{id}/cancel | 시작 전 (상태 분기: PENDING+payments 없음 → 주문 삭제(failUrl 복귀 정리 겸용) / PAID → 토스 취소 + CANCELLED) |
-| 결제 승인 | POST | /api/v1/payments/confirm | 시작 전 (토스 필수 — 승인 성공 시 장바구니 비우기 포함) |
+| 장바구니 조회/추가 | GET / POST | /api/v1/cart_items | 구현됨 — POST 중복 담기는 수량 합산(상한 99), is_active 제품만, products 조인 응답 |
+| 장바구니 수정/삭제 | PATCH / DELETE | /api/v1/cart_items/{id} | 구현됨 — RLS 본인 행만(타인·없는 id는 404) |
+| 찜 조회/추가 | GET / POST | /api/v1/dibs | 구현됨 — 중복 찜은 멱등 성공. 미출시(is_active=false) 제품도 찜 허용(출시 대기 용도) |
+| 찜 삭제 | DELETE | /api/v1/dibs/{id} | 구현됨 |
+| 주문 생성 | POST | /api/v1/orders | 구현됨 — 서버가 DB 단가로 재계산(+배송비 3,000원 정액, `src/data/shipping.ts`), PENDING + order_items 단가 스냅샷, 배송지 5필드 스냅샷 |
+| 주문 내역 | GET | /api/v1/orders | 구현됨 — 본인 것만(RLS), 품목·제품명 조인 |
+| 주문 단건 조회 | GET | /api/v1/orders/{id} | 구현됨 — 본인 전용. PENDING 재결제 모드(`/checkout?orderId=`)의 주문서 로드용 |
+| 주문 취소 | POST | /api/v1/orders/{id}/cancel | 구현됨 — 상태 분기: PENDING+payments 없음 → 삭제(failUrl 복귀 정리 겸용) / PENDING+payments 있음 → CANCELLED / PAID → 토스 취소 + CANCELLED / 배송 시작 후 400, CANCELLED 멱등 |
+| 결제 승인 | POST | /api/v1/payments/confirm | 구현됨 — 가드(본인·PENDING·금액 일치) 후 토스 승인, payments 기록(raw_response 포함) + PAID 전이 + 장바구니 제거. 이미 PAID면 멱등 성공. ⚠️ 실제 토스 승인·취소 호출은 테스트 키 발급 후 검증 필요 |
 | 토스 웹훅 | POST | /api/v1/payments/webhook | 2차 후순위 (가상계좌 제외로 필수 아님 — confirm 응답 유실 대비 상태 동기화 안전망) |
 
 ### 관리자 (1차)
@@ -141,7 +143,7 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 |---|---|---|---|
 | 전체/개별 주문 조회 | GET | /api/v1/admin/orders, /api/v1/admin/orders/{id} | 구현됨 — status 필터, 상세는 order_items 포함 |
 | 전체/개별 유저 조회 | GET | /api/v1/admin/users, /api/v1/admin/users/{id} | 구현됨 — 페이지네이션(50/페이지) |
-| 주문 배달 관리 | PATCH | /api/v1/admin/orders/{id}/delivery | 시작 전 (2차 — 배송 정책 확정 후) |
+| 주문 배달 관리 | PATCH | /api/v1/admin/orders/{id}/delivery | 구현됨 — 전이 규칙: PAID→SHIPPING(택배사·운송장 필수), SHIPPING→DELIVERED. 운송장은 관리자가 /manage에서 수동 입력 |
 | 문의 내역 조회 (B2B·B2C) | GET | /api/v1/admin/contacts | 구현됨 — channel·status·is_dispute 필터 |
 | 문의 상태 관리 | PATCH | /api/v1/admin/contacts/{id} | 구현됨 — 상태 전이 + is_dispute 표시(보유기간 1년/3년 구분 장치) |
 
@@ -151,7 +153,7 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 |---|---|---|---|
 | 마케팅 수신동의 2년 재확인 발송 | POST | /api/v1/cron/marketing-reconfirm | 구현됨 — CRON_SECRET Bearer 인증(pg_net 서버-서버 호출, CSRF 검증 예외). 매월 1일 실행, 대상: 최종 확인 시점(marketing_reconfirmed_at, 없으면 marketing_consent_at)이 2년 경과한 수신동의 회원. 발송 성공 시 marketing_reconfirmed_at 갱신, 실패·메일 예산 소진 건은 다음 실행에서 재시도 |
 
-CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 값으로 설정 — pg_cron job이 Vault에서 읽어 Bearer로 전달. DB 내부에서 끝나는 배치(contacts 파기·버킷 정리)는 HTTP 없이 pg_cron이 직접 실행.
+CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 값으로 설정 — pg_cron job이 Vault에서 읽어 Bearer로 전달. DB 내부에서 끝나는 배치(contacts 파기·버킷 정리·**PENDING 주문 정리** — `cleanup_pending_orders()`, 매시간 30분, 20260714000000 마이그레이션)는 HTTP 없이 pg_cron이 직접 실행.
 
 ---
 
@@ -207,10 +209,11 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 7. ✅ 보안·컴플라이언스 강화 (§7) — CSRF 미들웨어, rate limit(Token Bucket, DB 공유 상태) + 전역 메일 예산, contacts 보유기간 자동 파기, 탈퇴 회원 논리적 분리 보관(withdrawn_at), 마케팅 수신동의 2년 재확인 cron(§3 스케줄러)
 
 ### 2차 — 주문·결제
-1. products 동기화 스크립트(JSON→DB upsert, §2) → 제품·장바구니·찜 API
-2. 주문 생성(서버 금액 계산) → 토스 위젯 연동(테스트 키) → 결제 승인 → Payments 기록
-3. 주문 취소(토스 취소 API), 주문 내역, 관리자 주문·배송 관리, B2C 문의 주문 연계(order_id 선택)
-4. 웹훅/실패 복구 처리, 실 결제 테스트
+1. ✅ products 동기화 스크립트(`scripts/sync-products.mjs`, §2 — production 빌드 가드) → 장바구니·찜 API(`src/server/routes/cart.ts`·`dibs.ts`). e2e 21건 통과: 수량 합산·비활성 차단·RLS 404·멱등 찜·CSRF 403 포함
+2. ✅ 주문 생성(`src/server/routes/orders.ts` — 서버 금액 재계산 + 배송비 3,000원 정액) → 토스 위젯 연동(주문서 `/checkout`, v2 위젯) → 결제 승인(`src/server/routes/payments.ts` + `src/server/lib/toss.ts`) → payments 기록. e2e: 금액 변조 무시(서버 값), 비활성 제품·중복 sku·우편번호 400, confirm 가드(금액 불일치·비PENDING·멱등 PAID)
+3. ✅ 주문 취소(상태 분기 e2e: DELETED/CANCELLED/배송 후 400), 주문 내역(마이페이지), 관리자 배달 관리(PATCH delivery — 전이 규칙 e2e), B2C 문의 주문 연계(본인 주문 검증)
+4. ✅ PENDING 주문 정리 pg_cron(매시간 — 25h 삭제/CANCELLED/24h 미만 유지 e2e), 쇼핑 프론트(제품 상세 구매 동선 자체 결제 교체·`/cart`·`/checkout`·`/order/success|fail`·`/orders`·`/dibs` 전용 페이지 — 마이페이지는 건수 요약+이동, 헤더 장바구니·찜 아이콘 활성화·관리자 배송 UI), **주문 이력 회원 탈퇴 e2e**(1차 잔여 — PAID 보유 409 게이트, DELIVERED 후 익명화: profiles 익명화+withdrawn_at·주문 보존·cart/dibs 파기·문의 익명화 확인)
+5. ✅ 결제 실호출 검증 완료 (2026-07-14, 문서 공용 위젯 키) — 위젯 → 승인(payments DONE·raw_response) → 취소(토스 수락·CANCELED/CANCELLED 전이·실환불 입금 확인). ⚠️ **테스트 주의**: 간편결제는 **토스페이만** 모든 테스트 키에서 가상 승인 — **카카오페이는 공용/타 테스트 키에서 실제 출금됨**(실사고: 26,000원 실결제 → 취소로 환불). 카드도 가상 승인이라 안전. 잔여: 본인 위젯 키 교체, 실 결제 테스트(가맹 계약 후), 웹훅(후순위)
 
 ---
 
@@ -218,12 +221,15 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 
 | # | 항목 | 내용 | 결정 시한 |
 |---|---|---|---|
-| 1 | 배송 정책 | 배송비 정책(무료/정액/조건부), 배송 상태 단계, 운송장 입력 방식 — **서버 금액 재계산(총액 = 상품합 + 배송비)의 선행 조건** | 2차 착수 전 |
 | 2 | 통신판매업 신고 | 판매 개시 전 신고 필수 — 신고번호를 약관 표시사항·사이트 하단에 게시 | 2차 오픈 전 |
-| 3 | 토스 가맹 계약 | 가맹 심사 리드타임 확인 — 개발은 테스트 키로 선행 가능 | 2차 실결제 전 |
+| 3 | 토스 가맹 계약 | 가맹 심사 리드타임 확인 — 개발은 테스트 키로 선행(개발자센터 키를 `TOSS_SECRET_KEY`·`PUBLIC_TOSS_CLIENT_KEY`에 설정) | 2차 실결제 전 |
 | 4 | 찜 할인 알림(ORD-08) 데이터 근거 | 시스템에 "할인" 개념 없음 — ① CMS에 salePrice 필드 추가 + 동기화 시 할인 감지, ② 관리자 수동 캠페인 발송으로 완화 중 택일 | 2차 마케팅 발송 구현 전 |
 
+(구 미결 1 "배송 정책"은 확정으로 이동 — 아래 참조)
+
 ### 확정된 사항
+- **배송 정책 (2026-07-14 확정)**: 배송비 **전 주문 정액 3,000원** — 단일 원본 `src/data/shipping.ts`(클라이언트 표시·서버 재계산 공유). 배송 상태 단계는 스키마 그대로(PAID→SHIPPING→DELIVERED), 운송장은 관리자가 /manage에서 수동 입력(택배사+운송장 번호, 배송 시작 시 필수)
+- **구매 동선 (2026-07-14 확정)**: 제품 페이지를 자체 결제로 교체 — 네이버 스마트스토어 링크 제거, 구매하기(주문서 직행)·장바구니·찜 버튼. 결제는 토스 결제위젯 v2(`PUBLIC_TOSS_CLIENT_KEY`), customerKey는 user_id(/users/me 응답의 userId)
 - **Hono 통합 방식**: Astro catch-all(`src/pages/api/[...path].ts`)에 마운트, 앱 본체는 `src/server/`에 배치. 기존 contact·quote-download 포함 전 API를 Hono로 통합 (§1 참조)
 - **Users 테이블 제거**: public 스키마는 profiles만 사용, `auth.users`를 원본으로 FK 참조. 이메일은 profiles.user_email에 복사 (§2 참조)
 - **확정 ERD**: [roboseasy-erd.sql](roboseasy-erd.sql) — Payments 테이블·배송 스냅샷·FK/UNIQUE 보강 반영 (§2 참조)

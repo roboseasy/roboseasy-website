@@ -67,4 +67,4 @@ User ──HTTPS──▶ Netlify
 - **YouTube RSS** — 뉴스 페이지 YouTube 탭, 빌드 시 수집
 - **GitHub + Netlify OAuth** — Sveltia CMS 인증
 - **검증 파일** — `public/google*.html`, `public/naver*.html` (사이트 소유 인증 — 삭제 금지)
-- (2차 예정) **토스 페이먼츠** — 결제위젯 + 승인 API (backend.md §4)
+- **토스 페이먼츠** — 결제위젯 v2(`js.tosspayments.com`, `/checkout`) + 승인·취소 API(`src/server/lib/toss.ts`, `TOSS_SECRET_KEY`). 실결제는 가맹 계약 후 (backend.md §4)

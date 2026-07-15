@@ -106,15 +106,18 @@ import '../styles/pages/mypage.css';
         <div class="mypage__list">
           <div class="mypage__row">
             <span class="mypage__row-label">주문 내역</span>
-            <span class="mypage__badge">준비 중</span>
+            <span class="mypage__row-value" id="v-orders">불러오는 중...</span>
+            <a class="mypage__row-btn" href="/orders">이동</a>
           </div>
           <div class="mypage__row">
             <span class="mypage__row-label">찜</span>
-            <span class="mypage__badge">준비 중</span>
+            <span class="mypage__row-value" id="v-dibs">불러오는 중...</span>
+            <a class="mypage__row-btn" href="/dibs">이동</a>
           </div>
           <div class="mypage__row">
             <span class="mypage__row-label">장바구니</span>
-            <span class="mypage__badge">준비 중</span>
+            <span class="mypage__row-value" id="v-cart">불러오는 중...</span>
+            <a class="mypage__row-btn" href="/cart">이동</a>
           </div>
         </div>
       </section>
@@ -136,6 +139,9 @@ import '../styles/pages/mypage.css';
                 <option value="delivery">배송 문의</option>
                 <option value="as">AS 문의</option>
                 <option value="refund">환불·취소 문의</option>
+              </select>
+              <select id="q-order" class="mypage__select" aria-label="관련 주문 (선택)">
+                <option value="">관련 주문 없음</option>
               </select>
               <textarea id="q-message" class="mypage__textarea" placeholder="문의 내용을 입력해 주세요" aria-label="문의 내용"></textarea>
               <button type="submit" id="inquiryBtn" class="mypage__btn">문의 등록</button>
@@ -223,7 +229,9 @@ import '../styles/pages/mypage.css';
 
   /* ── 초기 로드: 내 정보 (401이면 로그인으로) ── */
   async function init() {
-    loadInquiries(); // /users/me와 병렬 로드 — 미인증이면 같이 401이고 곧 리다이렉트되므로 무해
+    // /users/me와 병렬 로드 — 미인증이면 같이 401이고 곧 리다이렉트되므로 무해
+    loadInquiries();
+    loadShoppingCounts();
     const res = await fetch('/api/v1/users/me');
     if (res.status === 401) { location.href = '/login?redirect=/mypage'; return; }
     if (!res.ok) { $('loading').textContent = '정보를 불러오지 못했습니다. 새로고침해 주세요.'; return; }
@@ -400,11 +408,59 @@ import '../styles/pages/mypage.css';
       badge.textContent = st.text;
       type.textContent = `${TYPE_LABEL[q.contactType] ?? q.contactType} 문의`;
       date.textContent = new Date(q.createdAt).toLocaleDateString('ko-KR');
+      if (q.orderId) {
+        const ord = document.createElement('span');
+        ord.textContent = `주문 ${q.orderId.slice(0, 8)}`;
+        head.appendChild(ord);
+      }
       const msg = document.createElement('p');
       msg.className = 'mypage__inquiry-msg';
       msg.textContent = q.message;
       item.append(head, msg);
       list.appendChild(item);
+    }
+  }
+
+  /* ── 쇼핑 요약 (2차) — 건수만 표시, 상세는 /orders·/dibs·/cart 전용 페이지에서.
+       주문 목록은 문의 폼의 "관련 주문" 드롭다운에도 재사용 ── */
+  async function loadShoppingCounts() {
+    const count = async (url: string, pick: (json: any) => number) => {
+      try {
+        const res = await fetch(url);
+        return res.ok ? pick(await res.json()) : null;
+      } catch {
+        return null;
+      }
+    };
+    type OrderSummary = { orderId: string; createdAt: string; items: { productName: string; quantity: number }[] };
+    const fetchOrders = async (): Promise<OrderSummary[] | null> => {
+      try {
+        const res = await fetch('/api/v1/orders');
+        return res.ok ? (await res.json()).orders : null;
+      } catch {
+        return null;
+      }
+    };
+    const [orders, dibs, cart] = await Promise.all([
+      fetchOrders(),
+      count('/api/v1/dibs', (j) => j.items.length),
+      count('/api/v1/cart_items', (j) => j.items.length),
+    ]);
+    $('v-orders').textContent = orders === null ? '—' : orders.length ? `${orders.length}건` : '주문 없음';
+    $('v-dibs').textContent = dibs === null ? '—' : dibs ? `${dibs}개` : '찜한 제품 없음';
+    $('v-cart').textContent = cart === null ? '—' : cart ? `${cart}개` : '비어 있음';
+
+    // 문의 폼 관련 주문 드롭다운 — 주문 코드(앞 8자)·날짜·품목 요약으로 식별
+    const sel = $('q-order') as HTMLSelectElement;
+    for (const o of orders ?? []) {
+      const opt = document.createElement('option');
+      opt.value = o.orderId;
+      const first = o.items[0];
+      const summary = first
+        ? `${first.productName}${o.items.length > 1 ? ` 외 ${o.items.length - 1}건` : ''}`
+        : '';
+      opt.textContent = `${new Date(o.createdAt).toLocaleDateString('ko-KR')} · ${o.orderId.slice(0, 8)} · ${summary}`;
+      sel.appendChild(opt);
     }
   }
 
@@ -415,15 +471,21 @@ import '../styles/pages/mypage.css';
     const btn = $('inquiryBtn') as HTMLButtonElement;
     btn.disabled = true;
     try {
+      const orderId = ($('q-order') as HTMLSelectElement).value;
       const res = await fetch('/api/v1/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contactType: ($('q-type') as HTMLSelectElement).value, message }),
+        body: JSON.stringify({
+          contactType: ($('q-type') as HTMLSelectElement).value,
+          message,
+          ...(orderId && { orderId }),
+        }),
       });
       const json = await res.json();
       if (!res.ok) { showMsg('inquiryMsg', 'error', json.error ?? '문의 등록에 실패했습니다.'); return; }
       showMsg('inquiryMsg', 'success', '문의가 접수되었습니다.');
       ($('q-message') as HTMLTextAreaElement).value = '';
+      ($('q-order') as HTMLSelectElement).value = '';
       loadInquiries();
     } catch {
       showMsg('inquiryMsg', 'error', '네트워크 오류가 발생했습니다.');

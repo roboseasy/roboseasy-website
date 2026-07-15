@@ -339,6 +339,7 @@ users.get('/users/me', requireAuth, async (c) => {
     return c.json({ error: '회원 정보를 불러오지 못했습니다.' }, 500);
   }
   return c.json({
+    userId: c.get('user').id, // 토스 위젯 customerKey용 (2차 결제 — 구매자 식별)
     email: data.user_email,
     name: data.user_name,
     phone: data.user_phone,

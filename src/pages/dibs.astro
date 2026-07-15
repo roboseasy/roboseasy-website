@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/dibs.css';
+---
+<BaseLayout
+  title="찜 - RoboSEasy | 로보시지"
+  description="로보시지 찜 목록"
+  path="/dibs"
+  lockTheme="light"
+  shopNav
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="dibs">
+    <h1 class="dibs__title">찜</h1>
+    <p id="dibsCount" class="dibs__count" hidden></p>
+    <div id="loading" class="dibs__loading">불러오는 중...</div>
+
+    <div id="content" hidden>
+      <div id="dibsEmpty" class="dibs__empty" hidden>
+        찜한 제품이 없습니다. <a href="/products">제품 보러 가기</a>
+      </div>
+      <ul id="dibsList" class="dibs__list"></ul>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import { products } from '../data/products';
+  import { $, won } from '../lib/dom';
+
+  const imageBySku = new Map(products.map((p) => [p.id, p.image ?? '']));
+
+  type Dib = { dibsId: string; productSku: string; productName: string; price: number; isActive: boolean };
+  let items: Dib[] = [];
+  const inCart = new Set<string>(); // 장바구니에 담긴 sku — "담기" 클릭 시 중복 안내용
+
+  function render() {
+    const list = $('dibsList');
+    list.innerHTML = '';
+    $('dibsEmpty').hidden = items.length > 0;
+    $('dibsCount').textContent = `${items.length}개 제품`;
+    $('dibsCount').hidden = items.length === 0;
+
+    for (const d of items) {
+      const li = document.createElement('li');
+      li.className = 'dibs__item';
+
+      const img = document.createElement('a');
+      img.className = 'dibs__item-img';
+      img.href = `/products/${d.productSku}`;
+      const src = imageBySku.get(d.productSku);
+      if (src) {
+        const el = document.createElement('img');
+        el.src = src;
+        el.alt = d.productName;
+        img.appendChild(el);
+      }
+
+      const info = document.createElement('div');
+      info.className = 'dibs__item-info';
+      const name = document.createElement('a');
+      name.className = 'dibs__item-name';
+      name.href = `/products/${d.productSku}`;
+      name.textContent = d.productName;
+      info.appendChild(name);
+      if (d.isActive) {
+        const price = document.createElement('p');
+        price.className = 'dibs__item-price';
+        price.textContent = won(d.price);
+        info.appendChild(price);
+      } else {
+        const badge = document.createElement('span');
+        badge.className = 'dibs__badge';
+        badge.textContent = '판매 준비 중';
+        info.appendChild(badge);
+      }
+
+      const actions = document.createElement('div');
+      actions.className = 'dibs__item-actions';
+      if (d.isActive) {
+        const cartBtn = document.createElement('button');
+        cartBtn.type = 'button';
+        cartBtn.className = 'dibs__cart-btn';
+        cartBtn.textContent = '장바구니 담기';
+        cartBtn.addEventListener('click', async () => {
+          // 이미 담긴 제품은 중복 담기 대신 안내 후 장바구니로
+          if (inCart.has(d.productSku)) {
+            if (confirm('이미 장바구니에 담겨 있는 제품입니다. 장바구니로 이동할까요?')) location.href = '/cart';
+            return;
+          }
+          cartBtn.disabled = true;
+          try {
+            const r = await fetch('/api/v1/cart_items', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ productSku: d.productSku, quantity: 1 }),
+            });
+            if (!r.ok) {
+              const json = await r.json().catch(() => null);
+              alert(json?.error ?? '장바구니에 담지 못했습니다.');
+              return;
+            }
+            inCart.add(d.productSku);
+            if (confirm('장바구니에 담았습니다. 장바구니로 이동할까요?')) location.href = '/cart';
+          } catch {
+            alert('네트워크 오류가 발생했습니다.');
+          } finally {
+            cartBtn.disabled = false;
+          }
+        });
+        actions.appendChild(cartBtn);
+      }
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'dibs__del-btn';
+      del.textContent = '삭제';
+      del.addEventListener('click', async () => {
+        const r = await fetch(`/api/v1/dibs/${d.dibsId}`, { method: 'DELETE' }).catch(() => null);
+        if (!r?.ok) { alert('삭제하지 못했습니다.'); return; }
+        items = items.filter((x) => x.dibsId !== d.dibsId);
+        render();
+      });
+      actions.appendChild(del);
+
+      li.append(img, info, actions);
+      list.appendChild(li);
+    }
+  }
+
+  (async () => {
+    // 장바구니 상태는 병렬 조회 — 실패해도 찜 목록 표시엔 지장 없음(중복 안내만 생략됨)
+    const [res, cartRes] = await Promise.all([
+      fetch('/api/v1/dibs').catch(() => null),
+      fetch('/api/v1/cart_items').catch(() => null),
+    ]);
+    if (!res) { $('loading').textContent = '찜 목록을 불러오지 못했습니다. 새로고침해 주세요.'; return; }
+    if (res.status === 401) { location.href = '/login?redirect=/dibs'; return; }
+    if (!res.ok) { $('loading').textContent = '찜 목록을 불러오지 못했습니다. 새로고침해 주세요.'; return; }
+    items = (await res.json()).items;
+    if (cartRes?.ok) {
+      for (const c of (await cartRes.json()).items) inCart.add(c.productSku);
+    }
+    $('loading').style.display = 'none';
+    ($('content') as HTMLElement).hidden = false;
+    render();
+  })();
+</script>

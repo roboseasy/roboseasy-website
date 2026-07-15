@@ -49,6 +49,11 @@ body {
     filter: brightness(0) saturate(100%) invert(36%) sepia(82%) saturate(750%) hue-rotate(224deg) brightness(101%) contrast(100%);
 }
 
+/* 라이트 테마 — 로고 검정 단색 (다크는 배경 대비를 위해 바이올렛 유지) */
+:root[data-theme='light'] .header__logo-image {
+    filter: brightness(0);
+}
+
 .header__nav-close {
     display: none;
 }
@@ -121,29 +126,6 @@ body {
     color: var(--color-bright-gray);
     background-color: var(--color-ash-border);
 }
-
-/* 준비 중 안내 토스트 (장바구니·찜 — 2차 구현 전) */
-.header__toast {
-    position: fixed;
-    bottom: 32px;
-    left: 50%;
-    transform: translate(-50%, 8px);
-    padding: 10px 18px;
-    background: rgba(15, 23, 42, 0.88);
-    color: #fff;
-    font-size: 0.85rem;
-    border-radius: 8px;
-    z-index: 1200;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.header__toast.is-visible {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
-
 
 /* ─── Hamburger toggle ─── */
 .header__menu-toggle {

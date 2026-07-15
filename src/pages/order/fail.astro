@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/pages/order-result.css';
+---
+<BaseLayout
+  title="결제 실패 - RoboSEasy | 로보시지"
+  description="로보시지 결제 실패"
+  path="/order/fail"
+  lockTheme="light"
+  shopNav
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="order-result">
+    <div class="order-result__box">
+      <h1 class="order-result__title">결제가 완료되지 않았습니다</h1>
+      <p id="failMsg" class="order-result__desc">결제가 취소되었거나 실패했습니다.</p>
+      <div class="order-result__actions">
+        <a class="order-result__btn" href="/cart">장바구니로 돌아가기</a>
+        <a class="order-result__btn order-result__btn--ghost" href="/products">계속 쇼핑하기</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const message = params.get('message');
+  if (message) {
+    document.getElementById('failMsg')!.textContent = message;
+  }
+
+  // 남은 PENDING 주문 즉시 정리 (best-effort — 실패해도 24h 배치가 처리, backend.md §4).
+  // mode=abandon: 결제 시도가 없던 주문만 삭제하고, 시도가 있던 주문은 재결제를 위해 보존한다.
+  const orderId = params.get('orderId');
+  if (orderId) {
+    fetch(`/api/v1/orders/${orderId}/cancel?mode=abandon`, { method: 'POST' }).catch(() => {});
+  }
+</script>

@@ -111,7 +111,7 @@ import '../styles/pages/manage.css';
         <div class="adm__table-wrap">
           <table class="adm__table">
             <thead>
-              <tr><th>주문일</th><th>주문번호</th><th>금액</th><th>수령인</th><th>배송지</th><th>상태</th></tr>
+              <tr><th>주문일</th><th>주문번호</th><th>금액</th><th>수령인</th><th>배송지</th><th>상태</th><th>배송 관리</th></tr>
             </thead>
             <tbody id="ordersBody"></tbody>
           </table>
@@ -123,7 +123,8 @@ import '../styles/pages/manage.css';
 </BaseLayout>
 
 <script>
-  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  import { $ } from '../lib/dom';
+  import { ORDER_STATUS_LABEL } from '../data/orderStatus';
 
   /* ── 권한 확인 ── */
   async function guard() {
@@ -369,10 +370,7 @@ import '../styles/pages/manage.css';
   $('us-prev').addEventListener('click', () => { usPage--; loadUsers(); });
   $('us-next').addEventListener('click', () => { usPage++; loadUsers(); });
 
-  /* ── 주문 (1차: 빈 목록) ── */
-  const ORDER_STATUS: Record<string, string> = {
-    PENDING: '결제 대기', PAID: '결제 완료', SHIPPING: '배송 중', DELIVERED: '배송 완료', CANCELLED: '취소됨',
-  };
+  /* ── 주문 ── */
   async function loadOrders() {
     const res = await fetch('/api/v1/admin/orders');
     if (!res.ok) return;
@@ -388,11 +386,71 @@ import '../styles/pages/manage.css';
         td(o.orderId.slice(0, 8), 'adm__nowrap'),
         td(Number(o.totalPrice).toLocaleString('ko-KR') + '원', 'adm__nowrap'),
         td(o.receiverName, 'adm__nowrap'),
-        td(o.shippingAddress),
-        td(ORDER_STATUS[o.status] ?? o.status, 'adm__nowrap'),
+        td([o.shippingPostcode && `(${o.shippingPostcode})`, o.shippingAddress, o.shippingAddressDetail].filter(Boolean).join(' ')),
+        td(ORDER_STATUS_LABEL[o.status] ?? o.status, 'adm__nowrap'),
+        deliveryCell(o),
       );
       body.appendChild(tr);
     }
+  }
+
+  /* 배송 관리 셀 — PAID: 택배사·운송장 입력 + 배송 시작 / SHIPPING: 배송 완료 (전이 규칙은 서버 검증) */
+  function deliveryCell(o: { orderId: string; status: string; courier: string | null; trackingNumber: string | null }) {
+    const cell = document.createElement('td');
+    cell.className = 'adm__nowrap';
+
+    const patch = async (payload: object, btn: HTMLButtonElement) => {
+      btn.disabled = true;
+      try {
+        const res = await fetch(`/api/v1/admin/orders/${o.orderId}/delivery`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const json = await res.json().catch(() => null);
+        if (!res.ok) { alert(json?.error ?? '변경에 실패했습니다.'); btn.disabled = false; return; }
+        await loadOrders(); // 성공 시 행이 새로 그려져 이 버튼은 교체됨
+        if (btn.isConnected) btn.disabled = false; // 재조회가 실패해 재렌더 안 된 경우만 복구
+      } catch {
+        alert('네트워크 오류가 발생했습니다.');
+        btn.disabled = false;
+      }
+    };
+
+    if (o.status === 'PAID') {
+      const courier = document.createElement('input');
+      courier.className = 'adm__delivery-input';
+      courier.placeholder = '택배사';
+      courier.value = o.courier ?? '';
+      const tracking = document.createElement('input');
+      tracking.className = 'adm__delivery-input';
+      tracking.placeholder = '운송장 번호';
+      tracking.value = o.trackingNumber ?? '';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'adm__delivery-btn';
+      btn.textContent = '배송 시작';
+      btn.addEventListener('click', () => {
+        if (!courier.value.trim() || !tracking.value.trim()) { alert('택배사와 운송장 번호를 입력해 주세요.'); return; }
+        patch({ status: 'SHIPPING', courier: courier.value.trim(), trackingNumber: tracking.value.trim() }, btn);
+      });
+      cell.append(courier, tracking, btn);
+    } else if (o.status === 'SHIPPING') {
+      const info = document.createElement('span');
+      info.className = 'adm__delivery-info';
+      info.textContent = `${o.courier ?? ''} ${o.trackingNumber ?? ''}`.trim();
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'adm__delivery-btn';
+      btn.textContent = '배송 완료';
+      btn.addEventListener('click', () => patch({ status: 'DELIVERED' }, btn));
+      cell.append(info, btn);
+    } else if (o.trackingNumber) {
+      cell.textContent = `${o.courier ?? ''} ${o.trackingNumber}`.trim();
+    } else {
+      cell.textContent = '—';
+    }
+    return cell;
   }
 
   /* ── 로그아웃 ── */

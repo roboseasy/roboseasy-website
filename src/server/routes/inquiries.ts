@@ -5,6 +5,7 @@ import { getEnv } from '../lib/env';
 import { getServiceClient } from '../lib/supabase';
 import { requireAuth, type AuthEnv } from '../middleware/auth';
 import { rateLimit, consumeEmailBudget } from '../middleware/rateLimit';
+import { UUID_RE } from '../lib/validation';
 
 // B2C 개인 문의 (CON-06·07) — 로그인 전용. DB(contacts)가 기록 원본, 메일은 운영 알림.
 // 이름·연락처는 입력받지 않고 세션의 profiles에서 채운다 (backend.md §3).
@@ -30,7 +31,7 @@ inquiries.post(
   rateLimit({ name: 'inquiry', capacity: 5, refillPerSec: 1 / 300,
     keyFn: (c) => (c.get('user') as { id?: string } | undefined)?.id ?? null }),
   async (c) => {
-  let body: { contactType?: string; message?: string; productSku?: string };
+  let body: { contactType?: string; message?: string; productSku?: string; orderId?: string };
   try {
     body = await c.req.json();
   } catch {
@@ -42,6 +43,20 @@ inquiries.post(
   }
   if (!body.message?.trim()) {
     return c.json({ error: '문의 내용을 입력해 주세요.' }, 400);
+  }
+
+  // 주문 연계(2차 — 배송·환불 문의용, 선택): 본인 주문만 연결 가능
+  const orderId = body.orderId?.trim() || null;
+  if (orderId) {
+    if (!UUID_RE.test(orderId)) return c.json({ error: '존재하지 않는 주문입니다.' }, 400);
+    const { data: order } = await c.get('db')
+      .from('orders')
+      .select('order_id, user_id')
+      .eq('order_id', orderId)
+      .maybeSingle();
+    if (!order || order.user_id !== c.get('user').id) {
+      return c.json({ error: '존재하지 않는 주문입니다.' }, 400);
+    }
   }
 
   // 이름·연락처는 profiles에서 (유저 토큰 — RLS 본인 행)
@@ -66,6 +81,7 @@ inquiries.post(
       channel: 'b2c',
       contact_type: body.contactType,
       user_id: uid,
+      order_id: orderId,
       product_sku: body.productSku?.trim() || null,
       name: profile.user_name,
       email: profile.user_email,
@@ -118,7 +134,7 @@ inquiries.post(
 inquiries.get('/inquiries', async (c) => {
   const { data, error } = await c.get('db')
     .from('contacts')
-    .select('contact_id, contact_type, product_sku, message, status, created_at')
+    .select('contact_id, contact_type, product_sku, order_id, message, status, created_at')
     .order('created_at', { ascending: false })
     .limit(50);
   if (error) {
@@ -130,6 +146,7 @@ inquiries.get('/inquiries', async (c) => {
       inquiryId: r.contact_id,
       contactType: r.contact_type,
       productSku: r.product_sku,
+      orderId: r.order_id,
       message: r.message,
       status: r.status,
       createdAt: r.created_at,
