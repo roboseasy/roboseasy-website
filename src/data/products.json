@@ -39,11 +39,21 @@
       "comingSoon": true
     },
     {
-      "id": "sts3215-motor",
-      "name": "STS3215 스마트 서보 모터",
+      "id": "test-product",
+      "name": "테스트 제품",
       "category": "etc",
-      "price": 23000,
-      "summary": "STS3215 스마트 시리얼 버스 서보 모터. SO-ARM·LeKiwi 호환."
+      "price": 100,
+      "summary": "",
+      "image": "",
+      "gallery": [],
+      "detailImages": [],
+      "specImages": [],
+      "naverUrl": "",
+      "productNumber": "0001",
+      "brand": "로보시지",
+      "origin": "국산",
+      "representative": false,
+      "comingSoon": false
     }
   ]
 }

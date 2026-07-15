@@ -21,6 +21,11 @@ import '../styles/pages/dibs.css';
         찜한 제품이 없습니다. <a href="/products">제품 보러 가기</a>
       </div>
       <ul id="dibsList" class="dibs__list"></ul>
+      <div id="dibsPager" class="dibs__pager" hidden>
+        <button type="button" id="dp-prev">이전</button>
+        <span id="dp-info" class="dibs__pager-info"></span>
+        <button type="button" id="dp-next">다음</button>
+      </div>
     </div>
   </main>
 </BaseLayout>
@@ -34,6 +39,8 @@ import '../styles/pages/dibs.css';
   type Dib = { dibsId: string; productSku: string; productName: string; price: number; isActive: boolean };
   let items: Dib[] = [];
   const inCart = new Set<string>(); // 장바구니에 담긴 sku — "담기" 클릭 시 중복 안내용
+  const PAGE_SIZE = 20; // 클라이언트 페이지네이션
+  let listPage = 1;
 
   function render() {
     const list = $('dibsList');
@@ -42,7 +49,14 @@ import '../styles/pages/dibs.css';
     $('dibsCount').textContent = `${items.length}개 제품`;
     $('dibsCount').hidden = items.length === 0;
 
-    for (const d of items) {
+    const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+    if (listPage > totalPages) listPage = totalPages;
+    $('dibsPager').hidden = items.length <= PAGE_SIZE;
+    $('dp-info').textContent = `${listPage} / ${totalPages}`;
+    ($('dp-prev') as HTMLButtonElement).disabled = listPage <= 1;
+    ($('dp-next') as HTMLButtonElement).disabled = listPage >= totalPages;
+
+    for (const d of items.slice((listPage - 1) * PAGE_SIZE, listPage * PAGE_SIZE)) {
       const li = document.createElement('li');
       li.className = 'dibs__item';
 
@@ -127,6 +141,9 @@ import '../styles/pages/dibs.css';
       list.appendChild(li);
     }
   }
+
+  $('dp-prev').addEventListener('click', () => { listPage--; render(); });
+  $('dp-next').addEventListener('click', () => { listPage++; render(); });
 
   (async () => {
     // 장바구니 상태는 병렬 조회 — 실패해도 찜 목록 표시엔 지장 없음(중복 안내만 생략됨)

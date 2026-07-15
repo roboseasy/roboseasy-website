@@ -118,6 +118,38 @@
 .dibs__cart-btn:disabled,
 .dibs__del-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ─── 페이지네이션 (클라이언트 20행) ─── */
+.dibs__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-16);
+  margin-top: var(--spacing-20);
+}
+
+.dibs__pager button {
+  padding: 7px 16px;
+  font-size: var(--text-small, 0.82rem);
+  border: 1px solid var(--color-ash-border);
+  border-radius: var(--radius-buttons);
+  background: none;
+  color: var(--color-medium-gray);
+  cursor: pointer;
+}
+
+.dibs__pager button:hover:not(:disabled) {
+  color: var(--color-ink, #0f172a);
+  border-color: var(--color-fog, #94a3b8);
+}
+
+.dibs__pager button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.dibs__pager-info {
+  font-size: var(--text-small, 0.85rem);
+  color: var(--color-medium-gray);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 560px) {
   .dibs__item {
     grid-template-columns: 56px 1fr;

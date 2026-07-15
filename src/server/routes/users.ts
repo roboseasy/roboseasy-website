@@ -114,7 +114,7 @@ users.post(
   '/users/login',
   rateLimit({ name: 'login', capacity: 10, refillPerSec: 1 / 300, keyFn: clientIp }),
   async (c) => {
-  let body: { email?: string; password?: string };
+  let body: { email?: string; password?: string; remember?: boolean };
   try {
     body = await c.req.json();
   } catch {
@@ -135,7 +135,7 @@ users.post(
     return c.json({ error: authMessage(error?.code, '로그인에 실패했습니다.') }, 401);
   }
 
-  setSessionCookies(c, data.session);
+  setSessionCookies(c, data.session, body.remember === true); // 미체크·미전송 = 세션 전용(공용 PC 기본)
 
   // role 조회 (로그인 시퀀스 — backend.md §4). 실패해도 로그인 자체는 유효하므로 기본값 user
   const db = createUserClient(data.session.access_token);

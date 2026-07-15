@@ -59,20 +59,40 @@
     align-items: start;
 }
 
-/* 좌측 목록 */
+/* 좌측 목록 — 카드 높이 고정(10행 기준): 행 수가 바뀌어도 레이아웃이 출렁이지 않도록 */
 .adm__list-card {
     background: var(--color-surface);
     border: 1px solid var(--color-ash-border);
     border-radius: 12px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 760px;
 }
+.adm__list-scroll { flex: 1; overflow-y: auto; }
 .adm__filters {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     padding: 12px 12px 10px;
     border-bottom: 1px solid var(--color-surface-2);
 }
 .adm__filters .adm__select { flex: 1; min-width: 0; }
+.adm__filters .adm__search { flex: 1 1 100%; }
+
+/* 검색 인풋 — 셀렉트와 동일 톤 */
+.adm__search {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    color: var(--color-bright-gray);
+    background: var(--color-surface);
+    border: 1px solid var(--color-graphite);
+    border-radius: 7px;
+}
+.adm__search::placeholder { color: var(--color-muted-gray); }
+.adm__toolbar { margin-bottom: 10px; }
+.adm__toolbar .adm__search { width: 320px; max-width: 100%; }
 .adm__select {
     padding: 6px 9px;
     font-size: 0.8rem;
@@ -148,14 +168,25 @@
 .adm__pager button:disabled { opacity: 0.4; cursor: not-allowed; }
 .adm__pager-total { margin-left: auto; }
 
-/* 우측 상세 */
+/* 우측 상세 — 목록 카드와 같은 고정 높이. 본문(msg)만 내부 스크롤,
+   처리 컨트롤(adm__detail-actions)은 카드 하단 고정 */
 .adm__detail {
     background: var(--color-surface);
     border: 1px solid var(--color-ash-border);
     border-radius: 12px;
     padding: 20px 24px;
-    min-height: 280px;
+    height: 760px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
+.adm__detail-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+.adm__detail-body[hidden] { display: none; }
 .adm__detail-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .adm__detail-title { font-size: 1.05rem; font-weight: var(--fw-bold); color: var(--color-bright-gray); }
 .adm__detail-date { margin-left: auto; font-size: 0.78rem; color: var(--color-muted-gray); }
@@ -178,12 +209,16 @@
     white-space: pre-wrap;
     word-break: break-word;
     margin: 0 0 18px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
 }
 .adm__detail-actions {
     display: flex;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
+    margin-top: auto; /* 카드 하단 고정 */
     padding-top: 16px;
     border-top: 1px solid var(--color-surface-2);
 }
@@ -286,4 +321,8 @@
 @media (max-width: 900px) {
     .adm__split { grid-template-columns: 1fr; }
     .adm__logout { margin-left: 0; }
+    /* 단일 컬럼에서는 고정 높이 해제 — 세로로 쌓이므로 내용만큼만 차지 */
+    .adm__list-card { height: auto; }
+    .adm__list-scroll { max-height: 480px; }
+    .adm__detail { height: auto; max-height: none; overflow-y: visible; }
 }

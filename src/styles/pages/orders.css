@@ -340,6 +340,38 @@
 .orders__cancel:hover { color: #dc2626; border-color: #dc2626; }
 .orders__cancel:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ─── 페이지네이션 (클라이언트 20행) ─── */
+.orders__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-16);
+  margin-top: var(--spacing-20);
+}
+
+.orders__pager button {
+  padding: 7px 16px;
+  font-size: var(--text-small, 0.82rem);
+  border: 1px solid var(--color-ash-border);
+  border-radius: var(--radius-buttons);
+  background: none;
+  color: var(--color-medium-gray);
+  cursor: pointer;
+}
+
+.orders__pager button:hover:not(:disabled) {
+  color: var(--color-ink, #0f172a);
+  border-color: var(--color-fog, #94a3b8);
+}
+
+.orders__pager button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.orders__pager-info {
+  font-size: var(--text-small, 0.85rem);
+  color: var(--color-medium-gray);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ─── 모바일 ─── */
 @media (max-width: 640px) {
   .orders__row {

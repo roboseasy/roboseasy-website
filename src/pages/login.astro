@@ -34,6 +34,11 @@ import '../styles/pages/auth.css';
           <input id="f-password" class="auth__input" type="password" autocomplete="current-password" placeholder="비밀번호" required />
         </div>
 
+        <label class="auth__remember">
+          <input type="checkbox" id="f-remember" class="auth__checkbox" />
+          <span>로그인 유지</span>
+        </label>
+
         <button type="submit" id="loginBtn" class="auth__submit">로그인</button>
       </form>
 
@@ -92,6 +97,22 @@ import '../styles/pages/auth.css';
   }
   .auth__link:hover { text-decoration: underline; }
 
+  .auth__remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--color-medium-gray);
+    cursor: pointer;
+    user-select: none;
+  }
+  .auth__checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-amethyst);
+    cursor: pointer;
+  }
+
   .auth__legal {
     display: flex;
     align-items: center;
@@ -138,6 +159,7 @@ import '../styles/pages/auth.css';
     e.preventDefault();
     const email = (document.getElementById('f-email') as HTMLInputElement).value.trim();
     const password = (document.getElementById('f-password') as HTMLInputElement).value;
+    const remember = (document.getElementById('f-remember') as HTMLInputElement).checked;
     if (!email || !password) { showMsg('error', '이메일과 비밀번호를 입력해 주세요.'); return; }
 
     btn.disabled = true; btn.textContent = '로그인 중...';
@@ -145,7 +167,7 @@ import '../styles/pages/auth.css';
       const res = await fetch('/api/v1/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, remember }),
       });
       const json = await res.json();
       if (!res.ok) { showMsg('error', json.error ?? '로그인에 실패했습니다.'); return; }

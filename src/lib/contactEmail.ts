@@ -31,6 +31,54 @@ export const esc = (v: unknown): string =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
+/* ── B2C 개인 문의 알림 메일 — B2B(buildEmailHtml)와 동일 양식, 견적번호·소속만 제외 ── */
+export interface B2cEmailPayload {
+  typeLabel: string;
+  name: string;
+  email: string;
+  phone: string;
+  /** 관련 주문 (선택) — 표시용 8자리로 잘라 출력 */
+  orderId?: string | null;
+  productSku?: string | null;
+  message: string;
+  contactId: string;
+}
+
+export function buildB2cEmailHtml(data: B2cEmailPayload): string {
+  const td = (label: string, value: string) => `
+    <tr>
+      <td style="padding:10px 14px;width:110px;font-weight:600;color:#1a0a3d;background:#f5f4fa;border-bottom:1px solid #e8e5f5;white-space:nowrap;">${label}</td>
+      <td style="padding:10px 14px;color:#333;border-bottom:1px solid #e8e5f5;">${value}</td>
+    </tr>`;
+
+  const customerRows = [
+    td('성함', esc(data.name)),
+    td('이메일', `<a href="mailto:${esc(data.email)}" style="color:#4472c4;">${esc(data.email)}</a>`),
+    td('연락처', esc(data.phone)),
+    data.orderId ? td('관련 주문', esc(data.orderId.slice(0, 8))) : '',
+    data.productSku ? td('제품', esc(data.productSku)) : '',
+  ].filter(Boolean).join('');
+
+  return `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"/></head>
+<body style="margin:0;padding:0;background:#f4f4f7;font-family:'Malgun Gothic','Apple SD Gothic Neo',system-ui,sans-serif;">
+  <div style="max-width:640px;margin:24px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    <div style="padding:28px 32px 20px;">
+      <h1 style="font-size:22px;font-weight:700;color:#1a0a3d;margin:0;">[로보시지 개인문의] ${esc(data.typeLabel)}</h1>
+    </div>
+    <hr style="border:none;border-top:1px solid #e8e5f5;margin:0;" />
+    <div style="padding:20px 32px 24px;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;border:1px solid #e8e5f5;">${customerRows}</table>
+    </div>
+    <hr style="border:none;border-top:1px solid #e8e5f5;margin:0;" />
+    <div style="padding:20px 32px 28px;">
+      <h2 style="font-size:15px;font-weight:700;color:#1a0a3d;margin:0 0 10px 0;">문의 내용</h2>
+      <div style="font-size:14px;color:#333;line-height:1.8;white-space:pre-wrap;background:#f9f9fb;border-radius:6px;padding:14px 16px;">${esc(data.message)}</div>
+      <p style="font-size:12px;color:#888;margin:12px 0 0 0;">처리·상태 변경은 관리자 문의 관리에서. (문의 ID: ${esc(data.contactId)})</p>
+    </div>
+  </div>
+</body></html>`;
+}
+
 // quote: priceQuoteItems가 서버에서 재계산한 견적 (purchase 외 유형은 null)
 export function buildEmailHtml(data: ContactPayload, quote: PricedQuote | null): string {
   const typeLabel = TYPE_LABEL[data.type] ?? esc(data.type);

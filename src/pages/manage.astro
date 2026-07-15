@@ -29,6 +29,7 @@ import '../styles/pages/manage.css';
         <div class="adm__split">
           <div class="adm__list-card">
             <div class="adm__filters">
+              <input id="ct-search" class="adm__search" type="search" placeholder="이름·이메일 검색" aria-label="문의 검색" />
               <select id="f-status" class="adm__select">
                 <option value="">상태 전체</option>
                 <option value="RECEIVED">접수됨</option>
@@ -46,7 +47,7 @@ import '../styles/pages/manage.css';
                 <option value="false">일반만</option>
               </select>
             </div>
-            <div id="contactList"></div>
+            <div id="contactList" class="adm__list-scroll"></div>
             <div id="contactsEmpty" class="adm__empty" hidden>문의가 없습니다.</div>
             <div class="adm__pager">
               <button type="button" id="ct-prev">이전</button>
@@ -58,7 +59,7 @@ import '../styles/pages/manage.css';
 
           <div class="adm__detail">
             <p id="detailPlaceholder" class="adm__placeholder">문의를 선택하세요.</p>
-            <div id="detailBody" hidden>
+            <div id="detailBody" class="adm__detail-body" hidden>
               <div class="adm__detail-head">
                 <h2 class="adm__detail-title" id="d-title"></h2>
                 <span class="adm__badge" id="d-channel"></span>
@@ -89,6 +90,9 @@ import '../styles/pages/manage.css';
 
       <!-- 유저 -->
       <section class="adm__panel" data-panel="users">
+        <div class="adm__toolbar">
+          <input id="us-search" class="adm__search" type="search" placeholder="이름·이메일 검색" aria-label="유저 검색" />
+        </div>
         <div class="adm__table-wrap">
           <table class="adm__table">
             <thead>
@@ -108,14 +112,23 @@ import '../styles/pages/manage.css';
 
       <!-- 주문 -->
       <section class="adm__panel" data-panel="orders">
+        <div class="adm__toolbar">
+          <input id="or-search" class="adm__search" type="search" placeholder="수령인·주문번호·주문자 이메일 검색" aria-label="주문 검색" />
+        </div>
         <div class="adm__table-wrap">
           <table class="adm__table">
             <thead>
-              <tr><th>주문일</th><th>주문번호</th><th>금액</th><th>수령인</th><th>배송지</th><th>상태</th><th>배송 관리</th></tr>
+              <tr><th>주문일</th><th>주문번호</th><th>금액</th><th>수령인</th><th>전화번호</th><th>배송지</th><th>상태</th><th>배송 관리</th></tr>
             </thead>
             <tbody id="ordersBody"></tbody>
           </table>
-          <div id="ordersEmpty" class="adm__empty" hidden>주문이 없습니다. (판매 기능은 2차 오픈)</div>
+          <div id="ordersEmpty" class="adm__empty" hidden>주문이 없습니다.</div>
+          <div class="adm__pager adm__table-pager">
+            <button type="button" id="or-prev">이전</button>
+            <span id="or-page">1</span>
+            <button type="button" id="or-next">다음</button>
+            <span class="adm__pager-total" id="or-total"></span>
+          </div>
         </div>
       </section>
     </div>
@@ -152,6 +165,12 @@ import '../styles/pages/manage.css';
     el.textContent = text;
     return el;
   };
+  // 검색 입력 디바운스 — 타이핑 멈춘 뒤 한 번만 조회
+  const debounce = (fn: () => void, ms = 300) => {
+    let t: ReturnType<typeof setTimeout>;
+    return () => { clearTimeout(t); t = setTimeout(fn, ms); };
+  };
+  const searchQuery = (id: string) => ($(id) as HTMLInputElement).value.trim();
 
   /* ── 문의 관리 — 목록 + 상세 ── */
   const CT_TYPE: Record<string, string> = {
@@ -255,17 +274,19 @@ import '../styles/pages/manage.css';
     if (channel) params.set('channel', channel);
     if (status) params.set('status', status);
     if (dispute) params.set('is_dispute', dispute);
+    const q = searchQuery('ct-search');
+    if (q) params.set('q', q);
 
     const res = await fetch(`/api/v1/admin/contacts?${params}`);
     if (!res.ok) return;
-    const { contacts: rows, total } = await res.json();
+    const { contacts: rows, total, pageSize } = await res.json();
     contacts = rows;
 
     $('seg-ct').textContent = String(total);
     $('ct-total').textContent = `총 ${total}건`;
     $('ct-page').textContent = String(ctPage);
     ($('ct-prev') as HTMLButtonElement).disabled = ctPage <= 1;
-    ($('ct-next') as HTMLButtonElement).disabled = ctPage * 50 >= total;
+    ($('ct-next') as HTMLButtonElement).disabled = ctPage * (pageSize ?? 10) >= total;
 
     // 선택 유지 — 현재 페이지에 없으면 첫 항목 선택
     if (!contacts.some((q) => q.contactId === selectedId)) {
@@ -335,15 +356,19 @@ import '../styles/pages/manage.css';
   ['f-channel', 'f-status', 'f-dispute'].forEach((id) =>
     $(id).addEventListener('change', () => { ctPage = 1; loadContacts(); })
   );
+  $('ct-search').addEventListener('input', debounce(() => { ctPage = 1; loadContacts(); }));
   $('ct-prev').addEventListener('click', () => { ctPage--; loadContacts(); });
   $('ct-next').addEventListener('click', () => { ctPage++; loadContacts(); });
 
   /* ── 유저 ── */
   let usPage = 1;
   async function loadUsers() {
-    const res = await fetch(`/api/v1/admin/users?page=${usPage}`);
+    const params = new URLSearchParams({ page: String(usPage) });
+    const q = searchQuery('us-search');
+    if (q) params.set('q', q);
+    const res = await fetch(`/api/v1/admin/users?${params}`);
     if (!res.ok) return;
-    const { users, total } = await res.json();
+    const { users, total, pageSize } = await res.json();
     const body = $('usersBody');
     body.innerHTML = '';
     $('usersEmpty').hidden = users.length > 0;
@@ -351,7 +376,7 @@ import '../styles/pages/manage.css';
     $('us-total').textContent = `총 ${total}명`;
     $('us-page').textContent = String(usPage);
     ($('us-prev') as HTMLButtonElement).disabled = usPage <= 1;
-    ($('us-next') as HTMLButtonElement).disabled = usPage * 50 >= total;
+    ($('us-next') as HTMLButtonElement).disabled = usPage * (pageSize ?? 30) >= total;
 
     for (const u of users) {
       const tr = document.createElement('tr');
@@ -367,18 +392,27 @@ import '../styles/pages/manage.css';
       body.appendChild(tr);
     }
   }
+  $('us-search').addEventListener('input', debounce(() => { usPage = 1; loadUsers(); }));
   $('us-prev').addEventListener('click', () => { usPage--; loadUsers(); });
   $('us-next').addEventListener('click', () => { usPage++; loadUsers(); });
 
   /* ── 주문 ── */
+  let orPage = 1;
   async function loadOrders() {
-    const res = await fetch('/api/v1/admin/orders');
+    const params = new URLSearchParams({ page: String(orPage) });
+    const q = searchQuery('or-search');
+    if (q) params.set('q', q);
+    const res = await fetch(`/api/v1/admin/orders?${params}`);
     if (!res.ok) return;
-    const { orders } = await res.json();
+    const { orders, total, pageSize } = await res.json();
     const body = $('ordersBody');
     body.innerHTML = '';
     $('ordersEmpty').hidden = orders.length > 0;
-    $('seg-or').textContent = String(orders.length);
+    $('seg-or').textContent = String(total);
+    $('or-total').textContent = `총 ${total}건`;
+    $('or-page').textContent = String(orPage);
+    ($('or-prev') as HTMLButtonElement).disabled = orPage <= 1;
+    ($('or-next') as HTMLButtonElement).disabled = orPage * (pageSize ?? 30) >= total;
     for (const o of orders) {
       const tr = document.createElement('tr');
       tr.append(
@@ -386,6 +420,7 @@ import '../styles/pages/manage.css';
         td(o.orderId.slice(0, 8), 'adm__nowrap'),
         td(Number(o.totalPrice).toLocaleString('ko-KR') + '원', 'adm__nowrap'),
         td(o.receiverName, 'adm__nowrap'),
+        td(o.receiverPhone ?? '-', 'adm__nowrap'),
         td([o.shippingPostcode && `(${o.shippingPostcode})`, o.shippingAddress, o.shippingAddressDetail].filter(Boolean).join(' ')),
         td(ORDER_STATUS_LABEL[o.status] ?? o.status, 'adm__nowrap'),
         deliveryCell(o),
@@ -393,6 +428,9 @@ import '../styles/pages/manage.css';
       body.appendChild(tr);
     }
   }
+  $('or-search').addEventListener('input', debounce(() => { orPage = 1; loadOrders(); }));
+  $('or-prev').addEventListener('click', () => { orPage--; loadOrders(); });
+  $('or-next').addEventListener('click', () => { orPage++; loadOrders(); });
 
   /* 배송 관리 셀 — PAID: 택배사·운송장 입력 + 배송 시작 / SHIPPING: 배송 완료 (전이 규칙은 서버 검증) */
   function deliveryCell(o: { orderId: string; status: string; courier: string | null; trackingNumber: string | null }) {
@@ -418,10 +456,7 @@ import '../styles/pages/manage.css';
     };
 
     if (o.status === 'PAID') {
-      const courier = document.createElement('input');
-      courier.className = 'adm__delivery-input';
-      courier.placeholder = '택배사';
-      courier.value = o.courier ?? '';
+      // 로젠택배 단독 계약 — 운송장 번호만 입력, 택배사는 서버가 자동 세팅
       const tracking = document.createElement('input');
       tracking.className = 'adm__delivery-input';
       tracking.placeholder = '운송장 번호';
@@ -431,10 +466,10 @@ import '../styles/pages/manage.css';
       btn.className = 'adm__delivery-btn';
       btn.textContent = '배송 시작';
       btn.addEventListener('click', () => {
-        if (!courier.value.trim() || !tracking.value.trim()) { alert('택배사와 운송장 번호를 입력해 주세요.'); return; }
-        patch({ status: 'SHIPPING', courier: courier.value.trim(), trackingNumber: tracking.value.trim() }, btn);
+        if (!tracking.value.trim()) { alert('운송장 번호를 입력해 주세요.'); return; }
+        patch({ status: 'SHIPPING', trackingNumber: tracking.value.trim() }, btn);
       });
-      cell.append(courier, tracking, btn);
+      cell.append(tracking, btn);
     } else if (o.status === 'SHIPPING') {
       const info = document.createElement('span');
       info.className = 'adm__delivery-info';

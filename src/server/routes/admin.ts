@@ -8,10 +8,28 @@ export const admin = new Hono<AuthEnv>();
 
 admin.use('*', requireAuth, requireAdmin);
 
-const PAGE_SIZE = 50;
-const pageOf = (c: { req: { query: (k: string) => string | undefined } }) => {
+// 페이지 크기 — 문의는 목록+상세 분할 뷰라 10행, 테이블 뷰(유저·주문)는 30행
+const pageOf = (c: { req: { query: (k: string) => string | undefined } }, size: number) => {
   const page = Math.max(1, parseInt(c.req.query('page') ?? '1', 10) || 1);
-  return { page, from: (page - 1) * PAGE_SIZE, to: page * PAGE_SIZE - 1 };
+  return { page, from: (page - 1) * size, to: page * size - 1 };
+};
+
+/* ── 검색(q) 유틸 ── */
+// ilike 패턴 — 와일드카드(%·_)와 or() 구분자(콤마·괄호)는 리터럴 검색 의미가 없어 제거
+const likePattern = (q: string) => `%${q.replace(/[%_,()]/g, '')}%`;
+// 이름·이메일 검색 or() 식 (profiles·contacts 공용 — 컬럼명만 다름)
+const personSearchOr = (q: string, cols: { name: string; email: string }) => {
+  const pat = likePattern(q);
+  return `${cols.name}.ilike.${pat},${cols.email}.ilike.${pat}`;
+};
+// 주문번호 프리픽스(표시용 8자리 등) → uuid 범위. uuid 대소 비교가 16바이트 순서라 hex 프리픽스와 정렬이 일치
+const uuidPrefixRange = (prefix: string) => {
+  const hex = prefix.toLowerCase();
+  const fmt = (fill: string) => {
+    const s = hex + fill.repeat(32 - hex.length);
+    return `${s.slice(0, 8)}-${s.slice(8, 12)}-${s.slice(12, 16)}-${s.slice(16, 20)}-${s.slice(20)}`;
+  };
+  return { lo: fmt('0'), hi: fmt('f') };
 };
 
 const userDto = (r: Record<string, unknown>) => ({
@@ -68,21 +86,25 @@ const contactDto = (r: Record<string, unknown>) => ({
   updatedAt: r.updated_at,
 });
 
-/* ── 유저 조회 (ADM-04·05) ── */
+/* ── 유저 조회 (ADM-04·05) — q: 이름·이메일 검색 ── */
+const USERS_PAGE_SIZE = 30;
 admin.get('/users', async (c) => {
-  const { page, from, to } = pageOf(c);
+  const { page, from, to } = pageOf(c, USERS_PAGE_SIZE);
   // 탈퇴(익명화) 회원은 논리적 분리 보관 대상 — 활성 회원 목록에서 제외
-  const { data, count, error } = await c.get('db')
+  let query = c.get('db')
     .from('profiles')
     .select('user_id, user_email, user_name, user_phone, user_postcode, user_address, user_address_detail, role, marketing_consent, created_at', { count: 'exact' })
-    .is('withdrawn_at', null)
-    .order('created_at', { ascending: false })
-    .range(from, to);
+    .is('withdrawn_at', null);
+  const q = c.req.query('q')?.trim();
+  if (q) {
+    query = query.or(personSearchOr(q, { name: 'user_name', email: 'user_email' }));
+  }
+  const { data, count, error } = await query.order('created_at', { ascending: false }).range(from, to);
   if (error) {
     console.error('admin users 조회 오류:', error);
     return c.json({ error: '유저 목록을 불러오지 못했습니다.' }, 500);
   }
-  return c.json({ users: (data ?? []).map(userDto), total: count ?? 0, page });
+  return c.json({ users: (data ?? []).map(userDto), total: count ?? 0, page, pageSize: USERS_PAGE_SIZE });
 });
 
 admin.get('/users/:id', async (c) => {
@@ -100,22 +122,40 @@ admin.get('/users/:id', async (c) => {
   return c.json(userDto(data));
 });
 
-/* ── 주문 조회 (ADM-02·03) — 1차에는 데이터 없음, 조회 경로만 제공 ── */
+/* ── 주문 조회 (ADM-02·03) — q 검색: @ 포함=주문자 이메일(profiles 조인),
+     hex 4~8자=주문번호 프리픽스, 그 외=수령인 이름 ── */
+const ORDERS_PAGE_SIZE = 30;
 admin.get('/orders', async (c) => {
-  const { page, from, to } = pageOf(c);
+  const { page, from, to } = pageOf(c, ORDERS_PAGE_SIZE);
+  const q = c.req.query('q')?.trim();
+  const emailSearch = !!q?.includes('@');
+
+  // 이메일 검색일 때만 profiles !inner 조인 — 조인 컬럼 필터가 주문을 거르도록.
+  // (as '*' 캐스팅: supabase-js 타입 파서가 조건부 select 문자열을 못 읽어 타입만 고정 — 런타임 무관)
+  const selectCols = (emailSearch ? '*, profiles!inner(user_email)' : '*') as '*';
   let query = c.get('db')
     .from('orders')
-    .select('*', { count: 'exact' })
-    .order('created_at', { ascending: false })
-    .range(from, to);
+    .select(selectCols, { count: 'exact' });
   const status = c.req.query('status');
   if (status) query = query.eq('status', status);
-  const { data, count, error } = await query;
+
+  if (q) {
+    if (emailSearch) {
+      query = query.ilike('profiles.user_email', likePattern(q));
+    } else if (/^[0-9a-f]{4,8}$/i.test(q)) {
+      const { lo, hi } = uuidPrefixRange(q);
+      query = query.gte('order_id', lo).lte('order_id', hi);
+    } else {
+      query = query.ilike('receiver_name', likePattern(q));
+    }
+  }
+
+  const { data, count, error } = await query.order('created_at', { ascending: false }).range(from, to);
   if (error) {
     console.error('admin orders 조회 오류:', error);
     return c.json({ error: '주문 목록을 불러오지 못했습니다.' }, 500);
   }
-  return c.json({ orders: (data ?? []).map(orderDto), total: count ?? 0, page });
+  return c.json({ orders: (data ?? []).map(orderDto), total: count ?? 0, page, pageSize: ORDERS_PAGE_SIZE });
 });
 
 admin.get('/orders/:id', async (c) => {
@@ -176,9 +216,11 @@ admin.patch('/orders/:id/delivery', async (c) => {
     if (order.status !== 'PAID') {
       return c.json({ error: `결제 완료(PAID) 주문만 배송 시작할 수 있습니다. (현재: ${order.status})` }, 400);
     }
-    if (!(courier ?? order.courier) || !(trackingNumber ?? order.tracking_number)) {
-      return c.json({ error: '배송 시작에는 택배사와 운송장 번호가 필요합니다.' }, 400);
+    if (!(trackingNumber ?? order.tracking_number)) {
+      return c.json({ error: '배송 시작에는 운송장 번호가 필요합니다.' }, 400);
     }
+    // 로젠택배 단독 계약 — UI는 운송장만 입력, 택배사는 서버가 기본값 세팅 (추후 확장 시 body.courier로 덮어씀)
+    if (!courier && !order.courier) update.courier = '로젠택배';
     update.status = 'SHIPPING';
   } else if (body.status === 'DELIVERED') {
     if (order.status !== 'SHIPPING') {
@@ -203,26 +245,29 @@ admin.patch('/orders/:id/delivery', async (c) => {
   return c.json({ success: true, order: orderDto(data) });
 });
 
-/* ── 문의 관리 (ADM-07) — channel·status·is_dispute 필터, 상태·분쟁 표시 갱신 ── */
+/* ── 문의 관리 (ADM-07) — channel·status·is_dispute 필터 + q(이름·이메일) 검색 ── */
+const CONTACTS_PAGE_SIZE = 10;
 admin.get('/contacts', async (c) => {
-  const { page, from, to } = pageOf(c);
+  const { page, from, to } = pageOf(c, CONTACTS_PAGE_SIZE);
   let query = c.get('db')
     .from('contacts')
-    .select('*', { count: 'exact' })
-    .order('created_at', { ascending: false })
-    .range(from, to);
+    .select('*', { count: 'exact' });
   const channel = c.req.query('channel');
   const status = c.req.query('status');
   const isDispute = c.req.query('is_dispute');
   if (channel) query = query.eq('channel', channel);
   if (status) query = query.eq('status', status);
   if (isDispute === 'true' || isDispute === 'false') query = query.eq('is_dispute', isDispute === 'true');
-  const { data, count, error } = await query;
+  const q = c.req.query('q')?.trim();
+  if (q) {
+    query = query.or(personSearchOr(q, { name: 'name', email: 'email' }));
+  }
+  const { data, count, error } = await query.order('created_at', { ascending: false }).range(from, to);
   if (error) {
     console.error('admin contacts 조회 오류:', error);
     return c.json({ error: '문의 목록을 불러오지 못했습니다.' }, 500);
   }
-  return c.json({ contacts: (data ?? []).map(contactDto), total: count ?? 0, page });
+  return c.json({ contacts: (data ?? []).map(contactDto), total: count ?? 0, page, pageSize: CONTACTS_PAGE_SIZE });
 });
 
 const CONTACT_STATUS = ['RECEIVED', 'IN_PROGRESS', 'DONE'] as const;

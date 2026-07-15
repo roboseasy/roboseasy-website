@@ -17,27 +17,31 @@ const cookieBase = {
 
 // 로그인 상태 표시용 쿠키 — httpOnly가 아니라 헤더 JS가 읽음. 값에 민감정보 없음(단순 플래그)
 const INDICATOR_COOKIE = 'rb-auth';
+// "로그인 유지" 선택 저장 — 리프레시 시 쿠키 지속성(세션 전용 vs 30일)을 결정하는 데 사용
+const REMEMBER_COOKIE = 'rb-remember';
+const REFRESH_MAX_AGE = 60 * 60 * 24 * 30; // 30일 — 리프레시 토큰으로 세션 연장
 
-export function setSessionCookies(c: Context, session: Session) {
+// remember=true(로그인 유지): maxAge 부여로 브라우저를 닫아도 유지(최대 30일).
+// remember=false: maxAge 없는 세션 쿠키 → 브라우저 종료 시 만료(공용 PC 대비).
+// remember 생략(리프레시 경로)이면 기존 선택을 rb-remember에서 읽음 — 구 세션(쿠키 없음)은 지속으로 간주(호환).
+export function setSessionCookies(c: Context, session: Session, remember?: boolean) {
+  const persist = remember ?? getCookie(c, REMEMBER_COOKIE) !== '0';
+  const persistOpts = persist ? { maxAge: REFRESH_MAX_AGE } : {};
+
   setCookie(c, ACCESS_COOKIE, session.access_token, {
     ...cookieBase,
-    maxAge: session.expires_in ?? 3600,
+    ...(persist ? { maxAge: session.expires_in ?? 3600 } : {}),
   });
-  setCookie(c, REFRESH_COOKIE, session.refresh_token, {
-    ...cookieBase,
-    maxAge: 60 * 60 * 24 * 30, // 30일 — 리프레시 토큰으로 세션 연장
-  });
-  setCookie(c, INDICATOR_COOKIE, '1', {
-    ...cookieBase,
-    httpOnly: false,
-    maxAge: 60 * 60 * 24 * 30,
-  });
+  setCookie(c, REFRESH_COOKIE, session.refresh_token, { ...cookieBase, ...persistOpts });
+  setCookie(c, INDICATOR_COOKIE, '1', { ...cookieBase, httpOnly: false, ...persistOpts });
+  setCookie(c, REMEMBER_COOKIE, persist ? '1' : '0', { ...cookieBase, ...persistOpts });
 }
 
 export function clearSessionCookies(c: Context) {
   deleteCookie(c, ACCESS_COOKIE, { path: '/' });
   deleteCookie(c, REFRESH_COOKIE, { path: '/' });
   deleteCookie(c, INDICATOR_COOKIE, { path: '/' });
+  deleteCookie(c, REMEMBER_COOKIE, { path: '/' });
 }
 
 export function getSessionTokens(c: Context) {

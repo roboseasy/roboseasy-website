@@ -21,6 +21,11 @@ import '../styles/pages/orders.css';
       </div>
       <div id="orderFilters" class="orders__filters" hidden></div>
       <div id="orderList" class="orders__list"></div>
+      <div id="orderPager" class="orders__pager" hidden>
+        <button type="button" id="op-prev">이전</button>
+        <span id="op-info" class="orders__pager-info"></span>
+        <button type="button" id="op-next">다음</button>
+      </div>
     </div>
   </main>
 </BaseLayout>
@@ -62,6 +67,8 @@ import '../styles/pages/orders.css';
   let orders: Order[] = [];
   let filter = 'all';
   let openId: string | null = null; // 펼쳐진 주문 — 재렌더 후에도 유지
+  const PAGE_SIZE = 20; // 클라이언트 페이지네이션 — 목록은 한 번에 받고 표시만 나눔
+  let listPage = 1;
 
   function renderFilters() {
     const wrap = $('orderFilters');
@@ -73,7 +80,7 @@ import '../styles/pages/orders.css';
       btn.type = 'button';
       btn.className = `orders__chip${filter === f.key ? ' orders__chip--on' : ''}`;
       btn.textContent = `${f.label} ${count}`;
-      btn.addEventListener('click', () => { filter = f.key; renderFilters(); render(); });
+      btn.addEventListener('click', () => { filter = f.key; listPage = 1; renderFilters(); render(); });
       wrap.appendChild(btn);
     }
   }
@@ -219,6 +226,14 @@ import '../styles/pages/orders.css';
 
     const active = FILTERS.find((f) => f.key === filter) ?? FILTERS[0];
     const filtered = orders.filter(active.match);
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    if (listPage > totalPages) listPage = totalPages;
+    const pager = $('orderPager');
+    pager.hidden = filtered.length <= PAGE_SIZE;
+    $('op-info').textContent = `${listPage} / ${totalPages}`;
+    ($('op-prev') as HTMLButtonElement).disabled = listPage <= 1;
+    ($('op-next') as HTMLButtonElement).disabled = listPage >= totalPages;
+
     if (filtered.length === 0) {
       const none = document.createElement('p');
       none.className = 'orders__none';
@@ -227,7 +242,7 @@ import '../styles/pages/orders.css';
       return;
     }
 
-    for (const o of filtered) {
+    for (const o of filtered.slice((listPage - 1) * PAGE_SIZE, listPage * PAGE_SIZE)) {
       const stText = ORDER_STATUS_LABEL[o.status] ?? o.status;
       const stCls = STATUS_CLASS[o.status] ?? '';
       const open = openId === o.orderId;
@@ -277,6 +292,9 @@ import '../styles/pages/orders.css';
       if (open) list.appendChild(buildDetail(o));
     }
   }
+
+  $('op-prev').addEventListener('click', () => { listPage--; render(); });
+  $('op-next').addEventListener('click', () => { listPage++; render(); });
 
   async function load() {
     const res = await fetch('/api/v1/orders').catch(() => null);

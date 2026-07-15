@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { Resend } from 'resend';
-import { esc } from '../../lib/contactEmail';
+import { buildB2cEmailHtml } from '../../lib/contactEmail';
 import { getEnv } from '../lib/env';
 import { getServiceClient } from '../lib/supabase';
 import { requireAuth, type AuthEnv } from '../middleware/auth';
@@ -15,13 +15,14 @@ export const inquiries = new Hono<AuthEnv>();
 // 이 서브앱의 실제 경로(/inquiries)로만 범위 제한 (backend.md §1 — 라우트 단위 인증).
 inquiries.use('/inquiries', requireAuth);
 
-const B2C_TYPES = ['product', 'delivery', 'as', 'refund'] as const;
+const B2C_TYPES = ['product', 'delivery', 'as', 'refund', 'etc'] as const;
 type B2cType = (typeof B2C_TYPES)[number];
 const B2C_TYPE_LABEL: Record<B2cType, string> = {
   product: '제품 문의',
   delivery: '배송 문의',
   as: 'AS 문의',
   refund: '환불·취소 문의',
+  etc: '기타 문의',
 };
 
 /* ── 개인 문의 등록 ── */
@@ -111,15 +112,17 @@ inquiries.post(
         to: getEnv('QUOTE_TO'),
         replyTo: profile.user_email, // 메일함에서 "답장"이 문의 회원에게 바로 가도록
         subject: `[개인문의] ${typeLabel} — ${profile.user_name}`,
-        html: `<!DOCTYPE html><html lang="ko"><body style="font-family:system-ui,sans-serif;font-size:14px;color:#333;">
-          <h2 style="font-size:16px;">[개인문의] ${typeLabel}</h2>
-          <table style="border-collapse:collapse;">
-            <tr><td style="padding:4px 12px 4px 0;font-weight:600;">회원</td><td>${esc(profile.user_name)} (${esc(profile.user_email)}, ${esc(profile.user_phone)})</td></tr>
-            ${body.productSku ? `<tr><td style="padding:4px 12px 4px 0;font-weight:600;">제품</td><td>${esc(body.productSku)}</td></tr>` : ''}
-            <tr><td style="padding:4px 12px 4px 0;font-weight:600;vertical-align:top;">내용</td><td style="white-space:pre-wrap;">${esc(body.message)}</td></tr>
-          </table>
-          <p style="color:#888;font-size:12px;">처리·상태 변경은 관리자 문의 관리에서. (문의 ID: ${row.contact_id})</p>
-        </body></html>`,
+        // B2B 문의 메일과 동일 양식 (견적번호·소속 없음) — lib/contactEmail.ts
+        html: buildB2cEmailHtml({
+          typeLabel,
+          name: profile.user_name,
+          email: profile.user_email,
+          phone: profile.user_phone,
+          orderId,
+          productSku: body.productSku?.trim() || null,
+          message: body.message.trim(),
+          contactId: row.contact_id,
+        }),
       });
       if (mailError) console.error('inquiries 알림 메일 오류(무시):', mailError);
     }

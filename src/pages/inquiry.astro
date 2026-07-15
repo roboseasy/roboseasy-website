@@ -1,0 +1,228 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/pages/inquiry.css';
+---
+<BaseLayout
+  title="1:1 문의 - RoboSEasy | 로보시지"
+  description="로보시지 1:1 문의"
+  path="/inquiry"
+  lockTheme="light"
+  shopNav
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <main class="inq">
+    <h1 class="inq__title">1:1 문의</h1>
+    <div id="loading" class="inq__loading">불러오는 중...</div>
+
+    <div id="content" hidden>
+      <div class="inq__tabs" role="tablist">
+        <button type="button" id="tab-write" class="inq__tab is-active" role="tab" aria-selected="true">문의하기</button>
+        <button type="button" id="tab-list" class="inq__tab" role="tab" aria-selected="false">
+          내 문의 내역 <span id="inqCount" class="inq__count"></span>
+        </button>
+      </div>
+
+      <!-- 문의하기 -->
+      <section id="panel-write" class="inq__panel is-active" role="tabpanel">
+        <form id="inquiryForm" class="inq__form" novalidate>
+          <div id="inquiryMsg" class="inq__msg" role="alert"></div>
+          <div class="inq__row2">
+            <div>
+              <label class="inq__label" for="q-type">문의 유형</label>
+              <select id="q-type" class="inq__select">
+                <option value="product">제품 문의</option>
+                <option value="delivery">배송 문의</option>
+                <option value="as">AS 문의</option>
+                <option value="refund">환불·취소 문의</option>
+                <option value="etc">기타 문의</option>
+              </select>
+            </div>
+            <div>
+              <label class="inq__label" for="q-order">관련 주문 (선택)</label>
+              <select id="q-order" class="inq__select">
+                <option value="">관련 주문 없음</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="inq__label" for="q-message">문의 내용</label>
+            <textarea id="q-message" class="inq__textarea" placeholder="문의 내용을 입력해 주세요"></textarea>
+          </div>
+          <button type="submit" id="inquiryBtn" class="inq__submit">문의 등록</button>
+          <p class="inq__hint">문의 답변은 가입하신 이메일로만 안내됩니다.</p>
+        </form>
+      </section>
+
+      <!-- 내 문의 내역 — 아코디언 -->
+      <section id="panel-list" class="inq__panel" role="tabpanel">
+        <div id="inquiryList"></div>
+        <p id="inqEmpty" class="inq__empty" hidden>등록된 문의가 없습니다.</p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import { $ } from '../lib/dom';
+
+  const TYPE_LABEL: Record<string, string> = { product: '제품', delivery: '배송', as: 'AS', refund: '환불·취소', etc: '기타' };
+  const STATUS_LABEL: Record<string, { text: string; cls: string }> = {
+    RECEIVED: { text: '접수됨', cls: 'inq__badge--new' },
+    IN_PROGRESS: { text: '처리 중', cls: 'inq__badge--progress' },
+    DONE: { text: '답변 완료', cls: 'inq__badge--done' },
+  };
+
+  type Inquiry = {
+    inquiryId: string; contactType: string; orderId: string | null;
+    message: string; status: string; createdAt: string;
+  };
+  let inquiries: Inquiry[] = [];
+  let openId: string | null = null; // 펼쳐진 문의 — 재렌더 후에도 유지
+
+  /* ── 탭 전환 ── */
+  function showTab(key: 'write' | 'list') {
+    for (const k of ['write', 'list'] as const) {
+      $(`tab-${k}`).classList.toggle('is-active', k === key);
+      $(`tab-${k}`).setAttribute('aria-selected', String(k === key));
+      $(`panel-${k}`).classList.toggle('is-active', k === key);
+    }
+  }
+  $('tab-write').addEventListener('click', () => showTab('write'));
+  $('tab-list').addEventListener('click', () => showTab('list'));
+
+  /* ── 내역 렌더 — 행 펼침(아코디언) ── */
+  function render() {
+    const list = $('inquiryList');
+    list.innerHTML = '';
+    $('inqCount').textContent = String(inquiries.length);
+    $('inqEmpty').hidden = inquiries.length > 0;
+
+    for (const q of inquiries) {
+      const open = openId === q.inquiryId;
+      const st = STATUS_LABEL[q.status] ?? { text: q.status, cls: '' };
+      const acc = document.createElement('div');
+      acc.className = `inq__acc${open ? ' inq__acc--open' : ''}`;
+
+      const head = document.createElement('div');
+      head.className = 'inq__acc-head';
+      head.tabIndex = 0;
+      head.setAttribute('role', 'button');
+      head.setAttribute('aria-expanded', String(open));
+
+      const chip = document.createElement('span');
+      chip.className = 'inq__chip';
+      chip.textContent = TYPE_LABEL[q.contactType] ?? q.contactType;
+      const badge = document.createElement('span');
+      badge.className = `inq__badge ${st.cls}`;
+      badge.textContent = st.text;
+      const subject = document.createElement('span');
+      subject.className = 'inq__acc-subject';
+      subject.textContent = q.message;
+      const date = document.createElement('span');
+      date.className = 'inq__acc-date';
+      date.textContent = new Date(q.createdAt).toLocaleDateString('ko-KR');
+      const chev = document.createElement('span');
+      chev.className = 'inq__acc-chev';
+      chev.textContent = '▶';
+      head.append(chip, badge, subject, date, chev);
+
+      const toggle = () => { openId = open ? null : q.inquiryId; render(); };
+      head.addEventListener('click', toggle);
+      head.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+      acc.appendChild(head);
+
+      if (open) {
+        const body = document.createElement('div');
+        body.className = 'inq__acc-body';
+        const meta = document.createElement('p');
+        meta.className = 'inq__acc-meta';
+        meta.textContent = `${TYPE_LABEL[q.contactType] ?? q.contactType} 문의 · ${new Date(q.createdAt).toLocaleDateString('ko-KR')} 접수`
+          + (q.orderId ? ` · 주문 ${q.orderId.slice(0, 8)}` : '');
+        const msg = document.createElement('p');
+        msg.className = 'inq__acc-msg';
+        msg.textContent = q.message;
+        body.append(meta, msg);
+        acc.appendChild(body);
+      }
+      list.appendChild(acc);
+    }
+  }
+
+  async function loadInquiries() {
+    const res = await fetch('/api/v1/inquiries').catch(() => null);
+    if (!res) { $('loading').textContent = '문의 내역을 불러오지 못했습니다. 새로고침해 주세요.'; return false; }
+    if (res.status === 401) { location.href = '/login?redirect=/inquiry'; return false; }
+    if (!res.ok) { $('loading').textContent = '문의 내역을 불러오지 못했습니다. 새로고침해 주세요.'; return false; }
+    inquiries = (await res.json()).inquiries;
+    render();
+    return true;
+  }
+
+  /* ── 관련 주문 드롭다운 — 실패해도 폼 사용엔 지장 없음 ── */
+  async function loadOrderOptions() {
+    try {
+      const res = await fetch('/api/v1/orders');
+      if (!res.ok) return;
+      const { orders } = await res.json();
+      const sel = $('q-order') as HTMLSelectElement;
+      for (const o of orders as { orderId: string; createdAt: string; items: { productName: string }[] }[]) {
+        const opt = document.createElement('option');
+        opt.value = o.orderId;
+        const first = o.items[0];
+        const summary = first
+          ? `${first.productName}${o.items.length > 1 ? ` 외 ${o.items.length - 1}건` : ''}`
+          : '';
+        opt.textContent = `${new Date(o.createdAt).toLocaleDateString('ko-KR')} · ${o.orderId.slice(0, 8)} · ${summary}`;
+        sel.appendChild(opt);
+      }
+    } catch { /* 드롭다운 생략 */ }
+  }
+
+  /* ── 등록 ── */
+  const showMsg = (type: 'error' | 'success', text: string) => {
+    const el = $('inquiryMsg');
+    el.className = `inq__msg inq__msg--${type}`;
+    el.textContent = text;
+  };
+
+  $('inquiryForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = ($('q-message') as HTMLTextAreaElement).value.trim();
+    if (!message) { showMsg('error', '문의 내용을 입력해 주세요.'); return; }
+    const btn = $('inquiryBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    try {
+      const orderId = ($('q-order') as HTMLSelectElement).value;
+      const res = await fetch('/api/v1/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contactType: ($('q-type') as HTMLSelectElement).value,
+          message,
+          ...(orderId && { orderId }),
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) { showMsg('error', json.error ?? '문의 등록에 실패했습니다.'); return; }
+      showMsg('success', '문의가 접수되었습니다. 답변은 가입하신 이메일로 안내됩니다.');
+      ($('q-message') as HTMLTextAreaElement).value = '';
+      ($('q-order') as HTMLSelectElement).value = '';
+      loadInquiries();
+    } catch {
+      showMsg('error', '네트워크 오류가 발생했습니다.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  /* ── 초기화 ── */
+  (async () => {
+    if (!(await loadInquiries())) return;
+    $('loading').style.display = 'none';
+    ($('content') as HTMLElement).hidden = false;
+    loadOrderOptions(); // 드롭다운은 백그라운드 채움
+  })();
+</script>

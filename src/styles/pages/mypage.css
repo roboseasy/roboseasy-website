@@ -196,20 +196,6 @@
 }
 .mypage__switch input:disabled + .mypage__switch-track { opacity: 0.5; }
 
-/* 배지 — 준비 중 / 문의 상태 */
-.mypage__badge {
-    margin-left: auto;
-    padding: 2px 9px;
-    border-radius: 99px;
-    font-size: 0.72rem;
-    font-weight: var(--fw-semibold);
-    background: var(--color-surface-2);
-    color: var(--color-muted-gray);
-    flex-shrink: 0;
-}
-.mypage__badge--done { background: rgba(74, 222, 128, 0.15); color: #15803d; }
-.mypage__badge--progress { background: rgba(250, 204, 21, 0.18); color: #a16207; }
-
 /* 메시지 */
 .mypage__msg { display: none; padding: 9px 12px; border-radius: 8px; font-size: 0.82rem; }
 .mypage__msg--error { display: block; background: rgba(248, 113, 113, 0.1); color: #dc2626; }
@@ -217,44 +203,6 @@
 .mypage__msg--row { margin: 0 18px 14px; }
 .mypage__msg--row.mypage__msg { padding: 8px 12px; }
 
-/* 문의 */
-.mypage__select, .mypage__textarea {
-    width: 100%;
-    padding: 9px 12px;
-    font-size: 0.88rem;
-    font-family: var(--font-body);
-    color: var(--color-bright-gray);
-    background: var(--color-surface);
-    border: 1px solid var(--color-graphite);
-    border-radius: 8px;
-}
-.mypage__textarea { min-height: 100px; resize: vertical; }
-.mypage__select:focus, .mypage__textarea:focus { outline: none; border-color: var(--color-amethyst); }
-
-.mypage__inquiry-form { display: flex; flex-direction: column; gap: 10px; }
-.mypage__inquiry-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-.mypage__inquiry {
-    padding: 12px 14px;
-    border: 1px solid var(--color-ash-border);
-    border-radius: 10px;
-}
-.mypage__inquiry-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.78rem;
-    color: var(--color-muted-gray);
-}
-.mypage__inquiry-head .mypage__badge { margin-left: 0; }
-.mypage__inquiry-msg {
-    margin-top: 8px;
-    font-size: 0.88rem;
-    color: var(--color-bright-gray);
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-.mypage__empty { font-size: 0.85rem; color: var(--color-muted-gray); padding: 4px 0; }
 /* 회원탈퇴 */
 .mypage__group--danger .mypage__row-label { width: auto; color: #dc2626; }
 .mypage__group--danger .mypage__row-value { font-size: 0.8rem; color: var(--color-muted-gray); }
