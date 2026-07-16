@@ -8,3 +8,8 @@
 
 [functions]
   included_files = ["src/excel/**"]
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
