@@ -13,3 +13,8 @@
   for = "/*"
   [headers.values]
     Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    # 클릭재킹 방지 — /manage·/mypage·/checkout 등을 외부 iframe에 씌우는 공격 차단
+    # (카카오 우편번호·토스 위젯은 우리 페이지가 embed하는 쪽이라 영향 없음)
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

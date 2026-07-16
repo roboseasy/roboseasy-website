@@ -8,7 +8,8 @@ import { UUID_RE } from '../lib/validation';
 
 // 주문 (2차 — backend.md §3·§4) — 회원 전용.
 // 금액은 서버가 DB 단가로 재계산(클라이언트 금액 신뢰 금지): 총액 = 상품합 + 배송비(정액).
-// 생성은 유저 토큰(RLS orders_insert_own_pending), 상태 전이·삭제는 service role.
+// 생성·상태 전이·삭제는 service role — 유저 토큰의 직접 insert 정책은 금액(total_price·unit_price)을
+// 검증하지 못해 제거됨(20260716000000 마이그레이션). 서버가 재계산한 금액만 DB에 들어간다.
 export const orders = new Hono<AuthEnv>();
 
 orders.use('/orders', requireAuth);
@@ -109,9 +110,11 @@ orders.post('/orders', async (c) => {
   const itemsTotal = priced.reduce((sum, i) => sum + i.unitPrice * i.qty, 0);
   const totalPrice = itemsTotal + SHIPPING_FEE;
 
-  // 주문 insert — 유저 토큰(RLS: 본인 + PENDING만 허용)
+  // 주문 insert — service role (유저 토큰 insert 정책 없음). 본인·PENDING은 서버가 값으로 보장.
+  const service = getServiceClient();
+  if (!service) return c.json({ error: '서버 설정 오류입니다.' }, 500);
   const uid = c.get('user').id;
-  const { data: order, error: orderError } = await db
+  const { data: order, error: orderError } = await service
     .from('orders')
     .insert({
       user_id: uid,
@@ -130,7 +133,7 @@ orders.post('/orders', async (c) => {
     return c.json({ error: '주문을 생성하지 못했습니다.' }, 500);
   }
 
-  const { error: itemsError } = await db.from('order_items').insert(
+  const { error: itemsError } = await service.from('order_items').insert(
     priced.map((i) => ({
       order_id: order.order_id,
       product_sku: i.sku,
@@ -139,14 +142,11 @@ orders.post('/orders', async (c) => {
     }))
   );
   if (itemsError) {
-    // 품목 없이 남은 주문 정리 — 유저에겐 delete 정책이 없으므로 service role로.
-    // 서버리스에서 응답 후 함수가 동결되면 미완료될 수 있어 반드시 await로 완료를 보장한다(유령 주문 방지).
+    // 품목 없이 남은 주문 정리 — 서버리스에서 응답 후 함수가 동결되면 미완료될 수 있어
+    // 반드시 await로 완료를 보장한다(유령 주문 방지).
     console.error('order_items 생성 오류:', itemsError);
-    const service = getServiceClient();
-    if (service) {
-      const { error: rollbackError } = await service.from('orders').delete().eq('order_id', order.order_id);
-      if (rollbackError) console.error('orders 롤백 오류:', rollbackError);
-    }
+    const { error: rollbackError } = await service.from('orders').delete().eq('order_id', order.order_id);
+    if (rollbackError) console.error('orders 롤백 오류:', rollbackError);
     return c.json({ error: '주문을 생성하지 못했습니다.' }, 500);
   }
 
