@@ -386,9 +386,14 @@ users.patch('/users/me', requireAuth, async (c) => {
   const uid = c.get('user').id;
 
   if (typeof body.marketingConsent === 'boolean') {
-    const { data: current } = await db
+    const { data: current, error: readError } = await db
       .from('profiles').select('marketing_consent').eq('user_id', uid).single();
-    if (current && current.marketing_consent !== body.marketingConsent) {
+    // 조회 실패를 무시하면 동의 변경이 조용히 누락됨(철회했는데 반영 안 됨) — 에러로 surface
+    if (readError || !current) {
+      console.error('profiles 조회 오류(마케팅 동의):', readError);
+      return c.json({ error: '회원 정보 수정에 실패했습니다.' }, 500);
+    }
+    if (current.marketing_consent !== body.marketingConsent) {
       update.marketing_consent = body.marketingConsent;
       update.marketing_consent_at = new Date().toISOString(); // 동의·철회 일시 — 2년 재확인 기준점
     }

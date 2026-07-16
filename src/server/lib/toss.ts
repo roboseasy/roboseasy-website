@@ -26,7 +26,11 @@ export interface TossResult {
   raw: unknown;
 }
 
-async function tossFetch(path: string, body: Record<string, unknown>): Promise<TossResult | null> {
+async function tossFetch(
+  path: string,
+  body: Record<string, unknown> | null,
+  method: 'GET' | 'POST' = 'POST'
+): Promise<TossResult | null> {
   const secretKey = getEnv('TOSS_SECRET_KEY');
   if (!secretKey) {
     console.error('[toss] TOSS_SECRET_KEY 미설정 — 결제 기능 비활성');
@@ -35,12 +39,12 @@ async function tossFetch(path: string, body: Record<string, unknown>): Promise<T
   let res: Response;
   try {
     res = await fetch(`${TOSS_API}${path}`, {
-      method: 'POST',
+      method,
       headers: {
         Authorization: `Basic ${Buffer.from(`${secretKey}:`).toString('base64')}`,
-        'Content-Type': 'application/json',
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
       },
-      body: JSON.stringify(body),
+      ...(body ? { body: JSON.stringify(body) } : {}),
     });
   } catch (err) {
     // 네트워크 순단(타임아웃·DNS 등) — 전역 onError로 던지지 않고 결제 문맥 오류로 반환.
@@ -74,4 +78,9 @@ export function confirmPayment(paymentKey: string, orderId: string, amount: numb
 /** 결제 취소 — 승인된 결제(paymentKey)를 전액 취소 */
 export function cancelPayment(paymentKey: string, cancelReason: string) {
   return tossFetch(`/payments/${encodeURIComponent(paymentKey)}/cancel`, { cancelReason });
+}
+
+/** 결제 조회 — confirm 결과가 불확실할 때(네트워크 순단 등) 토스의 실제 상태를 확인해 이중청구 방지 */
+export function getPayment(paymentKey: string) {
+  return tossFetch(`/payments/${encodeURIComponent(paymentKey)}`, null, 'GET');
 }

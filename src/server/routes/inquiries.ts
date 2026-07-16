@@ -45,6 +45,14 @@ inquiries.post(
   if (!body.message?.trim()) {
     return c.json({ error: '문의 내용을 입력해 주세요.' }, 400);
   }
+  // message는 text 컬럼이라 DB 한도가 없음 — 폭주 방지용 상식적 상한(서버 검증, contact.ts와 동일 기준)
+  if (body.message.length > 5000) {
+    return c.json({ error: '문의 내용은 5,000자 이내로 입력해 주세요.' }, 400);
+  }
+  // product_sku는 varchar(50) — 초과 시 insert가 22001로 실패해 기록이 유실되므로 사전 차단
+  if (body.productSku && body.productSku.trim().length > 50) {
+    return c.json({ error: '잘못된 요청입니다.' }, 400);
+  }
 
   // 주문 연계(2차 — 배송·환불 문의용, 선택): 본인 주문만 연결 가능
   const orderId = body.orderId?.trim() || null;
@@ -133,11 +141,13 @@ inquiries.post(
   return c.json({ success: true, inquiryId: row.contact_id }, 201);
 });
 
-/* ── 내 문의 내역 (마이페이지) — RLS contacts_select_own_b2c로 본인 것만 ── */
+/* ── 내 문의 내역 (마이페이지) — RLS는 own_or_admin이라 관리자는 전체가 보이므로
+     이 '내 문의' 목록에는 user_id를 명시 필터(본인 소유만) ── */
 inquiries.get('/inquiries', async (c) => {
   const { data, error } = await c.get('db')
     .from('contacts')
     .select('contact_id, contact_type, product_sku, order_id, message, status, created_at')
+    .eq('user_id', c.get('user').id)
     .order('created_at', { ascending: false })
     .limit(50);
   if (error) {

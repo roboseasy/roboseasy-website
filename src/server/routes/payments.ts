@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { getServiceClient } from '../lib/supabase';
-import { confirmPayment } from '../lib/toss';
+import { confirmPayment, getPayment } from '../lib/toss';
 import { requireAuth, type AuthEnv } from '../middleware/auth';
 import { UUID_RE } from '../lib/validation';
 
@@ -71,10 +71,25 @@ payments.post('/payments/confirm', async (c) => {
       // 같은 payment_key로 confirm이 이미 진행/완료됨 (successUrl 새로고침·동시 요청)
       const { data: existing } = await service
         .from('payments')
-        .select('status, receipt_url')
+        .select('order_id, status, receipt_url')
         .eq('payment_key', paymentKey)
         .maybeSingle();
-      if (existing?.status === 'DONE') {
+      // 이 paymentKey가 다른 주문의 것이면(오래된/조작된 요청) 요청 주문을 결제됨으로 응답하면 안 됨
+      if (!existing || existing.order_id !== orderId) {
+        return c.json({ error: '결제 정보가 올바르지 않습니다.' }, 409);
+      }
+      if (existing.status === 'DONE') {
+        // 이전 confirm이 캡처는 됐으나 주문 PAID 전이가 실패해 PENDING으로 남았을 수 있음 —
+        // 여기서 멱등하게 전이를 재시도해 복구(안 하면 24h 정리 크론이 결제된 주문을 취소해 버림).
+        const { error: fixError } = await service
+          .from('orders')
+          .update({ status: 'PAID' })
+          .eq('order_id', orderId)
+          .eq('status', 'PENDING');
+        if (fixError) {
+          console.error('orders PAID 전이 재시도 오류:', fixError);
+          return c.json({ error: '결제는 완료되었으나 주문 상태 갱신에 실패했습니다. 새로고침해 주세요.' }, 500);
+        }
         return c.json({ success: true, orderId, status: 'PAID', receiptUrl: existing.receipt_url ?? null });
       }
       return c.json({ error: '결제를 처리 중입니다. 잠시 후 주문 내역에서 확인해 주세요.' }, 409);
@@ -84,10 +99,31 @@ payments.post('/payments/confirm', async (c) => {
   }
 
   // 토스 승인
-  const result = await confirmPayment(paymentKey, orderId, amount);
+  let result = await confirmPayment(paymentKey, orderId, amount);
   if (!result) return c.json({ error: '서버 설정 오류입니다.' }, 500);
 
-  if (!result.ok) {
+  // confirm POST의 ok=true는 승인(DONE)을 의미. 네트워크 순단(NETWORK_ERROR)은 승인 여부가 불확실하므로
+  // ABORTED로 단정하지 않고 토스에 실제 상태를 조회해 재확인한다 — 캡처됐는데 재시도를 유도하면 이중청구.
+  let approved = result.ok;
+  if (!result.ok && result.errorCode === 'NETWORK_ERROR') {
+    const check = await getPayment(paymentKey);
+    if (!check) return c.json({ error: '서버 설정 오류입니다.' }, 500);
+    if (check.ok && check.payment?.status === 'DONE') {
+      result = check; // 실제로는 승인됨 — 아래 정상 승인 처리로 진행
+      approved = true;
+    } else if (check.ok && (check.payment?.status === 'ABORTED' || check.payment?.status === 'EXPIRED')) {
+      result = check; // 미승인 '확정'(ABORTED·EXPIRED) — 캡처 안 됨이 확실하므로 실패(ABORTED) 처리
+      approved = false;
+    } else {
+      // 조회 실패거나 상태가 IN_PROGRESS 등 승인 여부 불명 — 캡처됐을 수 있어 ABORTED로 단정하면
+      // 새 결제를 유도해 이중청구가 된다. 선점 행을 IN_PROGRESS로 남겨(ABORTED 아님) 새 결제 유도를
+      // 막고, 재시도 대신 주문 내역 확인을 안내한다. 대사(수동/웹훅)로 후처리.
+      console.error(`payments confirm: 승인 결과 불명(네트워크) — 대사 필요 (order_id=${orderId}, status=${check.ok ? check.payment?.status : 'CHECK_FAILED'})`);
+      return c.json({ error: '결제 결과를 확인하지 못했습니다. 중복 결제 방지를 위해 재시도하지 마시고 주문 내역에서 상태를 확인해 주세요.' }, 502);
+    }
+  }
+
+  if (!approved) {
     // 선점 행을 ABORTED로 갱신 (재시도는 새 paymentKey로 진행). 주문은 PENDING 유지.
     const { error: recordError } = await service
       .from('payments')

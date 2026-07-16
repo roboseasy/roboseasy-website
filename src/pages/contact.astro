@@ -615,7 +615,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <!-- 문의 내용 -->
             <div>
               <label class="field-label req" for="f-message">문의 내용</label>
-              <textarea id="f-message" name="message" class="textarea" placeholder="문의 내용을 입력해주세요" required></textarea>
+              <textarea id="f-message" name="message" class="textarea" placeholder="문의 내용을 입력해주세요" maxlength="5000" required></textarea>
             </div>
 
             <!-- 제출 -->
@@ -785,6 +785,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   function addFiles(filesLike) {
     Array.from(filesLike).forEach(f => {
+      if (uploaded.length >= 5) {
+        alert('첨부파일은 최대 5개까지 가능합니다.'); return;
+      }
       if (uploaded.reduce((s, u) => s + u.size, 0) + f.size > MAX_BYTES) {
         alert('총 파일 크기가 5 MB를 초과했습니다.'); return;
       }

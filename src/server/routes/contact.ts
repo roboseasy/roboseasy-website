@@ -34,6 +34,22 @@ contact.post('/contact', rateLimit({ name: 'contact', capacity: 5, refillPerSec:
   if (!TYPE_LABEL[body.type]) {
     return json({ success: false, error: '잘못된 문의 유형입니다.' }, 400);
   }
+  // 컬럼(varchar) 한도 초과 시 insert가 22001로 실패해 기록이 유실됨 — 사전 차단(스키마와 동일 한도)
+  if (body.name.length > 100 || body.email.length > 255 || body.phone.length > 20 || (body.org?.length ?? 0) > 100) {
+    return json({ success: false, error: '입력 값이 허용 길이를 초과했습니다.' }, 400);
+  }
+  // message는 text 컬럼이라 DB 한도가 없음 — 폭주 방지용 상식적 상한(서버 검증)
+  if (body.message.length > 5000) {
+    return json({ success: false, error: '문의 내용은 5,000자 이내로 입력해 주세요.' }, 400);
+  }
+  // 첨부 상한 — base64 인코딩 메모리 팽창·Resend 발송 한도 보호 (프론트 제한과 별개로 서버가 검증)
+  if (
+    userFiles.length > 5 ||
+    userFiles.some((f) => f.name.length > 255) ||
+    userFiles.reduce((sum, f) => sum + f.size, 0) > 5 * 1024 * 1024
+  ) {
+    return json({ success: false, error: '첨부파일은 최대 5개, 총 5MB 이내여야 합니다.' }, 400);
+  }
 
   // 견적 항목 검증·재계산 — 금액은 클라이언트 값을 쓰지 않고 단가표(quoteItems)로 서버가 계산
   let quote: PricedQuote | null = null;
@@ -99,8 +115,16 @@ contact.post('/contact', rateLimit({ name: 'contact', capacity: 5, refillPerSec:
     else mailSent = true;
   }
 
-  // 메일 발송 성공이면 통상 성공. 예산 소진·발송 실패라도 DB에 접수됐으면 성공 안내(확인 후 연락).
+  // 메일 발송 성공이면 통상 성공.
   if (mailSent) return json({ success: true }, 200);
-  if (recorded) return json({ success: true, message: '문의가 접수되었습니다. 확인 후 연락드리겠습니다.' }, 200);
+  // 첨부·견적서 엑셀·배송지(shipto)는 DB가 아닌 메일에만 실림 — 메일 실패 시 영구 유실되므로
+  // 이런 데이터가 실제로 있는 문의는 DB에 접수됐어도 실패로 안내해 재시도를 유도한다.
+  // (purchase 유형이라도 견적 항목·배송지·첨부가 전혀 없으면 본문·연락처가 전부라 DB 기록으로 충분)
+  const hasEmailOnlyData =
+    userFiles.length > 0 ||
+    (quote !== null && quote.items.length > 0) ||
+    (body.type === 'purchase' && !!body.shipto);
+  // 그 외(본문·연락처가 전부인 문의)는 DB 기록만으로 충분하므로 접수 성공 안내.
+  if (recorded && !hasEmailOnlyData) return json({ success: true, message: '문의가 접수되었습니다. 확인 후 연락드리겠습니다.' }, 200);
   return json({ success: false, error: '접수에 실패했습니다. 잠시 후 다시 시도해 주세요.' }, 500);
 });

@@ -162,13 +162,15 @@ orders.post('/orders', async (c) => {
   );
 });
 
-/* ── 내 주문 내역 — RLS orders_select_own으로 본인 것만, 품목·제품명 조인 ── */
+/* ── 내 주문 내역 — 품목·제품명 조인. RLS는 own_or_admin이라 관리자는 전체가 보이므로
+     이 '내 주문' 목록에는 user_id를 명시 필터(단건·취소 경로와 동일하게 본인 소유만) ── */
 orders.get('/orders', async (c) => {
   const { data, error } = await c.get('db')
     .from('orders')
     .select(
       'order_id, total_price, status, receiver_name, shipping_postcode, shipping_address, shipping_address_detail, courier, tracking_number, created_at, order_items(product_sku, quantity, unit_price, products(product_name))'
     )
+    .eq('user_id', c.get('user').id)
     .order('created_at', { ascending: false })
     .limit(50);
   if (error) {
@@ -227,7 +229,8 @@ orders.get('/orders/:id', async (c) => {
 
 /* ── 주문 취소 — 상태 분기 (backend.md §4·§6 확정):
      PENDING + payments 없음 → 주문 삭제(위젯 이탈·failUrl 복귀 정리 겸용)
-     PENDING + payments 있음 → CANCELLED (결제사 대사 기록 보존)
+     PENDING + payments 있음(승인 실패만) → CANCELLED (결제사 대사 기록 보존)
+     PENDING + 캡처된(DONE) 결제 있음(전이 실패 잔여) → PAID와 동일하게 토스 환불 후 CANCELLED
      PAID → 토스 결제 취소 후 CANCELLED (배송 전만 — ORD-10)
      SHIPPING·DELIVERED → 400, CANCELLED → 멱등 성공 ── */
 orders.post('/orders/:id/cancel', async (c) => {
@@ -259,8 +262,15 @@ orders.post('/orders/:id/cancel', async (c) => {
   const service = getServiceClient();
   if (!service) return c.json({ error: '서버 설정 오류입니다.' }, 500);
 
+  // PENDING이면 payments를 한 번만 조회해 재사용(캡처된 DONE 행 선택까지). PAID 경로는 아래에서 별도 조회.
+  let donePay: { payment_id: string; payment_key: string } | undefined;
+
   if (order.status === 'PENDING') {
-    const { data: pays } = await db.from('payments').select('payment_id').eq('order_id', id).limit(1);
+    // 상태까지 조회 — 캡처된(DONE) 결제가 섞여 있으면 환불이 필요하므로 분기해야 함
+    const { data: pays } = await db
+      .from('payments')
+      .select('payment_id, payment_key, status, approved_at')
+      .eq('order_id', id);
     if (!pays?.length) {
       const { error } = await service.from('orders').delete().eq('order_id', id); // order_items CASCADE
       if (error) {
@@ -271,33 +281,49 @@ orders.post('/orders/:id/cancel', async (c) => {
     }
     // 결제 시도가 있는 PENDING — abandon(자동 정리)이면 재시도를 위해 보존(재결제 버튼 유지)
     if (abandon) return c.json({ success: true, status: 'PENDING' });
-    const { error } = await service.from('orders').update({ status: 'CANCELLED' }).eq('order_id', id);
-    if (error) {
-      console.error('orders 취소 전이 오류:', error);
-      return c.json({ error: '주문을 취소하지 못했습니다.' }, 500);
+    if (!pays.some((p) => p.status === 'DONE')) {
+      // 승인 여부 불명(IN_PROGRESS)이 섞여 있으면 캡처됐을 수 있어(돈 묶임) 자동 취소 금지 —
+      // cleanup_skip_captured 마이그레이션과 동일하게 대사(수동/웹훅 환불)로 넘긴다.
+      if (pays.some((p) => p.status === 'IN_PROGRESS')) {
+        return c.json({ error: '결제 확인이 진행 중입니다. 잠시 후 주문 내역에서 상태를 확인하시거나 고객센터로 문의해 주세요.' }, 409);
+      }
+      // 캡처된(DONE)·불명(IN_PROGRESS) 결제가 없음(ABORTED 등 승인 실패만) — 출금이 없으므로 바로 CANCELLED
+      const { error } = await service.from('orders').update({ status: 'CANCELLED' }).eq('order_id', id);
+      if (error) {
+        console.error('orders 취소 전이 오류:', error);
+        return c.json({ error: '주문을 취소하지 못했습니다.' }, 500);
+      }
+      return c.json({ success: true, status: 'CANCELLED' });
     }
-    return c.json({ success: true, status: 'CANCELLED' });
+    // 캡처된(DONE) 결제가 남은 PENDING(상태 전이 실패 잔여) — 방금 조회한 pays에서 최신 승인 건을 골라
+    // 추가 조회 없이 아래 환불 로직으로 진행(approved_at 내림차순).
+    donePay = pays
+      .filter((p) => p.status === 'DONE')
+      .sort((a, b) => (b.approved_at ?? '').localeCompare(a.approved_at ?? ''))[0];
   }
 
-  // PAID — abandon 모드(자동 정리)는 결제 취소·환불을 트리거하지 않는다
+  // PAID(또는 캡처된 결제가 남은 PENDING) — abandon 모드(자동 정리)는 결제 취소·환불을 트리거하지 않는다
   if (abandon) return c.json({ success: true, status: 'PAID' });
 
-  // 승인된 결제(DONE)를 토스에서 취소 후 상태 전이
-  const { data: payment } = await db
-    .from('payments')
-    .select('payment_id, payment_key')
-    .eq('order_id', id)
-    .eq('status', 'DONE')
-    .order('approved_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (!payment) {
+  // 승인된 결제(DONE)를 토스에서 취소 후 상태 전이. PAID 경로는 pays 미조회이므로 여기서 DONE 행 조회.
+  if (!donePay) {
+    const { data: payment } = await db
+      .from('payments')
+      .select('payment_id, payment_key')
+      .eq('order_id', id)
+      .eq('status', 'DONE')
+      .order('approved_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    donePay = payment ?? undefined;
+  }
+  if (!donePay) {
     console.error(`orders cancel: PAID 주문에 DONE 결제가 없음 (order_id=${id})`);
     return c.json({ error: '결제 정보를 확인할 수 없습니다. 고객센터로 문의해 주세요.' }, 500);
   }
 
   const reason = '고객 요청 취소';
-  const result = await cancelPayment(payment.payment_key, reason);
+  const result = await cancelPayment(donePay.payment_key, reason);
   if (!result) return c.json({ error: '서버 설정 오류입니다.' }, 500);
   // 이미 취소된 결제는 성공으로 간주(멱등) — 그 외 오류는 중단
   if (!result.ok && result.errorCode !== 'ALREADY_CANCELED_PAYMENT') {
@@ -308,7 +334,7 @@ orders.post('/orders/:id/cancel', async (c) => {
   const { error: payError } = await service
     .from('payments')
     .update({ status: 'CANCELED', canceled_at: new Date().toISOString(), cancel_reason: reason })
-    .eq('payment_id', payment.payment_id);
+    .eq('payment_id', donePay.payment_id);
   if (payError) console.error('payments 취소 기록 오류:', payError); // 토스는 이미 취소됨 — 기록 실패만 로깅
 
   const { error: orderError } = await service.from('orders').update({ status: 'CANCELLED' }).eq('order_id', id);

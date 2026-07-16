@@ -16,6 +16,10 @@ https://roboseasy.netlify.app/*   https://roboseasy.ai/:splat   301!
 # 옛 SHOP 페이지(디자인 1안) → PRODUCTS 통합
 /shop                             /products                    301
 
+# 옛 API 경로(버저닝 전) → /api/v1. 배포 순간 캐시된 폼 페이지의 POST 유실 방지(200=메서드·본문 보존)
+/api/contact                      /api/v1/contact              200
+/api/quote-download               /api/v1/quote-download       200
+
 # 옛 .html 진입 URL (Netlify pretty URL 사용 전 직접 링크된 경우)
 /index.html                       /                            301
 /programs.html                    /programs                    301
