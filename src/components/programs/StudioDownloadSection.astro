@@ -45,9 +45,8 @@ interface OSColumn {
 const versions: Version[] = [
   {
     tag: 'v0.6.0-0.0.1',
-    label: 'v0.6.0 (0.0.1) — latest · Windows 전용',
-    // lerobot 0.6.0 기반. 현재 Windows(.exe)만 제공 — Linux(.deb)는 미빌드라
-    // linux.* 키를 넣지 않는다. 선택 시 Linux 버튼은 자동으로 '#' → 비활성 처리.
+    label: 'v0.6.0 (0.0.1) — latest · Windows · Ubuntu',
+    // lerobot 0.6.0 기반. Windows(.exe) + Linux(.deb) 모두 제공.
     assets: {
       'windows.primary':
         'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio-setup_v0.6.0_v0.0.1_win64.exe',
@@ -55,6 +54,10 @@ const versions: Version[] = [
         'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio-setup_v0.6.0_v0.0.1_win64.exe',
       'windows.zip.x64':
         'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.6.0-0.0.1.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio_0.6.0-0.0.1_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
     },
   },
   {
