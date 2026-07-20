@@ -6,7 +6,7 @@ import { optionSkuErrors } from './optionSkus.mjs';
 
 // 'addon' = 부품·액세서리. 정식 제품이라 단독 구매도 되지만, 제품 목록(/products)에는
 // 노출하지 않고 본품 상세의 추가 옵션과 직접 링크로만 판매한다 (CATEGORY_ORDER에서 제외).
-export type ProductCategory = 'so-arm101' | 'lekiwi' | 'etc' | 'addon';
+export type ProductCategory = 'a-ba' | 'a-go' | 'etc' | 'addon';
 
 export interface Product {
   id: string;
@@ -48,8 +48,8 @@ export const NAVER_STORE_URL = 'https://smartstore.naver.com/roboseasy';
 
 /** PRODUCTS 사이드바 카테고리 라벨 (표시용) */
 export const CATEGORY_LABELS: Record<ProductCategory, string> = {
-  'so-arm101': 'SO-ARM101',
-  lekiwi: 'LeKiwi',
+  'a-ba': 'A-Ba(SO-ARM101)',
+  'a-go': 'A-Go(LeKiwi)',
   etc: '기타',
   addon: '부품·액세서리',
 };

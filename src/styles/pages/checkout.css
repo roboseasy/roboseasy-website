@@ -120,13 +120,15 @@
 
 .checkout__zip-btn {
   padding: 0 var(--spacing-16);
-  border: 1px solid var(--color-amethyst);
+  border: 1px solid var(--color-carbon, #111111);
   border-radius: var(--radius-buttons);
   background: none;
-  color: var(--color-amethyst);
+  color: var(--color-carbon, #111111);
   font-size: var(--text-small, 0.875rem);
   cursor: pointer;
 }
+
+.checkout__zip-btn:hover { background: var(--color-surface-2, #f1f5f9); }
 
 .checkout__summary {
   border: 1px solid var(--color-ash-border);
@@ -162,11 +164,15 @@
   padding: 14px;
   border: 0;
   border-radius: var(--radius-buttons);
-  background: var(--color-amethyst);
+  background: var(--color-carbon, #111111);
   color: var(--color-white);
   font-size: var(--text-body);
   font-weight: var(--fw-semibold);
   cursor: pointer;
+}
+
+.checkout__pay-btn:hover:not(:disabled) {
+  background: var(--color-carbon-hover, #2b2b2b);
 }
 
 .checkout__pay-btn:disabled {

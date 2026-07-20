@@ -68,7 +68,7 @@
 
 .orders__row:hover,
 .orders__row:focus-visible {
-  background: var(--surface-page, #f8fafc);
+  background: var(--color-surface-2, #f1f5f9);
 }
 
 .orders__row--off {
@@ -134,7 +134,7 @@
 /* ─── 펼침 상세 ─── */
 .orders__detail {
   border-bottom: 1px solid var(--color-ash-border);
-  background: var(--surface-page, #f8fafc);
+  background: var(--color-surface-2, #f1f5f9);
   padding: var(--spacing-20);
   display: flex;
   flex-direction: column;
@@ -190,7 +190,7 @@
   font-weight: var(--fw-bold, 700);
 }
 
-.orders__detail-total span:last-child { color: var(--color-amethyst); }
+.orders__detail-total span:last-child { color: var(--color-ink, #0f172a); }
 
 .orders__detail-addr {
   margin: 0;
@@ -299,14 +299,14 @@
   padding: 7px 14px;
   font-size: var(--text-small, 0.82rem);
   font-weight: var(--fw-semibold);
-  border: 1px solid var(--color-amethyst);
+  border: 1px solid var(--color-carbon, #111111);
   border-radius: var(--radius-buttons);
-  color: var(--color-amethyst);
+  color: var(--color-carbon, #111111);
   text-decoration: none;
   white-space: nowrap;
 }
 
-.orders__track-btn:hover { background: var(--color-tag-bg); }
+.orders__track-btn:hover { background: var(--color-surface-2, #f1f5f9); }
 
 /* 액션 */
 .orders__detail-acts {
@@ -320,12 +320,12 @@
   font-size: var(--text-small, 0.82rem);
   font-weight: var(--fw-semibold);
   border-radius: var(--radius-buttons);
-  background: var(--color-amethyst);
+  background: var(--color-carbon, #111111);
   color: var(--color-white);
   text-decoration: none;
 }
 
-.orders__pay:hover { background: var(--color-iris-mid, #4b41c6); }
+.orders__pay:hover { background: var(--color-carbon-hover, #2b2b2b); }
 
 .orders__cancel {
   padding: 8px 14px;

@@ -107,13 +107,13 @@
     padding: 6px 14px;
     font-size: 0.8rem;
     font-family: var(--font-body);
-    color: var(--color-amethyst);
+    color: var(--color-carbon, #111111);
     background: none;
-    border: 1px solid var(--color-amethyst);
+    border: 1px solid var(--color-carbon, #111111);
     border-radius: 7px;
     cursor: pointer;
 }
-.adm__search-btn:hover { background: var(--color-tag-bg); }
+.adm__search-btn:hover { background: var(--color-surface-2, #f1f5f9); }
 .adm__select {
     padding: 6px 9px;
     font-size: 0.8rem;
@@ -137,7 +137,7 @@
     cursor: pointer;
 }
 .adm__item:first-child { border-top: none; }
-.adm__item:hover { background: var(--surface-page); }
+.adm__item:hover { background: var(--color-surface-2, #f1f5f9); }
 .adm__item.is-active {
     background: var(--color-tag-bg);
     border-left-color: var(--color-amethyst);
@@ -217,7 +217,7 @@
     flex-wrap: wrap;
     margin: 14px 0;
     padding: 12px 16px;
-    background: var(--surface-page);
+    background: var(--color-surface-2, #f1f5f9);
     border-radius: 10px;
     font-size: 0.83rem;
     color: var(--color-medium-gray);
@@ -258,12 +258,12 @@
     font-weight: var(--fw-bold);
     font-family: var(--font-body);
     color: #fff;
-    background: var(--color-amethyst);
+    background: var(--color-carbon, #111111);
     border: none;
     border-radius: 8px;
     cursor: pointer;
 }
-.adm__done-btn:hover { opacity: 0.9; }
+.adm__done-btn:hover:not(:disabled) { background: var(--color-carbon-hover, #2b2b2b); }
 .adm__done-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .adm__placeholder { padding: 40px 0; text-align: center; color: var(--color-muted-gray); font-size: 0.88rem; }
 
@@ -329,14 +329,14 @@
 .adm__delivery-btn {
     padding: 5px 10px;
     font-size: 0.82rem;
-    border: 1px solid var(--color-amethyst);
+    border: 1px solid var(--color-carbon, #111111);
     border-radius: 6px;
     background: none;
-    color: var(--color-amethyst);
+    color: var(--color-carbon, #111111);
     cursor: pointer;
 }
 .adm__delivery-btn + .adm__delivery-btn { margin-left: 6px; }
-.adm__delivery-btn:hover { background: var(--color-tag-bg); }
+.adm__delivery-btn:hover { background: var(--color-surface-2, #f1f5f9); }
 .adm__delivery-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .adm__delivery-info { margin-right: 8px; font-size: 0.82rem; color: var(--color-muted-gray); }
 

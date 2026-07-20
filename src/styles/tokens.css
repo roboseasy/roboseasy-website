@@ -119,8 +119,10 @@
 }
 
 /* ──────────────────────────────────────────────────────────────
-   라이트 모드 — 색 변수만 재정의 (Tella 라이트 디자인 스펙 기반).
-   <html data-theme="light">에서 활성화. 강조 violet / 시맨틱 색은 공통 유지.
+   라이트 모드 — 색 변수만 재정의 (A안 Mono Carbon 스펙).
+   <html data-theme="light">에서 활성화.
+   규칙: 채움 버튼은 carbon(#111111) 단일 · hover #2b2b2b.
+         signal violet(#5e51f8)은 링크·뱃지·포커스·진행 상태 전용 (채움 버튼 금지).
    ────────────────────────────────────────────────────────────── */
 :root[data-theme='light'] {
   color-scheme: light;
@@ -158,9 +160,10 @@
   --color-ash-border: #e5e7eb;      /* 테두리·구분선 */
   --color-chalk: #ffffff;           /* 페이지 배경 */
   --color-carbon: #111111;          /* 다크 CTA 버튼 */
+  --color-carbon-hover: #2b2b2b;    /* 다크 CTA hover */
 
   /* Aliases (기존 페이지 참조 유지) */
-  --surface-page: #f8fafc;
+  --surface-page: #ffffff;
   --surface-card: #ffffff;
 
   /* Shadows — 라이트에서는 중립 검정 기반 */

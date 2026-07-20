@@ -4,24 +4,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/docs/Sidebar.astro';
 import '../../styles/pages/docs.css';
 
-type Category = 'lerobot-library' | 'lerobot-so-arm' | 'lekiwi' | 'xlerobot';
+type Category = 'lerobot-library' | 'a-ba' | 'a-go' | 'dual-a-ba';
 
 const heroByCategory: Record<Category, { heading: string; description: string }> = {
   'lerobot-library': {
     heading: 'LeRobot Library',
     description: 'HuggingFace LeRobot 라이브러리 완벽 가이드',
   },
-  'lerobot-so-arm': {
-    heading: 'LeRobot SO-ARM',
-    description: 'SO-ARM 101 조립부터 텔레오퍼레이션까지 완벽 가이드',
+  'a-ba': {
+    heading: 'A-Ba(SO-ARM101)',
+    description: 'A-Ba(SO-ARM101) 조립부터 텔레오퍼레이션까지 완벽 가이드',
   },
-  lekiwi: {
-    heading: 'LeKiwi',
-    description: 'LeKiwi 모바일 로봇 플랫폼 개발 가이드',
+  'a-go': {
+    heading: 'A-Go(LeKiwi)',
+    description: 'A-Go(LeKiwi) 모바일 로봇 플랫폼 개발 가이드',
   },
-  xlerobot: {
-    heading: 'XLeRobot',
-    description: 'XLeRobot 확장형 로봇 플랫폼 활용 가이드',
+  'dual-a-ba': {
+    heading: 'Dual A-Ba(Dual SO-ARM)',
+    description: 'Dual A-Ba(Dual SO-ARM) 확장형 로봇 플랫폼 활용 가이드',
   },
 };
 

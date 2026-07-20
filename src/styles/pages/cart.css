@@ -162,7 +162,7 @@
 }
 
 .cart__summary-row--total dd {
-  color: var(--color-amethyst);
+  color: var(--color-ink, #0f172a);
 }
 
 .cart__order-btn {
@@ -171,7 +171,7 @@
   padding: 14px;
   border: 0;
   border-radius: var(--radius-buttons);
-  background: var(--color-amethyst);
+  background: var(--color-carbon, #111111);
   color: var(--color-white);
   font-size: var(--text-body);
   font-weight: var(--fw-semibold);
@@ -179,7 +179,7 @@
 }
 
 .cart__order-btn:hover:not(:disabled) {
-  background: var(--color-iris-mid, #4b41c6);
+  background: var(--color-carbon-hover, #2b2b2b);
 }
 
 .cart__order-btn:disabled {

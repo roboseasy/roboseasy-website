@@ -95,14 +95,14 @@
   padding: 8px 14px;
   font-size: var(--text-small, 0.82rem);
   font-weight: var(--fw-semibold);
-  border: 1px solid var(--color-amethyst);
+  border: 1px solid var(--color-carbon, #111111);
   border-radius: var(--radius-buttons);
   background: none;
-  color: var(--color-amethyst);
+  color: var(--color-carbon, #111111);
   cursor: pointer;
 }
 
-.dibs__cart-btn:hover { background: var(--color-tag-bg); }
+.dibs__cart-btn:hover { background: var(--color-surface-2, #f1f5f9); }
 
 .dibs__del-btn {
   padding: 8px 14px;

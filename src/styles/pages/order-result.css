@@ -61,14 +61,18 @@
   display: inline-block;
   padding: 12px 24px;
   border-radius: var(--radius-buttons);
-  background: var(--color-amethyst);
+  background: var(--color-carbon, #111111);
   color: var(--color-white);
   font-weight: var(--fw-semibold);
   text-decoration: none;
 }
 
+.order-result__btn:hover { background: var(--color-carbon-hover, #2b2b2b); }
+
 .order-result__btn--ghost {
   background: none;
-  border: 1px solid var(--color-amethyst);
-  color: var(--color-amethyst);
+  border: 1px solid var(--color-carbon, #111111);
+  color: var(--color-carbon, #111111);
 }
+
+.order-result__btn--ghost:hover { background: var(--color-surface-2, #f1f5f9); }

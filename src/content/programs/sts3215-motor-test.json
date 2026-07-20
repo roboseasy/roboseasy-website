@@ -2,7 +2,7 @@
   "slug": "sts3215-motor-test",
   "order": 1,
   "title": "Motor Test & ID Setup",
-  "description": "Feetech STS3215\n단일 모터 & SO-ARM 101 테스트 GUI",
+  "description": "Feetech STS3215\n단일 모터 & A-Ba(SO-ARM101) 테스트 GUI",
   "thumbnail": "/img/programs_img/sts3215-motor-test.webp",
   "downloadUrl": "https://drive.google.com/file/d/15tKCtkd2pcynmDJRcnbhutiWKotM1D19/view?usp=sharing"
 }

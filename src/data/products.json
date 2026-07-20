@@ -1,12 +1,12 @@
 {
   "products": [
     {
-      "id": "so-arm101-max",
-      "name": "LeRobot SO-ARM101 MAX",
-      "category": "so-arm101",
+      "id": "a-ba-max",
+      "name": "A-Ba(SO-ARM101) MAX",
+      "category": "a-ba",
       "price": 550000,
       "summary": "",
-      "image": "/img/uploads/so-arm101-max.png",
+      "image": "/img/uploads/so-arm101-max.webp",
       "gallery": [
         "/img/uploads/112851104212780333_856347944.jpg"
       ],
@@ -30,12 +30,12 @@
       "comingSoon": false
     },
     {
-      "id": "lekiwi",
-      "name": "LeKiWi",
-      "category": "lekiwi",
+      "id": "a-go",
+      "name": "A-Go(LeKiwi)",
+      "category": "a-go",
       "price": 0,
       "summary": "",
-      "image": "/img/uploads/lekiwi.png",
+      "image": "/img/uploads/lekiwi.webp",
       "gallery": [],
       "detailImages": [],
       "naverUrl": "",

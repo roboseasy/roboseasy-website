@@ -363,7 +363,7 @@ input.pdp__stepper-value:focus-visible {
 }
 
 .pdp__buy:hover {
-  background-color: #2b2b2b;
+  background-color: var(--color-carbon-hover, #2b2b2b);
 }
 
 .pdp__buy--disabled {
@@ -490,15 +490,11 @@ input.pdp__stepper-value:focus-visible {
 .pdp__detail-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-24);
   max-width: 860px;
   margin: 0 auto;
 }
 
 .pdp__detail-item {
-  border: 1px solid var(--color-ash-border);
-  border-radius: 4px;
-  overflow: hidden;
   background-color: var(--color-surface-2);
 }
 

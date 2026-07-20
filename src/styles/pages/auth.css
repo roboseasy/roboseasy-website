@@ -86,14 +86,14 @@
     font-size: 0.85rem;
     font-weight: var(--fw-semibold);
     font-family: var(--font-body);
-    color: var(--color-amethyst);
-    background: var(--color-tag-bg);
-    border: 1px solid var(--color-amethyst);
+    color: var(--color-carbon, #111111);
+    background: none;
+    border: 1px solid var(--color-carbon, #111111);
     border-radius: 8px;
     cursor: pointer;
-    transition: opacity 0.15s ease;
+    transition: background-color 0.15s ease;
 }
-.auth__zip-btn:hover { opacity: 0.85; }
+.auth__zip-btn:hover { background: var(--color-surface-2, #f1f5f9); }
 
 .auth__consents {
     display: flex;
@@ -137,13 +137,13 @@
     font-weight: var(--fw-bold);
     font-family: var(--font-body);
     color: #fff;
-    background: var(--color-amethyst);
+    background: var(--color-carbon, #111111);
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: opacity 0.15s ease;
+    transition: background-color 0.15s ease;
 }
-.auth__submit:hover { opacity: 0.9; }
+.auth__submit:hover { background: var(--color-carbon-hover, #2b2b2b); }
 .auth__submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .auth__msg {

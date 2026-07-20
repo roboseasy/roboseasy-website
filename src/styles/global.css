@@ -381,17 +381,18 @@ body {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 48px;
+    gap: 40px;
     margin-bottom: 48px;
     border-bottom: 1px solid var(--color-ash-border);
 }
 
 .footer__section {
-    min-width: 180px;
+    min-width: 160px;
 }
 
+/* basis 440px — 주소 한 줄(span 120px + 본문)이 접히지 않는 최소 폭 */
 .footer__section--about {
-    flex: 2;
+    flex: 2 1 440px;
     position: relative;
 }
 
@@ -414,9 +415,33 @@ body {
     z-index: 1;
 }
 
-.footer__section--social,
-.footer__section--store {
+.footer__section--docs,
+.footer__section--store,
+.footer__section--resource {
     flex: 1;
+}
+
+/* 소셜 아이콘 — footer__content 하단 구분선 아래 */
+.footer__social {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+/* astro-icon이 svg를 em 단위(0.97em × 1em 등)로 출력 — font-size가 아이콘 크기를 결정 */
+.footer__social-link {
+    display: inline-flex;
+    font-size: 26px;
+    color: var(--color-medium-gray);
+    transition: color 0.2s ease;
+}
+
+.footer__social-link:hover {
+    color: var(--color-lavender);
 }
 
 .footer__title {
@@ -454,8 +479,9 @@ body {
     color: var(--color-muted-gray);
 }
 
-.footer__section--social .footer__title,
-.footer__section--store .footer__title {
+.footer__section--docs .footer__title,
+.footer__section--store .footer__title,
+.footer__section--resource .footer__title {
     color: var(--color-medium-gray);
 }
 
@@ -659,6 +685,10 @@ body {
         padding: 48px 0 20px;
     }
 
+    .footer__container {
+        padding: 0 24px;
+    }
+
     .footer__content {
         flex-direction: column;
         gap: 24px;
@@ -688,22 +718,25 @@ body {
         margin-right: 0;
     }
 
-    .footer__section--social,
-    .footer__section--store {
+    .footer__section--docs,
+    .footer__section--store,
+    .footer__section--resource {
         display: flex;
         align-items: flex-start;
         gap: 8px;
     }
 
-    .footer__section--social .footer__title,
-    .footer__section--store .footer__title {
+    .footer__section--docs .footer__title,
+    .footer__section--store .footer__title,
+    .footer__section--resource .footer__title {
         flex-shrink: 0;
         min-width: 120px;
         margin-bottom: 0;
     }
 
-    .footer__section--social .footer__list,
-    .footer__section--store .footer__list {
+    .footer__section--docs .footer__list,
+    .footer__section--store .footer__list,
+    .footer__section--resource .footer__list {
         flex: 1;
     }
 }

@@ -93,12 +93,12 @@
   font-family: var(--font-body);
   border: 0;
   border-radius: var(--radius-buttons);
-  background: var(--color-amethyst);
+  background: var(--color-carbon, #111111);
   color: var(--color-white);
   cursor: pointer;
 }
 
-.inq__submit:hover:not(:disabled) { background: var(--color-iris-mid, #4b41c6); }
+.inq__submit:hover:not(:disabled) { background: var(--color-carbon-hover, #2b2b2b); }
 .inq__submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .inq__hint {
@@ -145,7 +145,7 @@
   cursor: pointer;
 }
 
-.inq__acc-head:hover { background: var(--surface-page, #f8fafc); }
+.inq__acc-head:hover { background: var(--color-surface-2, #f1f5f9); }
 
 .inq__acc-subject {
   flex: 1;
@@ -178,7 +178,7 @@
 }
 
 .inq__acc-body {
-  background: var(--surface-page, #f8fafc);
+  background: var(--color-surface-2, #f1f5f9);
   border-radius: var(--radius-inputs);
   padding: var(--spacing-16) 18px;
   margin: 0 0 14px;
