@@ -22,6 +22,10 @@
       "productNumber": "12169101368",
       "brand": "자체제작 상품",
       "origin": "국산",
+      "optionSkus": [
+        "test-product",
+        "assembly-service"
+      ],
       "representative": true,
       "comingSoon": false
     },
@@ -52,6 +56,24 @@
       "productNumber": "0001",
       "brand": "로보시지",
       "origin": "국산",
+      "representative": false,
+      "comingSoon": false
+    },
+    {
+      "id": "assembly-service",
+      "name": "조립서비스",
+      "category": "addon",
+      "price": 90000,
+      "summary": "",
+      "image": "",
+      "gallery": [],
+      "detailImages": [],
+      "specImages": [],
+      "naverUrl": "",
+      "productNumber": "",
+      "brand": "",
+      "origin": "",
+      "optionSkus": [],
       "representative": false,
       "comingSoon": false
     }

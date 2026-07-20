@@ -33,6 +33,9 @@ import '../styles/pages/checkout.css';
           <section class="checkout__section" aria-label="배송지">
             <h2 class="checkout__section-title">배송지</h2>
             <div class="checkout__form">
+              <select id="savedAddr" class="checkout__input" aria-label="저장된 배송지" hidden>
+                <option value="">저장된 배송지 선택</option>
+              </select>
               <div class="checkout__field-row">
                 <input id="f-name" class="checkout__input" type="text" placeholder="수령인" autocomplete="name" aria-label="수령인" />
                 <input id="f-phone" class="checkout__input" type="tel" placeholder="연락처" autocomplete="tel" aria-label="연락처" />
@@ -43,6 +46,10 @@ import '../styles/pages/checkout.css';
               </div>
               <input id="f-address" class="checkout__input" type="text" placeholder="기본 주소 — 주소 검색으로 입력" readonly aria-label="기본 주소" />
               <input id="f-addressDetail" class="checkout__input" type="text" placeholder="상세 주소 (동·호수 등)" autocomplete="address-line2" aria-label="상세 주소" />
+              <div class="checkout__save-addr" id="saveAddrRow">
+                <label><input type="checkbox" id="saveAddr" /> 이 배송지를 주소록에 저장</label>
+                <input id="f-label" class="checkout__input" type="text" placeholder="배송지명 (선택 — 집·회사 등)" aria-label="배송지명" hidden />
+              </div>
             </div>
           </section>
 
@@ -89,6 +96,39 @@ import '../styles/pages/checkout.css';
   // 장바구니-결제 모드에서 주문에 담긴 cart_id — 결제 완료 후 이 항목만 장바구니에서 정리한다.
   // (바로구매·재결제는 비어 있어 장바구니를 건드리지 않음)
   let cartItemIds: string[] = [];
+  // 바로구매의 본품 SKU — 추가 옵션이 품절이어도 본품 주문까지 막지 않도록, 어느 게 본품인지 기억한다
+  let buyNowMainSku: string | null = null;
+  // 저장된 배송지 목록 — 셀렉트에서 고르면 폼을 채운다 (주문에는 그대로 스냅샷 저장)
+  type SavedAddress = {
+    deliveryId: string; deliveryLabel: string | null; receiverName: string;
+    receiverPhone: string; postcode: string; address: string; addressDetail: string;
+  };
+  let savedAddresses: SavedAddress[] = [];
+
+  /* ── 주문서 이탈 정리 ──
+     결제로 넘어가지 않은 채 주문서를 벗어나면 방금 만든 PENDING 주문을 즉시 정리한다.
+     mode=abandon은 결제 시도가 없는 주문만 삭제하므로(결제 기록이 있으면 서버가 보존),
+     승인 직전/직후에 창이 닫혀도 결제된 주문이 사라지지 않는다.
+     재결제 모드(?orderId=)는 기존 주문을 지우면 안 되므로 대상에서 제외한다.
+     이 요청이 유실되는 경우(탭 강제 종료 등)는 서버의 정리 배치가 회수한다. */
+  let abandonOrderId: string | null = null;
+  let handingOffToPayment = false; // requestPayment로 결제창에 넘기는 중 — 이탈로 보지 않음
+
+  const abandonPath = (id: string) => `/api/v1/orders/${encodeURIComponent(id)}/cancel?mode=abandon`;
+
+  async function abandonOrder() {
+    if (!abandonOrderId) return;
+    const id = abandonOrderId;
+    abandonOrderId = null;
+    await fetch(abandonPath(id), { method: 'POST' }).catch(() => {});
+  }
+
+  // 창 닫기·뒤로가기·다른 페이지 이동 — 응답을 기다릴 수 없으므로 sendBeacon으로 발사
+  window.addEventListener('pagehide', () => {
+    if (!abandonOrderId || handingOffToPayment) return;
+    navigator.sendBeacon(abandonPath(abandonOrderId));
+    abandonOrderId = null;
+  });
 
   function fail(message: string) {
     const el = $('pageMsg');
@@ -149,12 +189,20 @@ import '../styles/pages/checkout.css';
       return null;
     }
 
-    const sku = params.get('sku');
-    if (sku) {
-      const product = products.find((p) => p.id === sku);
-      if (!product || product.comingSoon || product.price <= 0) return '구매할 수 없는 제품입니다.';
-      const qty = Math.min(Math.max(parseInt(params.get('qty') ?? '1', 10) || 1, 1), MAX_QTY);
-      items = [{ productSku: product.id, productName: product.name, price: product.price, quantity: qty }];
+    // 바로 구매 — sku/qty 쌍을 순서대로 짝지어 읽는다 (본품 1개 + 제품 상세에서 고른 추가 옵션들)
+    const skus = params.getAll('sku');
+    if (skus.length) {
+      const qtys = params.getAll('qty');
+      const picked: OrderItem[] = [];
+      for (const [i, sku] of skus.entries()) {
+        // 추가 옵션도 정식 제품이라 같은 목록에서 찾으면 된다
+        const product = products.find((p) => p.id === sku);
+        if (!product || product.comingSoon || product.price <= 0) return '구매할 수 없는 제품입니다.';
+        const qty = Math.min(Math.max(parseInt(qtys[i] ?? '1', 10) || 1, 1), MAX_QTY);
+        picked.push({ productSku: product.id, productName: product.name, price: product.price, quantity: qty });
+      }
+      items = picked;
+      buyNowMainSku = skus[0] ?? null; // 첫 SKU가 본품, 이후는 추가 옵션
       return null;
     }
     const res = await fetch('/api/v1/cart_items').catch(() => null);
@@ -166,6 +214,41 @@ import '../styles/pages/checkout.css';
     cartItemIds = active.map((i) => i.cartId);
     return null;
   }
+
+  /* ── 저장된 배송지 ── */
+  async function loadSavedAddresses() {
+    const res = await fetch('/api/v1/deliveries').catch(() => null);
+    if (!res?.ok) return; // 주소록은 부가 기능 — 실패해도 주문서는 그대로 쓸 수 있다
+    savedAddresses = (await res.json()).deliveries ?? [];
+    if (!savedAddresses.length) return;
+
+    const sel = $('savedAddr') as HTMLSelectElement;
+    for (const a of savedAddresses) {
+      const opt = document.createElement('option');
+      opt.value = a.deliveryId;
+      opt.textContent = a.deliveryLabel ? `${a.deliveryLabel} · ${a.receiverName}` : `${a.receiverName} · ${a.address}`;
+      sel.appendChild(opt);
+    }
+    sel.hidden = false;
+  }
+
+  $('savedAddr').addEventListener('change', () => {
+    const a = savedAddresses.find((x) => x.deliveryId === ($('savedAddr') as HTMLSelectElement).value);
+    if (!a) return;
+    input('f-name').value = a.receiverName;
+    input('f-phone').value = a.receiverPhone;
+    input('f-postcode').value = a.postcode;
+    input('f-address').value = a.address;
+    input('f-addressDetail').value = a.addressDetail ?? '';
+    // 이미 저장된 배송지를 골랐으므로 중복 저장 방지
+    input('saveAddr').checked = false;
+    input('f-label').hidden = true;
+  });
+
+  // 저장 체크 시에만 배송지명 입력을 노출 (배송지명은 선택 항목)
+  $('saveAddr').addEventListener('change', () => {
+    input('f-label').hidden = !input('saveAddr').checked;
+  });
 
   /* ── 카카오 우편번호 ── */
   $('zipBtn').addEventListener('click', () => {
@@ -234,10 +317,36 @@ import '../styles/pages/checkout.css';
         });
         const json = await res.json().catch(() => null);
         if (res.status === 401) { location.href = `/login?redirect=${encodeURIComponent('/checkout' + location.search)}`; return; }
+        // 바로구매에서 품절된 게 추가 옵션뿐이면(본품은 판매 중) 그 옵션만 빼고 금액을 다시 보여준다 —
+        // 옵션 하나 때문에 본품 주문까지 막히지 않도록. 사용자가 바뀐 금액을 확인하고 다시 결제한다.
+        if (!res.ok && Array.isArray(json?.unavailableSkus) && buyNowMainSku && !json.unavailableSkus.includes(buyNowMainSku)) {
+          const gone = new Set(json.unavailableSkus as string[]);
+          const dropped = items.filter((i) => gone.has(i.productSku));
+          if (dropped.length && dropped.length < items.length) {
+            items = items.filter((i) => !gone.has(i.productSku));
+            renderItems();
+            msg.textContent = `품절된 옵션을 제외했습니다: ${dropped.map((i) => i.productName).join(', ')}. 금액을 확인하고 다시 결제해 주세요.`;
+            return;
+          }
+        }
         if (!res.ok || !json?.orderId) { msg.textContent = json?.error ?? '주문을 생성하지 못했습니다.'; return; }
         orderId = json.orderId;
         name = json.orderName;
         amount = json.totalPrice; // 금액은 서버 재계산 값이 기준
+        abandonOrderId = orderId; // 여기서부터 이탈 정리 대상
+
+        // 주소록 저장 — 부가 기능이라 실패(개수 초과 등)해도 결제는 그대로 진행
+        if (input('saveAddr').checked) {
+          await fetch('/api/v1/deliveries', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              deliveryLabel: input('f-label').value.trim(),
+              receiverName, receiverPhone, postcode: shippingPostcode,
+              address: shippingAddress, addressDetail: shippingAddressDetail,
+            }),
+          }).catch(() => {});
+        }
       }
 
       // 결제 완료 후 정리할 cart_id를 successUrl 리다이렉트 뒤에도 쓰도록 보관 (같은 탭 sessionStorage).
@@ -250,6 +359,7 @@ import '../styles/pages/checkout.css';
       }
 
       await widgets.setAmount({ currency: 'KRW', value: amount });
+      handingOffToPayment = true; // 결제창으로 리다이렉트 — 이 이탈은 정리 대상이 아님
       await widgets.requestPayment({
         orderId,
         orderName: name,
@@ -259,7 +369,10 @@ import '../styles/pages/checkout.css';
         customerEmail: me.email,
       });
     } catch (err: any) {
-      // 사용자가 결제창을 닫으면 requestPayment가 reject — 주문(PENDING)은 24h 정리 배치가 처리
+      // 결제창을 닫거나(USER_CANCEL) 호출이 실패하면 리다이렉트가 일어나지 않는다 —
+      // 방금 만든 PENDING 주문을 여기서 바로 정리한다 (다시 누르면 새 주문이 생성됨).
+      handingOffToPayment = false;
+      await abandonOrder();
       if (err?.code !== 'USER_CANCEL') {
         console.error(err);
         msg.textContent = err?.message ?? '결제를 시작하지 못했습니다.';
@@ -291,6 +404,10 @@ import '../styles/pages/checkout.css';
       input('f-postcode').value = me.postcode ?? '';
       input('f-address').value = me.address ?? '';
       input('f-addressDetail').value = me.addressDetail ?? '';
+      await loadSavedAddresses();
+    } else {
+      // 재결제는 주문 시점 배송지 고정 — 주소록 선택·저장 모두 해당 없음
+      ($('saveAddrRow') as HTMLElement).hidden = true;
     }
 
     renderItems();

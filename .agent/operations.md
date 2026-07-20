@@ -56,7 +56,7 @@ git push origin main
 DB에 등록된 정기 작업은 SQL Editor에서 확인·검증한다. pg_cron은 Supabase DB(상시 가동)에서 돌아가며 Netlify 배포와 무관하다.
 
 - **최초 활성화**: Dashboard > Database > Extensions에서 `pg_cron`·`pg_net` 활성화(마이그레이션의 `create extension`으로도 시도되나, 권한 이슈 시 대시보드에서 확인).
-- **등록된 작업 조회**: `select jobid, jobname, schedule, active, command from cron.job;` → `purge-expired-contacts`, `marketing-reconfirm-notice`, `purge-rate-limit-buckets`, `cleanup-pending-orders`(2차 — 매시간 미결제 주문 정리) 네 건이 보이면 정상.
+- **등록된 작업 조회**: `select jobid, jobname, schedule, active, command from cron.job;` → `purge-expired-contacts`, `marketing-reconfirm-notice`, `purge-rate-limit-buckets`, `cleanup-pending-orders`(2차 — 15분 간격 미결제 주문 정리) 네 건이 보이면 정상.
 - **실행 이력**: `select jobname, status, return_message, start_time from cron.job_run_details order by start_time desc limit 20;` → `status = 'succeeded'` 확인. 실패면 `return_message`에 원인.
 - **HTTP 호출 결과(pg_net)**: 마케팅 재확인은 엔드포인트를 호출하므로 `select id, status_code, error_msg, created from net._http_response order by created desc limit 10;`로 응답 코드(200 기대) 확인.
 - **수동 실행(테스트)**: 파기는 `select public.purge_expired_contacts();`(삭제 건수 반환). 마케팅 재확인은 `select cron.schedule` 명령 본문을 직접 실행하거나 `curl -X POST https://roboseasy.ai/api/v1/cron/marketing-reconfirm -H "Authorization: Bearer <CRON_SECRET>"`.

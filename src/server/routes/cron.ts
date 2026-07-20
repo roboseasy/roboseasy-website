@@ -29,7 +29,7 @@ function reconfirmHtml(name: string, consentDate: string, siteUrl: string): stri
 /* ── 마케팅 수신동의 2년 주기 재확인 발송 ──
    최종 확인 시점(marketing_reconfirmed_at, 없으면 최초 동의 marketing_consent_at)이
    2년 지난 수신동의 회원에게 안내 메일 발송 → marketing_reconfirmed_at 갱신(다음 2년까지 재발송 안 함).
-   발송 실패 건은 timestamp를 갱신하지 않아 다음 실행에서 재시도. */
+   중복 발송 방지를 위해 timestamp를 '발송 전에' 선점하고, 발송 실패 시 원복해 다음 실행에서 재시도한다. */
 cron.post('/cron/marketing-reconfirm', async (c) => {
   const secret = getEnv('CRON_SECRET');
   if (!secret || c.req.header('authorization') !== `Bearer ${secret}`) {
@@ -43,7 +43,7 @@ cron.post('/cron/marketing-reconfirm', async (c) => {
 
   const { data: due, error } = await db
     .from('profiles')
-    .select('user_id, user_email, user_name, marketing_consent_at')
+    .select('user_id, user_email, user_name, marketing_consent_at, marketing_reconfirmed_at')
     .eq('marketing_consent', true)
     .is('withdrawn_at', null)
     .or(`and(marketing_reconfirmed_at.is.null,marketing_consent_at.lt.${cutoff}),marketing_reconfirmed_at.lt.${cutoff}`)
@@ -69,6 +69,11 @@ cron.post('/cron/marketing-reconfirm', async (c) => {
     const consentDate = u.marketing_consent_at
       ? new Date(u.marketing_consent_at).toLocaleDateString('ko-KR')
       : '(기록 없음)';
+    // 발송 전에 timestamp를 선점 — '메일은 갔는데 갱신 실패'로 다음 실행에서 중복 발송되는 것을 막는다
+    const { error: claimError } = await db
+      .from('profiles').update({ marketing_reconfirmed_at: nowIso }).eq('user_id', u.user_id);
+    if (claimError) { failed.push(u.user_id); continue; }
+
     const { error: mailError } = await resend.emails.send({
       from,
       to: u.user_email,
@@ -76,11 +81,13 @@ cron.post('/cron/marketing-reconfirm', async (c) => {
       subject: '[로보시지] 광고성 정보 수신동의 확인 안내',
       html: reconfirmHtml(u.user_name, consentDate, siteUrl),
     });
-    if (mailError) { failed.push(u.user_id); continue; }
-
-    const { error: upError } = await db
-      .from('profiles').update({ marketing_reconfirmed_at: nowIso }).eq('user_id', u.user_id);
-    if (upError) { failed.push(u.user_id); continue; }
+    if (mailError) {
+      // 발송 실패 — 선점한 timestamp를 원래 값으로 되돌려 다음 실행에서 재시도되게 한다
+      await db.from('profiles')
+        .update({ marketing_reconfirmed_at: u.marketing_reconfirmed_at }).eq('user_id', u.user_id);
+      failed.push(u.user_id);
+      continue;
+    }
     sent++;
   }
 

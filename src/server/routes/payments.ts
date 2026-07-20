@@ -102,10 +102,11 @@ payments.post('/payments/confirm', async (c) => {
   let result = await confirmPayment(paymentKey, orderId, amount);
   if (!result) return c.json({ error: '서버 설정 오류입니다.' }, 500);
 
-  // confirm POST의 ok=true는 승인(DONE)을 의미. 네트워크 순단(NETWORK_ERROR)은 승인 여부가 불확실하므로
-  // ABORTED로 단정하지 않고 토스에 실제 상태를 조회해 재확인한다 — 캡처됐는데 재시도를 유도하면 이중청구.
+  // confirm POST의 ok=true는 승인(DONE)을 의미. 네트워크 순단(NETWORK_ERROR)이나 토스 5xx는 요청이
+  // 닿아 캡처됐을 수 있어 승인 여부가 불확실하므로, ABORTED로 단정하지 않고 토스에 실제 상태를 조회해
+  // 재확인한다 — 캡처됐는데 재시도를 유도하면 이중청구. 4xx(확정 실패)만 그대로 ABORTED 처리한다.
   let approved = result.ok;
-  if (!result.ok && result.errorCode === 'NETWORK_ERROR') {
+  if (!result.ok && (result.errorCode === 'NETWORK_ERROR' || result.status >= 500)) {
     const check = await getPayment(paymentKey);
     if (!check) return c.json({ error: '서버 설정 오류입니다.' }, 500);
     if (check.ok && check.payment?.status === 'DONE') {
@@ -118,7 +119,7 @@ payments.post('/payments/confirm', async (c) => {
       // 조회 실패거나 상태가 IN_PROGRESS 등 승인 여부 불명 — 캡처됐을 수 있어 ABORTED로 단정하면
       // 새 결제를 유도해 이중청구가 된다. 선점 행을 IN_PROGRESS로 남겨(ABORTED 아님) 새 결제 유도를
       // 막고, 재시도 대신 주문 내역 확인을 안내한다. 대사(수동/웹훅)로 후처리.
-      console.error(`payments confirm: 승인 결과 불명(네트워크) — 대사 필요 (order_id=${orderId}, status=${check.ok ? check.payment?.status : 'CHECK_FAILED'})`);
+      console.error(`payments confirm: 승인 결과 불명(네트워크/5xx) — 대사 필요 (order_id=${orderId}, status=${check.ok ? check.payment?.status : 'CHECK_FAILED'})`);
       return c.json({ error: '결제 결과를 확인하지 못했습니다. 중복 결제 방지를 위해 재시도하지 마시고 주문 내역에서 상태를 확인해 주세요.' }, 502);
     }
   }

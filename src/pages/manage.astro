@@ -29,7 +29,10 @@ import '../styles/pages/manage.css';
         <div class="adm__split">
           <div class="adm__list-card">
             <div class="adm__filters">
-              <input id="ct-search" class="adm__search" type="search" placeholder="이름·이메일 검색" aria-label="문의 검색" />
+              <div class="adm__search-box">
+                <input id="ct-search" class="adm__search" type="search" placeholder="이름·이메일 검색" aria-label="문의 검색" />
+                <button type="button" id="ct-searchBtn" class="adm__search-btn">검색</button>
+              </div>
               <select id="f-status" class="adm__select">
                 <option value="">상태 전체</option>
                 <option value="RECEIVED">접수됨</option>
@@ -91,7 +94,10 @@ import '../styles/pages/manage.css';
       <!-- 유저 -->
       <section class="adm__panel" data-panel="users">
         <div class="adm__toolbar">
-          <input id="us-search" class="adm__search" type="search" placeholder="이름·이메일 검색" aria-label="유저 검색" />
+          <div class="adm__search-box">
+            <input id="us-search" class="adm__search" type="search" placeholder="이름·이메일 검색" aria-label="유저 검색" />
+            <button type="button" id="us-searchBtn" class="adm__search-btn">검색</button>
+          </div>
         </div>
         <div class="adm__table-wrap">
           <table class="adm__table">
@@ -113,7 +119,10 @@ import '../styles/pages/manage.css';
       <!-- 주문 -->
       <section class="adm__panel" data-panel="orders">
         <div class="adm__toolbar">
-          <input id="or-search" class="adm__search" type="search" placeholder="수령인·주문번호·주문자 이메일 검색" aria-label="주문 검색" />
+          <div class="adm__search-box">
+            <input id="or-search" class="adm__search" type="search" placeholder="수령인·주문번호·주문자 이메일 검색" aria-label="주문 검색" />
+            <button type="button" id="or-searchBtn" class="adm__search-btn">검색</button>
+          </div>
         </div>
         <div class="adm__table-wrap">
           <table class="adm__table">
@@ -165,12 +174,14 @@ import '../styles/pages/manage.css';
     el.textContent = text;
     return el;
   };
-  // 검색 입력 디바운스 — 타이핑 멈춘 뒤 한 번만 조회
-  const debounce = (fn: () => void, ms = 300) => {
-    let t: ReturnType<typeof setTimeout>;
-    return () => { clearTimeout(t); t = setTimeout(fn, ms); };
-  };
   const searchQuery = (id: string) => ($(id) as HTMLInputElement).value.trim();
+  // 검색 실행은 Enter·검색 버튼으로만 — 타이핑마다 조회하지 않는다(ilike 질의 부하)
+  const onSearch = (inputId: string, btnId: string, run: () => void) => {
+    $(inputId).addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter') run();
+    });
+    $(btnId).addEventListener('click', run);
+  };
 
   /* ── 문의 관리 — 목록 + 상세 ── */
   const CT_TYPE: Record<string, string> = {
@@ -356,7 +367,7 @@ import '../styles/pages/manage.css';
   ['f-channel', 'f-status', 'f-dispute'].forEach((id) =>
     $(id).addEventListener('change', () => { ctPage = 1; loadContacts(); })
   );
-  $('ct-search').addEventListener('input', debounce(() => { ctPage = 1; loadContacts(); }));
+  onSearch('ct-search', 'ct-searchBtn', () => { ctPage = 1; loadContacts(); });
   $('ct-prev').addEventListener('click', () => { ctPage--; loadContacts(); });
   $('ct-next').addEventListener('click', () => { ctPage++; loadContacts(); });
 
@@ -392,7 +403,7 @@ import '../styles/pages/manage.css';
       body.appendChild(tr);
     }
   }
-  $('us-search').addEventListener('input', debounce(() => { usPage = 1; loadUsers(); }));
+  onSearch('us-search', 'us-searchBtn', () => { usPage = 1; loadUsers(); });
   $('us-prev').addEventListener('click', () => { usPage--; loadUsers(); });
   $('us-next').addEventListener('click', () => { usPage++; loadUsers(); });
 
@@ -428,7 +439,7 @@ import '../styles/pages/manage.css';
       body.appendChild(tr);
     }
   }
-  $('or-search').addEventListener('input', debounce(() => { orPage = 1; loadOrders(); }));
+  onSearch('or-search', 'or-searchBtn', () => { orPage = 1; loadOrders(); });
   $('or-prev').addEventListener('click', () => { orPage--; loadOrders(); });
   $('or-next').addEventListener('click', () => { orPage++; loadOrders(); });
 
@@ -471,15 +482,49 @@ import '../styles/pages/manage.css';
       });
       cell.append(tracking, btn);
     } else if (o.status === 'SHIPPING') {
+      // 운송장 오기입 정정 — 수정 버튼을 누르면 입력칸으로 바뀌고, 저장 시 상태 전이 없이 번호만 갱신
       const info = document.createElement('span');
       info.className = 'adm__delivery-info';
       info.textContent = `${o.courier ?? ''} ${o.trackingNumber ?? ''}`.trim();
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'adm__delivery-btn';
-      btn.textContent = '배송 완료';
-      btn.addEventListener('click', () => patch({ status: 'DELIVERED' }, btn));
-      cell.append(info, btn);
+
+      const editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.className = 'adm__delivery-btn';
+      editBtn.textContent = '배송 수정';
+
+      const doneBtn = document.createElement('button');
+      doneBtn.type = 'button';
+      doneBtn.className = 'adm__delivery-btn';
+      doneBtn.textContent = '배송 완료';
+      doneBtn.addEventListener('click', () => patch({ status: 'DELIVERED' }, doneBtn));
+
+      editBtn.addEventListener('click', () => {
+        // 취소·무변경은 이 셀만 원래 3버튼으로 되돌린다 — 전체 목록 재조회(loadOrders) 불필요
+        const restore = () => cell.replaceChildren(info, editBtn, doneBtn);
+        const tracking = document.createElement('input');
+        tracking.className = 'adm__delivery-input';
+        tracking.placeholder = '운송장 번호';
+        tracking.value = o.trackingNumber ?? '';
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'adm__delivery-btn';
+        saveBtn.textContent = '저장';
+        saveBtn.addEventListener('click', () => {
+          const next = tracking.value.trim();
+          if (!next) { alert('운송장 번호를 입력해 주세요.'); return; }
+          if (next === o.trackingNumber) { restore(); return; } // 변경 없음 — 원래 표시로 복귀
+          patch({ trackingNumber: next }, saveBtn);
+        });
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'adm__delivery-btn';
+        cancelBtn.textContent = '취소';
+        cancelBtn.addEventListener('click', restore);
+        cell.replaceChildren(tracking, saveBtn, cancelBtn);
+        tracking.focus();
+      });
+
+      cell.append(info, editBtn, doneBtn);
     } else if (o.trackingNumber) {
       cell.textContent = `${o.courier ?? ''} ${o.trackingNumber}`.trim();
     } else {

@@ -103,6 +103,21 @@
   flex: 0 1 160px;
 }
 
+.checkout__save-addr {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  font-size: var(--text-small, 0.875rem);
+  color: var(--color-muted-gray);
+}
+
+.checkout__save-addr label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
 .checkout__zip-btn {
   padding: 0 var(--spacing-16);
   border: 1px solid var(--color-amethyst);

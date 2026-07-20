@@ -78,7 +78,6 @@
     border-bottom: 1px solid var(--color-surface-2);
 }
 .adm__filters .adm__select { flex: 1; min-width: 0; }
-.adm__filters .adm__search { flex: 1 1 100%; }
 
 /* 검색 인풋 — 셀렉트와 동일 톤 */
 .adm__search {
@@ -92,7 +91,29 @@
 }
 .adm__search::placeholder { color: var(--color-muted-gray); }
 .adm__toolbar { margin-bottom: 10px; }
-.adm__toolbar .adm__search { width: 320px; max-width: 100%; }
+
+/* 검색 인풋 + 실행 버튼 한 벌 (검색은 Enter·버튼으로만 실행).
+   버튼은 flex:none으로 폭을 지키고, 남는 폭은 인풋이 차지하되 min-width:0으로 줄어들 수 있게 한다
+   (min-width가 auto면 인풋의 기본 intrinsic 폭 때문에 버튼이 컨테이너 밖으로 밀려 잘린다) */
+.adm__search-box { display: flex; gap: 6px; min-width: 0; }
+.adm__search-box .adm__search { flex: 1; min-width: 0; }
+.adm__toolbar .adm__search-box { width: 320px; max-width: 100%; }
+/* 문의 탭 필터 영역 — 검색박스가 한 줄을 독점하되(셀렉트가 같은 줄로 올라와 좁아지지 않도록)
+   인풋 자체는 200px까지만 (.adm__search-box 규칙보다 뒤에 와야 max-width가 적용됨) */
+.adm__filters .adm__search-box { flex: 0 0 100%; }
+.adm__filters .adm__search { max-width: 200px; }
+.adm__search-btn {
+    flex: none;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    color: var(--color-amethyst);
+    background: none;
+    border: 1px solid var(--color-amethyst);
+    border-radius: 7px;
+    cursor: pointer;
+}
+.adm__search-btn:hover { background: var(--color-tag-bg); }
 .adm__select {
     padding: 6px 9px;
     font-size: 0.8rem;
@@ -314,6 +335,7 @@
     color: var(--color-amethyst);
     cursor: pointer;
 }
+.adm__delivery-btn + .adm__delivery-btn { margin-left: 6px; }
 .adm__delivery-btn:hover { background: var(--color-tag-bg); }
 .adm__delivery-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .adm__delivery-info { margin-right: 8px; font-size: 0.82rem; color: var(--color-muted-gray); }

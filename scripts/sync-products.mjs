@@ -6,6 +6,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
 import ws from 'ws';
+import { optionSkuErrors } from '../src/data/optionSkus.mjs';
 
 // Netlify 빌드 가드 — develop 브랜치·Deploy Preview 빌드가 prod DB를 덮어쓰지 않도록
 // production 컨텍스트에서만 실행 (로컬 실행은 NETLIFY 미설정이라 통과)
@@ -49,6 +50,10 @@ for (const p of products) {
     errors.push(`${p.id}: price가 0 이상의 숫자가 아님 (${JSON.stringify(p.price)})`);
   }
 }
+
+// 추가 옵션(optionSkus) 검증 — 없는 id면 상세 페이지에서 옵션이 조용히 사라지므로 배포 전에 빌드를 세운다.
+// 규칙은 products.ts 개발 경고와 공유(src/data/optionSkus.mjs)
+errors.push(...optionSkuErrors(products));
 if (errors.length) {
   for (const e of errors) console.error(`[sync-products] ${e}`);
   process.exit(1);
@@ -60,6 +65,7 @@ const db = createClient(url, key, {
   realtime: { transport: ws }, // Node 20에 내장 WebSocket 없음 — 생성자가 요구 (src/server/lib/supabase.ts 참고)
 });
 
+// 추가 옵션(addon)도 일반 제품이라 별도 처리 없이 그대로 upsert된다
 const rows = products.map((p) => ({
   product_sku: p.id,
   product_name: p.name.trim(),

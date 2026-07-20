@@ -43,7 +43,7 @@ Astro catch-all 라우트 마운트 방식: `src/pages/api/[...path].ts`에서 `
 
 ## 2. 데이터 모델 (ERD)
 
-**적용 기준: `supabase/migrations/`** (PostgreSQL, 테이블 9개 — [roboseasy-erd.sql](roboseasy-erd.sql)은 초기 8테이블 설계 기록). 원본 `roboseasy.sql`(v1, MySQL) 대비 변경:
+**적용 기준: `supabase/migrations/`** (PostgreSQL, 테이블 10개 — [roboseasy-erd.sql](roboseasy-erd.sql)은 초기 8테이블 설계 기록). 원본 `roboseasy.sql`(v1, MySQL) 대비 변경:
 
 | 테이블 | 주요 컬럼 | 비고 |
 |---|---|---|
@@ -51,6 +51,7 @@ Astro catch-all 라우트 마운트 방식: `src/pages/api/[...path].ts`에서 `
 | products | product_sku(PK), product_name, category, product_price, is_active, description | JSON(Sveltia)이 원본, DB는 미러 — 아래 "products 동기화" 참조. 재고 관리 없음 |
 | cart_items | cart_id(PK), user_id(FK), product_sku(FK), quantity | UNIQUE(user_id, product_sku) |
 | dibs | dibs_id(PK), user_id(FK), product_sku(FK) | 찜. UNIQUE(user_id, product_sku) |
+| **deliveries** | delivery_id(PK), user_id(FK, ON DELETE CASCADE), delivery_label(선택), receiver_name, receiver_phone, postcode, address, address_detail | **신설** — 회원 배송지 주소록(회원당 최대 10개, API에서 제한). 주문서에서 불러 쓰는 용도일 뿐이고 **주문의 배송지는 orders 스냅샷이 원본** — 여기 행을 수정·삭제해도 접수된 주문은 변하지 않는다. RLS는 본인 행만(cart_items·dibs와 동일, 관리자 예외 없음) |
 | orders | order_id(PK), user_id(FK), total_price, status, 배송 스냅샷(receiver_name/receiver_phone/shipping_postcode/shipping_address/shipping_address_detail), courier, tracking_number | status: `PENDING→PAID→SHIPPING→DELIVERED / CANCELLED` (CHECK) |
 | order_items | oitem_id(PK), order_id(FK), product_sku(FK), quantity, unit_price | 주문 시점 단가 스냅샷 |
 | **payments** | payment_id(PK), order_id(FK), payment_key(UQ), amount, method, status, requested_at/approved_at/canceled_at, cancel_reason, receipt_url, raw_response(jsonb) | **신설** — 토스 승인·취소 기록. status는 토스 상태값 그대로 (CHECK) |
@@ -128,6 +129,8 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 | 장바구니 수정/삭제 | PATCH / DELETE | /api/v1/cart_items/{id} | 구현됨 — RLS 본인 행만(타인·없는 id는 404) |
 | 찜 조회/추가 | GET / POST | /api/v1/dibs | 구현됨 — 중복 찜은 멱등 성공. 미출시(is_active=false) 제품도 찜 허용(출시 대기 용도) |
 | 찜 삭제 | DELETE | /api/v1/dibs/{id} | 구현됨 |
+| 배송지 주소록 조회/추가 | GET / POST | /api/v1/deliveries | 구현됨 — 회원당 최대 10개. 배송지명·상세주소는 선택, 우편번호는 5자리 검증 |
+| 배송지 수정/삭제 | PATCH / DELETE | /api/v1/deliveries/{id} | 구현됨 — PATCH는 전체 필드 교체(우편번호·주소가 한 벌), RLS 본인 행만(타인·없는 id는 404) |
 | 주문 생성 | POST | /api/v1/orders | 구현됨 — 서버가 DB 단가로 재계산(+배송비 3,000원 정액, `src/data/shipping.ts`), PENDING + order_items 단가 스냅샷, 배송지 5필드 스냅샷 |
 | 주문 내역 | GET | /api/v1/orders | 구현됨 — 본인 것만(RLS), 품목·제품명 조인 |
 | 주문 단건 조회 | GET | /api/v1/orders/{id} | 구현됨 — 본인 전용. PENDING 재결제 모드(`/checkout?orderId=`)의 주문서 로드용 |
@@ -141,9 +144,9 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 
 | 기능 | Method | Path | 상태 |
 |---|---|---|---|
-| 전체/개별 주문 조회 | GET | /api/v1/admin/orders, /api/v1/admin/orders/{id} | 구현됨 — status 필터, 상세는 order_items 포함 |
-| 전체/개별 유저 조회 | GET | /api/v1/admin/users, /api/v1/admin/users/{id} | 구현됨 — 페이지네이션(50/페이지) |
-| 주문 배달 관리 | PATCH | /api/v1/admin/orders/{id}/delivery | 구현됨 — 전이 규칙: PAID→SHIPPING(택배사·운송장 필수), SHIPPING→DELIVERED. 운송장은 관리자가 /manage에서 수동 입력 |
+| 전체/개별 주문 조회 | GET | /api/v1/admin/orders, /api/v1/admin/orders/{id} | 구현됨 — status 필터, 상세는 order_items 포함. `q` 검색: `@` 포함=주문자 이메일(profiles 조인 ilike) / hex 4~8자=주문번호 프리픽스(uuid 범위) / 그 외=수령인 이름 ilike |
+| 전체/개별 유저 조회 | GET | /api/v1/admin/users, /api/v1/admin/users/{id} | 구현됨 — 페이지네이션(50/페이지). `q` 검색: 이름·이메일 ilike |
+| 주문 배달 관리 | PATCH | /api/v1/admin/orders/{id}/delivery | 구현됨 — 전이 규칙: PAID→SHIPPING(택배사·운송장 필수), SHIPPING→DELIVERED. 운송장은 관리자가 /manage에서 수동 입력. **status 없이 trackingNumber만 보내면 상태 전이 없이 운송장만 정정**(오기입 수정 — /manage의 SHIPPING 행 "배송 수정" 버튼) |
 | 문의 내역 조회 (B2B·B2C) | GET | /api/v1/admin/contacts | 구현됨 — channel·status·is_dispute 필터 |
 | 문의 상태 관리 | PATCH | /api/v1/admin/contacts/{id} | 구현됨 — 상태 전이 + is_dispute 표시(보유기간 1년/3년 구분 장치) |
 
@@ -153,7 +156,7 @@ Sveltia CMS는 Git 기반 백엔드(GitHub/GitLab/Gitea)만 지원하고 DB 백�
 |---|---|---|---|
 | 마케팅 수신동의 2년 재확인 발송 | POST | /api/v1/cron/marketing-reconfirm | 구현됨 — CRON_SECRET Bearer 인증(pg_net 서버-서버 호출, CSRF 검증 예외). 매월 1일 실행, 대상: 최종 확인 시점(marketing_reconfirmed_at, 없으면 marketing_consent_at)이 2년 경과한 수신동의 회원. 발송 성공 시 marketing_reconfirmed_at 갱신, 실패·메일 예산 소진 건은 다음 실행에서 재시도 |
 
-CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 값으로 설정 — pg_cron job이 Vault에서 읽어 Bearer로 전달. DB 내부에서 끝나는 배치(contacts 파기·버킷 정리·**PENDING 주문 정리** — `cleanup_pending_orders()`, 매시간 30분, 20260714000000 마이그레이션)는 HTTP 없이 pg_cron이 직접 실행.
+CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 값으로 설정 — pg_cron job이 Vault에서 읽어 Bearer로 전달. DB 내부에서 끝나는 배치(contacts 파기·버킷 정리·**PENDING 주문 정리** — `cleanup_pending_orders()`, 15분 간격, 20260720010000 마이그레이션)는 HTTP 없이 pg_cron이 직접 실행.
 
 ---
 
@@ -190,9 +193,10 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 5. 승인 성공: payments 기록 + orders.status=PAID + **주문 품목을 장바구니에서 제거** → 주문 완료 페이지 표시 (**약관 제12조 수신확인통지 역할** — 주문번호·품목·금액 표시) / 실패: 주문 실패 처리
 6. 주문 취소(`POST /api/v1/orders/{id}/cancel` — 상태 분기): PAID면 토스 결제 취소 API 호출 후 CANCELLED (배송 전만 허용 — ORD-10) / PENDING + payments 없음이면 주문 삭제(아래 정리와 동일 규칙)
 
-미결제(PENDING) 주문 정리 — 위젯 이탈은 서버가 관측할 수 없으므로 시간 기반 정리(확정):
-- **pg_cron 매시간**: 생성 후 24시간 경과한 PENDING 주문 중 ① payments 행 없음 → **DELETE**(order_items는 CASCADE, 계약 미성립 건이라 보존 의무 없음) ② payments 행 있음(승인 실패 등) → **CANCELLED 전이**(결제사 대사·분쟁 기록 보존, FK도 삭제를 막음)
-- failUrl/결제 취소 복귀 페이지에서 `POST /api/v1/orders/{id}/cancel` 호출로 즉시 정리 (best-effort 보조 — 별도 엔드포인트 없이 취소 API의 PENDING 분기 재사용)
+미결제(PENDING) 주문 정리 — 클라이언트 즉시 정리 + 시간 기반 배치(확정):
+- **주문서 이탈 즉시 정리**(`src/pages/checkout.astro`): 결제창을 닫거나(USER_CANCEL) 주문서를 벗어날 때 `POST /api/v1/orders/{id}/cancel?mode=abandon`. 페이지 종료 경로는 `pagehide` + `navigator.sendBeacon`(응답을 기다릴 수 없음). **결제창으로 리다이렉트하는 순간은 이탈로 보지 않고**(플래그), 재결제 모드(`?orderId=`)는 기존 주문을 지우면 안 되므로 대상에서 제외. `mode=abandon`은 결제 시도가 없는 주문만 삭제하므로 승인 직전/직후에 창이 닫혀도 결제된 주문은 사라지지 않는다
+- **pg_cron 15분 간격**: 생성 후 **2시간** 경과한 PENDING 주문 중 ① payments 행 없음 → **DELETE**(order_items는 CASCADE, 계약 미성립 건이라 보존 의무 없음) ② payments 행 있음(승인 실패 ABORTED만) → **CANCELLED 전이**(결제사 대사·분쟁 기록 보존, FK도 삭제를 막음). DONE·IN_PROGRESS가 있으면 자동 취소 제외(돈 묶임 방지 — 20260715020000). 위 즉시 정리가 유실된 경우(탭 강제 종료 등)를 회수하는 안전망이라 주기를 짧게 잡되, 주문서를 오래 열어 둔 사용자의 주문이 결제 직전에 사라지지 않도록 2시간 여유를 둔다 (20260720010000)
+- failUrl 복귀 페이지에서도 `POST /api/v1/orders/{id}/cancel?mode=abandon` 호출 (별도 엔드포인트 없이 취소 API의 PENDING 분기 재사용)
 - 4번의 PENDING 가드가 안전망: 삭제된 orderId로 늦게 도착한 confirm은 "주문 없음"으로 거부
 
 ---
@@ -243,7 +247,7 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 - **문의 기록 DB 저장**: 1차부터 contacts 테이블에 기록(메일 발송과 병행) — 법정 보유기간 관리(일반 1년/불만·분쟁 3년, is_dispute 구분). 첨부파일은 DB 미저장, 메일 첨부로만 전달
 - **문의 이원화(B2B/B2C)**: 입구 2개 + 테이블 1개(channel 구분) — B2B는 기존 `/contact` 폼(비로그인 허용, 견적·첨부), B2C는 판매 사이트 개인 문의(`/api/v1/inquiries`, 로그인 전용, 이름·연락처 자동). B2C 문의는 마이페이지에서 본인 것만 조회 가능(RLS `contacts_select_own_b2c`) (§3 참조)
 - **결제수단**: 카드·간편결제만 지원 — 가상계좌 미지원(입금 대기 상태·웹훅 필수화 등 복잡도 회피, 이용약관 제11조에서 제외). 기관 계좌이체 구매는 B2B 견적 문의 경로로 처리
-- **미결제 주문 정리**: pg_cron 매시간 — 24시간 경과 PENDING 중 payments 없으면 DELETE, 있으면 CANCELLED. failUrl 복귀 시 즉시 정리(best-effort), confirm은 PENDING 가드 + 멱등 처리 (§4 참조)
+- **미결제 주문 정리**: 주문서 이탈 시 클라이언트가 즉시 `cancel?mode=abandon` 호출(pagehide는 sendBeacon) + pg_cron 15분 간격 안전망 — 2시간 경과 PENDING 중 payments 없으면 DELETE, ABORTED만 있으면 CANCELLED. confirm은 PENDING 가드 + 멱등 처리 (§4 참조)
 - **주문 취소·배달 관리 경로**: `POST /api/v1/orders/{id}/cancel`, `PATCH /api/v1/admin/orders/{id}/delivery` — 취소는 리소스 삭제가 아닌 상태 전이(+토스 취소 API 호출)이므로 DELETE 대신 액션 POST, 배달 관리는 특정 주문에 속한 정보이므로 주문 하위 경로 (§3 참조)
 
 ### 법무 문서 (초안 — 법률 검토 후 게시)

@@ -45,6 +45,8 @@ collections:
                   - { label: "SO-ARM101", value: "so-arm101" }
                   - { label: "LeKiwi", value: "lekiwi" }
                   - { label: "기타", value: "etc" }
+                  - { label: "부품·액세서리 (제품 목록에서 숨김)", value: "addon" }
+                hint: "'부품·액세서리'는 제품 목록 페이지에 노출되지 않습니다. 본품의 '추가 옵션'으로 붙이거나 링크로 직접 판매하세요"
               - { name: price, label: "가격(원)", widget: number, value_type: int, min: 0, hint: "출시 예정 제품은 0으로 두고 아래 '곧 출시'를 켜세요" }
               - { name: summary, label: "한 줄 설명", widget: text, required: false }
               - { name: image, label: "대표 이미지", widget: image, required: false }
@@ -55,6 +57,21 @@ collections:
               - { name: productNumber, label: "상품번호", widget: string, required: false, hint: "상품정보 표에 표시" }
               - { name: brand, label: "브랜드", widget: string, required: false, hint: "상품정보 표에 표시" }
               - { name: origin, label: "원산지", widget: string, required: false, hint: "상품정보 표에 표시" }
+              - name: optionSkus
+                label: "추가 옵션"
+                label_singular: "옵션"
+                widget: list
+                required: false
+                hint: "이 제품 상세 페이지의 '추가 옵션' 드롭다운에 뜹니다. 부품을 먼저 '부품·액세서리' 카테고리로 등록한 뒤 여기서 고르세요"
+                field:
+                  name: sku
+                  label: "옵션으로 붙일 제품"
+                  widget: relation
+                  collection: products
+                  file: list
+                  search_fields: ["products.*.name"]
+                  display_fields: ["products.*.name"]
+                  value_field: "products.*.id"
               - { name: representative, label: "카테고리 대표(큰 이미지)", widget: boolean, required: false, default: false, hint: "카테고리당 1개만" }
               - { name: comingSoon, label: "곧 출시 배지", widget: boolean, required: false, default: false }
 

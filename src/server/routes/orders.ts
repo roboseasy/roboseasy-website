@@ -100,7 +100,10 @@ orders.post('/orders', async (c) => {
   }
   const bySku = new Map((products ?? []).map((p) => [p.product_sku, p]));
   if (bySku.size !== items.length) {
-    return c.json({ error: '판매 중이 아닌 제품이 포함되어 있습니다.' }, 400);
+    // 어떤 SKU가 판매 중이 아닌지 알려준다 — 바로구매에서 옵션 하나가 품절이어도 본품까지
+    // 막히지 않도록, 클라이언트가 품절 옵션만 빼고 다시 시도할 수 있게 한다.
+    const unavailableSkus = items.filter((i) => !bySku.has(i.sku)).map((i) => i.sku);
+    return c.json({ error: '판매 중이 아닌 제품이 포함되어 있습니다.', unavailableSkus }, 400);
   }
 
   const priced = items.map((i) => {
