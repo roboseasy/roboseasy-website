@@ -30,6 +30,16 @@ contact.post('/contact', rateLimit({ name: 'contact', capacity: 5, refillPerSec:
   if (!body.name || !body.email || !body.phone || !body.type || !body.message) {
     return json({ success: false, error: '필수 항목이 누락되었습니다.' }, 400);
   }
+  // JSON 파싱 결과라 필드가 문자열이 아닐 수 있음(숫자·배열 등) — 문자열이 아니면 아래 길이
+  // 검사가 통과해 버리므로 DB insert·메일 발송 전에 타입부터 확정 (quoteDownload.ts와 동일 기준)
+  if (
+    [body.name, body.email, body.phone, body.type, body.message].some((v) => typeof v !== 'string') ||
+    [body.title, body.org, body.shipto, body.isBuyer, body.purchaseMonth].some(
+      (v) => v != null && typeof v !== 'string'
+    )
+  ) {
+    return json({ success: false, error: '잘못된 요청입니다.' }, 400);
+  }
   // 미지의 type이면 메일은 가도 contacts insert가 CHECK 위반으로 유실됨 — 사전 차단
   if (!TYPE_LABEL[body.type]) {
     return json({ success: false, error: '잘못된 문의 유형입니다.' }, 400);

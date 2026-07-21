@@ -33,9 +33,14 @@ import '../styles/pages/checkout.css';
           <section class="checkout__section" aria-label="배송지">
             <h2 class="checkout__section-title">배송지</h2>
             <div class="checkout__form">
-              <select id="savedAddr" class="checkout__input" aria-label="저장된 배송지" hidden>
-                <option value="">저장된 배송지 선택</option>
-              </select>
+              <div class="checkout__field-row" id="savedAddrRow" hidden>
+                <select id="savedAddr" class="checkout__input" aria-label="저장된 배송지">
+                  <option value="">저장된 배송지 선택</option>
+                </select>
+                <button type="button" id="addrEditBtn" class="checkout__zip-btn" title="현재 입력된 배송지 정보로 수정합니다" hidden>수정</button>
+                <button type="button" id="addrDelBtn" class="checkout__zip-btn" hidden>삭제</button>
+              </div>
+              <div id="addrMsg" class="checkout__msg" role="status" hidden></div>
               <div class="checkout__field-row">
                 <input id="f-name" class="checkout__input" type="text" placeholder="수령인" autocomplete="name" aria-label="수령인" />
                 <input id="f-phone" class="checkout__input" type="tel" placeholder="연락처" autocomplete="tel" aria-label="연락처" />
@@ -216,6 +221,17 @@ import '../styles/pages/checkout.css';
   }
 
   /* ── 저장된 배송지 ── */
+  const optionLabel = (a: SavedAddress) =>
+    a.deliveryLabel ? `${a.deliveryLabel} · ${a.receiverName}` : `${a.receiverName} · ${a.address}`;
+
+  // 배송지 섹션 안내 메시지 — 빈 문자열이면 숨김
+  function addrNotice(text: string, ok = false) {
+    const el = $('addrMsg');
+    el.textContent = text;
+    el.classList.toggle('checkout__msg--ok', ok);
+    el.hidden = !text;
+  }
+
   async function loadSavedAddresses() {
     const res = await fetch('/api/v1/deliveries').catch(() => null);
     if (!res?.ok) return; // 주소록은 부가 기능 — 실패해도 주문서는 그대로 쓸 수 있다
@@ -226,14 +242,18 @@ import '../styles/pages/checkout.css';
     for (const a of savedAddresses) {
       const opt = document.createElement('option');
       opt.value = a.deliveryId;
-      opt.textContent = a.deliveryLabel ? `${a.deliveryLabel} · ${a.receiverName}` : `${a.receiverName} · ${a.address}`;
+      opt.textContent = optionLabel(a);
       sel.appendChild(opt);
     }
-    sel.hidden = false;
+    ($('savedAddrRow') as HTMLElement).hidden = false;
   }
 
   $('savedAddr').addEventListener('change', () => {
     const a = savedAddresses.find((x) => x.deliveryId === ($('savedAddr') as HTMLSelectElement).value);
+    // 수정·삭제는 저장된 배송지를 골랐을 때만
+    ($('addrEditBtn') as HTMLElement).hidden = !a;
+    ($('addrDelBtn') as HTMLElement).hidden = !a;
+    addrNotice('');
     if (!a) return;
     input('f-name').value = a.receiverName;
     input('f-phone').value = a.receiverPhone;
@@ -243,6 +263,69 @@ import '../styles/pages/checkout.css';
     // 이미 저장된 배송지를 골랐으므로 중복 저장 방지
     input('saveAddr').checked = false;
     input('f-label').hidden = true;
+  });
+
+  // 수정 — 폼에 입력된 현재 값으로 선택된 배송지를 덮어쓴다 (배송지명은 폼에 없으므로 기존 값 유지)
+  $('addrEditBtn').addEventListener('click', async () => {
+    const sel = $('savedAddr') as HTMLSelectElement;
+    const a = savedAddresses.find((x) => x.deliveryId === sel.value);
+    if (!a) return;
+    const receiverName = input('f-name').value.trim();
+    const receiverPhone = input('f-phone').value.trim();
+    const postcode = input('f-postcode').value.trim();
+    const address = input('f-address').value.trim();
+    const addressDetail = input('f-addressDetail').value.trim();
+    if (!receiverName || !receiverPhone) { addrNotice('수령인과 연락처를 입력해 주세요.'); return; }
+    if (!/^\d{5}$/.test(postcode) || !address) { addrNotice('주소 검색으로 배송지를 입력해 주세요.'); return; }
+
+    const btn = $('addrEditBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    try {
+      const res = await fetch(`/api/v1/deliveries/${encodeURIComponent(a.deliveryId)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          deliveryLabel: a.deliveryLabel ?? '',
+          receiverName, receiverPhone, postcode, address, addressDetail,
+        }),
+      }).catch(() => null);
+      const json = await res?.json().catch(() => null);
+      if (!res?.ok) { addrNotice(json?.error ?? '배송지를 수정하지 못했습니다.'); return; }
+      Object.assign(a, json);
+      sel.options[sel.selectedIndex].textContent = optionLabel(a);
+      addrNotice('배송지를 수정했습니다.', true);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // 삭제 — 주소록에서만 제거. 폼에 채워진 값은 그대로 두어 이번 주문에는 계속 쓸 수 있다
+  $('addrDelBtn').addEventListener('click', async () => {
+    const sel = $('savedAddr') as HTMLSelectElement;
+    const a = savedAddresses.find((x) => x.deliveryId === sel.value);
+    if (!a) return;
+    if (!confirm('선택한 배송지를 삭제할까요?')) return;
+
+    const btn = $('addrDelBtn') as HTMLButtonElement;
+    btn.disabled = true;
+    try {
+      const res = await fetch(`/api/v1/deliveries/${encodeURIComponent(a.deliveryId)}`, { method: 'DELETE' })
+        .catch(() => null);
+      if (!res?.ok) {
+        const json = await res?.json().catch(() => null);
+        addrNotice(json?.error ?? '배송지를 삭제하지 못했습니다.');
+        return;
+      }
+      savedAddresses = savedAddresses.filter((x) => x.deliveryId !== a.deliveryId);
+      sel.options[sel.selectedIndex].remove();
+      sel.value = '';
+      ($('addrEditBtn') as HTMLElement).hidden = true;
+      ($('addrDelBtn') as HTMLElement).hidden = true;
+      if (!savedAddresses.length) ($('savedAddrRow') as HTMLElement).hidden = true;
+      addrNotice('배송지를 삭제했습니다.', true);
+    } finally {
+      btn.disabled = false;
+    }
   });
 
   // 저장 체크 시에만 배송지명 입력을 노출 (배송지명은 선택 항목)

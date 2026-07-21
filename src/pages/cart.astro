@@ -17,12 +17,13 @@ import '../styles/pages/cart.css';
     <div id="loading" class="cart__loading">불러오는 중...</div>
 
     <div id="content" hidden>
-      <div id="cartEmpty" class="cart__empty" hidden>
-        장바구니가 비어 있습니다. <a href="/products">제품 보러 가기</a>
-      </div>
-
-      <div id="cartBody" class="cart__body" hidden>
-        <ul id="cartList" class="cart__list"></ul>
+      <div id="cartBody" class="cart__body">
+        <div>
+          <ul id="cartList" class="cart__list"></ul>
+          <div id="cartEmpty" class="cart__empty" hidden>
+            장바구니가 비어 있습니다. <a href="/products">제품 보러 가기</a>
+          </div>
+        </div>
 
         <aside class="cart__summary">
           <dl class="cart__summary-list">
@@ -57,10 +58,8 @@ import '../styles/pages/cart.css';
     list.innerHTML = '';
     const empty = items.length === 0;
     $('cartEmpty').hidden = !empty;
-    $('cartBody').hidden = empty;
     $('cartCount').textContent = `${items.length}개 품목`;
     $('cartCount').hidden = empty;
-    if (empty) return;
 
     for (const it of items) {
       const li = document.createElement('li');

@@ -25,6 +25,10 @@
   color: var(--color-medium-gray);
 }
 
+.cart__empty {
+  border-bottom: 1px solid var(--color-ash-border);
+}
+
 .cart__empty a {
   color: var(--color-amethyst);
   text-decoration: underline;

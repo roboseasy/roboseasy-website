@@ -29,7 +29,8 @@ export const esc = (v: unknown): string =>
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 
 /* ── B2C 개인 문의 알림 메일 — B2B(buildEmailHtml)와 동일 양식, 견적번호·소속만 제외 ── */
 export interface B2cEmailPayload {

@@ -171,7 +171,7 @@ orders.get('/orders', async (c) => {
   const { data, error } = await c.get('db')
     .from('orders')
     .select(
-      'order_id, total_price, status, receiver_name, shipping_postcode, shipping_address, shipping_address_detail, courier, tracking_number, created_at, order_items(product_sku, quantity, unit_price, products(product_name))'
+      'order_id, total_price, status, receiver_name, shipping_postcode, shipping_address, shipping_address_detail, courier, tracking_number, refund_amount, created_at, order_items(product_sku, quantity, unit_price, products(product_name))'
     )
     .eq('user_id', c.get('user').id)
     .order('created_at', { ascending: false })
@@ -191,6 +191,7 @@ orders.get('/orders', async (c) => {
       shippingAddressDetail: o.shipping_address_detail,
       courier: o.courier,
       trackingNumber: o.tracking_number,
+      refundAmount: o.refund_amount == null ? null : Number(o.refund_amount),
       createdAt: o.created_at,
       items: mapItems(o.order_items),
     })),
@@ -260,6 +261,11 @@ orders.post('/orders/:id/cancel', async (c) => {
   if (order.status === 'SHIPPING' || order.status === 'DELIVERED') {
     if (abandon) return c.json({ success: true, status: order.status }); // 자동 정리는 배송 건을 건드리지 않음
     return c.json({ error: '배송이 시작된 주문은 취소할 수 없습니다. 고객센터로 문의해 주세요.' }, 400);
+  }
+  // 환불 플로우 진행·완료 건 — 아래 PAID 경로로 흘러 토스 취소가 중복 실행되지 않도록 차단
+  if (order.status === 'REFUND_REQUESTED' || order.status === 'REFUNDED') {
+    if (abandon) return c.json({ success: true, status: order.status });
+    return c.json({ error: '환불이 진행 중이거나 완료된 주문입니다.' }, 400);
   }
 
   const service = getServiceClient();

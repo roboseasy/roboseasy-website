@@ -1,6 +1,8 @@
 import { Hono } from 'hono';
 import { requireAuth, requireAdmin, type AuthEnv } from '../middleware/auth';
 import { UUID_RE } from '../lib/validation';
+import { getServiceClient } from '../lib/supabase';
+import { cancelPayment } from '../lib/toss';
 
 // 관리자 API — /api/v1/admin/* 전체가 requireAuth → requireAdmin 체인으로 보호됨.
 // 조회는 유저 토큰(RLS의 admin 정책)으로 수행 — service role 불필요(이중 방어).
@@ -64,6 +66,10 @@ const orderDto = (r: Record<string, unknown>) => ({
   shippingAddressDetail: r.shipping_address_detail,
   courier: r.courier,
   trackingNumber: r.tracking_number,
+  refundReason: r.refund_reason,
+  refundRequestedAt: r.refund_requested_at,
+  refundedAt: r.refunded_at,
+  refundAmount: r.refund_amount == null ? null : Number(r.refund_amount),
   createdAt: r.created_at,
   updatedAt: r.updated_at,
 });
@@ -243,6 +249,150 @@ admin.patch('/orders/:id/delivery', async (c) => {
     return c.json({ error: '배송 정보 변경에 실패했습니다.' }, 500);
   }
   return c.json({ success: true, order: orderDto(data) });
+});
+
+/* ── 환불 관리 (ADM-08) — 유저는 환불 문의(contacts)로 접수, 처리는 관리자 전용 (backend.md §4):
+   REQUEST: DELIVERED → REFUND_REQUESTED (사유 필수 — 문의 내용 요약. 반품 회수·검수 대기)
+   APPROVE: REFUND_REQUESTED → REFUNDED (토스 취소 — refundAmount 미지정 시 전액, 지정 시 반품비 차감 부분취소)
+   REJECT:  REFUND_REQUESTED → DELIVERED 복귀 (거절 사유는 이메일로 안내 — DB 미저장) ── */
+admin.patch('/orders/:id/refund', async (c) => {
+  const id = c.req.param('id');
+  if (!UUID_RE.test(id)) return c.json({ error: '존재하지 않는 주문입니다.' }, 404);
+  let body: { action?: string; reason?: string; refundAmount?: number };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: '잘못된 요청입니다.' }, 400);
+  }
+  const action = body.action;
+  if (action !== 'REQUEST' && action !== 'APPROVE' && action !== 'REJECT') {
+    return c.json({ error: 'action은 REQUEST/APPROVE/REJECT 중 하나여야 합니다.' }, 400);
+  }
+
+  const db = c.get('db');
+  const { data: order } = await db
+    .from('orders')
+    .select('order_id, status, total_price, refund_reason')
+    .eq('order_id', id)
+    .maybeSingle();
+  if (!order) return c.json({ error: '존재하지 않는 주문입니다.' }, 404);
+
+  if (action === 'REQUEST') {
+    const reason = body.reason?.trim();
+    if (!reason) return c.json({ error: '환불 사유를 입력해 주세요.' }, 400);
+    if (reason.length > 200) return c.json({ error: '환불 사유는 200자 이내로 입력해 주세요.' }, 400);
+    if (order.status !== 'DELIVERED') {
+      return c.json({ error: `배송 완료(DELIVERED) 주문만 환불 접수할 수 있습니다. (현재: ${order.status})` }, 400);
+    }
+    // status 조건을 갱신에도 걸어 동시 요청 시 한 번만 전이 (배송 관리와 달리 돈이 걸린 전이라 명시 가드)
+    const { data, error } = await db
+      .from('orders')
+      .update({ status: 'REFUND_REQUESTED', refund_reason: reason, refund_requested_at: new Date().toISOString() })
+      .eq('order_id', id)
+      .eq('status', 'DELIVERED')
+      .select()
+      .maybeSingle();
+    if (error || !data) {
+      if (!error) return c.json({ error: '주문 상태가 변경되었습니다. 새로고침해 주세요.' }, 409);
+      console.error('refund REQUEST 전이 오류:', error);
+      return c.json({ error: '환불 접수에 실패했습니다.' }, 500);
+    }
+    return c.json({ success: true, order: orderDto(data) });
+  }
+
+  if (order.status !== 'REFUND_REQUESTED') {
+    return c.json({ error: `환불 접수(REFUND_REQUESTED) 주문만 처리할 수 있습니다. (현재: ${order.status})` }, 400);
+  }
+
+  if (action === 'REJECT') {
+    // REQUEST가 DELIVERED에서만 가능하므로 복귀 상태는 항상 DELIVERED.
+    // refund_reason·requested_at은 접수 이력으로 보존 (재접수 시 덮어씀)
+    const { data, error } = await db
+      .from('orders')
+      .update({ status: 'DELIVERED' })
+      .eq('order_id', id)
+      .eq('status', 'REFUND_REQUESTED')
+      .select()
+      .maybeSingle();
+    if (error || !data) {
+      if (!error) return c.json({ error: '주문 상태가 변경되었습니다. 새로고침해 주세요.' }, 409);
+      console.error('refund REJECT 전이 오류:', error);
+      return c.json({ error: '환불 거절에 실패했습니다.' }, 500);
+    }
+    return c.json({ success: true, order: orderDto(data) });
+  }
+
+  // APPROVE — 환불액 확정(기본 전액) 후 토스 취소 → REFUNDED
+  const total = Number(order.total_price);
+  const amount = body.refundAmount == null ? total : Number(body.refundAmount);
+  // 토스 취소 금액은 원 단위 정수만 유효 — 소수는 사전 차단
+  if (!Number.isInteger(amount) || amount <= 0 || amount > total) {
+    return c.json({ error: `환불 금액이 올바르지 않습니다. (1 ~ ${total}원 정수)` }, 400);
+  }
+
+  // payments는 관리자 RLS 조회 정책이 없어 service role로 접근 (orders.ts 취소 경로와 동일)
+  const service = getServiceClient();
+  if (!service) return c.json({ error: '서버 설정 오류입니다.' }, 500);
+  const { data: donePay } = await service
+    .from('payments')
+    .select('payment_id, payment_key')
+    .eq('order_id', id)
+    .eq('status', 'DONE')
+    .order('approved_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (!donePay) {
+    console.error(`refund APPROVE: 승인(DONE) 결제가 없음 (order_id=${id})`);
+    return c.json({ error: '결제 정보를 확인할 수 없습니다. 결제 내역 대사가 필요합니다.' }, 500);
+  }
+
+  const reason = order.refund_reason ?? '환불 승인';
+
+  // 이중 환불 방지 — 토스 호출 '전에' REFUNDED로 CAS 선점. 부분취소(cancelAmount)는
+  // 전액취소(ALREADY_CANCELED 멱등)와 달리 토스가 잔액 내 반복 실행을 허용하므로,
+  // 동시 APPROVE·실패 후 재시도가 취소를 중복 실행하지 않도록 상태 전이를 먼저 건다.
+  // 토스 취소 실패 시 아래에서 REFUND_REQUESTED로 복귀시켜 재시도를 허용한다.
+  const { data: claimed, error: claimError } = await db
+    .from('orders')
+    .update({ status: 'REFUNDED', refunded_at: new Date().toISOString(), refund_amount: amount })
+    .eq('order_id', id)
+    .eq('status', 'REFUND_REQUESTED')
+    .select()
+    .maybeSingle();
+  if (claimError || !claimed) {
+    if (!claimError) return c.json({ error: '주문 상태가 변경되었습니다. 새로고침해 주세요.' }, 409);
+    console.error('refund APPROVE 선점 오류:', claimError);
+    return c.json({ error: '환불 처리에 실패했습니다.' }, 500);
+  }
+
+  // 전액이어도 cancelAmount를 명시해 의도를 고정 — 이미 취소된 결제는 멱등 성공 처리
+  const result = await cancelPayment(donePay.payment_key, reason, amount);
+  if (!result || (!result.ok && result.errorCode !== 'ALREADY_CANCELED_PAYMENT')) {
+    // 출금 없음 — 선점을 되돌려 재시도 가능 상태로 복귀
+    const { error: revertError } = await db
+      .from('orders')
+      .update({ status: 'REFUND_REQUESTED', refunded_at: null, refund_amount: null })
+      .eq('order_id', id)
+      .eq('status', 'REFUNDED');
+    if (revertError) {
+      console.error('refund APPROVE 선점 복구 오류:', revertError);
+      return c.json({ error: '결제 취소가 실행되지 않았으나 주문 상태 복구에 실패했습니다. 새로고침 후 결제 내역을 확인해 주세요.' }, 500);
+    }
+    if (!result) return c.json({ error: '서버 설정 오류입니다.' }, 500);
+    console.error('toss 환불 취소 실패:', result.status, result.errorCode, result.errorMessage);
+    return c.json({ error: result.errorMessage ?? '결제 취소에 실패했습니다.' }, 502);
+  }
+
+  // 부분취소면 토스 상태가 PARTIAL_CANCELED — 응답값 우선, 없으면 금액으로 판별
+  const payStatus = (result.payment?.status as string | undefined)
+    ?? (amount < total ? 'PARTIAL_CANCELED' : 'CANCELED');
+  const { error: payError } = await service
+    .from('payments')
+    .update({ status: payStatus, canceled_at: new Date().toISOString(), cancel_reason: reason })
+    .eq('payment_id', donePay.payment_id);
+  if (payError) console.error('payments 환불 기록 오류:', payError); // 토스는 이미 취소됨 — 기록 실패만 로깅
+
+  return c.json({ success: true, order: orderDto(claimed) });
 });
 
 /* ── 문의 관리 (ADM-07) — channel·status·is_dispute 필터 + q(이름·이메일) 검색 ── */

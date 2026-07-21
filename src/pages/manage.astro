@@ -73,6 +73,7 @@ import '../styles/pages/manage.css';
                 <span><b>이름</b><span id="d-name"></span></span>
                 <span><b>이메일</b><span id="d-email"></span></span>
                 <span><b>전화</b><span id="d-phone"></span></span>
+                <span id="d-orderWrap" hidden><b>연계 주문</b><button type="button" id="d-order" class="adm__order-link"></button></span>
               </div>
               <p class="adm__detail-msg" id="d-msg"></p>
               <div class="adm__detail-actions">
@@ -196,7 +197,7 @@ import '../styles/pages/manage.css';
 
   type Contact = {
     contactId: string; createdAt: string; channel: string; contactType: string;
-    name: string; email: string; phone: string; message: string;
+    name: string; email: string; phone: string; message: string; orderId: string | null;
     isDispute: boolean; status: string;
   };
   let contacts: Contact[] = [];
@@ -271,6 +272,8 @@ import '../styles/pages/manage.css';
     $('d-name').textContent = q.name;
     $('d-email').textContent = q.email;
     $('d-phone').textContent = q.phone || '-';
+    ($('d-orderWrap') as HTMLElement).hidden = !q.orderId;
+    $('d-order').textContent = q.orderId ? q.orderId.slice(0, 8) : '';
     $('d-msg').textContent = q.message;
     ($('d-statusSel') as HTMLSelectElement).value = q.status;
     ($('d-dispute') as HTMLInputElement).checked = q.isDispute;
@@ -364,6 +367,16 @@ import '../styles/pages/manage.css';
     selectContact(q.contactId);
   });
 
+  // 연계 주문으로 이동 — 주문 탭 전환 + 주문번호 프리픽스 검색 (환불 문의 → 해당 주문 환불 처리 동선)
+  $('d-order').addEventListener('click', () => {
+    const q = contacts.find((x) => x.contactId === selectedId);
+    if (!q?.orderId) return;
+    ($('or-search') as HTMLInputElement).value = q.orderId.slice(0, 8);
+    orPage = 1;
+    loadOrders();
+    (document.querySelector('.adm__seg-btn[data-panel="orders"]') as HTMLButtonElement)?.click();
+  });
+
   ['f-channel', 'f-status', 'f-dispute'].forEach((id) =>
     $(id).addEventListener('change', () => { ctPage = 1; loadContacts(); })
   );
@@ -443,15 +456,19 @@ import '../styles/pages/manage.css';
   $('or-prev').addEventListener('click', () => { orPage--; loadOrders(); });
   $('or-next').addEventListener('click', () => { orPage++; loadOrders(); });
 
-  /* 배송 관리 셀 — PAID: 택배사·운송장 입력 + 배송 시작 / SHIPPING: 배송 완료 (전이 규칙은 서버 검증) */
-  function deliveryCell(o: { orderId: string; status: string; courier: string | null; trackingNumber: string | null }) {
+  /* 배송·환불 관리 셀 — PAID: 배송 시작 / SHIPPING: 배송 완료 / DELIVERED: 환불 접수 /
+     REFUND_REQUESTED: 환불 승인·거절 (전이 규칙은 서버 검증) */
+  function deliveryCell(o: {
+    orderId: string; status: string; courier: string | null; trackingNumber: string | null;
+    totalPrice: number | string; refundAmount: number | null;
+  }) {
     const cell = document.createElement('td');
     cell.className = 'adm__nowrap';
 
-    const patch = async (payload: object, btn: HTMLButtonElement) => {
+    const patch = async (payload: object, btn: HTMLButtonElement, path = 'delivery') => {
       btn.disabled = true;
       try {
-        const res = await fetch(`/api/v1/admin/orders/${o.orderId}/delivery`, {
+        const res = await fetch(`/api/v1/admin/orders/${o.orderId}/${path}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -525,6 +542,50 @@ import '../styles/pages/manage.css';
       });
 
       cell.append(info, editBtn, doneBtn);
+    } else if (o.status === 'DELIVERED') {
+      // 환불 문의 확인 후 여기서 접수 — REQUEST 전이(반품 회수·검수 대기), 승인 전까지 돈은 안 움직임
+      if (o.trackingNumber) {
+        const info = document.createElement('span');
+        info.className = 'adm__delivery-info';
+        info.textContent = `${o.courier ?? ''} ${o.trackingNumber}`.trim();
+        cell.appendChild(info);
+      }
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'adm__delivery-btn';
+      btn.textContent = '환불 접수';
+      btn.addEventListener('click', () => {
+        const reason = prompt('환불 사유 (환불 문의 내용 요약, 200자 이내)');
+        if (reason === null) return;
+        if (!reason.trim()) { alert('환불 사유를 입력해 주세요.'); return; }
+        patch({ action: 'REQUEST', reason: reason.trim() }, btn, 'refund');
+      });
+      cell.appendChild(btn);
+    } else if (o.status === 'REFUND_REQUESTED') {
+      const total = Number(o.totalPrice);
+      const approveBtn = document.createElement('button');
+      approveBtn.type = 'button';
+      approveBtn.className = 'adm__delivery-btn';
+      approveBtn.textContent = '환불 승인';
+      approveBtn.addEventListener('click', () => {
+        const v = prompt('환불 금액(원) — 반품비 차감 시 수정', String(total));
+        if (v === null) return;
+        const amount = Number(v.replace(/[^\d]/g, ''));
+        if (!amount || amount > total) { alert(`환불 금액이 올바르지 않습니다. (1 ~ ${total.toLocaleString('ko-KR')}원)`); return; }
+        if (!confirm(`${amount.toLocaleString('ko-KR')}원을 환불(토스 결제 취소)합니다. 진행할까요?`)) return;
+        patch({ action: 'APPROVE', refundAmount: amount }, approveBtn, 'refund');
+      });
+      const rejectBtn = document.createElement('button');
+      rejectBtn.type = 'button';
+      rejectBtn.className = 'adm__delivery-btn';
+      rejectBtn.textContent = '거절';
+      rejectBtn.addEventListener('click', () => {
+        if (!confirm('환불 접수를 거절하고 배송 완료 상태로 되돌릴까요? (사유는 이메일로 안내해 주세요)')) return;
+        patch({ action: 'REJECT' }, rejectBtn, 'refund');
+      });
+      cell.append(approveBtn, rejectBtn);
+    } else if (o.status === 'REFUNDED') {
+      cell.textContent = o.refundAmount != null ? `환불 ${Number(o.refundAmount).toLocaleString('ko-KR')}원` : '환불 완료';
     } else if (o.trackingNumber) {
       cell.textContent = `${o.courier ?? ''} ${o.trackingNumber}`.trim();
     } else {

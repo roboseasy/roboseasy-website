@@ -75,9 +75,12 @@ export function confirmPayment(paymentKey: string, orderId: string, amount: numb
   return tossFetch('/payments/confirm', { paymentKey, orderId, amount });
 }
 
-/** 결제 취소 — 승인된 결제(paymentKey)를 전액 취소 */
-export function cancelPayment(paymentKey: string, cancelReason: string) {
-  return tossFetch(`/payments/${encodeURIComponent(paymentKey)}/cancel`, { cancelReason });
+/** 결제 취소 — cancelAmount 미지정 시 전액, 지정 시 부분취소(반품비 차감 환불용) */
+export function cancelPayment(paymentKey: string, cancelReason: string, cancelAmount?: number) {
+  return tossFetch(`/payments/${encodeURIComponent(paymentKey)}/cancel`, {
+    cancelReason,
+    ...(cancelAmount != null ? { cancelAmount } : {}),
+  });
 }
 
 /** 결제 조회 — confirm 결과가 불확실할 때(네트워크 순단 등) 토스의 실제 상태를 확인해 이중청구 방지 */

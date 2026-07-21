@@ -81,14 +81,26 @@ payments.post('/payments/confirm', async (c) => {
       if (existing.status === 'DONE') {
         // 이전 confirm이 캡처는 됐으나 주문 PAID 전이가 실패해 PENDING으로 남았을 수 있음 —
         // 여기서 멱등하게 전이를 재시도해 복구(안 하면 24h 정리 크론이 결제된 주문을 취소해 버림).
-        const { error: fixError } = await service
+        const { data: fixed, error: fixError } = await service
           .from('orders')
           .update({ status: 'PAID' })
           .eq('order_id', orderId)
-          .eq('status', 'PENDING');
+          .eq('status', 'PENDING')
+          .select('order_id');
         if (fixError) {
           console.error('orders PAID 전이 재시도 오류:', fixError);
           return c.json({ error: '결제는 완료되었으나 주문 상태 갱신에 실패했습니다. 새로고침해 주세요.' }, 500);
+        }
+        if (!fixed?.length) {
+          // 전이할 PENDING 행이 없음 — 동시 요청이 이미 PAID로 전이했으면 성공이지만,
+          // 취소 등으로 다른 상태가 됐다면(환불됐는데 payments CANCELED 기록만 실패한 잔여 등)
+          // 결제됨으로 응답하면 안 됨 — 현재 상태를 확인해 분기 (아래 정상 승인 경로와 동일 기준)
+          const { data: cur } = await service
+            .from('orders').select('status').eq('order_id', orderId).maybeSingle();
+          if (cur?.status !== 'PAID') {
+            console.error(`payments confirm: DONE 결제가 있으나 주문 상태가 ${cur?.status ?? '없음'} (order_id=${orderId}) — 대사 필요`);
+            return c.json({ error: '결제가 완료되었으나 주문 확인에 문제가 있습니다. 고객센터로 문의해 주세요.' }, 409);
+          }
         }
         return c.json({ success: true, orderId, status: 'PAID', receiptUrl: existing.receipt_url ?? null });
       }

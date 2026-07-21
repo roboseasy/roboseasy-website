@@ -37,7 +37,7 @@ const { title, description, path, image, bodyClass, chrome = true, lockTheme = f
     <SeoMeta title={title} description={description} path={path} image={image} />
     <slot name="head" />
   </head>
-  <body class={bodyClass}>
+  <body class:list={[bodyClass, shopNav && 'has-shop-nav']}>
     {chrome && <MainHeader shopNav={shopNav} />}
     <slot />
     {chrome && <MainFooter />}

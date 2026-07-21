@@ -41,6 +41,8 @@ import '../styles/pages/orders.css';
     SHIPPING: 'orders__badge--progress',
     DELIVERED: 'orders__badge--done',
     CANCELLED: '',
+    REFUND_REQUESTED: 'orders__badge--wait',
+    REFUNDED: '',
   };
 
   // 진행 스텝 — 별도 "상품 준비" 상태값이 없어 PAID를 결제 완료·상품 준비 두 칸으로 표시
@@ -53,15 +55,15 @@ import '../styles/pages/orders.css';
   type Order = {
     orderId: string; totalPrice: number; status: string; createdAt: string;
     receiverName: string; shippingPostcode: string; shippingAddress: string; shippingAddressDetail: string;
-    courier: string | null; trackingNumber: string | null;
+    courier: string | null; trackingNumber: string | null; refundAmount: number | null;
     items: { productSku: string; productName: string; quantity: number; unitPrice: number }[];
   };
 
   const FILTERS: { key: string; label: string; match: (o: Order) => boolean }[] = [
     { key: 'all', label: '전체', match: () => true },
-    { key: 'active', label: '진행 중', match: (o) => ['PENDING', 'PAID', 'SHIPPING'].includes(o.status) },
+    { key: 'active', label: '진행 중', match: (o) => ['PENDING', 'PAID', 'SHIPPING', 'REFUND_REQUESTED'].includes(o.status) },
     { key: 'done', label: '완료', match: (o) => o.status === 'DELIVERED' },
-    { key: 'cancelled', label: '취소', match: (o) => o.status === 'CANCELLED' },
+    { key: 'cancelled', label: '취소·환불', match: (o) => ['CANCELLED', 'REFUNDED'].includes(o.status) },
   ];
 
   let orders: Order[] = [];
@@ -154,6 +156,16 @@ import '../styles/pages/orders.css';
       note.className = 'orders__detail-cancelled';
       note.textContent = '결제 취소(환불)된 주문입니다.';
       detail.appendChild(note);
+    } else if (o.status === 'REFUND_REQUESTED') {
+      const note = document.createElement('p');
+      note.className = 'orders__detail-cancelled';
+      note.textContent = '환불이 접수된 주문입니다. 반품 상품 확인 후 환불이 진행되며, 안내는 가입하신 이메일로 드립니다.';
+      detail.appendChild(note);
+    } else if (o.status === 'REFUNDED') {
+      const note = document.createElement('p');
+      note.className = 'orders__detail-cancelled';
+      note.textContent = `환불 완료된 주문입니다.${o.refundAmount != null ? ` (환불 금액 ${won(o.refundAmount)})` : ''}`;
+      detail.appendChild(note);
     } else if (STEP_DONE[o.status]) {
       const doneCount = STEP_DONE[o.status];
       const steps = document.createElement('div');
@@ -170,7 +182,7 @@ import '../styles/pages/orders.css';
       detail.appendChild(steps);
     }
 
-    // ④ 운송장 · 배송 조회 (로젠택배)
+    // ④ 운송장 + 액션 — 배송 중: 배송 조회(로젠택배) / 배송 완료: 환불 문의(문의 폼에 주문 연계)
     if (o.trackingNumber) {
       const track = document.createElement('div');
       track.className = 'orders__track';
@@ -179,13 +191,22 @@ import '../styles/pages/orders.css';
       const no = document.createElement('b');
       no.className = 'orders__track-no';
       no.textContent = o.trackingNumber;
-      const link = document.createElement('a');
-      link.className = 'orders__track-btn';
-      link.href = trackUrl(o.trackingNumber);
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = '배송 조회';
-      track.append(label, no, link);
+      track.append(label, no);
+      if (o.status === 'SHIPPING') {
+        const link = document.createElement('a');
+        link.className = 'orders__track-btn';
+        link.href = trackUrl(o.trackingNumber);
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = '배송 조회';
+        track.appendChild(link);
+      } else if (o.status === 'DELIVERED') {
+        const link = document.createElement('a');
+        link.className = 'orders__track-btn';
+        link.href = `/inquiry?orderId=${o.orderId}&type=refund`;
+        link.textContent = '환불 문의';
+        track.appendChild(link);
+      }
       detail.appendChild(track);
     }
 
@@ -248,7 +269,7 @@ import '../styles/pages/orders.css';
       const open = openId === o.orderId;
 
       const row = document.createElement('div');
-      row.className = `orders__row${open ? ' orders__row--open' : ''}${o.status === 'CANCELLED' ? ' orders__row--off' : ''}`;
+      row.className = `orders__row${open ? ' orders__row--open' : ''}${['CANCELLED', 'REFUNDED'].includes(o.status) ? ' orders__row--off' : ''}`;
       row.tabIndex = 0;
       row.setAttribute('role', 'button');
       row.setAttribute('aria-expanded', String(open));

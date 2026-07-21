@@ -50,7 +50,7 @@ import '../styles/pages/inquiry.css';
             <textarea id="q-message" class="inq__textarea" placeholder="문의 내용을 입력해 주세요" maxlength="5000"></textarea>
           </div>
           <button type="submit" id="inquiryBtn" class="inq__submit">문의 등록</button>
-          <p class="inq__hint">문의 답변은 가입하신 이메일로만 안내됩니다.</p>
+          <p class="inq__hint">문의 답변은 가입하신 이메일로만 안내됩니다. 사진 등 추가 자료가 필요하면 답변 이메일에 회신으로 보내주세요.</p>
         </form>
       </section>
 
@@ -178,7 +178,17 @@ import '../styles/pages/inquiry.css';
         opt.textContent = `${new Date(o.createdAt).toLocaleDateString('ko-KR')} · ${o.orderId.slice(0, 8)} · ${summary}`;
         sel.appendChild(opt);
       }
+      // 주문 내역에서 진입(/inquiry?orderId=&type=refund) — 해당 주문 프리셀렉트 (본인 주문이 아니면 무시됨)
+      const qpOrder = new URLSearchParams(location.search).get('orderId');
+      if (qpOrder) sel.value = qpOrder;
     } catch { /* 드롭다운 생략 */ }
+  }
+
+  // ?type= 프리셀렉트 — 옵션에 있는 값만 반영
+  {
+    const qpType = new URLSearchParams(location.search).get('type');
+    const typeSel = $('q-type') as HTMLSelectElement;
+    if (qpType && [...typeSel.options].some((o) => o.value === qpType)) typeSel.value = qpType;
   }
 
   /* ── 등록 ── */

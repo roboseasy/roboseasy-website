@@ -6,4 +6,6 @@ export const ORDER_STATUS_LABEL: Record<string, string> = {
   SHIPPING: '배송 중',
   DELIVERED: '배송 완료',
   CANCELLED: '취소됨',
+  REFUND_REQUESTED: '환불 접수',
+  REFUNDED: '환불 완료',
 };

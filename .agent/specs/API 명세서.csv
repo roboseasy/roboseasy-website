@@ -23,6 +23,10 @@
 찜 조회,/api/v1/dibs,GET,,완료,기호 김,완료
 찜 추가,/api/v1/dibs,POST,,완료,기호 김,완료
 찜 삭제,/api/v1/dibs/{id},DELETE,,완료,기호 김,완료
+배송지 목록 조회,/api/v1/deliveries,GET,,완료,기호 김,완료
+배송지 추가,/api/v1/deliveries,POST,,완료,기호 김,완료
+배송지 수정,/api/v1/deliveries/{id},PATCH,,완료,기호 김,완료
+배송지 삭제,/api/v1/deliveries/{id},DELETE,,완료,기호 김,완료
 주문,/api/v1/orders,POST,,완료,기호 김,완료
 주문 단건 조회,/api/v1/orders/{id},GET,,완료,기호 김,완료
 주문 내역,/api/v1/orders,GET,,완료,기호 김,완료
@@ -35,6 +39,7 @@
 전체 유저 조회,/api/v1/admin/users,GET,,완료,기호 김,완료
 개별 유저 조회,/api/v1/admin/users/{id},GET,,완료,기호 김,완료
 주문 배달 관리,/api/v1/admin/orders/{id}/delivery,PATCH,,완료,기호 김,완료
+환불 관리 (접수·승인·거절),/api/v1/admin/orders/{id}/refund,PATCH,,완료,기호 김,완료
 문의 내역 조회 (B2B·B2C),/api/v1/admin/contacts,GET,,완료,기호 김,완료
 문의 상태 관리,/api/v1/admin/contacts/{id},PATCH,,완료,기호 김,완료
 ,,,[스케줄러 — pg_cron 전용],,,

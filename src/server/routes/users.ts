@@ -78,7 +78,8 @@ users.post(
   if (!anon) return c.json({ error: '서버 설정 오류입니다.' }, 500);
 
   // 이메일 확인 후 이동할 페이지 — 로컬/프로덕션 origin을 따라감
-  const origin = c.req.header('origin') ?? getEnv('PUBLIC_SITE_URL') ?? 'https://roboseasy.ai';
+  // getEnv는 미설정 시 ''를 반환하므로 ??가 아닌 ||로 폴백 (cron.ts와 동일 기준)
+  const origin = c.req.header('origin') || getEnv('PUBLIC_SITE_URL') || 'https://roboseasy.ai';
 
   const { data, error } = await anon.auth.signUp({
     email,
@@ -276,7 +277,8 @@ users.post(
   const anon = createAnonClient();
   if (!anon) return c.json({ error: '서버 설정 오류입니다.' }, 500);
 
-  const origin = c.req.header('origin') ?? getEnv('PUBLIC_SITE_URL') ?? 'https://roboseasy.ai';
+  // getEnv는 미설정 시 ''를 반환하므로 ??가 아닌 ||로 폴백 (cron.ts와 동일 기준)
+  const origin = c.req.header('origin') || getEnv('PUBLIC_SITE_URL') || 'https://roboseasy.ai';
   const { error } = await anon.auth.resetPasswordForEmail(body.email, {
     redirectTo: `${origin}/reset-password`,
   });
@@ -423,19 +425,20 @@ users.delete('/users/me', requireAuth, async (c) => {
   const uid = c.get('user').id;
   const scrambled = anonEmail(uid);
 
-  // 배송 미완료(결제 완료·배송 중) 주문이 있으면 탈퇴 보류 (약관 제7조 1항 — 거래 완료 후 처리)
-  // PENDING(미결제 방치)·CANCELLED·DELIVERED는 진행 중 거래가 아니므로 차단 대상 아님.
+  // 배송 미완료(결제 완료·배송 중)·환불 진행 중 주문이 있으면 탈퇴 보류 (약관 제7조 1항 — 거래 완료 후 처리)
+  // PENDING(미결제 방치)·CANCELLED·DELIVERED·REFUNDED는 진행 중 거래가 아니므로 차단 대상 아님.
+  // REFUND_REQUESTED는 반품 회수·검수·환불이 남은 진행 중 거래 — 익명화되면 회수 연락처가 사라짐.
   // 어떤 변경도 하기 전에 먼저 확인 — 부분 처리 후 보류되는 상태 방지.
   const { data: openOrder, error: openOrderError } = await admin
     .from('orders').select('order_id').eq('user_id', uid)
-    .in('status', ['PAID', 'SHIPPING']).limit(1).maybeSingle();
+    .in('status', ['PAID', 'SHIPPING', 'REFUND_REQUESTED']).limit(1).maybeSingle();
   if (openOrderError) {
     console.error('탈퇴: 배송 미완료 주문 조회 오류:', openOrderError);
     return c.json({ error: '탈퇴 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.' }, 500);
   }
   if (openOrder) {
     return c.json(
-      { error: '배송이 완료되지 않은 주문이 있어 탈퇴할 수 없습니다. 배송 완료 후 다시 시도해 주세요.' },
+      { error: '배송 또는 환불이 진행 중인 주문이 있어 탈퇴할 수 없습니다. 거래 완료 후 다시 시도해 주세요.' },
       409,
     );
   }

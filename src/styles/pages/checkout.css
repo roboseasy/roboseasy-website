@@ -25,6 +25,10 @@
   margin-bottom: var(--spacing-12);
 }
 
+.checkout__msg--ok {
+  color: #2e7d32;
+}
+
 .checkout__grid {
   display: grid;
   grid-template-columns: 1fr 300px;
