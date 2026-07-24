@@ -3,8 +3,9 @@ import { Icon } from 'astro-icon/components';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MainBanner from '../components/MainBanner.astro';
 import '../styles/pages/home.css';
-// 랜딩 News 섹션 카드는 Sveltia CMS가 관리하는 landing-news.json에 저장됨.
-import { items as newsItems } from '../data/landing-news.json';
+// 랜딩 News 섹션 카드는 Sveltia CMS가 관리하는 landing-news.json에 저장됨. 최대 6개 노출.
+import { items as allNewsItems } from '../data/landing-news.json';
+const newsItems = allNewsItems.slice(0, 6);
 
 const title = '로보시지: RoboSEasy';
 const description = '로봇이 더 쉽고, 더 가까워지도록. 로보시지는 제품·교육·기술을 통해 전국민의 Physical AI 접근성 향상에 기여합니다';

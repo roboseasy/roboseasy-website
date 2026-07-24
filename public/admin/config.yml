@@ -84,7 +84,7 @@ collections:
       - name: items
         label: "뉴스 카드"
         file: "src/data/landing-news.json"
-        description: "메인(홈) 화면 News 섹션 카드. 위에서부터 순서대로 표시됩니다."
+        description: "메인(홈) 화면 News 섹션 카드. 위에서부터 순서대로, 최대 6개까지 표시됩니다."
         fields:
           - name: items
             label: "뉴스 카드"
