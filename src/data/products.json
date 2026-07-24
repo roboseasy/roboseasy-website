@@ -36,10 +36,7 @@
       "productNumber": "12169101368",
       "brand": "자체제작 상품",
       "origin": "국산",
-      "optionSkus": [
-        "test-product",
-        "assembly-service"
-      ],
+      "optionSkus": [],
       "representative": true,
       "comingSoon": false
     }
