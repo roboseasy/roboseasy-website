@@ -1046,6 +1046,21 @@
   background: #a78bfa;
 }
 
+/* 자산이 없는(준비중) 다운로드 링크 — 비활성 회색 처리 (예: Windows 전용 릴리스의 Linux 버튼) */
+.studio-download__btn--disabled,
+.studio-download__chip--disabled {
+  background: #a49db6;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+}
+.studio-download__btn--disabled:hover,
+.studio-download__chip--disabled:hover {
+  background: #a49db6;
+  transform: none;
+  box-shadow: none;
+}
+
 /* 추가 프로그램 섹션과의 구분선 */
 .studio-download + .programs {
   border-top: 1px solid var(--color-ash-border);

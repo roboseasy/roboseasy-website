@@ -44,8 +44,25 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.1',
+    label: 'v0.6.0 (0.0.1) — latest · Windows · Ubuntu',
+    // lerobot 0.6.0 기반. Windows(.exe) + Linux(.deb) 모두 제공.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio-setup_v0.6.0_v0.0.1_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio-setup_v0.6.0_v0.0.1_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.6.0-0.0.1.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio_0.6.0-0.0.1_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
+    },
+  },
+  {
     tag: 'v0.5.1-0.0.1',
-    label: 'v0.5.1 (0.0.1) — latest',
+    label: 'v0.5.1 (0.0.1) — Windows · Ubuntu',
     assets: {
       'windows.primary':
         'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.5.1-0.0.1/roboseasy-studio-setup_v0.5.1_v0.0.1_win64.exe',
@@ -224,24 +241,39 @@ const versionAssetsJson = JSON.stringify(
     if (!select) return;
     const assetMap = JSON.parse(select.dataset.versionAssets || '{}');
 
+    // 자산이 없어 href가 '#'인 다운로드 링크는 비활성(회색) 처리한다.
+    // Windows 전용 릴리스를 선택하면 Linux/.deb 버튼이 자동으로 여기에 걸린다.
+    const applyAvailability = () => {
+      document.querySelectorAll('[data-asset-key]').forEach((el) => {
+        const unavailable = el.getAttribute('href') === '#';
+        if (el.classList.contains('studio-download__btn')) {
+          el.classList.toggle('studio-download__btn--disabled', unavailable);
+        }
+        if (el.classList.contains('studio-download__chip')) {
+          el.classList.toggle('studio-download__chip--disabled', unavailable);
+        }
+      });
+    };
+
     select.addEventListener('change', () => {
-      const tag = select.value;
-      const assets = assetMap[tag] || {};
+      const assets = assetMap[select.value] || {};
       document.querySelectorAll('[data-asset-key]').forEach((el) => {
         const key = el.getAttribute('data-asset-key');
         el.setAttribute('href', (key && assets[key]) || '#');
       });
+      applyAvailability();
     });
+
+    applyAvailability(); // 초기 로드 (SSR된 기본 버전 기준)
   })();
 
-  // Mac 컬럼은 아직 빌드 자산이 없음 — 클릭 시 안내 alert.
-  // href가 실제 URL로 채워지면 (미래 릴리스에 mac.* 키 추가) 자연스럽게 안내가 사라지고 실제 다운로드 진행.
-  document.querySelectorAll('.studio-download__column--mac [data-asset-key]').forEach((el) => {
-    el.addEventListener('click', (e) => {
-      if (el.getAttribute('href') === '#') {
-        e.preventDefault();
-        alert('죄송합니다. 준비중입니다.');
-      }
-    });
+  // 자산이 없는(준비중) 다운로드 링크 클릭 시 안내. href가 실제 URL로 채워지면
+  // (미래 릴리스에 해당 키 추가) 자연스럽게 안내가 사라지고 실제 다운로드로 진행된다.
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-asset-key]');
+    if (el && el.getAttribute('href') === '#') {
+      e.preventDefault();
+      alert('죄송합니다. 준비중입니다.');
+    }
   });
 </script>
