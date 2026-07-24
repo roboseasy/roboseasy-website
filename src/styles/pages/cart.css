@@ -1,0 +1,224 @@
+/* 장바구니 (2차) — 라이트 테마 기능 우선 (mypage와 동일 계열) */
+.cart {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--spacing-40) var(--spacing-20) var(--spacing-80);
+  color: var(--color-charcoal, #222);
+}
+
+.cart__title {
+  font-size: var(--text-h3, 1.5rem);
+  font-weight: var(--fw-bold, 700);
+  margin-bottom: var(--spacing-4);
+}
+
+.cart__count {
+  margin: 0 0 var(--spacing-24);
+  font-size: var(--text-small, 0.875rem);
+  color: var(--color-muted-gray);
+}
+
+.cart__loading,
+.cart__empty {
+  padding: var(--spacing-40) 0;
+  text-align: center;
+  color: var(--color-medium-gray);
+}
+
+.cart__empty {
+  border-bottom: 1px solid var(--color-ash-border);
+}
+
+.cart__empty a {
+  color: var(--color-amethyst);
+  text-decoration: underline;
+}
+
+.cart__body {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--spacing-24);
+  align-items: start;
+}
+
+.cart__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid var(--color-charcoal, #222);
+}
+
+.cart__item {
+  display: grid;
+  grid-template-columns: 72px 1fr auto auto auto;
+  gap: var(--spacing-16);
+  align-items: center;
+  padding: var(--spacing-16) 0;
+  border-bottom: 1px solid var(--color-ash-border);
+}
+
+.cart__item--inactive {
+  opacity: 0.55;
+}
+
+.cart__item-img {
+  width: 72px;
+  height: 72px;
+  border: 1px solid var(--color-ash-border);
+  border-radius: var(--radius-buttons);
+  overflow: hidden;
+  background: var(--color-tag-bg, #f5f5f7);
+}
+
+.cart__item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart__item-name {
+  font-weight: var(--fw-semibold);
+  color: inherit;
+  text-decoration: none;
+}
+
+.cart__item-name:hover {
+  text-decoration: underline;
+}
+
+.cart__item-price {
+  margin-top: 4px;
+  color: var(--color-medium-gray);
+  font-size: var(--text-small, 0.875rem);
+}
+
+.cart__qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-ash-border);
+  border-radius: var(--radius-buttons);
+  overflow: hidden;
+}
+
+.cart__qty button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+.cart__qty button:disabled {
+  color: var(--color-muted-gray, #bbb);
+  cursor: not-allowed;
+}
+
+.cart__qty span {
+  min-width: 36px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cart__item-total {
+  min-width: 96px;
+  text-align: right;
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.cart__item-del {
+  border: 0;
+  background: none;
+  font-size: 1.25rem;
+  color: var(--color-medium-gray);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.cart__summary {
+  border: 1px solid var(--color-ash-border);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-20);
+  position: sticky;
+  top: 96px;
+}
+
+.cart__summary-list {
+  margin: 0 0 var(--spacing-16);
+}
+
+.cart__summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  color: var(--color-medium-gray);
+}
+
+.cart__summary-row--total {
+  margin-top: var(--spacing-8, 8px);
+  padding-top: var(--spacing-12);
+  border-top: 1px solid var(--color-ash-border);
+  color: inherit;
+  font-weight: var(--fw-bold, 700);
+  font-size: 1.05rem;
+}
+
+.cart__summary-row--total dd {
+  color: var(--color-ink, #0f172a);
+}
+
+.cart__order-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: var(--radius-buttons);
+  background: var(--color-carbon, #111111);
+  color: var(--color-white);
+  font-size: var(--text-body);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.cart__order-btn:hover:not(:disabled) {
+  background: var(--color-carbon-hover, #2b2b2b);
+}
+
+.cart__order-btn:disabled {
+  background: var(--color-graphite, #888);
+  cursor: not-allowed;
+}
+
+.cart__note {
+  margin-top: var(--spacing-12);
+  font-size: var(--text-small, 0.8125rem);
+  color: var(--color-medium-gray);
+}
+
+@media (max-width: 768px) {
+  .cart__body {
+    grid-template-columns: 1fr;
+  }
+
+  .cart__item {
+    grid-template-columns: 56px 1fr auto;
+    grid-template-rows: auto auto;
+  }
+
+  .cart__item-img {
+    width: 56px;
+    height: 56px;
+    grid-row: span 2;
+  }
+
+  .cart__item-total {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .cart__summary {
+    position: static;
+  }
+}

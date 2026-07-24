@@ -4,8 +4,8 @@ import { getCollection } from 'astro:content';
 
 interface Props {
   /** 현재 페이지의 카테고리 */
-  category: 'lerobot-library' | 'lerobot-so-arm' | 'lekiwi' | 'xlerobot';
-  /** 현재 페이지 URL path (예: '/docs/lerobot-so-arm/setup-hardware-assembly') — 활성 항목 표시용 */
+  category: 'lerobot-library' | 'a-ba' | 'a-go' | 'dual-a-ba';
+  /** 현재 페이지 URL path (예: '/docs/a-ba/setup-hardware-assembly') — 활성 항목 표시용 */
   currentPath: string;
 }
 
@@ -30,7 +30,7 @@ for (const entry of entries) {
 
 // entry → URL path 변환 (index.md → 카테고리 루트)
 function entryHref(entry: Entry): string {
-  // entry.slug 형태: "lerobot-so-arm/setup-hardware-assembly" 또는 "lerobot-so-arm/index"
+  // entry.slug 형태: "a-ba/setup-hardware-assembly" 또는 "a-ba/index"
   const slug = entry.slug.endsWith('/index') ? entry.slug.replace(/\/index$/, '') : entry.slug;
   return `/docs/${slug}`;
 }

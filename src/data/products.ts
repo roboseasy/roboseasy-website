@@ -2,8 +2,11 @@
 // 이 파일은 타입 정의·상수·정렬된 export 인터페이스만 제공한다 (페이지는 이 모듈만 import).
 // 실제 상품 사진은 카탈로그 작성 중이라 image를 비워두면 "?" placeholder로 렌더된다.
 import productsData from './products.json';
+import { optionSkuErrors } from './optionSkus.mjs';
 
-export type ProductCategory = 'so-arm101' | 'lekiwi' | 'etc';
+// 'addon' = 부품·액세서리. 정식 제품이라 단독 구매도 되지만, 제품 목록(/products)에는
+// 노출하지 않고 본품 상세의 추가 옵션과 직접 링크로만 판매한다 (CATEGORY_ORDER에서 제외).
+export type ProductCategory = 'a-ba' | 'a-go' | 'etc' | 'addon';
 
 export interface Product {
   id: string;
@@ -33,6 +36,11 @@ export interface Product {
   representative?: boolean;
   /** '곧 출시' 배지 */
   comingSoon?: boolean;
+  /**
+   * 상세 페이지에 추가 옵션으로 붙일 다른 제품의 id 목록 (보통 category='addon'인 부품).
+   * 옵션도 정식 제품이라 order_items.product_sku FK가 그대로 성립하고, 단독 구매도 가능하다.
+   */
+  optionSkus?: string[];
 }
 
 /** 구매 링크 기본값 — 제품별 naverUrl이 없을 때 스토어 메인 */
@@ -40,10 +48,24 @@ export const NAVER_STORE_URL = 'https://smartstore.naver.com/roboseasy';
 
 /** PRODUCTS 사이드바 카테고리 라벨 (표시용) */
 export const CATEGORY_LABELS: Record<ProductCategory, string> = {
-  'so-arm101': 'SO-ARM101',
-  lekiwi: 'LeKiwi',
+  'a-ba': 'A-Ba(SO-ARM101)',
+  'a-go': 'A-Go(LeKiwi)',
   etc: '기타',
+  addon: '부품·액세서리',
 };
 
 // products.json은 CMS가 쓰는 데이터 파일. JSON 배열 순서가 곧 표시 순서.
 export const products = productsData.products as Product[];
+
+/** 제품의 추가 옵션 — optionSkus가 가리키는 제품 중 판매 중(가격>0·출시됨)인 것만 */
+export const optionsOf = (product: Product): Product[] =>
+  (product.optionSkus ?? [])
+    .map((sku) => products.find((p) => p.id === sku))
+    .filter((p): p is Product => !!p && !p.comingSoon && p.price > 0);
+
+// optionSkus 오류(없는 id·자기 자신·중복)를 개발 중에 경고로 알린다 — 옵션이 조용히 사라져
+// 원인을 찾기 어려운 것을 막는다. 규칙은 빌드 게이트(sync-products)와 공유(optionSkus.mjs).
+// 배포 전 빌드 실패는 sync-products가 담당하므로 여기서는 DEV에서 경고만 한다.
+if (import.meta.env.DEV) {
+  for (const e of optionSkuErrors(products)) console.warn(`[products] ${e}`);
+}

@@ -1,4 +1,10 @@
-/* 제품 상세 페이지 (PDP) — 라이트 고정. 클래식 2단 + 하단 상세 이미지. */
+/* 제품 상세 페이지 (PDP) — 라이트 고정. 클래식 2단 + 하단 상세 이미지.
+   비주얼 방향(테크 모노): 카본 블랙 CTA·사각 지오메트리(radius 4px)·헤어라인 표.
+   바이올렛은 가격과 포커스에만 절제해 쓴다. 하단 탭(.pdp__tabs)만 기존 스타일 유지. */
+
+body {
+  background-color: #ffffff;
+}
 
 .pdp {
   padding: var(--spacing-48) 20px var(--spacing-80);
@@ -20,7 +26,8 @@
 /* 갤러리 */
 .pdp__main {
   aspect-ratio: 4 / 3;
-  border-radius: var(--radius-images);
+  border: 1px solid var(--color-ash-border);
+  border-radius: 4px;
   overflow: hidden;
   background-color: var(--color-surface-2);
 }
@@ -40,17 +47,25 @@
   margin-top: var(--spacing-12);
 }
 
+/* 썸네일 — 비활성은 살짝 덜어내고, 선택된 것만 카본 테두리로 또렷하게 */
 .pdp__thumb {
   aspect-ratio: 1 / 1;
-  border-radius: var(--radius-inputs);
+  border-radius: 4px;
   overflow: hidden;
   background-color: var(--color-surface-2);
-  border: 2px solid transparent;
+  border: 1px solid var(--color-ash-border);
+  opacity: 0.65;
   cursor: pointer;
+  transition: opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.pdp__thumb:hover {
+  opacity: 1;
 }
 
 .pdp__thumb.is-active {
-  border-color: var(--color-amethyst);
+  border-color: var(--color-carbon);
+  opacity: 1;
 }
 
 .pdp__thumb img {
@@ -68,12 +83,13 @@
   flex-direction: column;
 }
 
+/* 카테고리 — 넓은 자간의 대문자 라벨(스펙시트 헤더 느낌) */
 .pdp__category {
-  font-size: var(--text-body-sm);
-  font-weight: var(--fw-medium);
-  color: var(--color-muted-gray);
+  font-size: var(--text-caption-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-steel);
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.18em;
 }
 
 .pdp__name {
@@ -82,35 +98,31 @@
   font-size: var(--text-heading);
   font-weight: var(--fw-bold);
   color: var(--color-bright-gray);
-  line-height: 1.3;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-/* 이름 아래 구분선 + 배송/상품 정보 표 */
+/* 이름 아래 구분선 — 카본 실선으로 스펙 표의 시작을 명확히 */
 .pdp__divider {
   border: none;
-  border-top: 1px solid var(--color-ash-border);
-  margin: 0 0 var(--spacing-20);
+  border-top: 1px solid var(--color-carbon);
+  margin: 0 0 var(--spacing-8);
 }
 
+/* 배송/상품 정보 — 헤어라인으로 행을 나눈 스펙시트 */
 .pdp__meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-24);
-  margin: 0 0 var(--spacing-24);
+  margin: 0 0 var(--spacing-28);
 }
 
 .pdp__meta-title {
-  margin: 0 0 var(--spacing-8);
-  font-family: var(--font-display);
-  font-size: var(--text-subheading);
+  margin: 0;
+  padding: var(--spacing-12) 0 2px;
+  font-size: var(--text-caption-sm);
   font-weight: var(--fw-bold);
-  color: var(--color-bright-gray);
-}
-
-/* 그룹(배송정보/상품정보) 사이에만 구분선 */
-.pdp__meta-group + .pdp__meta-group {
-  border-top: 1px solid var(--color-ash-border);
-  padding-top: var(--spacing-24);
+  color: var(--color-steel);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
 }
 
 .pdp__meta-list {
@@ -122,11 +134,12 @@
   grid-template-columns: 96px 1fr;
   gap: var(--spacing-16);
   padding: var(--spacing-8) 0;
+  border-bottom: 1px solid var(--color-ash-border);
   font-size: var(--text-body-sm);
 }
 
 .pdp__meta-row dt {
-  color: var(--color-muted-gray);
+  color: var(--color-steel);
 }
 
 .pdp__meta-row dd {
@@ -134,20 +147,192 @@
   color: var(--color-medium-gray);
 }
 
+/* 가격 — 이 페이지에서 바이올렛을 쓰는 유일한 큰 요소 */
 .pdp__price {
-  margin: 0 0 var(--spacing-20);
+  margin: 0 0 var(--spacing-24);
   font-size: var(--text-heading-lg);
   font-weight: var(--fw-bold);
   color: var(--color-amethyst);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
 .pdp__summary {
-  margin: 0 0 var(--spacing-32);
-  padding-top: var(--spacing-20);
-  border-top: 1px solid var(--color-ash-border);
+  margin: 0 0 var(--spacing-24);
   font-size: var(--text-body);
   color: var(--color-medium-gray);
   line-height: 1.6;
+}
+
+/* ─── 추가 옵션 ─── */
+.pdp__options {
+  margin: 0 0 var(--spacing-24);
+}
+
+.pdp__opt-label {
+  display: block;
+  margin: 0 0 var(--spacing-8);
+  font-size: var(--text-caption-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-steel);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.pdp__opt-select {
+  width: 100%;
+  padding: 13px 40px 13px 14px;
+  font-family: inherit;
+  font-size: var(--text-body-sm);
+  color: var(--color-bright-gray);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-carbon);
+  border-radius: 4px;
+  appearance: none;
+  /* 셀렉트 화살표 — 외부 요청 없이 인라인 SVG */
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23111' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+}
+
+.pdp__opt-select:focus-visible {
+  outline: 2px solid var(--color-amethyst);
+  outline-offset: 1px;
+}
+
+/* 선택된 옵션 목록 — 본품과 구분되게 헤어라인 행으로 쌓임 */
+.pdp__opt-picked:not(:empty) {
+  margin-top: var(--spacing-8);
+}
+
+.pdp__opt-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--color-ash-border);
+  font-size: var(--text-body-sm);
+}
+
+.pdp__opt-name {
+  color: var(--color-medium-gray);
+}
+
+.pdp__opt-name em {
+  margin-right: var(--spacing-8);
+  font-style: normal;
+  font-size: var(--text-caption-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.1em;
+  color: var(--color-amethyst);
+}
+
+/* 수량 스테퍼 — 본품(수량 행)과 추가 옵션 행이 같은 UI를 쓴다 */
+.pdp__stepper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pdp__stepper button {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: var(--color-medium-gray);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-ash-border);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.pdp__stepper button:hover:not(:disabled) {
+  background-color: var(--color-surface-2);
+}
+
+.pdp__stepper button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 옵션은 표시 전용 span, 본품은 직접 입력 가능한 input — 같은 자리·같은 모양으로 */
+.pdp__stepper-value {
+  min-width: 34px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+input.pdp__stepper-value {
+  width: 40px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  appearance: textfield; /* Firefox 스피너 제거 — 증감은 좌우 버튼이 담당 */
+}
+
+input.pdp__stepper-value::-webkit-inner-spin-button,
+input.pdp__stepper-value::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+input.pdp__stepper-value:focus-visible {
+  outline: 2px solid var(--color-amethyst);
+  outline-offset: 1px;
+}
+
+.pdp__opt-amount {
+  font-weight: var(--fw-semibold);
+  color: var(--color-bright-gray);
+  font-variant-numeric: tabular-nums;
+}
+
+.pdp__opt-remove {
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: var(--color-steel);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.pdp__opt-remove:hover {
+  color: var(--color-bright-gray);
+}
+
+/* 합계 — 카본 실선 위에 얹어 CTA 직전의 결론으로 읽히게 */
+.pdp__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--spacing-16);
+  padding-top: var(--spacing-12);
+  border-top: 1px solid var(--color-carbon);
+}
+
+.pdp__total-label {
+  font-size: var(--text-body-sm);
+  color: var(--color-steel);
+}
+
+.pdp__total-label b {
+  color: var(--color-bright-gray);
+  font-variant-numeric: tabular-nums;
+}
+
+.pdp__total-sum {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-bright-gray);
+  font-variant-numeric: tabular-nums;
 }
 
 /* 액션 버튼 */
@@ -165,18 +350,20 @@
   text-align: center;
   font-size: var(--text-body);
   font-weight: var(--fw-semibold);
-  border-radius: var(--radius-buttons);
+  border-radius: 4px;
   text-decoration: none;
-  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* 주 CTA — 카본 블랙. 바이올렛은 가격에 양보하고 버튼은 하드웨어 톤으로 */
 .pdp__buy {
-  background-color: var(--color-amethyst);
+  background-color: var(--color-carbon);
   color: var(--color-white);
+  letter-spacing: 0.02em;
 }
 
 .pdp__buy:hover {
-  opacity: 0.88;
+  background-color: var(--color-carbon-hover, #2b2b2b);
 }
 
 .pdp__buy--disabled {
@@ -185,14 +372,69 @@
   cursor: not-allowed;
 }
 
+.pdp__buy--disabled:hover {
+  background-color: var(--color-graphite);
+}
+
 .pdp__quote {
-  background-color: transparent;
-  color: var(--color-amethyst);
-  border: 1px solid var(--color-amethyst);
+  background-color: var(--color-white);
+  color: var(--color-bright-gray);
+  border: 1px solid var(--color-carbon);
 }
 
 .pdp__quote:hover {
-  background-color: var(--color-tag-bg);
+  background-color: var(--color-surface-2);
+}
+
+.pdp__qty-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.pdp__qty-label {
+  font-size: var(--text-body);
+  color: var(--color-medium-gray);
+}
+
+.pdp__sub-actions {
+  display: flex;
+  gap: var(--spacing-12);
+}
+
+.pdp__sub-actions .pdp__quote {
+  flex: 1;
+  cursor: pointer;
+}
+
+/* 담김/찜 토글 — is-active면 채움 아이콘(검정)·♥ 표시 */
+.pdp__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pdp__ico--fill {
+  display: none;
+}
+
+.pdp__toggle.is-active .pdp__ico--line {
+  display: none;
+}
+
+.pdp__toggle.is-active {
+  background-color: var(--color-surface-2);
+}
+
+.pdp__toggle.is-active .pdp__ico--fill {
+  display: inline;
+  color: var(--color-carbon);
+}
+
+.pdp__buy {
+  border: 0;
+  cursor: pointer;
 }
 
 /* ─── 하단 상세 정보 탭 (설명 / 제원) ─── */
@@ -248,14 +490,11 @@
 .pdp__detail-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-24);
   max-width: 860px;
   margin: 0 auto;
 }
 
 .pdp__detail-item {
-  border-radius: var(--radius-images);
-  overflow: hidden;
   background-color: var(--color-surface-2);
 }
 

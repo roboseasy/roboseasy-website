@@ -1,5 +1,16 @@
 ---
 // 홈페이지 히어로 섹션
+// 티커 로고에 width/height를 명시해 이미지 로드 전에도 트랙 너비를 확정한다.
+// 너비가 로딩 중에 변하면 %-기반 스크롤 애니메이션의 체감 속도가 매번 달라진다.
+const tickerLogos = [
+  { src: '/img/common_img/hyundai.webp',    alt: '현대자동차',       w: 614, h: 94 },
+  { src: '/img/common_img/hansung.webp',    alt: '한성대학교',       w: 477, h: 94 },
+  { src: '/img/common_img/yonsei.webp',     alt: '연세대학교',       w: 318, h: 96 },
+  { src: '/img/common_img/itcenentec.webp', alt: 'ITCEN ENTEC',      w: 666, h: 94 },
+  { src: '/img/common_img/kosac.webp',      alt: '한국과학창의재단', w: 312, h: 96 },
+  { src: '/img/common_img/modulabs.webp',   alt: '모두의연구소',     w: 250, h: 96 },
+];
+const tickerLoop = [...tickerLogos, ...tickerLogos];
 ---
 <section class="banner">
   <div class="banner__row">
@@ -21,24 +32,14 @@
     <div class="client-ticker">
       <div class="client-ticker__track">
         <div class="client-ticker__group">
-          <img src="/img/common_img/hyundai.png"    alt="현대자동차"  class="client-ticker__logo" />
-          <img src="/img/common_img/hansung.png"    alt="한성대학교"  class="client-ticker__logo" />
-          <img src="/img/common_img/opengraph.png"  alt="OpenGraph"   class="client-ticker__logo" />
-          <img src="/img/common_img/itcenentec.png" alt="ITCEN ENTEC" class="client-ticker__logo" />
-          <img src="/img/common_img/hyundai.png"    alt="현대자동차"  class="client-ticker__logo" />
-          <img src="/img/common_img/hansung.png"    alt="한성대학교"  class="client-ticker__logo" />
-          <img src="/img/common_img/opengraph.png"  alt="OpenGraph"   class="client-ticker__logo" />
-          <img src="/img/common_img/itcenentec.png" alt="ITCEN ENTEC" class="client-ticker__logo" />
+          {tickerLoop.map((logo) => (
+            <img src={logo.src} alt={logo.alt} width={logo.w} height={logo.h} class="client-ticker__logo" />
+          ))}
         </div>
         <div class="client-ticker__group" aria-hidden="true">
-          <img src="/img/common_img/hyundai.png"    alt="" class="client-ticker__logo" />
-          <img src="/img/common_img/hansung.png"    alt="" class="client-ticker__logo" />
-          <img src="/img/common_img/opengraph.png"  alt="" class="client-ticker__logo" />
-          <img src="/img/common_img/itcenentec.png" alt="" class="client-ticker__logo" />
-          <img src="/img/common_img/hyundai.png"    alt="" class="client-ticker__logo" />
-          <img src="/img/common_img/hansung.png"    alt="" class="client-ticker__logo" />
-          <img src="/img/common_img/opengraph.png"  alt="" class="client-ticker__logo" />
-          <img src="/img/common_img/itcenentec.png" alt="" class="client-ticker__logo" />
+          {tickerLoop.map((logo) => (
+            <img src={logo.src} alt="" width={logo.w} height={logo.h} class="client-ticker__logo" />
+          ))}
         </div>
       </div>
     </div>

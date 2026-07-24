@@ -7,10 +7,11 @@ import type { ProductCategory } from '../data/products';
 import '../styles/pages/products.css';
 
 const title = 'Products - RoboSEasy | 로보시지';
-const description = 'RoboSEasy 전체 제품. SO-ARM101, LeKiwi 등 카테고리별로 둘러보세요.';
+const description = 'RoboSEasy 전체 제품. A-Ba(SO-ARM101), A-Go(LeKiwi) 등 카테고리별로 둘러보세요.';
 
-// 사이드바·섹션 노출 순서
-const CATEGORY_ORDER: ProductCategory[] = ['so-arm101', 'lekiwi', 'etc'];
+// 사이드바·섹션 노출 순서. 'addon'(부품·액세서리)은 일부러 뺀다 —
+// 본품 상세의 추가 옵션과 직접 링크로만 팔고 카탈로그에는 노출하지 않는다.
+const CATEGORY_ORDER: ProductCategory[] = ['a-ba', 'a-go', 'etc'];
 
 // 카테고리별로 대표 상품(큰 이미지) 1개 + 나머지(1×5 카드)로 분리
 const sections = CATEGORY_ORDER.map((key) => {
@@ -20,7 +21,7 @@ const sections = CATEGORY_ORDER.map((key) => {
   return { key, label: CATEGORY_LABELS[key], anchor: `cat-${key}`, representative, cards };
 });
 ---
-<BaseLayout title={title} description={description} path="/products" lockTheme="light">
+<BaseLayout title={title} description={description} path="/products" lockTheme="light" shopNav>
   <!-- 히어로: Product Center — 모든 제품 이미지가 섹션 전체를 덮고 텍스트 오버레이 -->
   <section class="products-hero">
     <!-- 좌측 파티클 배너 — 중앙으로 갈수록 페이드 -->

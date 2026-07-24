@@ -19,9 +19,11 @@ interface Props {
   chrome?: boolean;
   /** 페이지 테마 고정: 'light'면 라이트, 그 외(기본)는 다크 (shop=라이트, 나머지=다크) */
   lockTheme?: boolean | 'light';
+  /** true면 헤더 우측에 판매 아이콘(마이페이지·장바구니·찜) 표시 — 판매 동선 페이지 전용 */
+  shopNav?: boolean;
 }
 
-const { title, description, path, image, bodyClass, chrome = true, lockTheme = false } = Astro.props;
+const { title, description, path, image, bodyClass, chrome = true, lockTheme = false, shopNav = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="ko" data-theme={lockTheme === 'light' ? 'light' : 'dark'}>
@@ -35,8 +37,8 @@ const { title, description, path, image, bodyClass, chrome = true, lockTheme = f
     <SeoMeta title={title} description={description} path={path} image={image} />
     <slot name="head" />
   </head>
-  <body class={bodyClass}>
-    {chrome && <MainHeader />}
+  <body class:list={[bodyClass, shopNav && 'has-shop-nav']}>
+    {chrome && <MainHeader shopNav={shopNav} />}
     <slot />
     {chrome && <MainFooter />}
   </body>

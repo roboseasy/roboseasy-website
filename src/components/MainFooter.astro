@@ -1,6 +1,43 @@
 ---
+import { Icon } from 'astro-icon/components';
 // 모든 페이지 하단 푸터.
-// 기존 js/components/main-footer.js에서 1:1 포팅.
+
+const socialLinks = [
+  { icon: 'fa6-brands:github', href: 'https://github.com/roboseasy', label: 'GitHub' },
+  { icon: 'fa6-brands:instagram', href: 'https://www.instagram.com/robo_seasy/', label: 'Instagram' },
+  { icon: 'fa6-brands:youtube', href: 'https://www.youtube.com/@RoboSEasy', label: 'YouTube' },
+  { icon: 'fa6-brands:blogger-b', href: 'https://roboseasy.blogspot.com/', label: 'Blogger' },
+];
+
+const sections = [
+  {
+    key: 'docs',
+    title: 'Documents',
+    links: [
+      { name: 'LeRobot', href: '/docs/lerobot-library', external: false },
+      { name: 'A-Ba', href: '/docs/a-ba', external: false },
+      { name: 'A-Go', href: '/docs/a-go', external: false },
+    ],
+  },
+  {
+    key: 'store',
+    title: 'Store',
+    links: [
+      { name: 'Products', href: '/products', external: false },
+      { name: 'Naver Smart Store', href: 'https://smartstore.naver.com/roboseasy', external: true },
+      { name: 'Coupang', href: 'https://shop.coupang.com/roboseasy', external: true },
+    ],
+  },
+  {
+    key: 'resource',
+    title: 'Resource',
+    links: [
+      { name: '문의하기', href: '/contact', external: false },
+      { name: '이용약관', href: '/terms', external: false },
+      { name: '개인정보처리방침', href: '/privacy', external: false },
+    ],
+  },
+];
 ---
 <footer class="footer">
   <div class="footer__container">
@@ -10,25 +47,31 @@
         <ul class="footer__list">
           <li class="footer__list-item"><span>이메일</span>roboseasy@gmail.com</li>
           <li class="footer__list-item"><span>주소</span>서울 관악구 신림동 532-35, 그린스타 3층</li>
-          <li class="footer__list-item"><span>사업자등록번호</span>173-44-01316</li>
+          <li class="footer__list-item"><span>사업자등록번호</span>836-81-03763</li>
+          <li class="footer__list-item"><span>통신판매신고번호</span>2026-서울관악-1246</li>
         </ul>
       </div>
-      <div class="footer__section footer__section--social">
-        <div class="footer__title">Social</div>
-        <ul class="footer__list">
-          <li class="footer__list-item"><a class="footer__link" target="_blank" rel="noopener" href="https://github.com/roboseasy">GitHub</a></li>
-          <li class="footer__list-item"><a class="footer__link" target="_blank" rel="noopener" href="https://www.instagram.com/robo_seasy/">instagram</a></li>
-          <li class="footer__list-item"><a class="footer__link" target="_blank" rel="noopener" href="https://www.youtube.com/@RoboSEasy">YouTube</a></li>
-          <li class="footer__list-item"><a class="footer__link" target="_blank" rel="noopener" href="https://roboseasy.blogspot.com/">Blogger</a></li>
-        </ul>
-      </div>
-      <div class="footer__section footer__section--store">
-        <div class="footer__title">Store</div>
-        <ul class="footer__list">
-          <li class="footer__list-item"><a class="footer__link" target="_blank" rel="noopener" href="https://smartstore.naver.com/roboseasy">Naver Smart Store</a></li>
-          <li class="footer__list-item"><a class="footer__link" target="_blank" rel="noopener" href="https://shop.coupang.com/roboseasy">Coupang</a></li>
-        </ul>
-      </div>
+      {sections.map((section) => (
+        <div class={`footer__section footer__section--${section.key}`}>
+          <div class="footer__title">{section.title}</div>
+          <ul class="footer__list">
+            {section.links.map((link) => (
+              <li class="footer__list-item">
+                <a class="footer__link" href={link.href} {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}>{link.name}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
+    <ul class="footer__social">
+      {socialLinks.map((social) => (
+        <li>
+          <a class="footer__social-link" href={social.href} target="_blank" rel="noopener" aria-label={social.label} title={social.label}>
+            <Icon name={social.icon} />
+          </a>
+        </li>
+      ))}
+    </ul>
   </div>
 </footer>

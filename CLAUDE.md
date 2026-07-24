@@ -8,13 +8,13 @@
 
 ## 작업 시 먼저 읽을 문서
 
-- [.agent/architecture.md](.agent/architecture.md) — 폴더 구조, 라우팅, 컴포넌트
-- [.agent/tech-stack.md](.agent/tech-stack.md) — Astro, 의존성, 외부 통합
-- [.agent/conventions.md](.agent/conventions.md) — 코딩·네이밍·커밋 규칙
-- [.agent/workflows.md](.agent/workflows.md) — 페이지/프로그램/docs 추가 절차
-- [.agent/known-issues.md](.agent/known-issues.md) — 알려진 이슈, 주의사항
-- [.agent/tasks/](.agent/tasks/) — 진행/완료 작업 단위 메모
-- [.agent/refactor-astro-plan.md](.agent/refactor-astro-plan.md) — Astro 마이그레이션 기획서
+- [.agent/frontend.md](.agent/frontend.md) — 프론트엔드: 폴더 구조·라우팅·컨벤션·작업 절차
+- [.agent/backend.md](.agent/backend.md) — 백엔드 개발 기획서 (회원·주문·결제, ERD·RLS·명세는 .agent/specs/)
+- [.agent/system-architecture.md](.agent/system-architecture.md) — 시스템 아키텍처·기술 스택·외부 통합
+- [.agent/operations.md](.agent/operations.md) — 배포·테스트·운영 (로컬 개발, 환경변수, CMS 운영)
+- [.agent/issues.md](.agent/issues.md) — 알려진 이슈·주의사항·TODO
+- [.agent/terms-of-service-draft.md](.agent/terms-of-service-draft.md) · [.agent/privacy-policy-draft.md](.agent/privacy-policy-draft.md) — 이용약관·개인정보처리방침 초안
+- [.agent/archive/](.agent/archive/) — 완료된 역사 기록 (Astro 마이그레이션 기획·작업 메모)
 
 ## 기본 원칙
 

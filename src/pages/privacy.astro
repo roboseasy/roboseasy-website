@@ -1,0 +1,10 @@
+---
+import { getEntry } from 'astro:content';
+import LegalLayout from '../layouts/LegalLayout.astro';
+
+const entry = await getEntry('legal', 'privacy');
+const { Content } = await entry.render();
+---
+<LegalLayout title={entry.data.title} description="로보시지(RoboSEasy) 개인정보처리방침입니다." path="/privacy">
+  <Content />
+</LegalLayout>

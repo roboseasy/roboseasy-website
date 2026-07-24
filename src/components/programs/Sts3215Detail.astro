@@ -10,7 +10,7 @@ import { Icon } from 'astro-icon/components';
                     <div class="program-modal__info-section">
                         <span class="program-modal__badge"><Icon name="fa6-solid:robot" /> RobosEasy</span>
                         <h2 class="program-modal__title">Motor Test & ID Setup</h2>
-                        <p class="program-modal__subtitle">Feetech STS3215 서보 모터 제어·테스트 애플리케이션. 단일 모터 세부 제어(모드 1)와 SO-ARM 101 전체 모터 동시 제어(모드 2)를 지원합니다.</p>
+                        <p class="program-modal__subtitle">Feetech STS3215 서보 모터 제어·테스트 애플리케이션. 단일 모터 세부 제어(모드 1)와 A-Ba(SO-ARM101) 전체 모터 동시 제어(모드 2)를 지원합니다.</p>
                         <a href="#" class="program-modal__download-btn" onclick="return handleDownload('https://drive.google.com/file/d/15tKCtkd2pcynmDJRcnbhutiWKotM1D19/view?usp=sharing');">
                             <Icon name="fa6-solid:download" /> AppImage 다운로드
                         </a>
@@ -20,7 +20,7 @@ import { Icon } from 'astro-icon/components';
                 <div class="modal-tabs">
                     <button class="modal-tab modal-tab--active" onclick="switchModalTab(this, '개요')">개요</button>
                     <button class="modal-tab" onclick="switchModalTab(this, '모드1')">모드 1 — 단일 모터</button>
-                    <button class="modal-tab" onclick="switchModalTab(this, '모드2')">모드 2 — SO-ARM 전체</button>
+                    <button class="modal-tab" onclick="switchModalTab(this, '모드2')">모드 2 — A-Ba(SO-ARM101) 전체</button>
                     <button class="modal-tab" onclick="switchModalTab(this, '문제해결')">문제 해결</button>
                 </div>
                 <div class="modal-tab-panels">
@@ -48,8 +48,8 @@ import { Icon } from 'astro-icon/components';
                                 </div>
                                 <div class="modal-feature-card">
                                     <div class="modal-feature-card__icon"><Icon name="fa6-solid:robot" /></div>
-                                    <div class="modal-feature-card__title">모드 2 — SO-ARM 101 전체</div>
-                                    <div class="modal-feature-card__desc">SO-ARM 101의 6개 모터를 동시에 모니터링·제어하며 충돌 감지로 안전하게 운용합니다.</div>
+                                    <div class="modal-feature-card__title">모드 2 — A-Ba(SO-ARM101) 전체</div>
+                                    <div class="modal-feature-card__desc">A-Ba(SO-ARM101)의 6개 모터를 동시에 모니터링·제어하며 충돌 감지로 안전하게 운용합니다.</div>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +171,7 @@ import { Icon } from 'astro-icon/components';
                             <div class="modal-timeline">
                                 <div class="modal-timeline__item">
                                     <div class="modal-timeline__num">1</div>
-                                    <div class="modal-timeline__body"><div class="modal-timeline__title">하드웨어 연결</div><div class="modal-timeline__desc">USB-시리얼 어댑터 + SO-ARM 101 전원 연결</div></div>
+                                    <div class="modal-timeline__body"><div class="modal-timeline__title">하드웨어 연결</div><div class="modal-timeline__desc">USB-시리얼 어댑터 + A-Ba(SO-ARM101) 전원 연결</div></div>
                                 </div>
                                 <div class="modal-timeline__item">
                                     <div class="modal-timeline__num">2</div>
@@ -273,7 +273,7 @@ import { Icon } from 'astro-icon/components';
                             <div class="modal-accordion__item">
                                 <div class="modal-accordion__header" onclick="toggleAccordion(this)">
                                     <div class="modal-accordion__icon"><Icon name="fa6-solid:exclamation" /></div>
-                                    <div class="modal-accordion__title">SO-ARM 101 연결 후 카드가 표시되지 않음</div>
+                                    <div class="modal-accordion__title">A-Ba(SO-ARM101) 연결 후 카드가 표시되지 않음</div>
                                     <Icon name="fa6-solid:chevron-down" class="modal-accordion__toggle" />
                                 </div>
                                 <div class="modal-accordion__body">

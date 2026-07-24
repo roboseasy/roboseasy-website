@@ -14,6 +14,7 @@ const {
   title,
   description,
   path = '',
+  /* og:image는 PNG 유지 — WebP는 카카오톡 PC 등 일부 스크래퍼에서 미표시. og 전용이라 용량 이득도 없음 */
   image = '/img/common_img/banner.png',
   type = 'website',
 } = Astro.props;

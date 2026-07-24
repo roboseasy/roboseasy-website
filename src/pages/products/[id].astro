@@ -1,8 +1,10 @@
 ---
+import { Icon } from 'astro-icon/components';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BrandPlaceholder from '../../components/shop/BrandPlaceholder.astro';
-import { products, CATEGORY_LABELS, NAVER_STORE_URL } from '../../data/products';
+import { products, CATEGORY_LABELS, optionsOf } from '../../data/products';
 import type { Product } from '../../data/products';
+import { SHIPPING_FEE } from '../../data/shipping';
 import '../../styles/pages/product-detail.css';
 
 export function getStaticPaths() {
@@ -11,10 +13,13 @@ export function getStaticPaths() {
 
 interface Props { product: Product }
 const { product } = Astro.props;
-const { name, category, price, summary, image, gallery, detailImages, specImages, naverUrl, comingSoon, productNumber, brand, origin } = product;
+const { name, category, price, summary, image, gallery, detailImages, specImages, comingSoon, productNumber, brand, origin } = product;
+// 판매 가능 여부 — DB is_active(price>0 AND !comingSoon)와 일치시켜 구매 동선 게이트를 맞춘다
+const unavailable = comingSoon || price <= 0;
 const hasProductInfo = Boolean(productNumber || brand || origin);
+// 추가 옵션 — optionSkus로 연결한 부품(addon) 제품들. 없으면 옵션 UI 자체를 렌더하지 않음
+const options = unavailable ? [] : optionsOf(product);
 
-const buyUrl = naverUrl ?? NAVER_STORE_URL;
 // 썸네일이 메인 이미지를 구동 — 대표 이미지를 첫 썸네일로 포함시켜
 // 다른 썸네일을 본 뒤 다시 메인(대표)으로 복귀할 수 있게 함
 const galleryImages = gallery && gallery.length ? gallery : [];
@@ -28,7 +33,9 @@ const specs = specImages && specImages.length ? specImages : Array.from({ length
 const title = `${name} - RoboSEasy | 로보시지`;
 const description = summary ?? `${name} 제품 정보와 구매 안내.`;
 ---
-<BaseLayout title={title} description={description} path={`/products/${product.id}`} lockTheme="light">
+<BaseLayout title={title} description={description} path={`/products/${product.id}`} lockTheme="light" shopNav>
+  {/* 부품·액세서리는 카탈로그에 없는 제품 — 검색 노출을 막고 링크로만 접근하게 한다 (sitemap 제외는 astro.config.mjs) */}
+  {category === 'addon' && <meta name="robots" content="noindex" slot="head" />}
   <article class="pdp">
     <div class="pdp__container">
       <!-- 상단: 좌측 갤러리 / 우측 정보 -->
@@ -55,7 +62,7 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
         <div class="pdp__info">
           <span class="pdp__category">{CATEGORY_LABELS[category]}</span>
           <h1 class="pdp__name">{name}</h1>
-          <p class="pdp__price">{comingSoon ? '가격 미정' : `${price.toLocaleString('ko-KR')}원`}</p>
+          <p class="pdp__price">{unavailable ? '가격 미정' : `${price.toLocaleString('ko-KR')}원`}</p>
 
           <hr class="pdp__divider" />
           <div class="pdp__meta">
@@ -63,8 +70,8 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
               <h2 class="pdp__meta-title">배송정보</h2>
               <dl class="pdp__meta-list">
                 <div class="pdp__meta-row"><dt>배송 기간</dt><dd>평균 3일 이내 도착 확률 100%</dd></div>
-                <div class="pdp__meta-row"><dt>배송비</dt><dd>무료배송 (100,000원 이상 무료)</dd></div>
-                <div class="pdp__meta-row"><dt>배송/출고</dt><dd>GSPostbox택배</dd></div>
+                <div class="pdp__meta-row"><dt>배송비</dt><dd>{SHIPPING_FEE.toLocaleString('ko-KR')}원 (전 주문 동일)</dd></div>
+                <div class="pdp__meta-row"><dt>배송/출고</dt><dd>로젠택배</dd></div>
               </dl>
             </section>
             {hasProductInfo && (
@@ -72,19 +79,63 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
                 <h2 class="pdp__meta-title">상품정보</h2>
                 <dl class="pdp__meta-list">
                   {productNumber && <div class="pdp__meta-row"><dt>상품번호</dt><dd>{productNumber}</dd></div>}
-                  {brand && <div class="pdp__meta-row"><dt>브랜드</dt><dd>{brand}</dd></div>}
-                  {origin && <div class="pdp__meta-row"><dt>원산지</dt><dd>{origin}</dd></div>}
+                  {brand && <div class="pdp__meta-row"><dt>제조사</dt><dd>{brand}</dd></div>}
+                  {origin && <div class="pdp__meta-row"><dt>제조국</dt><dd>{origin}</dd></div>}
                 </dl>
               </section>
             )}
           </div>
 
           {summary && <p class="pdp__summary">{summary}</p>}
-          <div class="pdp__actions">
-            {comingSoon ? (
+
+          {options.length > 0 && (
+            <div class="pdp__options">
+              <label class="pdp__opt-label" for="pdp-option">추가 옵션</label>
+              <select id="pdp-option" class="pdp__opt-select">
+                <option value="">옵션을 선택하세요</option>
+                {options.map((o) => (
+                  <option value={o.id} data-name={o.name} data-price={o.price}>
+                    {o.name} — +{o.price.toLocaleString('ko-KR')}원
+                  </option>
+                ))}
+              </select>
+              <div id="pdp-optPicked" class="pdp__opt-picked"></div>
+            </div>
+          )}
+
+          <div class="pdp__actions" data-sku={product.id} data-price={price}>
+            {unavailable ? (
               <span class="pdp__buy pdp__buy--disabled" aria-disabled="true">출시 예정</span>
             ) : (
-              <a class="pdp__buy" href={buyUrl} target="_blank" rel="noopener noreferrer">구매하기</a>
+              <>
+                <div class="pdp__qty-row">
+                  <label class="pdp__qty-label" for="pdp-qty">수량</label>
+                  <span class="pdp__stepper">
+                    <button type="button" id="pdp-qtyMinus" aria-label="수량 줄이기">−</button>
+                    <input id="pdp-qty" class="pdp__stepper-value" type="number" min="1" max="99" value="1" inputmode="numeric" />
+                    <button type="button" id="pdp-qtyPlus" aria-label="수량 늘리기">+</button>
+                  </span>
+                </div>
+                {options.length > 0 && (
+                  <div class="pdp__total">
+                    <span class="pdp__total-label">본품 <b id="pdp-baseQty">1</b>개 · 옵션 <b id="pdp-optCount">0</b>건</span>
+                    <span class="pdp__total-sum"><span id="pdp-totalAmount">{price.toLocaleString('ko-KR')}</span>원</span>
+                  </div>
+                )}
+                <button type="button" id="buyNowBtn" class="pdp__buy">구매하기</button>
+                <div class="pdp__sub-actions">
+                  <!-- 담김/찜 상태 토글 버튼 — is-active 클래스로 채움 아이콘·♥ 전환 (스크립트) -->
+                  <button type="button" id="addCartBtn" class="pdp__quote pdp__toggle" aria-pressed="false">
+                    <Icon name="solar:cart-large-2-linear" class="pdp__ico pdp__ico--line" width="18" />
+                    <Icon name="solar:cart-large-2-bold" class="pdp__ico pdp__ico--fill" width="18" />
+                    <span>장바구니</span>
+                  </button>
+                  <button type="button" id="addDibsBtn" class="pdp__quote pdp__toggle" aria-pressed="false">
+                    <span id="dibsHeart">♡</span>
+                    <span>찜</span>
+                  </button>
+                </div>
+              </>
             )}
             <a class="pdp__quote" href="/contact">견적보기</a>
           </div>
@@ -146,5 +197,236 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
       }
       thumbItems.forEach((t) => t.classList.toggle('is-active', t === thumb));
     });
+  });
+
+  // 구매 동선 — 자체 결제 (2차). 비로그인이면 API 401 → 로그인으로 유도
+  const actions = document.querySelector<HTMLElement>('.pdp__actions');
+  const sku = actions?.dataset.sku ?? '';
+  const basePrice = Number(actions?.dataset.price ?? 0);
+  const qtyInput = document.getElementById('pdp-qty') as HTMLInputElement | null;
+  const getQty = () => {
+    const q = parseInt(qtyInput?.value ?? '1', 10);
+    return Number.isInteger(q) && q >= 1 && q <= 99 ? q : 1;
+  };
+
+  /* ── 본품 수량 스테퍼 — 옵션 행과 같은 UI. 직접 입력도 유지(최대 99라 +만으로는 번거로움) ── */
+  const qtyMinus = document.getElementById('pdp-qtyMinus') as HTMLButtonElement | null;
+  const qtyPlus = document.getElementById('pdp-qtyPlus') as HTMLButtonElement | null;
+
+  function setQty(next: number) {
+    if (!qtyInput) return;
+    const q = Math.min(Math.max(Number.isFinite(next) ? Math.trunc(next) : 1, 1), 99);
+    qtyInput.value = String(q);
+    if (qtyMinus) qtyMinus.disabled = q <= 1;
+    if (qtyPlus) qtyPlus.disabled = q >= 99;
+    updateTotals(); // 본품 수량만 바뀌므로 합계만 갱신 (옵션 행은 그대로)
+  }
+
+  qtyMinus?.addEventListener('click', () => setQty(getQty() - 1));
+  qtyPlus?.addEventListener('click', () => setQty(getQty() + 1));
+  // 타이핑 중에는 합계만 갱신하고(커서 유지), 입력을 마치면 1~99로 정규화
+  qtyInput?.addEventListener('input', () => updateTotals());
+  qtyInput?.addEventListener('blur', () => setQty(getQty()));
+  const toLogin = () => {
+    location.href = `/login?redirect=${encodeURIComponent(location.pathname)}`;
+  };
+
+  /* ── 추가 옵션 — 옵션도 각각 별도 제품(SKU)이라 주문·장바구니에 개별 품목으로 담긴다 ── */
+  const optSelect = document.getElementById('pdp-option') as HTMLSelectElement | null;
+  const optPicked = document.getElementById('pdp-optPicked');
+  // 선택한 옵션: sku → { name, price, qty }
+  const picked = new Map<string, { name: string; price: number; qty: number }>();
+
+  function renderOptions() {
+    if (!optPicked) return;
+    optPicked.innerHTML = '';
+
+    for (const [optSku, o] of picked) {
+      const row = document.createElement('div');
+      row.className = 'pdp__opt-row';
+
+      const name = document.createElement('span');
+      name.className = 'pdp__opt-name';
+      const badge = document.createElement('em');
+      badge.textContent = '옵션';
+      name.append(badge, document.createTextNode(o.name));
+
+      const stepper = document.createElement('span');
+      stepper.className = 'pdp__stepper';
+      const minus = document.createElement('button');
+      minus.type = 'button';
+      minus.textContent = '−';
+      minus.setAttribute('aria-label', `${o.name} 수량 줄이기`);
+      minus.disabled = o.qty <= 1;
+      minus.addEventListener('click', () => { o.qty = Math.max(1, o.qty - 1); renderOptions(); });
+      const count = document.createElement('span');
+      count.className = 'pdp__stepper-value';
+      count.textContent = String(o.qty);
+      const plus = document.createElement('button');
+      plus.type = 'button';
+      plus.textContent = '+';
+      plus.setAttribute('aria-label', `${o.name} 수량 늘리기`);
+      plus.disabled = o.qty >= 99;
+      plus.addEventListener('click', () => { o.qty = Math.min(99, o.qty + 1); renderOptions(); });
+      stepper.append(minus, count, plus);
+
+      const amount = document.createElement('span');
+      amount.className = 'pdp__opt-amount';
+      amount.textContent = `${(o.price * o.qty).toLocaleString('ko-KR')}원`;
+
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'pdp__opt-remove';
+      remove.textContent = '✕';
+      remove.setAttribute('aria-label', `${o.name} 삭제`);
+      remove.addEventListener('click', () => { picked.delete(optSku); renderOptions(); });
+
+      row.append(name, stepper, amount, remove);
+      optPicked.appendChild(row);
+    }
+
+    updateTotals();
+  }
+
+  // 합계 표시(본품 수량·옵션 건수·총액)만 다시 쓴다 — 옵션 행 DOM은 건드리지 않으므로
+  // 본품 수량 타이핑처럼 목록이 안 바뀌는 갱신에 쓴다(매 키 입력마다 행을 재생성하지 않도록).
+  function updateTotals() {
+    let optTotal = 0;
+    for (const o of picked.values()) optTotal += o.price * o.qty;
+    const baseQtyEl = document.getElementById('pdp-baseQty');
+    const optCountEl = document.getElementById('pdp-optCount');
+    const totalEl = document.getElementById('pdp-totalAmount');
+    if (baseQtyEl) baseQtyEl.textContent = String(getQty());
+    if (optCountEl) optCountEl.textContent = String(picked.size);
+    if (totalEl) totalEl.textContent = (basePrice * getQty() + optTotal).toLocaleString('ko-KR');
+  }
+
+  optSelect?.addEventListener('change', () => {
+    const opt = optSelect.selectedOptions[0];
+    if (!optSelect.value || !opt) return;
+    // 이미 담긴 옵션을 다시 고르면 수량 +1
+    const existing = picked.get(optSelect.value);
+    if (existing) existing.qty = Math.min(99, existing.qty + 1);
+    else picked.set(optSelect.value, { name: opt.dataset.name ?? '', price: Number(opt.dataset.price ?? 0), qty: 1 });
+    optSelect.value = '';
+    renderOptions();
+  });
+
+  document.getElementById('buyNowBtn')?.addEventListener('click', () => {
+    // 본품 + 선택 옵션을 sku/qty 쌍으로 전달 (주문서에서 로그인 검사 — 비로그인이면 로그인 후 복귀)
+    const params = new URLSearchParams();
+    params.append('sku', sku);
+    params.append('qty', String(getQty()));
+    for (const [optSku, o] of picked) {
+      params.append('sku', optSku);
+      params.append('qty', String(o.qty));
+    }
+    location.href = `/checkout?${params}`;
+  });
+
+  // 담김/찜 상태 — 로그인 상태면 초기 조회로 채우고, 클릭은 토글(담기/빼기, 찜/해제)
+  const cartBtn = document.getElementById('addCartBtn') as HTMLButtonElement | null;
+  const dibsBtn = document.getElementById('addDibsBtn') as HTMLButtonElement | null;
+  let cartId: string | null = null;
+  let dibsId: string | null = null;
+  // 옵션은 이 페이지에서 한 번만 장바구니에 담는다 — 재토글 시 다시 담으면 수량이 누적되기 때문
+  let optionsAddedToCart = false;
+
+  function renderToggles() {
+    cartBtn?.classList.toggle('is-active', !!cartId);
+    cartBtn?.setAttribute('aria-pressed', String(!!cartId));
+    dibsBtn?.classList.toggle('is-active', !!dibsId);
+    dibsBtn?.setAttribute('aria-pressed', String(!!dibsId));
+    const heart = document.getElementById('dibsHeart');
+    if (heart) heart.textContent = dibsId ? '♥' : '♡';
+  }
+
+  async function loadStates() {
+    if (!cartBtn) return; // 출시 예정 — 버튼 없음
+    // rb-auth 표시 쿠키가 없으면 비로그인 — 조회 생략(기본 빈 상태)
+    if (!document.cookie.split('; ').some((c) => c === 'rb-auth=1')) return;
+    try {
+      const [cartRes, dibsRes] = await Promise.all([fetch('/api/v1/cart_items'), fetch('/api/v1/dibs')]);
+      if (cartRes.ok) {
+        const { items } = await cartRes.json();
+        cartId = items.find((i: { productSku: string }) => i.productSku === sku)?.cartId ?? null;
+      }
+      if (dibsRes.ok) {
+        const { items } = await dibsRes.json();
+        dibsId = items.find((i: { productSku: string }) => i.productSku === sku)?.dibsId ?? null;
+      }
+      renderToggles();
+    } catch { /* 상태 표시 실패는 무시 — 기본 상태 유지 */ }
+  }
+  loadStates();
+
+  cartBtn?.addEventListener('click', async () => {
+    cartBtn.disabled = true;
+    try {
+      if (cartId) {
+        // 이미 담김 → 장바구니에서 제거 (재담기·수량 변경은 /cart에서)
+        const res = await fetch(`/api/v1/cart_items/${cartId}`, { method: 'DELETE' });
+        if (res.status === 401) { toLogin(); return; }
+        if (!res.ok && res.status !== 404) { alert('장바구니에서 빼지 못했습니다.'); return; }
+        cartId = null;
+      } else {
+        const res = await fetch('/api/v1/cart_items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productSku: sku, quantity: getQty() }),
+        });
+        if (res.status === 401) { toLogin(); return; }
+        const json = await res.json().catch(() => null);
+        if (!res.ok) { alert(json?.error ?? '장바구니에 담지 못했습니다.'); return; }
+        cartId = json.cartId ?? null;
+
+        // 선택한 옵션도 담는다 — 이 페이지에서 한 번만(재토글로 인한 수량 누적 방지). 담은 뒤에는
+        // 장바구니 페이지에서 관리한다. 옵션끼리는 독립이라 병렬로 요청한다.
+        if (!optionsAddedToCart && picked.size) {
+          await Promise.all(
+            [...picked].map(([optSku, o]) =>
+              fetch('/api/v1/cart_items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productSku: optSku, quantity: o.qty }),
+              }).catch(() => {})
+            )
+          );
+          optionsAddedToCart = true;
+        }
+      }
+      renderToggles();
+    } catch {
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      cartBtn.disabled = false;
+    }
+  });
+
+  dibsBtn?.addEventListener('click', async () => {
+    dibsBtn.disabled = true;
+    try {
+      if (dibsId) {
+        const res = await fetch(`/api/v1/dibs/${dibsId}`, { method: 'DELETE' });
+        if (res.status === 401) { toLogin(); return; }
+        if (!res.ok && res.status !== 404) { alert('찜을 해제하지 못했습니다.'); return; }
+        dibsId = null;
+      } else {
+        const res = await fetch('/api/v1/dibs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productSku: sku }),
+        });
+        if (res.status === 401) { toLogin(); return; }
+        const json = await res.json().catch(() => null);
+        if (!res.ok) { alert(json?.error ?? '찜하지 못했습니다.'); return; }
+        dibsId = json.dibsId ?? null;
+      }
+      renderToggles();
+    } catch {
+      alert('네트워크 오류가 발생했습니다.');
+    } finally {
+      dibsBtn.disabled = false;
+    }
   });
 </script>

@@ -1,0 +1,359 @@
+/* 관리자(/manage) — /admin은 Sveltia CMS 경로라 사용 불가 */
+/* 관리자 — 분할 뷰(문의 목록 + 상세 패널), 유저·주문은 테이블. 라이트 테마 */
+
+.adm {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 120px 20px 80px;
+}
+
+/* 상단 바 — 제목 + 세그먼트 전환 + 로그아웃 */
+.adm__top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.adm__title { font-size: 1.5rem; font-weight: var(--fw-bold); color: var(--color-bright-gray); }
+.adm__seg {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--color-surface-2);
+    border-radius: 10px;
+}
+.adm__seg-btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: var(--fw-semibold);
+    font-family: var(--font-body);
+    color: var(--color-muted-gray);
+    background: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.adm__seg-btn.is-active {
+    background: var(--color-surface);
+    color: var(--color-bright-gray);
+    font-weight: var(--fw-bold);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+}
+.adm__logout {
+    margin-left: auto;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    font-family: var(--font-body);
+    color: var(--color-muted-gray);
+    background: none;
+    border: 1px solid var(--color-graphite);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+.adm__logout:hover { color: var(--color-bright-gray); border-color: var(--color-medium-gray); }
+
+.adm__panel { display: none; margin-top: 20px; }
+.adm__panel.is-active { display: block; }
+
+/* ── 문의: 분할 뷰 ── */
+.adm__split {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+/* 좌측 목록 — 카드 높이 고정(10행 기준): 행 수가 바뀌어도 레이아웃이 출렁이지 않도록 */
+.adm__list-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-ash-border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 760px;
+}
+.adm__list-scroll { flex: 1; overflow-y: auto; }
+.adm__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 12px 10px;
+    border-bottom: 1px solid var(--color-surface-2);
+}
+.adm__filters .adm__select { flex: 1; min-width: 0; }
+
+/* 검색 인풋 — 셀렉트와 동일 톤 */
+.adm__search {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    color: var(--color-bright-gray);
+    background: var(--color-surface);
+    border: 1px solid var(--color-graphite);
+    border-radius: 7px;
+}
+.adm__search::placeholder { color: var(--color-muted-gray); }
+.adm__toolbar { margin-bottom: 10px; }
+
+/* 검색 인풋 + 실행 버튼 한 벌 (검색은 Enter·버튼으로만 실행).
+   버튼은 flex:none으로 폭을 지키고, 남는 폭은 인풋이 차지하되 min-width:0으로 줄어들 수 있게 한다
+   (min-width가 auto면 인풋의 기본 intrinsic 폭 때문에 버튼이 컨테이너 밖으로 밀려 잘린다) */
+.adm__search-box { display: flex; gap: 6px; min-width: 0; }
+.adm__search-box .adm__search { flex: 1; min-width: 0; }
+.adm__toolbar .adm__search-box { width: 320px; max-width: 100%; }
+/* 문의 탭 필터 영역 — 검색박스가 한 줄을 독점하되(셀렉트가 같은 줄로 올라와 좁아지지 않도록)
+   인풋 자체는 200px까지만 (.adm__search-box 규칙보다 뒤에 와야 max-width가 적용됨) */
+.adm__filters .adm__search-box { flex: 0 0 100%; }
+.adm__filters .adm__search { max-width: 200px; }
+.adm__search-btn {
+    flex: none;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    color: var(--color-carbon, #111111);
+    background: none;
+    border: 1px solid var(--color-carbon, #111111);
+    border-radius: 7px;
+    cursor: pointer;
+}
+.adm__search-btn:hover { background: var(--color-surface-2, #f1f5f9); }
+.adm__select {
+    padding: 6px 9px;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    color: var(--color-bright-gray);
+    background: var(--color-surface);
+    border: 1px solid var(--color-graphite);
+    border-radius: 7px;
+}
+
+.adm__item {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    text-align: left;
+    font-family: var(--font-body);
+    background: none;
+    border: none;
+    border-top: 1px solid var(--color-surface-2);
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+.adm__item:first-child { border-top: none; }
+.adm__item:hover { background: var(--color-surface-2, #f1f5f9); }
+.adm__item.is-active {
+    background: var(--color-tag-bg);
+    border-left-color: var(--color-amethyst);
+}
+.adm__item-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+.adm__item-name {
+    font-size: 0.85rem;
+    font-weight: var(--fw-bold);
+    color: var(--color-bright-gray);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.adm__item-date { margin-left: auto; flex-shrink: 0; font-size: 0.7rem; color: var(--color-muted-gray); }
+.adm__item-snippet {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--color-muted-gray);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adm__pager {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--color-surface-2);
+    font-size: 0.8rem;
+    color: var(--color-muted-gray);
+}
+.adm__pager button {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    background: var(--color-surface);
+    color: var(--color-bright-gray);
+    border: 1px solid var(--color-graphite);
+    border-radius: 7px;
+    cursor: pointer;
+}
+.adm__pager button:disabled { opacity: 0.4; cursor: not-allowed; }
+.adm__pager-total { margin-left: auto; }
+
+/* 우측 상세 — 목록 카드와 같은 고정 높이. 본문(msg)만 내부 스크롤,
+   처리 컨트롤(adm__detail-actions)은 카드 하단 고정 */
+.adm__detail {
+    background: var(--color-surface);
+    border: 1px solid var(--color-ash-border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    height: 760px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.adm__detail-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+.adm__detail-body[hidden] { display: none; }
+.adm__detail-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.adm__detail-title { font-size: 1.05rem; font-weight: var(--fw-bold); color: var(--color-bright-gray); }
+.adm__detail-date { margin-left: auto; font-size: 0.78rem; color: var(--color-muted-gray); }
+.adm__detail-contact {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+    padding: 12px 16px;
+    background: var(--color-surface-2, #f1f5f9);
+    border-radius: 10px;
+    font-size: 0.83rem;
+    color: var(--color-medium-gray);
+}
+.adm__detail-contact b { color: var(--color-bright-gray); font-weight: var(--fw-bold); margin-right: 6px; }
+.adm__order-link {
+    border: 0;
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: var(--color-carbon, #111111);
+    text-decoration: underline;
+    cursor: pointer;
+}
+.adm__detail-msg {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--color-bright-gray);
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0 0 18px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+.adm__detail-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: auto; /* 카드 하단 고정 */
+    padding-top: 16px;
+    border-top: 1px solid var(--color-surface-2);
+}
+.adm__detail-actions label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.83rem;
+    color: var(--color-medium-gray);
+}
+.adm__detail-actions input[type='checkbox'] { accent-color: var(--color-amethyst); }
+.adm__done-btn {
+    margin-left: auto;
+    padding: 7px 16px;
+    font-size: 0.83rem;
+    font-weight: var(--fw-bold);
+    font-family: var(--font-body);
+    color: #fff;
+    background: var(--color-carbon, #111111);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.adm__done-btn:hover:not(:disabled) { background: var(--color-carbon-hover, #2b2b2b); }
+.adm__done-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.adm__placeholder { padding: 40px 0; text-align: center; color: var(--color-muted-gray); font-size: 0.88rem; }
+
+/* 배지 */
+.adm__badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: var(--fw-semibold);
+    background: var(--color-surface-2);
+    color: var(--color-medium-gray);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.adm__badge--b2c { background: var(--color-tag-bg); color: var(--color-amethyst); }
+.adm__badge--new { background: var(--color-tag-bg); color: var(--color-amethyst); }
+.adm__badge--progress { background: rgba(250, 204, 21, 0.18); color: #a16207; }
+.adm__badge--done { background: rgba(74, 222, 128, 0.15); color: #15803d; }
+.adm__badge--dispute { background: rgba(248, 113, 113, 0.12); color: #dc2626; }
+
+/* ── 유저·주문: 테이블 ── */
+.adm__table-wrap {
+    overflow-x: auto;
+    background: var(--color-surface);
+    border: 1px solid var(--color-ash-border);
+    border-radius: 12px;
+}
+.adm__table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.adm__table th {
+    text-align: left;
+    padding: 11px 14px;
+    color: var(--color-muted-gray);
+    font-weight: var(--fw-semibold);
+    border-bottom: 1px solid var(--color-ash-border);
+    white-space: nowrap;
+}
+.adm__table td {
+    padding: 11px 14px;
+    color: var(--color-bright-gray);
+    border-bottom: 1px solid var(--color-ash-border);
+    vertical-align: top;
+}
+.adm__table tr:last-child td { border-bottom: none; }
+.adm__nowrap { white-space: nowrap; }
+.adm__table-pager { border-top: 1px solid var(--color-surface-2); }
+
+.adm__empty { padding: 28px; text-align: center; color: var(--color-muted-gray); font-size: 0.88rem; }
+
+.adm__loading { padding: 60px 0; text-align: center; color: var(--color-muted-gray); }
+
+/* 주문 배송 관리 (2차) */
+.adm__delivery-input {
+    width: 96px;
+    margin-right: 6px;
+    padding: 5px 8px;
+    font-size: 0.82rem;
+    border: 1px solid var(--color-ash-border);
+    border-radius: 6px;
+    background: none;
+    color: inherit;
+}
+.adm__delivery-btn {
+    padding: 5px 10px;
+    font-size: 0.82rem;
+    border: 1px solid var(--color-carbon, #111111);
+    border-radius: 6px;
+    background: none;
+    color: var(--color-carbon, #111111);
+    cursor: pointer;
+}
+.adm__delivery-btn + .adm__delivery-btn { margin-left: 6px; }
+.adm__delivery-btn:hover { background: var(--color-surface-2, #f1f5f9); }
+.adm__delivery-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.adm__delivery-info { margin-right: 8px; font-size: 0.82rem; color: var(--color-muted-gray); }
+
+@media (max-width: 900px) {
+    .adm__split { grid-template-columns: 1fr; }
+    .adm__logout { margin-left: 0; }
+    /* 단일 컬럼에서는 고정 높이 해제 — 세로로 쌓이므로 내용만큼만 차지 */
+    .adm__list-card { height: auto; }
+    .adm__list-scroll { max-height: 480px; }
+    .adm__detail { height: auto; max-height: none; overflow-y: visible; }
+}

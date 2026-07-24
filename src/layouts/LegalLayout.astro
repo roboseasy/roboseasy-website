@@ -1,0 +1,131 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+// 약관·개인정보처리방침 등 법적 고지 페이지 전용 레이아웃.
+// 본문은 content collection 'legal'의 마크다운을 <slot />으로 받는다.
+interface Props {
+  title: string;
+  /** SEO meta description 전용 — 화면에는 출력하지 않는다 */
+  description: string;
+  path: string;
+}
+const { title, description, path } = Astro.props;
+---
+<BaseLayout title={`${title} | 로보시지 RoboSEasy`} description={description} path={path} lockTheme="light">
+  <section class="legal">
+    <div class="legal__container">
+      <h1 class="legal__heading">{title}</h1>
+      <slot />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 64px 24px 80px;
+  }
+
+  .legal__heading {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: var(--fw-bold);
+    color: var(--color-ink);
+    margin: 0 0 56px;
+    letter-spacing: var(--tracking-heading-lg);
+    text-align: center;
+  }
+
+  .legal__container {
+    max-width: 860px;
+    margin: 0 auto;
+    color: var(--color-slate);
+    font-size: var(--text-body-sm);
+    line-height: 1.8;
+    word-break: keep-all;
+  }
+
+  .legal__container :global(h1) {
+    font-size: var(--text-heading-lg);
+    color: var(--color-ink);
+    margin: 56px 0 56px;
+  }
+
+  /* 본문 첫 h1은 페이지 제목 바로 아래 — 위 여백 제거 */
+  .legal__heading + :global(h1) {
+    margin-top: 0;
+  }
+
+  .legal__container :global(h2) {
+    font-size: var(--text-subheading);
+    color: var(--color-ink);
+    margin: 36px 0 12px;
+  }
+
+  .legal__container :global(p),
+  .legal__container :global(li) {
+    margin-bottom: 10px;
+  }
+
+  /* reset.css가 list-style: none으로 전역 리셋 — 본문에서만 마커 복원 */
+  .legal__container :global(ol) {
+    list-style: decimal outside;
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  .legal__container :global(ul) {
+    list-style: disc outside;
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  /* 중첩 목록 — 상위 항목 바로 아래로 붙임 */
+  .legal__container :global(li > ol),
+  .legal__container :global(li > ul) {
+    margin: 8px 0 8px;
+  }
+
+  .legal__container :global(blockquote) {
+    margin: 16px 0;
+    padding: 12px 18px;
+    border-left: 3px solid var(--color-soft-amethyst);
+    background: rgba(128, 128, 128, 0.08);
+  }
+
+  .legal__container :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: var(--text-caption);
+  }
+
+  .legal__container :global(th),
+  .legal__container :global(td) {
+    border: 1px solid var(--color-ash-border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .legal__container :global(th) {
+    color: var(--color-ink);
+    background: rgba(128, 128, 128, 0.08);
+  }
+
+  .legal__container :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--color-ash-border);
+    margin: 40px 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .legal {
+      padding: 40px 20px 60px;
+    }
+
+    .legal__container :global(table) {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>

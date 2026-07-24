@@ -55,7 +55,7 @@ roboseasy-website/
 
 - **새 프로그램**: `src/content/programs/<slug>.json` 추가 (썸네일은 `public/img/`)
 - **새 docs 페이지**: `src/content/docs/<category>/<slug>.md` 작성, frontmatter에 title/category/group/order
-- 자세한 절차: [.agent/workflows.md](.agent/workflows.md)
+- 자세한 절차: [.agent/frontend.md](.agent/frontend.md)의 "작업 절차"
 
 ## 배포
 
@@ -68,8 +68,8 @@ git push origin main
 ## 개발 가이드
 
 - [CLAUDE.md](CLAUDE.md) — Claude Code(또는 새 컨트리뷰터)를 위한 진입점
-- [.agent/architecture.md](.agent/architecture.md) — 폴더 / 라우팅 / 컴포넌트
-- [.agent/tech-stack.md](.agent/tech-stack.md) — Astro / 의존성 / 외부 통합
-- [.agent/conventions.md](.agent/conventions.md) — 네이밍 / CSS / 커밋 규칙
-- [.agent/workflows.md](.agent/workflows.md) — 페이지·프로그램·docs 추가 절차
-- [.agent/known-issues.md](.agent/known-issues.md) — 알려진 이슈, 함정
+- [.agent/frontend.md](.agent/frontend.md) — 프론트엔드: 폴더/라우팅/컨벤션/작업 절차
+- [.agent/backend.md](.agent/backend.md) — 백엔드 개발 기획서
+- [.agent/system-architecture.md](.agent/system-architecture.md) — 시스템 아키텍처 / 기술 스택
+- [.agent/operations.md](.agent/operations.md) — 배포·테스트·운영
+- [.agent/issues.md](.agent/issues.md) — 알려진 이슈, 함정

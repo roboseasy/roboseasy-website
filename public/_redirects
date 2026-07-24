@@ -6,9 +6,22 @@ https://roboseasy.netlify.app/*   https://roboseasy.ai/:splat   301!
 
 # 옛 docsify 문서 진입 URL → 새 docs 라우트
 /docs-lerobot-library.html        /docs/lerobot-library        301
-/docs-lerobot-so-arm.html         /docs/lerobot-so-arm         301
-/docs-xlerobot.html               /docs/xlerobot               301
-/docs-lekiwi.html                 /docs/lekiwi                 301
+/docs-lerobot-so-arm.html         /docs/a-ba                   301
+/docs-xlerobot.html               /docs/dual-a-ba              301
+/docs-lekiwi.html                 /docs/a-go                   301
+
+# 제품 브랜드명 변경(SO-ARM101→A-Ba / XLeRobot→Dual A-Ba / LeKiwi→A-Go)에 따른 docs slug 이전.
+# 하위 문서까지 함께 옮겨졌으므로 :splat으로 경로 뒤쪽을 보존한다.
+/docs/lerobot-so-arm              /docs/a-ba                   301
+/docs/lerobot-so-arm/*            /docs/a-ba/:splat            301
+/docs/xlerobot                    /docs/dual-a-ba              301
+/docs/xlerobot/*                  /docs/dual-a-ba/:splat       301
+/docs/lekiwi                      /docs/a-go                   301
+/docs/lekiwi/*                    /docs/a-go/:splat            301
+
+# 제품 sku 변경(so-arm101-max→a-ba-max / lekiwi→a-go)에 따른 제품 상세 URL 이전
+/products/so-arm101-max           /products/a-ba-max           301
+/products/lekiwi                  /products/a-go               301
 
 # 옛 hackaton-2026 OG image (T 빠진 오타 파일명) → 통일된 철자
 /img/hackaton-2026.png            /img/hackathon-2026_img/hackathon-2026.png      301
