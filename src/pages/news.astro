@@ -69,8 +69,15 @@ async function loadYtVideos(): Promise<YtVideo[]> {
   return [];
 }
 
+// RSS 수집이 빌드 중 실패해도(이 서버/IP에 간헐적 404/500) YouTube 탭이 비지 않도록 채널 대표 영상 폴백.
+const YT_FALLBACK: YtVideo[] = [
+  'ILz0K2XjZF8', 'Ape2Qg_waGA', 'x55GjA5352U',
+  'vDS5eLKd9lM', 'cu2dFLND0go', 'WuzyrXT91Qg',
+].map((id) => ({ id, title: 'RoboSEasy' }));
+
 // 두 피드는 서로 독립 → 병렬로 가져와 블로킹 시간을 합산이 아닌 최댓값으로 단축
-const [blogPosts, ytVideos] = await Promise.all([loadBlogPosts(), loadYtVideos()]);
+const [blogPosts, ytFetched] = await Promise.all([loadBlogPosts(), loadYtVideos()]);
+const ytVideos = ytFetched.length ? ytFetched : YT_FALLBACK;
 ---
 <BaseLayout title={title} description={description} path="/news">
   <section class="page-intro">

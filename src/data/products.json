@@ -1,12 +1,12 @@
 {
   "products": [
     {
-      "id": "so-arm101-max",
-      "name": "LeRobot SO-ARM101 MAX",
-      "category": "so-arm101",
+      "id": "a-ba-max",
+      "name": "A-Ba(SO-ARM101) MAX",
+      "category": "a-ba",
       "price": 550000,
       "summary": "",
-      "image": "/img/uploads/so-arm101-max.png",
+      "image": "/img/uploads/so-arm101-max.webp",
       "gallery": [
         "/img/uploads/112851104212780333_856347944.jpg"
       ],
@@ -22,21 +22,60 @@
       "productNumber": "12169101368",
       "brand": "자체제작 상품",
       "origin": "국산",
+      "optionSkus": [
+        "test-product",
+        "assembly-service"
+      ],
       "representative": true,
       "comingSoon": false
     },
     {
-      "id": "lekiwi",
-      "name": "LeKiWi",
-      "category": "lekiwi",
+      "id": "a-go",
+      "name": "A-Go(LeKiwi)",
+      "category": "a-go",
       "price": 0,
       "summary": "",
-      "image": "/img/uploads/lekiwi.png",
+      "image": "/img/uploads/lekiwi.webp",
       "gallery": [],
       "detailImages": [],
       "naverUrl": "",
       "representative": true,
       "comingSoon": true
+    },
+    {
+      "id": "test-product",
+      "name": "테스트 제품",
+      "category": "etc",
+      "price": 100,
+      "summary": "",
+      "image": "",
+      "gallery": [],
+      "detailImages": [],
+      "specImages": [],
+      "naverUrl": "",
+      "productNumber": "0001",
+      "brand": "로보시지",
+      "origin": "국산",
+      "representative": false,
+      "comingSoon": false
+    },
+    {
+      "id": "assembly-service",
+      "name": "조립서비스",
+      "category": "addon",
+      "price": 90000,
+      "summary": "",
+      "image": "",
+      "gallery": [],
+      "detailImages": [],
+      "specImages": [],
+      "naverUrl": "",
+      "productNumber": "",
+      "brand": "",
+      "origin": "",
+      "optionSkus": [],
+      "representative": false,
+      "comingSoon": false
     }
   ]
 }

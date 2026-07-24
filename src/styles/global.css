@@ -49,6 +49,11 @@ body {
     filter: brightness(0) saturate(100%) invert(36%) sepia(82%) saturate(750%) hue-rotate(224deg) brightness(101%) contrast(100%);
 }
 
+/* 라이트 테마 — 로고 검정 단색 (다크는 배경 대비를 위해 바이올렛 유지) */
+:root[data-theme='light'] .header__logo-image {
+    filter: brightness(0);
+}
+
 .header__nav-close {
     display: none;
 }
@@ -80,6 +85,47 @@ body {
     background-color: var(--color-ash-border);
 }
 
+/* 데스크톱에서 네비를 우측으로 — shopNav 아이콘이 뒤에 붙어도 정렬 유지 */
+.header__nav {
+    margin-left: auto;
+}
+
+/* ─── 판매 아이콘 (shopNav — /products·회원 페이지 전용) ───
+   광폭 화면: 컨테이너 밖 화면 우측 끝(스크롤바 옆)에 고정 — 네비 위치에 영향 없음.
+   1025~1440px: 우측 끝에 두면 우측 정렬 네비와 겹치므로 네비 뒤 인라인 배치로 폴백 */
+.header__icons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media screen and (max-width: 1440px) {
+    .header__icons {
+        position: static;
+        transform: none;
+        margin-left: 8px;
+    }
+}
+
+.header__icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--color-slate);
+    border-radius: var(--radius-cards);
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.header__icon-link:hover {
+    color: var(--color-bright-gray);
+    background-color: var(--color-ash-border);
+}
 
 /* ─── Hamburger toggle ─── */
 .header__menu-toggle {
@@ -288,6 +334,25 @@ body {
     display: block;
 }
 
+/* 판매 동선 페이지(shopNav): 콘텐츠가 짧아도 푸터를 뷰포트 최하단에 고정.
+   페이지 루트 요소(main·div 등)는 flex 아이템이 되면 가로 auto 마진 때문에 stretch가
+   풀려 fit-content로 쪼그라들므로, 헤더·푸터를 제외한 모든 직계 자식에 width: 100%를
+   명시해 블록 때와 같은 너비(max-width + 가운데)를 유지한다 */
+body.has-shop-nav {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+body.has-shop-nav > :not(header):not(footer) {
+    width: 100%;
+}
+
+body.has-shop-nav .footer {
+    margin-top: auto;
+}
+
 /* ─── Footer ─── */
 .footer {
     /* 푸터 텍스트/테두리는 테마 무관하게 항상 다크 아일랜드로 고정 */
@@ -303,9 +368,9 @@ body {
     overflow: hidden;   /* about 글로우 ::before(좌-40/우-120px) 스필 클리핑 → 전 페이지 가로 스크롤 방지 */
 }
 
-/* 라이트 모드 페이지에서만 푸터 배경을 Deep Nebula로 (랜딩 등 다크 고정 페이지는 기존 #171717 유지) */
+/* 라이트 모드 페이지에서만 푸터 배경을 별도 지정 (랜딩 등 다크 고정 페이지는 기존 #171717 유지) */
 :root[data-theme='light'] .footer {
-    background: rgb(16 10 30);
+    background: #0C0A09;
 }
 
 /* 라이트 모드: 푸터 about 섹션의 보라색 radial 그라디언트 글로우 제거 */
@@ -335,17 +400,18 @@ body {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 48px;
+    gap: 40px;
     margin-bottom: 48px;
     border-bottom: 1px solid var(--color-ash-border);
 }
 
 .footer__section {
-    min-width: 180px;
+    min-width: 160px;
 }
 
+/* basis 440px — 주소 한 줄(span 120px + 본문)이 접히지 않는 최소 폭 */
 .footer__section--about {
-    flex: 2;
+    flex: 2 1 440px;
     position: relative;
 }
 
@@ -368,9 +434,33 @@ body {
     z-index: 1;
 }
 
-.footer__section--social,
-.footer__section--store {
+.footer__section--docs,
+.footer__section--store,
+.footer__section--resource {
     flex: 1;
+}
+
+/* 소셜 아이콘 — footer__content 하단 구분선 아래 */
+.footer__social {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+/* astro-icon이 svg를 em 단위(0.97em × 1em 등)로 출력 — font-size가 아이콘 크기를 결정 */
+.footer__social-link {
+    display: inline-flex;
+    font-size: 26px;
+    color: var(--color-medium-gray);
+    transition: color 0.2s ease;
+}
+
+.footer__social-link:hover {
+    color: var(--color-lavender);
 }
 
 .footer__title {
@@ -408,8 +498,9 @@ body {
     color: var(--color-muted-gray);
 }
 
-.footer__section--social .footer__title,
-.footer__section--store .footer__title {
+.footer__section--docs .footer__title,
+.footer__section--store .footer__title,
+.footer__section--resource .footer__title {
     color: var(--color-medium-gray);
 }
 
@@ -484,6 +575,14 @@ body {
     /* Header — collapsed nav */
     .header__menu-toggle {
         display: flex;
+    }
+
+    /* 판매 아이콘은 햄버거 옆에 상시 노출 */
+    .header__icons {
+        position: static;
+        transform: none;
+        margin-left: auto;
+        margin-right: 4px;
     }
 
     .header__nav {
@@ -605,6 +704,10 @@ body {
         padding: 48px 0 20px;
     }
 
+    .footer__container {
+        padding: 0 24px;
+    }
+
     .footer__content {
         flex-direction: column;
         gap: 24px;
@@ -634,22 +737,25 @@ body {
         margin-right: 0;
     }
 
-    .footer__section--social,
-    .footer__section--store {
+    .footer__section--docs,
+    .footer__section--store,
+    .footer__section--resource {
         display: flex;
         align-items: flex-start;
         gap: 8px;
     }
 
-    .footer__section--social .footer__title,
-    .footer__section--store .footer__title {
+    .footer__section--docs .footer__title,
+    .footer__section--store .footer__title,
+    .footer__section--resource .footer__title {
         flex-shrink: 0;
         min-width: 120px;
         margin-bottom: 0;
     }
 
-    .footer__section--social .footer__list,
-    .footer__section--store .footer__list {
+    .footer__section--docs .footer__list,
+    .footer__section--store .footer__list,
+    .footer__section--resource .footer__list {
         flex: 1;
     }
 }
