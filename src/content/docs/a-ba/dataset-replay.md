@@ -73,7 +73,7 @@ Record & Replay 설정이 완료되었다면, 이제 Policy 모델을 학습하�
     <p>Vision-Language-Action <br>모델을 학습합니다</p>
   </a>
   <a href="#/policy-groot" class="card">
-    <h3>🚀 GR00T N1.5</h3>
+    <h3>🚀 GR00T N1.7</h3>
     <p>NVIDIA의 대규모 기반 <br>모델을 활용합니다</p>
   </a>
 </div>

@@ -8,13 +8,13 @@ order: 20
 # LeRobot 설치 가이드
 
 > ⚠️ **시작하기 전에**
-LeRobot 설치 전에 Python 3.10과 Git이 설치되어 있는지 확인하세요.
+LeRobot 설치 전에 Python 3.12과 Git이 설치되어 있는지 확인하세요.
 
 ## 시스템 요구사항
 
 ### 필수 요구사항
 
-- **Python 3.10**, 환경과 함께 설치하면 됨.
+- **Python 3.12**, 환경과 함께 설치하면 됨.
 - **Git**
 
 ### 권장 요구사항
@@ -29,37 +29,42 @@ LeRobot 설치 전에 Python 3.10과 Git이 설치되어 있는지 확인하세�
 - USB 포트 4개 이상 (허브 사용 시 프레임 드롭 주의)
 - Jetson 도 좋음
 
-## 설치 과정
+## 2.1 라이브러리 설치하기
 
-### 1단계: 가상환경 세팅
+다음 3가지 방법 중 하나를 선택하여 가상환경을 준비합니다.
 
+- conda
+- uv
+- python venv
 
-#### 1.1. Conda 가상환경 
+그리고 lerobot 라이브러리를 각 가상환경에 맞게 설치합니다.
 
-##### miniforge 설치 
-OS나 CPU 아키텍처 (하드웨어)와 상관없이 아래와 같은 명령어를 통해 Miniforge를 설치합니다.
+## 1. 가상환경 준비
+
+### 1.1. Conda 가상환경
+
+#### Miniforge 설치
+OS나 CPU 아키텍처 (하드웨어)와 상관없이 아래와 같은 명령어를 통해 Miniforge를 설치합니다:
 
 ```bash
 
 wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
-
 bash Miniforge3-$(uname)-$(uname -m).sh
 
 ```
 
-##### miniconda 설치
+#### Miniconda 설치
 
-OS나 CPU 아키텍처 (하드웨어)와 상관없이 아래와 같은 명령어를 통해 Miniconda를 설치합니다.
+OS나 CPU 아키텍처 (하드웨어)와 상관없이 아래와 같은 명령어를 통해 Miniconda를 설치합니다:
 
 ```bash
 
-wget "https://repo.anaconda.com/miniconda/Miniconda3-latest-$(uname)-$(uname -m).sh"  
-
+wget "https://repo.anaconda.com/miniconda/Miniconda3-latest-$(uname)-$(uname -m).sh"
 bash Miniconda3-latest-$(uname)-$(uname -m).sh
 
 ```
 
-내 컴퓨터에서는 어떤 값이 나오는지 궁금하다면 터미널에 아래 명령어를 각각 입력합니다.
+내 컴퓨터에서는 어떤 값이 나오는지 궁금하다면 터미널에 아래 명령어를 각각 입력합니다:
 
 ```bash
 echo $(uname)
@@ -72,16 +77,16 @@ echo $(uname -m)
 | `$(uname)` | 운영체제(OS)의 이름 | Linux(리눅스/우분투 등), Darwin (macOS)  |
 | `$(uname -m)` | CPU 아키텍처 (하드웨어) | `x86_64` (인텔/AMD 64비트), `arm64` (애플 실리콘 M1/M2), `aarch64` (라즈베리 파이/제슨)  |
 
-#### 가상환경 셋업 
-Python 3.10으로 conda를 이용해서 가상환경을 생성합니다.
+#### 환경 셋업
+Python 3.12으로 conda를 이용해서 가상환경을 생성합니다:
 
 ```bash
 
-conda create -n lerobot python=3.13 -y
+conda create -n lerobot python=3.12 -y
 
 ```
 
-그다음, conda 환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다.
+그다음, conda 환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다:
 
 ```bash
 
@@ -89,11 +94,7 @@ conda activate lerobot
 
 ```
 
-### 2단계: ffmpeg 설치
-
-영상 처리를 위해 ffmpeg가 필요합니다.
-
-**Ubuntu/Linux:**
+이어서 `ffmpeg` 를 해당 환경에 설치합니다:
 
 ```bash
 
@@ -109,102 +110,249 @@ conda install ffmpeg -c conda-forge
 > conda install ffmpeg=7.1.1 -c conda-forge
 > ```
 > 
-> -   _[리눅스에서만]_ 자체 ffmpeg를 사용하려면: [ffmpeg 빌드 종속성을 설치](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#GettheDependencies)하고 [libsvtav1을 사용하여 소스에서 ffmpeg를 컴파일](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu#libsvtav1)한 다음, `which ffmpeg` 명령어를 사용하여 설치 환경에 맞는 ffmpeg 바이너리를 사용해야 합니다.
+> -   _[리눅스에서만]_ 자체 ffmpeg를 사용하려면 ffmpeg 빌드 종속성을 설치[1]하고 libsvtav1을 사용하여 소스에서 ffmpeg를 컴파일[2]한 다음, `which ffmpeg` 명령어를 사용하여 설치 환경에 맞는 ffmpeg 바이너리를 사용해야 합니다.
 
 
-### 3단계: LeRobot 소스 코드 다운로드
+### 1.2. uv 가상환경
+
+uv는 Rust로 작성된 초고속 Python 패키지 관리자로, pip보다 10-100배 빠르며, 가상환경을 자동으로 관리하는 기능을 제공합니다.
+
+#### uv 설치
 
 ```bash
-# LeRobot 저장소 클론
+
+# uv 설치
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# 설치 확인
+uv --version
+
+```
+
+
+#### 환경 셋업
+Python 3.12으로 uv를 이용해서 가상환경을 생성합니다:
+
+```bash
+
+uv venv lerobot --python 3.12
+
+```
+
+그다음, 가상환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다:
+
+```bash
+
+source lerobot/bin/activate
+
+```
+
+이어서 `ffmpeg` 를 해당 환경에 설치합니다:
+
+```bash
+
+# apt로 설치
+sudo apt update
+sudo apt install ffmpeg
+
+```
+
+### 1.3. venv 가상환경
+
+venv는 Python 표준 라이브러리로, 별도의 설치 없이 가상환경을 생성하고 관리할 수 있습니다.
+
+#### 환경 셋업
+Python 3.12으로 venv를 이용해서 가상환경을 생성합니다:
+
+```bash
+
+python3.12 -m venv lerobot
+
+```
+
+그다음, 가상환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다:
+
+```bash
+
+source lerobot/bin/activate
+
+```
+
+이어서 `ffmpeg` 를 해당 환경에 설치합니다:
+
+```bash
+
+# apt로 설치
+sudo apt update
+sudo apt install ffmpeg
+
+```
+
+## 2. LeRobot 라이브러리 설치
+
+
+### 2.1. From Source
+
+먼저, repository를 clone하고 해당 directory로 이동합니다:
+
+```bash
+
 git clone https://github.com/huggingface/lerobot.git
 cd lerobot
+
 ```
 
-
-### 5단계: LeRobot 설치
-
-#### From Source
-
-라이브러리를 수정 가능(Editable) 모드로 설치합니다. 소스 코드를 직접 수정하거나 기여하려는 사용자에게 권장되는 방식입니다.
+그다음, 라이브러리를 수정 가능(Editable) 모드로 설치합니다. 소스 코드를 직접 수정하거나 기여하려는 사용자에게 권장되는 방식입니다:
 
 ```bash
+
 pip install -e .
+# uv 가상환경인 경우
+# uv pip install -e .
+
 ```
 
-#### Installation from PyPI
+버전 확인 
 
-**Core Library:** 다음과 같이 base package를 설치할 수 있습니다.
+```
+python -c "import lerobot; print(lerobot.__version__)"
+```
+
+또는 
+
+```
+grep -m1 version pyproject.toml
+```
+
+
+### 2.2. Installation from PyPI
+
+**Core Library:** 다음과 같이 base package를 설치할 수 있습니다:
 
 ```bash
 
 pip install lerobot
-
 # uv 가상환경인 경우
 # uv pip install lerobot
 
 ```
 
-### 로봇 하드웨어 드라이버
+해당 설치는 default 종속성만 설치합니다.
 
-실제 로봇 하드웨어를 사용할 예정이니 드라이버를 설치하세요:
 
-실제로 사용할 로봇의 모터에 맞게 필요한 드라이버를 설치하세요.
-
-```bash
-# Feetech 모터 (SO-ARM100, A-Ba(SO-ARM101))
-pip install -e ".[feetech]"
-
-# Dynamixel 모터 (Koch, etc.)
-pip install -e ".[dynamixel]"
+버전확인 
+```
+pip show lerobot | grep -i version
 ```
 
-## 선택적 설치 옵션
+
+### 2.3 특정 버전 설치
+
+특정 버전(예: `v0.5.1`)을 설치하고 싶다면, clone 시 `--branch` 옵션으로 해당 버전의 태그를 지정할 수 있습니다:
+
+```bash
+git clone --branch v0.6.0 --depth 1 https://github.com/huggingface/lerobot.git 
+
+cd lerobot
+```
+
+또는 이미 clone한 repository에서 특정 버전 태그로 checkout할 수도 있습니다:
+
+```bash
+cd lerobot 
+
+git fetch --tags 
+
+git checkout v0.5.1
+```
+
+버전확인
+```
+
+python -c "import lerobot; print(lerobot.__version__)"
+
+```
+
+그다음, 라이브러리를 수정 가능(Editable) 모드로 설치합니다. 소스 코드를 직접 수정하거나 기여하려는 사용자에게 권장되는 방식입니다:
+
+```bash
+pip install --index-url https://download.pytorch.org/whl/cu128 torch torchvision
+
+pip install -e ".[core_scripts]"  # For robot workflows (recording, replaying, calibrate)
+pip install -e ".[training]"      # For training policies
+pip install -e ".[all]"           # Everything (all policies, envs, hardware, dev tools)
+# uv 가상환경인 경우
+# uv pip install -e .
+```
+PyPI를 통해 라이브러리를 설치할 때, 특정 버전만 설치하고 싶다면, 
+
+```bash
+
+pip install lerobot==0.6.0 
+# uv 가상환경인 경우 # 
+uv pip install lerobot==0.6.0
+
+```
+
+
+
+
+
+
+### 2.4 Optional dependencies
 
 LeRobot은 특정 기능을 위한 선택적 추가 기능을 제공합니다. 여러 추가 기능을 조합하여 lerobot 라이브러리를 사용할 수 있습니다(예: `.[aloha,feetech]`). 사용 가능한 모든 추가 기능은 `pyproject.toml` 파일을 참고해 주시기 바랍니다.
 
-### 시뮬레이션 환경
+#### Simulations
 
-특정 시뮬레이션 환경을 사용하려면 추가 패키지를 설치하세요:
+시뮬레이션을 위한 환경 패키지가 있습니다. 해당 패키지를 설치합니다: `aloha` (gym-aloha[3]), or `pusht` (gym-pusht[4])
+
+예시:
+```bash
+
+pip install -e ".[aloha]" # or "[pusht]" for example
+
+```
+
+#### Motor Control
+
+Koch v1.1 로봇 플랫폼은 Dynamixel SDK를, SO100/SO101/Moss 로봇 플랫폼은 Feetech SDK를 설치합니다:
 
 ```bash
-# ALOHA 시뮬레이션 환경
-uv pip install -e ".[aloha]"
 
-# Push-T 시뮬레이션 환경
-uv pip install -e ".[pusht]"
+pip install -e ".[feetech]" # or "[dynamixel]" for example
 
-# 모든 시뮬레이션 환경
-uv pip install -e ".[aloha,pusht,xarm]"
 ```
 
-### 실험 추적 도구
+---
 
-모델 학습 과정을 추적하려면 Weights & Biases를 설정하세요:
+**Extra Features:** 추가 기능 설치
 
 ```bash
-# W&B 설치
-uv pip install wandb
 
-# W&B 로그인
-wandb login
+pip install 'lerobot[all]' # All available features 
+pip install 'lerobot[aloha,pusht]' # Specific features (Aloha & Pusht) 
+pip install 'lerobot[feetech]' # Feetech motor support
+pip install 'lerobot[dynamixel]' # Dynamixel motor support
+pip install -e ".[smolvla]"
+pip install -e ".[pi]"
+pip install lerobot[groot]
+pip install lerobot[xvla]
+# ....
+
 ```
 
-## 설치 확인
+### 각주
+[1] FFmpeg Wiki. (n.d.). CompilationGuide/Ubuntu: Get the Dependencies.
+(https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu)
 
-설치가 완료되었는지 확인해봅시다:
+[2] FFmpeg Wiki. (n.d.). CompilationGuide/Ubuntu: libsvtav1.<br>
+(https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu)
 
-```python
-# Python 인터프리터 실행
-python
+[3] Hugging Face. (2024). gym-aloha [GitHub repository].<br>
+(https://github.com/huggingface/gym-aloha)
 
-# LeRobot 임포트 테스트
->>> import lerobot
->>> print(lerobot.__version__)
->>> exit()
-```
-
-> ⚠️ **설치 완료!**
-LeRobot이 성공적으로 설치되었습니다. 이제 하드웨어를 연결하고 로봇을 제어할 준비가 되었습니다.
+[4] Hugging Face. (2024). gym-pusht [GitHub repository].<br>
+(https://github.com/huggingface/gym-pusht)
 
 ## 문제 해결
 

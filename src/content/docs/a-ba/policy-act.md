@@ -177,32 +177,23 @@ accelerate launch \
 
 ### 3. 평가
 
-기본으로 제공되는 평가 및 실행 코드는 기본적으로 record 코드와 같습니다.
+v0.6.0부터 학습된 정책의 평가·실행은 `lerobot-record`가 아니라 **`lerobot-rollout`** 명령어로 수행합니다.
 
-따라서 평가 에피소드를 실행하면 해당 에피소드는 데이터셋 record와 같이 저장됩니다.
+평가 에피소드를 데이터셋으로 남기려면 `--strategy.type=episodic` 전략을 사용합니다. 이 전략은 기존 `lerobot-record`처럼 에피소드 단위로 기록하고, 에피소드 사이에 리셋 구간(`--dataset.reset_time_s`)을 둡니다.
 
-이때, 코드 자체에서 훈련 데이터셋과 평가 데이터셋을 구분하기 위해, 
-
-반드시 `--dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \` 이 옵션에서 `eval_` 을 붙여줘야 합니다.
-
-그렇지 않으면, 오류가 발생합니다.
-
-또한, 만약 매 에피소드 별로 끊어지고 저장되는게 싫다면 에피소드 타임을 아주 길게 하면 됩니다.
+이때 훈련 데이터셋과 평가 데이터셋을 구분하기 위해 `--dataset.repo_id`에 `eval_` 접두사를 붙이는 것을 권장합니다.
 
 ```bash
-export HF_USER="roboseasy" 
-export TASK_NAME="pick_and_place" 
+export HF_USER="roboseasy"
+export TASK_NAME="pick_and_place"
 export TASK_DESCRIPTION="Pick a ball and place"
 ```
 
-<!-- tabs:start -->
-
-#### **기본 설정**
-
 ```bash
-# 평가 및 실행 기본 설정
-lerobot-record \
-  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
+# 평가 (에피소드 기록) - episodic 전략
+lerobot-rollout \
+  --strategy.type=episodic \
+  --policy.path=${HF_USER}/${TASK_NAME}_act \
   --robot.type=so101_follower \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
@@ -218,43 +209,27 @@ lerobot-record \
   --display_data=true
 ```
 
-#### **시간 늘리기**
-
-```bash
-# 평가 및 실행 시간 설정을 길게 해서 끊기지 않고 반복 작업 수행
-lerobot-record \
-  --policy.repo_id=${HF_USER}/${TASK_NAME}_act \
-  --robot.type=so101_follower \
-  --robot.port=/dev/so101_follower \
-  --robot.id=follower \
-  --robot.cameras='{
-      top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
-      wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
-    }' \
-  --dataset.repo_id=${HF_USER}/eval_${TASK_NAME} \
-  --dataset.single_task=${TASK_NAME} \
-  --dataset.num_episodes=1 \
-  --dataset.episode_time_s=10000 \
-  --dataset.reset_time_s=1 \
-  --display_data=true
-```
-
-<!-- tabs:end -->
+> **팁** 💡`TIP`
+> <br>기록 없이 정책을 끊김 없이 연속 실행하려면 아래 **추론 및 실행**의 `base` 전략을 사용하세요.
 
 ### 4. 추론 및 실행
 
-모델을 추론하기 위해서 `lerobot-record` 명령어를 사용하게 되면 옵션으로 정해준 episode_time_s 안에 수행하지 못하면 마지막 포지션에서 멈추어 연속적인 데모를 보여주지 못합니다. 
+추론(Inference)은 학습된 정책을 로봇 위에서 실제로 구동하는 과정입니다. v0.6.0부터는 로보시지가 따로 작성했던 추론 코드 대신, LeRobot이 공식 제공하는 **`lerobot-rollout`** 명령어를 사용합니다.
 
-또한, 매 에피소드 별로 데이터셋을 저장하기 때문에 실행할 때마다 저장된 데이터셋을 삭제해주어야하는 번거로움이 있습니다.
+`lerobot-rollout`은 `--strategy.type` 옵션으로 실행 방식을 선택합니다.
 
-이러한 문제들을 해결하기 위해 로보시지는 추론 코드를 따로 작성하여 사용하였습니다.
+| 전략 | 설명 |
+|------|------|
+| `base` | 데이터 기록 없이 정책만 연속 실행 (데모·빠른 확인용) |
+| `episodic` | 에피소드 단위로 기록 (기존 `lerobot-record` 평가 방식과 동일) |
+| `sentry` | 연속 기록 + 주기적 Hub 업로드 (대규모 평가용) |
 
-해당 코드는 매 에피소드 별로 데이터셋을 저장하지 않으며, 에피소드 시간에 구애받지 않습니다.
-
-아래와 같은 명령어를 통해 연속적인 추론을 실행할 수 있습니다:
+데모나 빠른 확인에는 `base` 전략을 사용합니다. 이 전략은 **데이터셋을 저장하지 않으며**, 에피소드 시간에 구애받지 않습니다. 실행 시간은 `--duration`(초)으로 지정하고, `0`이면 무한 실행합니다.
 
 ```bash
-lerobot-inference \
+lerobot-rollout \
+  --strategy.type=base \
+  --policy.path=${HF_USER}/${TASK_NAME}_act \
   --robot.type=so101_follower \
   --robot.port=/dev/so101_follower \
   --robot.id=follower \
@@ -262,10 +237,18 @@ lerobot-inference \
       top: {type: opencv, index_or_path: /dev/cam_top, width: 640, height: 480, fps: 25},
       wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
     }' \
-  --policy.path=${HF_USER}/${TASK_NAME}_act \
-  --instruction="${TASK_DESCRIPTION}" \
+  --task="${TASK_DESCRIPTION}" \
+  --duration=0 \
   --display_data=true
 ```
+
+**주요 옵션**
+
+- `--strategy.type=base`: 기록 없이 정책만 실행
+- `--policy.path`: 학습된 정책 경로 (HuggingFace Hub ID 또는 로컬 체크포인트)
+- `--task`: 정책에 전달할 작업 설명 (ACT는 언어 조건이 없어 생략 가능)
+- `--duration`: 실행 시간(초), `0`이면 무한 실행
+- `--display_data=true`: Rerun으로 관측·행동 실시간 시각화
 
 
 ---

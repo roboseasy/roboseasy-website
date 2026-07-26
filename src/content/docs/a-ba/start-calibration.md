@@ -67,7 +67,7 @@ lerobot-calibrate \
     --teleop.port=/dev/so101_leader \
     --teleop.id=leader
 ```
-
+sss
 ### Calibration 과정
 
 1. **중간 위치 설정**
