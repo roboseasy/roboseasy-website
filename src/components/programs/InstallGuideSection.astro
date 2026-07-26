@@ -39,8 +39,38 @@ const panels: OSPanel[] = [
     key: 'windows',
     label: 'Windows',
     iconName: 'fa6-brands:windows',
-    status: 'soon',
-    steps: [],
+    status: 'ready',
+    steps: [
+      {
+        num: '1',
+        title: '인스톨러 다운로드',
+        body:
+          '위 Download Physical Labs 섹션의 [Windows] 버튼을 클릭하세요. ' +
+          'physical-labs-setup_<버전>_win64.exe 파일이 다운로드됩니다. (Windows 11 64-bit 권장)',
+      },
+      {
+        num: '2',
+        title: '인스톨러 실행',
+        body:
+          '다운로드한 파일을 더블클릭하세요. "Windows에서 PC를 보호했습니다" 화면이 뜨면 ' +
+          '[추가 정보] → [실행] 을 누르면 됩니다 (미서명 인스톨러 안내). ' +
+          '위저드 안내에 따라 진행하면 Python 3.12 가 없는 PC 는 동봉 인스톨러가 자동 실행되고, ' +
+          '이어서 의존성 설치(1~2GB 다운로드, 인터넷 필수)가 5~30분간 진행됩니다.',
+      },
+      {
+        num: '3',
+        title: '앱 실행',
+        body:
+          '설치가 끝나면 시작 메뉴에서 "Physical Labs" 를 검색해 실행하세요. ' +
+          '설치 중 만든 데스크톱 바로가기로도 실행할 수 있습니다.',
+      },
+    ],
+    tip: {
+      title: '기존 Roboseasy Studio 사용자',
+      text:
+        '새 인스톨러가 설치 시 구버전을 자동 제거합니다. 첫 실행 시 로그인·약관 동의·' +
+        '로봇 설정·API 키·녹화 모션이 자동으로 이관되며, 재로그인 없이 그대로 사용할 수 있습니다.',
+    },
   },
   {
     key: 'linux',
@@ -61,7 +91,8 @@ const panels: OSPanel[] = [
         variant: 'terminal',
         body:
           '터미널을 열고 다운로드 폴더로 이동한 뒤 아래 명령을 실행합니다. ' +
-          'apt 가 의존 패키지를 자동으로 함께 설치해 줍니다.',
+          'apt 가 의존 패키지를 자동으로 함께 설치해 줍니다. ' +
+          '(구 roboseasy-studio 가 설치돼 있어도 이 한 줄로 자동 교체됩니다 — dpkg -i 는 거부됨)',
         code: 'cd ~/Downloads\nsudo apt install ./physical-labs_*.deb',
       },
       {

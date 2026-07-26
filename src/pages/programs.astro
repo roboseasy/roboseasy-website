@@ -7,7 +7,7 @@ import InstallGuideSection from '../components/programs/InstallGuideSection.astr
 import '../styles/pages/programs.css';
 
 const title = 'Programs - RoboSEasy | 로보시지';
-const description = 'Physical Labs 데스크탑 앱과 도구 모음을 다운로드하세요';
+const description = 'Physical Labs 데스크탑 앱(구 RoboSEasy Studio)과 도구 모음을 다운로드하세요';
 
 const programs = (await getCollection('programs')).sort((a, b) => a.data.order - b.data.order);
 ---

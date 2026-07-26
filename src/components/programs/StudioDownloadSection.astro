@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 // /programs 페이지 상단 "Download Physical Labs" 섹션.
+// (구 RoboSEasy Studio — 2026-07 에 Physical Labs 로 제품명 변경)
 // VSCode 다운로드 페이지와 동일한 3-OS 컬럼 레이아웃.
 //
 // 데이터 구조:
@@ -45,10 +46,15 @@ interface OSColumn {
 const versions: Version[] = [
   {
     tag: 'v0.6.0-0.0.1',
-    label: 'v0.6.0 (0.0.1) — latest · Ubuntu',
-    // lerobot 0.6.0 기반. 현재 릴리스에는 Linux(.deb)만 올라가 있다.
-    // Windows(.exe) 자산이 없어 windows.primary 키를 비워 둔다 → 버튼이 자동으로 비활성 처리됨.
+    label: 'v0.6.0 (0.0.1) — latest · Windows · Ubuntu',
+    // lerobot 0.6.0 기반. Physical Labs 첫 릴리즈 (버전 라인 0.0.1 리셋).
+    // 배포 저장소는 physical-labs-app-deploy (구 roboseasy-studio-deploy 에서 리네임).
+    // 구 Roboseasy Studio 릴리즈들은 배포 저장소에서 삭제됨 — 목록에 남기지 않는다.
     assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.1/physical-labs-setup_0.6.0-0.0.1_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.1/physical-labs-setup_0.6.0-0.0.1_win64.exe',
       'windows.zip.x64':
         'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.1.zip',
       'linux.deb.x64':
@@ -160,7 +166,7 @@ const versionAssetsJson = JSON.stringify(
 <section class="studio-download">
   <header class="studio-download__header">
     <h2 class="studio-download__title">Download Physical Labs</h2>
-    <p class="studio-download__subtitle">로봇 학습·제어 통합 스튜디오. 무료 로봇 데스크탑 앱</p>
+    <p class="studio-download__subtitle">로봇 학습·제어 통합 스튜디오. 무료 로봇 데스크탑 앱 (구 RoboSEasy Studio)</p>
     <div class="studio-download__toolbar">
       <label class="studio-download__version-label" for="studio-version-select">Version</label>
       <select
