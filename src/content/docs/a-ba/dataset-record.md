@@ -69,9 +69,11 @@ hf auth login --add-to-git-credential --token YOUR_TOKEN_HERE
 
 
 # 2. 로그인 확인 및 환경 변수 설정
-HF_USER=$(hf auth whoami | head -n 1)
-echo $HF_USER
+hf auth whoami
 # 로그인이 성공했다면 본인의 HuggingFace 사용자명이 출력됩니다.
+HF_USER=$(hf auth whoami -q 2>/dev/null)
+echo $HF_USER
+
 ```
 
 > **정보** ℹ️ `INFO`
@@ -86,12 +88,11 @@ echo $HF_USER
 매번 설정하지 않도록 `.bashrc` 파일에 추가:
 
 ```bash
+
+gedit ~/.bashrc
+
 # ~/.bashrc 맨 아래 추가
-export HF_USER=$(python - <<'PY'
-from huggingface_hub import whoami
-print(whoami().get("name", ""))
-PY
-)
+export HF_USER=$(hf auth whoami -q 2>/dev/null)
 
 # 변경사항 적용
 source ~/.bashrc
