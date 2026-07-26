@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-// /programs 페이지 상단 "Download RoboSEasy Studio" 섹션.
+// /programs 페이지 상단 "Download Physical Labs" 섹션.
 // VSCode 다운로드 페이지와 동일한 3-OS 컬럼 레이아웃.
 //
 // 데이터 구조:
@@ -45,35 +45,16 @@ interface OSColumn {
 const versions: Version[] = [
   {
     tag: 'v0.6.0-0.0.1',
-    label: 'v0.6.0 (0.0.1) — latest · Windows · Ubuntu',
-    // lerobot 0.6.0 기반. Windows(.exe) + Linux(.deb) 모두 제공.
+    label: 'v0.6.0 (0.0.1) — latest · Ubuntu',
+    // lerobot 0.6.0 기반. 현재 릴리스에는 Linux(.deb)만 올라가 있다.
+    // Windows(.exe) 자산이 없어 windows.primary 키를 비워 둔다 → 버튼이 자동으로 비활성 처리됨.
     assets: {
-      'windows.primary':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio-setup_v0.6.0_v0.0.1_win64.exe',
-      'windows.user-installer.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio-setup_v0.6.0_v0.0.1_win64.exe',
       'windows.zip.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.6.0-0.0.1.zip',
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.1.zip',
       'linux.deb.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.6.0-0.0.1/roboseasy-studio_0.6.0-0.0.1_amd64.deb',
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.1/physical-labs_0.6.0-0.0.1_amd64.deb',
       'linux.tar.gz.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
-    },
-  },
-  {
-    tag: 'v0.5.1-0.0.1',
-    label: 'v0.5.1 (0.0.1) — Windows · Ubuntu',
-    assets: {
-      'windows.primary':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.5.1-0.0.1/roboseasy-studio-setup_v0.5.1_v0.0.1_win64.exe',
-      'windows.user-installer.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.5.1-0.0.1/roboseasy-studio-setup_v0.5.1_v0.0.1_win64.exe',
-      'windows.zip.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.5.1-0.0.1.zip',
-      'linux.deb.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/releases/download/v0.5.1-0.0.1/roboseasy-studio_0.5.1-0.0.1_amd64.deb',
-      'linux.tar.gz.x64':
-        'https://github.com/roboseasy/roboseasy-studio-deploy/archive/refs/tags/v0.5.1-0.0.1.tar.gz',
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
     },
   },
 ];
@@ -178,7 +159,7 @@ const versionAssetsJson = JSON.stringify(
 ---
 <section class="studio-download">
   <header class="studio-download__header">
-    <h2 class="studio-download__title">Download RoboSEasy Studio</h2>
+    <h2 class="studio-download__title">Download Physical Labs</h2>
     <p class="studio-download__subtitle">로봇 학습·제어 통합 스튜디오. 무료 로봇 데스크탑 앱</p>
     <div class="studio-download__toolbar">
       <label class="studio-download__version-label" for="studio-version-select">Version</label>
