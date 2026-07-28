@@ -62,27 +62,6 @@
       "comingSoon": false
     },
     {
-      "id": "open-gripper",
-      "name": "Open Gripper",
-      "category": "etc",
-      "price": 88000,
-      "summary": "",
-      "image": "/img/uploads/Open_Gripper.webp",
-      "gallery": [],
-      "detailImages": [
-        "/img/uploads/Open_Gripper-02.webp",
-        "/img/uploads/Open_Gripper-03.webp"
-      ],
-      "specImages": [],
-      "naverUrl": "https://smartstore.naver.com/roboseasy/products/13156884121",
-      "productNumber": "06010004",
-      "brand": "로보시지",
-      "origin": "대한민국",
-      "optionSkus": [],
-      "representative": false,
-      "comingSoon": false
-    },
-    {
       "id": "dual-a-ba",
       "name": "Dual A-Ba(Dual SO-ARM)",
       "category": "a-ba",
@@ -98,6 +77,30 @@
       "specImages": [],
       "naverUrl": "https://smartstore.naver.com/roboseasy/products/12660819557",
       "productNumber": "06010003",
+      "brand": "로보시지",
+      "origin": "대한민국",
+      "optionSkus": [],
+      "representative": false,
+      "comingSoon": false
+    },
+    {
+      "id": "open-gripper",
+      "name": "Open Gripper",
+      "category": "etc",
+      "price": 88000,
+      "summary": "",
+      "image": "/img/uploads/Open_Gripper.webp",
+      "gallery": [],
+      "detailImages": [
+        "/img/uploads/상세페이지_Open_Gripper-01.webp",
+        "/img/uploads/상세페이지_Open_Gripper-02.webp",
+        "/img/uploads/상세페이지_Open_Gripper-03.webp",
+        "/img/uploads/상세페이지_Open_Gripper-04.webp",
+        "/img/uploads/상세페이지_Open_Gripper-05.webp"
+      ],
+      "specImages": [],
+      "naverUrl": "https://smartstore.naver.com/roboseasy/products/13156884121",
+      "productNumber": "06010004",
       "brand": "로보시지",
       "origin": "대한민국",
       "optionSkus": [],
