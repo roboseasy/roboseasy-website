@@ -42,7 +42,13 @@
         "/img/uploads/제품출시포스터-02.webp",
         "/img/uploads/제품출시포스터-03.webp"
       ],
-      "detailImages": [],
+      "detailImages": [
+        "/img/uploads/A-Go-01.webp",
+        "/img/uploads/A-Go-02.webp",
+        "/img/uploads/A-Go-03.webp",
+        "/img/uploads/A-Go-04.webp",
+        "/img/uploads/A-Go-05.webp"
+      ],
       "specImages": [],
       "naverUrl": "https://smartstore.naver.com/roboseasy/products/13646175572",
       "productNumber": "06010003",
