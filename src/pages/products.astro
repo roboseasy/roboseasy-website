@@ -24,13 +24,15 @@ const sections = CATEGORY_ORDER.map((key) => {
 <BaseLayout title={title} description={description} path="/products" lockTheme="light" shopNav>
   <!-- 히어로: Product Center — 모든 제품 이미지가 섹션 전체를 덮고 텍스트 오버레이 -->
   <section class="products-hero">
-    <!-- 좌측 파티클 배너 — 중앙으로 갈수록 페이드 -->
+    <!-- 배너 배경 -->
     <img class="products-hero__bg" src="/img/products_img/products-hero-bg.webp" alt="" aria-hidden="true" />
     <div class="products-hero__inner">
       <div class="products-hero__text">
         <span class="products-hero__eyebrow">RoboSEasy</span>
         <h1 class="products-hero__title">Product Center</h1>
       </div>
+      <!-- 우측 제품 이미지 -->
+      <img class="products-hero__product" src="/img/products_img/products-center.webp" alt="" aria-hidden="true" />
     </div>
   </section>
 

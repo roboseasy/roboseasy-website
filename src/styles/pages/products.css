@@ -12,7 +12,7 @@ body {
   background: #ffffff;
 }
 
-/* 파티클 배너 — inner 전체를 덮음 */
+/* 배너 배경 — inner 전체를 덮음 */
 .products-hero__bg {
   position: absolute;
   top: 0;
@@ -37,6 +37,22 @@ body {
   align-items: center;
 }
 
+/* 제품 이미지 — 컨테이너(inner) 우측 끝, 배너 세로 중앙.
+   좌측 타이틀(48px, 약 370px)과 겹치지 않게 420px는 비워둔다 —
+   컨테이너가 좁아지는 768~1120px 구간에서 % 만으로는 침범하기 때문 */
+.products-hero__product {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(62%, calc(100% - 420px));
+  max-width: 700px;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
 .products-hero__eyebrow {
   display: inline-block;
   font-family: var(--font-display);
@@ -50,7 +66,7 @@ body {
 .products-hero__title {
   margin: var(--spacing-8) 0 0;
   font-family: var(--font-display);
-  font-size: var(--text-display);
+  font-size: var(--text-display-sm);
   font-weight: var(--fw-bold);
   color: var(--color-ink);
   line-height: 1.1;
@@ -246,6 +262,12 @@ body {
   }
   .products-hero__title {
     font-size: clamp(24px, 7vw, 32px);
+  }
+  /* 모바일은 상하 배치 — 좌우 20px 여백만 남기고 폭 가득 */
+  .products-hero__product {
+    right: 20px;
+    width: calc(100% - 40px);
+    max-width: none;
   }
   .product-cat__title,
   .product-rep__name {
