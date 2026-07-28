@@ -21,7 +21,10 @@
         "/img/uploads/A-Ba-05.webp",
         "/img/uploads/A-Ba-06.webp"
       ],
-      "specImages": [],
+      "specImages": [
+        "/img/uploads/SO-ARM101_FollowerARM_Dimensions.webp",
+        "/img/uploads/SO-ARM101_LeaderARM_Dimensions.webp"
+      ],
       "naverUrl": "https://smartstore.naver.com/roboseasy/products/12169101368",
       "productNumber": "06010001",
       "brand": "로보시지",
