@@ -114,9 +114,18 @@ payments.post('/payments/confirm', async (c) => {
   let result = await confirmPayment(paymentKey, orderId, amount);
   if (!result) return c.json({ error: '서버 설정 오류입니다.' }, 500);
 
-  // confirm POST의 ok=true는 승인(DONE)을 의미. 네트워크 순단(NETWORK_ERROR)이나 토스 5xx는 요청이
-  // 닿아 캡처됐을 수 있어 승인 여부가 불확실하므로, ABORTED로 단정하지 않고 토스에 실제 상태를 조회해
-  // 재확인한다 — 캡처됐는데 재시도를 유도하면 이중청구. 4xx(확정 실패)만 그대로 ABORTED 처리한다.
+  // 2xx는 요청 수용일 뿐이므로 payment.status === 'DONE'까지 확인해야 승인이다. 가상계좌
+  // (WAITING_FOR_DEPOSIT)처럼 미캡처 상태를 승인으로 오인하면 미입금 주문이 PAID가 된다.
+  // 다만 캡처 여부가 불확실하므로 ABORTED로 단정하지 않고(새 결제를 유도하면 이중청구) 선점 행을
+  // IN_PROGRESS로 남긴 채 대사로 넘긴다. 응답 본문 파싱 실패(payment=null)도 같은 경로로 처리된다.
+  if (result.ok && result.payment?.status !== 'DONE') {
+    console.error(`payments confirm: 2xx이나 DONE 아님 (order_id=${orderId}, status=${result.payment?.status ?? '없음'}) — 대사 필요`);
+    return c.json({ error: '결제가 완료되지 않았습니다. 중복 결제 방지를 위해 재시도하지 마시고 주문 내역에서 상태를 확인해 주세요.' }, 502);
+  }
+
+  // 네트워크 순단(NETWORK_ERROR)이나 토스 5xx는 요청이 닿아 캡처됐을 수 있어 승인 여부가 불확실하므로,
+  // ABORTED로 단정하지 않고 토스에 실제 상태를 조회해 재확인한다 — 캡처됐는데 재시도를 유도하면
+  // 이중청구. 4xx(확정 실패)만 그대로 ABORTED 처리한다.
   let approved = result.ok;
   if (!result.ok && (result.errorCode === 'NETWORK_ERROR' || result.status >= 500)) {
     const check = await getPayment(paymentKey);

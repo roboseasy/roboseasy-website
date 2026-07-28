@@ -493,12 +493,15 @@ users.delete('/users/me', requireAuth, async (c) => {
       return c.json({ error: '탈퇴 처리에 실패했습니다.' }, 500);
     }
 
-    // 익명화 경로는 profiles 행이 남아 cart_items·dibs가 CASCADE되지 않음 → 명시적 파기
+    // 익명화 경로는 profiles 행이 남아 cart_items·dibs·deliveries가 CASCADE되지 않음 → 명시적 파기
     // (개인정보처리방침 제7조 — 보유 근거 없는 정보는 지체 없이 파기)
+    // deliveries는 수령인명·연락처·주소를 담고 있고, 탈퇴 후엔 로그인이 차단되어 본인이 지울 수도 없다.
+    // (주문 시점 배송지는 orders의 스냅샷으로 별도 보존되므로 거래 증빙에는 영향 없음)
     const { error: cartError } = await admin.from('cart_items').delete().eq('user_id', uid);
     const { error: dibsError } = await admin.from('dibs').delete().eq('user_id', uid);
-    if (cartError || dibsError) {
-      console.error('탈퇴: 장바구니/찜 파기 오류:', cartError, dibsError);
+    const { error: deliveriesError } = await admin.from('deliveries').delete().eq('user_id', uid);
+    if (cartError || dibsError || deliveriesError) {
+      console.error('탈퇴: 장바구니/찜/배송지 파기 오류:', cartError, dibsError, deliveriesError);
       return c.json({ error: '탈퇴 처리에 실패했습니다.' }, 500);
     }
 

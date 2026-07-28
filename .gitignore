@@ -11,4 +11,9 @@ dist
 .vscode/*
 !.vscode/extensions.json
 
-.env
+# API keys and environment variables
+.env*
+!.env.example
+
+# Claude settings
+.claude/settings.local.json

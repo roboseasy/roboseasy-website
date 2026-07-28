@@ -43,7 +43,7 @@ Astro catch-all 라우트 마운트 방식: `src/pages/api/[...path].ts`에서 `
 
 ## 2. 데이터 모델 (ERD)
 
-**적용 기준: `supabase/migrations/`** (PostgreSQL, 테이블 10개 — [roboseasy-erd.sql](roboseasy-erd.sql)은 초기 8테이블 설계 기록). 원본 `roboseasy.sql`(v1, MySQL) 대비 변경:
+**적용 기준: `supabase/migrations/`** (PostgreSQL, 테이블 10개 — 2026-07-28 스쿼시로 스키마는 [20260706162814_init_schema.sql](../supabase/migrations/20260706162814_init_schema.sql) 한 파일). 원본 `roboseasy.sql`(v1, MySQL) 대비 변경:
 
 | 테이블 | 주요 컬럼 | 비고 |
 |---|---|---|
@@ -64,7 +64,7 @@ Astro catch-all 라우트 마운트 방식: `src/pages/api/[...path].ts`에서 `
 - **토스 orderId = orders.order_id(uuid)** 그대로 사용 — 토스 허용 형식(6~64자 영숫자·`-`·`_`)에 uuid가 부합하므로 별도 주문번호 컬럼 불필요
 - **결제 재시도 허용**: payments.order_id는 UNIQUE 아님(실패 후 재시도 시 행 추가), payment_key만 UNIQUE
 - 주소는 우편번호 + 기본주소(카카오 우편번호 서비스로 채움, 프론트에서 읽기전용) + 상세주소(직접 입력) 3필드. 배송지는 주문 시점 스냅샷으로 orders에 저장 (profiles 주소 변경과 무관하게 보존). orders.user_id는 거래기록 5년 보관 의무 때문에 CASCADE 삭제 없음 — 탈퇴 정책은 §6 확정 사항 참조
-- 가입 트리거(auth.users insert → profiles 생성)·updated_at 트리거·RLS 정책: [roboseasy-trigger-rls.sql](roboseasy-trigger-rls.sql) — 스키마 적용 후 실행. 일반 요청은 유저 토큰(RLS 적용), 주문 생성·결제 승인·상태 전이·회원탈퇴는 service role(RLS 우회 — 주문·품목 insert 정책은 금액 위조 심층 방어로 제거됨, 20260716000000 마이그레이션)
+- 가입 트리거(auth.users insert → profiles 생성)·updated_at 트리거·RLS 정책·pg_cron 배치: [20260706162822_triggers_rls.sql](../supabase/migrations/20260706162822_triggers_rls.sql) — 스키마 적용 후 실행. 일반 요청은 유저 토큰(RLS 적용), 주문 생성·결제 승인·상태 전이·회원탈퇴는 service role(RLS 우회 — 주문·품목 insert 정책은 금액 위조 심층 방어로 제거됨)
 
 ### products 동기화 (JSON → DB) — 구현됨 (`scripts/sync-products.mjs`)
 
@@ -236,7 +236,7 @@ CRON_SECRET은 Netlify 환경변수 + Supabase Vault(`cron_secret`)에 동일 �
 - **구매 동선 (2026-07-14 확정)**: 제품 페이지를 자체 결제로 교체 — 네이버 스마트스토어 링크 제거, 구매하기(주문서 직행)·장바구니·찜 버튼. 결제는 토스 결제위젯 v2(`PUBLIC_TOSS_CLIENT_KEY`), customerKey는 user_id(/users/me 응답의 userId)
 - **Hono 통합 방식**: Astro catch-all(`src/pages/api/[...path].ts`)에 마운트, 앱 본체는 `src/server/`에 배치. 기존 contact·quote-download 포함 전 API를 Hono로 통합 (§1 참조)
 - **Users 테이블 제거**: public 스키마는 profiles만 사용, `auth.users`를 원본으로 FK 참조. 이메일은 profiles.user_email에 복사 (§2 참조)
-- **확정 ERD**: [roboseasy-erd.sql](roboseasy-erd.sql) — Payments 테이블·배송 스냅샷·FK/UNIQUE 보강 반영 (§2 참조)
+- **확정 ERD**: [20260706162814_init_schema.sql](../supabase/migrations/20260706162814_init_schema.sql) — Payments 테이블·배송 스냅샷·FK/UNIQUE 보강 반영 (§2 참조)
 - **products 데이터**: A안 — JSON(Sveltia CMS)이 원본 유지, 빌드 시 DB upsert 동기화. 재고 관리 없음, 삭제는 is_active=false (§2 "products 동기화" 참조. Sveltia는 Git 백엔드만 지원해 DB 직접 관리 불가)
 - **비회원 구매 불허**: 주문·장바구니·찜은 회원 전용 — 명세(회원 전제) 그대로. 게스트 주문 경로 없음
 - **관리자 로그인**: 별도 엔드포인트 없이 일반 로그인 + role 검사 — `/api/v1/admin/*`은 `requireAuth → requireAdmin` 미들웨어 체인으로 보호. 감사 로그 등 관리자 전용 강화가 필요해지면 이 미들웨어 레벨에서 처리. **rate limit은 관리자 API에 걸지 않음** — 세션 필수 API는 대상 아님(§7 적용 기준 참조)

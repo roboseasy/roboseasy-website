@@ -1,37 +1,60 @@
--- RoboSEasy 판매 사이트 스키마 v2 (PostgreSQL / Supabase)
--- 원본 roboseasy.sql(v1, MySQL) 대비 변경:
---   1. Users 테이블 제거 — auth.users가 원본, profiles.user_id FK → auth.users(id)
---   2. profiles: user_email(관리자 조회용 복사본, 가입 트리거에서 기록), marketing_consent(+at),
---      약관·개인정보 동의 일시(terms_agreed_at, privacy_agreed_at — 분쟁 시 증빙) 추가
---   3. payments 테이블 신설 — 토스 페이먼츠 승인/취소 기록
---   4. orders: 배송지 스냅샷·운송장·status 정의 추가. 토스 orderId는 별도 컬럼 없이
+-- RoboSEasy 판매 사이트 — 전체 스키마 (PostgreSQL / Supabase)
+--
+-- [2026-07-28 스쿼시] 기존 마이그레이션 17개(20260706162814 ~ 20260721000000)와
+-- .agent/roboseasy-erd.sql을 '최종 상태' 하나로 합친 기준 파일이다.
+-- 새 환경 부트스트랩용 — 이미 적용된 DB에 재실행하면 실패한다(운영 DB는 migration repair로 이력만 정리).
+-- 트리거·함수·RLS·pg_cron 배치는 20260706162822_triggers_rls.sql에서 관리.
+--
+-- 설계 요지:
+--   1. Users 테이블 없음 — auth.users가 원본, profiles.user_id FK → auth.users(id)
+--   2. profiles: user_email(관리자 조회용 복사본, 가입 트리거에서 기록), 마케팅 동의(+동의/재확인 일시),
+--      약관·개인정보 동의 일시(분쟁 시 증빙), withdrawn_at(탈퇴 익명화 회원 논리 분리)
+--   3. payments — 토스 페이먼츠 승인/취소 기록. 토스 orderId는 별도 컬럼 없이
 --      orders.order_id(uuid)를 그대로 사용 (토스 허용 형식: 6~64자 영숫자·-·_)
---   5. FK 전면 보강, cart_items·dibs 중복 담기 방지 UNIQUE
---   6. products: product_price NOT NULL, is_active 추가 (재고 관리 없음 — stock 없음)
---      products는 JSON(Sveltia CMS)이 원본, DB는 주문 FK·금액 검증용 미러 (backend.md §2)
---   7. contacts 테이블 신설 — 문의 기록의 법정 보유기간 관리(일반 1년/불만·분쟁 3년).
---      B2B(기존 /contact 폼)·B2C(판매 사이트, 로그인 전용) 공용 — channel로 구분
+--   4. orders — 주문 시점 배송지 스냅샷·운송장·상태 전이·환불 기록
+--   5. products — JSON(Sveltia CMS)이 원본, DB는 주문 FK·금액 검증용 미러 (backend.md §2). 재고 관리 없음
+--   6. contacts — 문의 기록의 법정 보유기간 관리. B2B(/contact)·B2C(판매 사이트) 공용, channel로 구분
+--   7. deliveries — 회원 배송지 주소록 (orders의 스냅샷과 별개)
+--   8. rate_limit_buckets — 서버리스 인스턴스 간 공유 Token Bucket
 -- 명명 규칙: snake_case — Postgres는 따옴표 없는 식별자를 소문자로 접으므로
 --   camelCase는 유지 불가(매 쿼리 따옴표 필요). API 응답에서 camelCase로 매핑.
--- 가입 트리거(auth.users insert → profiles 생성)와 RLS 정책은 별도 마이그레이션에서 관리.
+--
+-- 스쿼시로 접힌 변경 이력(신규 DB에는 결과만 반영됨):
+--   * user_zipcode → user_postcode / shipping_zipcode → shipping_postcode 리네임
+--   * product_sku 브랜드 이전(so-arm101-max → a-ba-max, lekiwi → a-go)은 데이터 이관이라
+--     신규 DB에는 해당 없음. 그때 함께 붙인 FK on update cascade만 아래에 인라인으로 반영.
 
 create table profiles (
 	user_id uuid primary key references auth.users (id) on delete cascade,
 	user_email varchar(255) not null unique,
 	user_name varchar(100) not null,
 	user_phone varchar(20) not null,
+	-- 주소: 우편번호 + 기본주소(카카오 우편번호 서비스로 채움) + 상세주소(직접 입력)
+	user_postcode varchar(10) not null default '',
 	user_address varchar(255) not null,
+	user_address_detail varchar(255) not null default '',
 	role varchar(20) not null default 'user' check (role in ('user', 'admin')),
 	marketing_consent boolean not null default false,
-	marketing_consent_at timestamptz, -- 마케팅 동의·철회 일시 — 2년 주기 재확인(정보통신망법) 기준점
+	marketing_consent_at timestamptz, -- 최초 동의·철회 일시 — 안내문의 '동의 날짜' 표기용으로 보존
+	-- 광고성 정보 수신동의 2년 주기 재확인(정보통신망법 제50조 / 시행령 제62조의3) —
+	-- 재확인 안내를 보낼 때마다 갱신되는 최종 확인 시점
+	marketing_reconfirmed_at timestamptz,
 	-- 약관·개인정보 동의 증빙 (분리 동의). 가입 시점 = 동의 시점이므로 default now()
 	terms_agreed_at timestamptz not null default now(),
 	privacy_agreed_at timestamptz not null default now(),
+	-- 탈퇴 회원 거래기록의 논리적 분리 보관 (표준 개인정보 보호지침 제10조).
+	-- 주문 이력이 있어 익명화 경로로 탈퇴한 회원 표시 → 운영(활성 회원 목록) 조회에서 분리.
+	withdrawn_at timestamptz,
 	created_at timestamptz not null default now(),
 	updated_at timestamptz not null default now()
 );
 
--- 원본은 src/data/products.json(Sveltia CMS 관리) — 빌드/배포 시 upsert 동기화되는 미러.
+-- 활성 회원 목록 조회용 부분 인덱스 (withdrawn_at IS NULL — 운영 목록의 기본 필터)
+create index profiles_active_idx
+	on profiles (created_at desc)
+	where withdrawn_at is null;
+
+-- 원본은 src/data/products.ts(Sveltia CMS 관리) — 빌드/배포 시 upsert 동기화되는 미러.
 -- json의 id = product_sku. json에서 빠진 제품은 주문 FK 때문에 delete 불가 → is_active=false 처리.
 create table products (
 	product_sku varchar(50) primary key,
@@ -42,10 +65,12 @@ create table products (
 	description text
 );
 
+-- 아래 자식 테이블들의 product_sku FK에는 on update cascade —
+-- sku 변경(브랜드 리네임 등)이 장바구니·찜·주문·문의로 자동 전파되도록.
 create table cart_items (
 	cart_id uuid primary key default gen_random_uuid(),
 	user_id uuid not null references profiles (user_id) on delete cascade,
-	product_sku varchar(50) not null references products (product_sku),
+	product_sku varchar(50) not null references products (product_sku) on update cascade,
 	quantity integer not null check (quantity > 0),
 	created_at timestamptz not null default now(),
 	unique (user_id, product_sku) -- 중복 담기 방지(수량은 quantity로 관리)
@@ -54,7 +79,7 @@ create table cart_items (
 create table dibs (
 	dibs_id uuid primary key default gen_random_uuid(),
 	user_id uuid not null references profiles (user_id) on delete cascade,
-	product_sku varchar(50) not null references products (product_sku),
+	product_sku varchar(50) not null references products (product_sku) on update cascade,
 	created_at timestamptz not null default now(),
 	unique (user_id, product_sku)
 );
@@ -66,14 +91,23 @@ create table orders (
 	-- (backend.md §6 탈퇴 정책)
 	user_id uuid not null references profiles (user_id),
 	total_price numeric(12,2) not null,
+	-- 환불(ORD-16·ADM-08): DELIVERED → REFUND_REQUESTED → REFUNDED(승인) 또는 DELIVERED(반려)
 	status varchar(20) not null default 'PENDING'
-		check (status in ('PENDING', 'PAID', 'SHIPPING', 'DELIVERED', 'CANCELLED')),
-	-- 주문 시점 배송지 스냅샷 (profiles 수정과 무관하게 보존)
+		check (status in ('PENDING', 'PAID', 'SHIPPING', 'DELIVERED', 'CANCELLED',
+			'REFUND_REQUESTED', 'REFUNDED')),
+	-- 주문 시점 배송지 스냅샷 (profiles·deliveries 수정과 무관하게 보존)
 	receiver_name varchar(100) not null,
 	receiver_phone varchar(20) not null,
+	shipping_postcode varchar(10) not null default '',
 	shipping_address varchar(255) not null,
+	shipping_address_detail varchar(255) not null default '',
 	courier varchar(50),
 	tracking_number varchar(50),
+	-- 환불 처리 기록 — 주문 단위 전액(±반품비 차감) 1회 정책이라 별도 테이블 없이 컬럼으로
+	refund_reason varchar(200),      -- REQUEST 시 관리자 입력 (환불 문의 내용 요약)
+	refund_requested_at timestamptz, -- REQUEST 시각
+	refunded_at timestamptz,         -- APPROVE(환불 완료) 시각
+	refund_amount numeric(12,2),     -- 실제 환불액 — 반품비 차감 시 total_price와 다름
 	created_at timestamptz not null default now(),
 	updated_at timestamptz not null default now()
 );
@@ -81,7 +115,7 @@ create table orders (
 create table order_items (
 	oitem_id uuid primary key default gen_random_uuid(),
 	order_id uuid not null references orders (order_id) on delete cascade,
-	product_sku varchar(50) not null references products (product_sku),
+	product_sku varchar(50) not null references products (product_sku) on update cascade,
 	quantity integer not null check (quantity > 0),
 	unit_price numeric(12,2) not null -- 주문 시점 단가 스냅샷
 );
@@ -97,8 +131,10 @@ create table contacts (
 	-- 탈퇴 시 본인 문의의 name/email/phone은 별도 처리 — 일반 문의는 익명화,
 	-- 분쟁 기록(is_dispute)은 전자상거래법 3년 보존 근거로 유지 (backend.md §6 탈퇴 정책)
 	user_id uuid references profiles (user_id) on delete set null,
-	order_id uuid references orders (order_id), -- b2c 주문 연계 문의(배송·환불 등) → nullable
-	product_sku varchar(50) references products (product_sku), -- b2c 제품 문의 연계 → nullable
+	-- on delete set null: 미결제 PENDING 정리 배치·사용자 취소로 주문이 삭제될 때
+	-- 연계 문의가 FK로 막히지 않도록. 문의는 보존하고 주문 링크만 끊는다 (backend.md §4·§6)
+	order_id uuid references orders (order_id) on delete set null, -- b2c 주문 연계 문의(배송·환불 등)
+	product_sku varchar(50) references products (product_sku) on update cascade, -- b2c 제품 문의 연계
 	-- b2b: purchase(견적)·as·workshop·corp_edu·etc / b2c: product(제품)·delivery(배송)·as·refund(환불·취소)
 	contact_type varchar(20) not null
 		check (contact_type in ('purchase', 'as', 'workshop', 'corp_edu', 'etc', 'product', 'delivery', 'refund')),
@@ -121,8 +157,9 @@ create table payments (
 	payment_key varchar(200) not null unique, -- 토스 결제 키(승인/취소 API 호출 키)
 	amount numeric(12,2) not null,
 	method varchar(30), -- 카드 | 가상계좌 | 간편결제 등 (승인 응답에서 확정)
-	status varchar(30) not null -- 토스 상태값 그대로 저장
-		check (status in ('READY', 'IN_PROGRESS', 'DONE', 'CANCELED', 'ABORTED', 'EXPIRED')),
+	status varchar(30) not null -- 토스 상태값 그대로 저장 (PARTIAL_CANCELED = 반품비 차감 부분취소)
+		check (status in ('READY', 'IN_PROGRESS', 'DONE', 'CANCELED', 'ABORTED', 'EXPIRED',
+			'PARTIAL_CANCELED')),
 	requested_at timestamptz,
 	approved_at timestamptz,
 	canceled_at timestamptz,
@@ -130,5 +167,34 @@ create table payments (
 	receipt_url varchar(500),
 	raw_response jsonb, -- 토스 승인/취소 응답 원본 — 분쟁·대사(reconciliation) 대비
 	created_at timestamptz not null default now(),
+	updated_at timestamptz not null default now()
+);
+
+-- 배송지 주소록 — 회원이 저장해 두고 주문서에서 불러 쓰는 배송지 목록.
+-- orders의 배송지 5필드는 '주문 시점 스냅샷'으로 그대로 유지한다(계약 증빙).
+-- 여기 행을 나중에 수정·삭제해도 이미 접수된 주문의 배송지는 변하지 않는다.
+create table deliveries (
+	delivery_id uuid primary key default gen_random_uuid(),
+	user_id uuid not null references profiles (user_id) on delete cascade,
+	delivery_label varchar(50), -- 배송지명(집·회사 등) — 선택
+	receiver_name varchar(100) not null,
+	receiver_phone varchar(20) not null,
+	postcode varchar(10) not null,
+	address varchar(255) not null,
+	address_detail varchar(255) not null default '', -- 선택 — 미입력 시 빈 문자열(orders와 동일 규약)
+	created_at timestamptz not null default now(),
+	updated_at timestamptz not null default now()
+);
+
+-- 목록은 항상 본인 것만 최신순 조회 — user_id 단독 인덱스로 충분(회원당 최대 5건)
+create index deliveries_user_id_idx on deliveries (user_id);
+
+-- Token Bucket rate limit — 서버리스(Netlify Functions) 인스턴스 간 공유 상태.
+-- 인메모리는 인스턴스마다 분리되어 한도가 느슨해지므로 DB 테이블 + 원자적 RPC(consume_token)로 관리한다.
+--   * per-key 버킷: B2B 문의(IP)·B2C 문의(user_id) 남용 차단
+--   * 전역 버킷('global:resend'): Resend 무료 100/day 한도 보호
+create table rate_limit_buckets (
+	bucket_key text primary key,          -- 'contact:ip:1.2.3.4' / 'inquiry:user:<uuid>' / 'global:resend'
+	tokens     double precision not null, -- 현재 잔여 토큰 (충전은 소비 시점에 지연 계산)
 	updated_at timestamptz not null default now()
 );
