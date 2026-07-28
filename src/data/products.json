@@ -29,6 +29,28 @@
       "optionSkus": [],
       "representative": true,
       "comingSoon": false
+    },
+    {
+      "id": "a-go",
+      "name": "A-Go(LeKiwi)",
+      "category": "a-go",
+      "price": 990000,
+      "summary": "",
+      "image": "/img/uploads/LeKiwi_Base.webp",
+      "gallery": [
+        "/img/uploads/제품출시포스터-01.webp",
+        "/img/uploads/제품출시포스터-02.webp",
+        "/img/uploads/제품출시포스터-03.webp"
+      ],
+      "detailImages": [],
+      "specImages": [],
+      "naverUrl": "https://smartstore.naver.com/roboseasy/products/13646175572",
+      "productNumber": "06010003",
+      "brand": "로보시지",
+      "origin": "대한민국",
+      "optionSkus": [],
+      "representative": true,
+      "comingSoon": false
     }
   ]
 }
