@@ -85,46 +85,9 @@ body {
     background-color: var(--color-ash-border);
 }
 
-/* 데스크톱에서 네비를 우측으로 — shopNav 아이콘이 뒤에 붙어도 정렬 유지 */
+/* 데스크톱에서 네비를 우측으로 */
 .header__nav {
     margin-left: auto;
-}
-
-/* ─── 판매 아이콘 (shopNav — /products·회원 페이지 전용) ───
-   광폭 화면: 컨테이너 밖 화면 우측 끝(스크롤바 옆)에 고정 — 네비 위치에 영향 없음.
-   1025~1440px: 우측 끝에 두면 우측 정렬 네비와 겹치므로 네비 뒤 인라인 배치로 폴백 */
-.header__icons {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-@media screen and (max-width: 1440px) {
-    .header__icons {
-        position: static;
-        transform: none;
-        margin-left: 8px;
-    }
-}
-
-.header__icon-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    color: var(--color-slate);
-    border-radius: var(--radius-cards);
-    transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.header__icon-link:hover {
-    color: var(--color-bright-gray);
-    background-color: var(--color-ash-border);
 }
 
 /* ─── Hamburger toggle ─── */
@@ -575,14 +538,6 @@ body.has-shop-nav .footer {
     /* Header — collapsed nav */
     .header__menu-toggle {
         display: flex;
-    }
-
-    /* 판매 아이콘은 햄버거 옆에 상시 노출 */
-    .header__icons {
-        position: static;
-        transform: none;
-        margin-left: auto;
-        margin-right: 4px;
     }
 
     .header__nav {
