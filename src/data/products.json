@@ -36,7 +36,7 @@
       "category": "a-go",
       "price": 990000,
       "summary": "",
-      "image": "/img/uploads/LeKiwi_Base.webp",
+      "image": "/img/uploads/LeKiwi_Base_1.webp",
       "gallery": [
         "/img/uploads/제품출시포스터-01.webp",
         "/img/uploads/제품출시포스터-02.webp",
@@ -56,6 +56,27 @@
       "origin": "대한민국",
       "optionSkus": [],
       "representative": true,
+      "comingSoon": false
+    },
+    {
+      "id": "open-gripper",
+      "name": "Open Gripper",
+      "category": "etc",
+      "price": 88000,
+      "summary": "",
+      "image": "/img/uploads/Open_Gripper.webp",
+      "gallery": [],
+      "detailImages": [
+        "/img/uploads/Open_Gripper-02.webp",
+        "/img/uploads/Open_Gripper-03.webp"
+      ],
+      "specImages": [],
+      "naverUrl": "https://smartstore.naver.com/roboseasy/products/13156884121",
+      "productNumber": "06010004",
+      "brand": "로보시지",
+      "origin": "대한민국",
+      "optionSkus": [],
+      "representative": false,
       "comingSoon": false
     }
   ]
