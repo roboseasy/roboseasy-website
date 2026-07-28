@@ -1,39 +1,29 @@
 {
   "products": [
     {
-      "id": "a-go",
-      "name": "A-Go(LeKiwi)",
-      "category": "a-go",
-      "price": 0,
-      "summary": "",
-      "image": "/img/uploads/lekiwi.webp",
-      "gallery": [],
-      "detailImages": [],
-      "naverUrl": "",
-      "productNumber": "",
-      "representative": true,
-      "comingSoon": true
-    },
-    {
       "id": "a-ba-max",
       "name": "A-Ba(SO-ARM101) MAX",
       "category": "a-ba",
       "price": 550000,
       "summary": "",
-      "image": "",
+      "image": "/img/uploads/A-Ba.webp",
       "gallery": [
-        "/img/uploads/112851104212780333_856347944.jpg"
+        "/img/uploads/A-Ba.webp"
       ],
       "detailImages": [
-        "/img/uploads/Artboard_14x.jpeg",
-        "/img/uploads/Artboard_24x.jpeg",
-        "/img/uploads/Artboard_34x.jpeg",
-        "/img/uploads/Artboard_54x.jpeg",
-        "/img/uploads/Artboard_44x.jpeg"
+        "/img/uploads/A-Ba-01_01.webp",
+        "/img/uploads/A-Ba-01_02.webp",
+        "/img/uploads/A-Ba-01_03.webp",
+        "/img/uploads/A-Ba-01_04.webp",
+        "/img/uploads/A-Ba-02.webp",
+        "/img/uploads/A-Ba-03.webp",
+        "/img/uploads/A-Ba-04.webp",
+        "/img/uploads/A-Ba-05.webp",
+        "/img/uploads/A-Ba-06.webp"
       ],
       "specImages": [],
       "naverUrl": "https://smartstore.naver.com/roboseasy/products/12169101368",
-      "productNumber": "12169101368",
+      "productNumber": "06010001",
       "brand": "자체제작 상품",
       "origin": "국산",
       "optionSkus": [],
