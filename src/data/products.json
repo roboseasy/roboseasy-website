@@ -81,6 +81,24 @@
       "optionSkus": [],
       "representative": false,
       "comingSoon": false
+    },
+    {
+      "id": "dual-a-ba",
+      "name": "Dual A-Ba(Dual SO-ARM)",
+      "category": "a-ba",
+      "price": 253000,
+      "summary": "",
+      "image": "",
+      "gallery": [],
+      "detailImages": [],
+      "specImages": [],
+      "naverUrl": "",
+      "productNumber": "",
+      "brand": "",
+      "origin": "",
+      "optionSkus": [],
+      "representative": false,
+      "comingSoon": false
     }
   ]
 }
