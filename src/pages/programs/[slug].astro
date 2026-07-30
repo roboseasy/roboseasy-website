@@ -87,12 +87,6 @@ const title = `${data.title} - RoboSEasy | 로보시지`;
     item.classList.toggle('active');
   }
 
-  // 구버전 호환 (programs.html의 toggleTrouble)
-  function toggleTrouble(header) {
-    const item = header.closest('.program-modal__trouble-item');
-    item.classList.toggle('active');
-  }
-
   // 다운로드 버튼 — Detail 본문에 onclick="return handleDownload(...)" 호출이 있으므로
   // 라우트 페이지에서도 전역 함수가 있어야 함. PC/모바일 가드 없이 새 탭 오픈.
   function handleDownload(url) {

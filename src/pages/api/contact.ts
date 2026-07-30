@@ -33,6 +33,11 @@ const TYPE_LABEL: Record<string, string> = {
 };
 
 
+// 메일 HTML에 넣는 모든 사용자 입력값은 이 함수를 거친다 — 문의자가 넣은 마크업이
+// 담당자 메일함에서 실제 링크·태그로 렌더되는 것을 막는다. 속성값(mailto href)도 포함이라 따옴표까지 처리.
+const esc = (s: string): string =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
 function buildEmailHtml(data: ContactPayload): string {
   const typeLabel = TYPE_LABEL[data.type] ?? data.type;
   const now = new Date();
@@ -46,11 +51,11 @@ function buildEmailHtml(data: ContactPayload): string {
     </tr>`;
 
   const customerRows = [
-    td('성함', data.name + (data.title ? ` (${data.title})` : '')),
-    td('이메일', `<a href="mailto:${data.email}" style="color:#4472c4;">${data.email}</a>`),
-    td('연락처', data.phone),
-    data.org ? td('소속', data.org) : '',
-    data.type === 'purchase' && data.shipto ? td('배송 주소', data.shipto) : '',
+    td('성함', esc(data.name + (data.title ? ` (${data.title})` : ''))),
+    td('이메일', `<a href="mailto:${esc(data.email)}" style="color:#4472c4;">${esc(data.email)}</a>`),
+    td('연락처', esc(data.phone)),
+    data.org ? td('소속', esc(data.org)) : '',
+    data.type === 'purchase' && data.shipto ? td('배송 주소', esc(data.shipto)) : '',
   ].filter(Boolean).join('');
 
   let purchaseSection = '';
@@ -58,7 +63,7 @@ function buildEmailHtml(data: ContactPayload): string {
     const itemRows = data.items.map((it, i) => `
       <tr style="background:${i % 2 === 1 ? '#f9f9fb' : '#fff'};">
         <td style="padding:8px 12px;text-align:center;border-bottom:1px solid #e8e5f5;">${i+1}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #e8e5f5;">${it.name}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #e8e5f5;">${esc(it.name)}</td>
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.qty.toLocaleString('ko-KR')}</td>
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.unitPrice.toLocaleString('ko-KR')}</td>
         <td style="padding:8px 12px;text-align:right;border-bottom:1px solid #e8e5f5;">${it.supply.toLocaleString('ko-KR')}</td>
@@ -101,7 +106,7 @@ function buildEmailHtml(data: ContactPayload): string {
     <hr style="border:none;border-top:1px solid #e8e5f5;margin:0;" />
     <div style="padding:20px 32px 28px;">
       <h2 style="font-size:15px;font-weight:700;color:#1a0a3d;margin:0 0 10px 0;">문의 내용</h2>
-      <div style="font-size:14px;color:#333;line-height:1.8;white-space:pre-wrap;background:#f9f9fb;border-radius:6px;padding:14px 16px;">${data.message.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      <div style="font-size:14px;color:#333;line-height:1.8;white-space:pre-wrap;background:#f9f9fb;border-radius:6px;padding:14px 16px;">${esc(data.message)}</div>
     </div>
   </div>
 </body></html>`;
@@ -122,6 +127,11 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!body.name || !body.email || !body.phone || !body.type || !body.message) {
     return new Response(JSON.stringify({ success: false, error: '필수 항목이 누락되었습니다.' }), { status: 400 });
+  }
+
+  // 제외 문자에 <>"',;: 를 포함 — 이 값이 replyTo 헤더로 그대로 들어가므로 주소 위조·Resend 거부(500)를 막는다
+  if (!/^[^\s@<>"',;:\\]+@[^\s@<>"',;:\\]+\.[^\s@<>"',;:\\]+$/.test(body.email)) {
+    return new Response(JSON.stringify({ success: false, error: '이메일 형식이 올바르지 않습니다.' }), { status: 400 });
   }
 
   const typeLabel = TYPE_LABEL[body.type] ?? body.type;
@@ -149,6 +159,7 @@ export const POST: APIRoute = async ({ request }) => {
   const { error } = await resend.emails.send({
     from: getEnv('QUOTE_FROM'),
     to: getEnv('QUOTE_TO'),
+    replyTo: body.email,
     subject: `[로보시지 문의] ${typeLabel} — ${body.name}`,
     html: buildEmailHtml(body),
     attachments: [...attachments, ...userAttachments],

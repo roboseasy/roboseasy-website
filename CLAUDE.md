@@ -9,12 +9,12 @@
 ## 작업 시 먼저 읽을 문서
 
 - [.agent/frontend.md](.agent/frontend.md) — 프론트엔드: 폴더 구조·라우팅·컨벤션·작업 절차
-- [.agent/backend.md](.agent/backend.md) — 백엔드 개발 기획서 (회원·주문·결제, ERD·RLS·명세는 .agent/specs/)
 - [.agent/system-architecture.md](.agent/system-architecture.md) — 시스템 아키텍처·기술 스택·외부 통합
 - [.agent/operations.md](.agent/operations.md) — 배포·테스트·운영 (로컬 개발, 환경변수, CMS 운영)
 - [.agent/issues.md](.agent/issues.md) — 알려진 이슈·주의사항·TODO
-- [.agent/terms-of-service-draft.md](.agent/terms-of-service-draft.md) · [.agent/privacy-policy-draft.md](.agent/privacy-policy-draft.md) — 이용약관·개인정보처리방침 초안
 - [.agent/archive/](.agent/archive/) — 완료된 역사 기록 (Astro 마이그레이션 기획·작업 메모)
+
+> 회원·주문·결제 백엔드는 이 브랜치 범위가 아니다 — 별도 브랜치에서 관리한다. 서버 호출은 문의 메일·견적서 두 건뿐이고 데이터베이스는 쓰지 않는다.
 
 ## 기본 원칙
 

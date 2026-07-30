@@ -1,6 +1,5 @@
 [build]
-  # sync-products는 CONTEXT=production에서만 실제 동기화 (그 외 컨텍스트는 스크립트가 스킵)
-  command = "npm run sync-products && npm run build"
+  command = "npm run build"
   publish = "dist"
 
 [build.environment]
@@ -13,8 +12,7 @@
   for = "/*"
   [headers.values]
     Cross-Origin-Opener-Policy = "same-origin-allow-popups"
-    # 클릭재킹 방지 — /manage·/mypage·/checkout 등을 외부 iframe에 씌우는 공격 차단
-    # (카카오 우편번호·토스 위젯은 우리 페이지가 embed하는 쪽이라 영향 없음)
+    # 클릭재킹 방지 — 사이트를 외부 iframe에 씌우는 공격 차단
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"

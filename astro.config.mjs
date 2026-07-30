@@ -15,7 +15,4 @@ export default defineConfig({
   output: 'hybrid',
   adapter: netlify(),
   integrations: [sitemap({ filter: (page) => !addonPaths.has(new URL(page).pathname) }), icon()],
-  redirects: {
-    '/hackathon': '/hackathon-2026',
-  },
 });
