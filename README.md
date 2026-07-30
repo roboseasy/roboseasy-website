@@ -23,7 +23,7 @@ roboseasy-website/
 ├── public/            # 빌드 시 dist/로 그대로 복사되는 정적 자산
 │   ├── admin/         # Sveltia CMS (/admin 콘텐츠 편집 화면)
 │   ├── img/           # 페이지별 이미지 — common_img, index_img, products_img,
-│   │                  #   programs_img, documents_img, hackathon-2026_img,
+│   │                  #   programs_img, documents_img,
 │   │                  #   assembly, so_arm, uploads
 │   └── videos/        # 조립 가이드 영상
 ├── src/

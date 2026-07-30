@@ -454,8 +454,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 </style>
 
-<script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
-
 <main class="page-hero">
   <div class="page-inner">
 
@@ -690,6 +688,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   const fmt = n => (n || 0).toLocaleString('ko-KR');
   const pad = n => String(n).padStart(2, '0');
 
+  // 인라인 SVG 아이콘 — astro-icon <Icon>은 빌드 타임 템플릿 전용이라 innerHTML 문자열에서는
+  // 렌더되지 않는다. 아래 마크업은 클라이언트에서 조립되므로 SVG를 직접 넣는다 (solar 세트).
+  // 감싸는 버튼에 aria-label이 있으므로 아이콘 자체는 aria-hidden.
+  const ICON_TRASH =
+    '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<g fill="none" stroke="currentColor" stroke-width="1.5">' +
+        '<path stroke-linecap="round" d="M20.5 6h-17m15.333 2.5l-.46 6.9c-.177 2.654-.265 3.981-1.13 4.79s-2.196.81-4.856.81h-.774c-2.66 0-3.991 0-4.856-.81c-.865-.809-.954-2.136-1.13-4.79l-.46-6.9M9.5 11l.5 5m4.5-5l-.5 5"/>' +
+        '<path d="M6.5 6h.11a2 2 0 0 0 1.83-1.32l.034-.103l.097-.291c.083-.249.125-.373.18-.479a1.5 1.5 0 0 1 1.094-.788C9.962 3 10.093 3 10.355 3h3.29c.262 0 .393 0 .51.019a1.5 1.5 0 0 1 1.094.788c.055.106.097.23.18.479l.097.291A2 2 0 0 0 17.5 6"/>' +
+      '</g>' +
+    '</svg>';
+  const ICON_DOCUMENT =
+    '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<g fill="none" stroke="currentColor" stroke-width="1.5">' +
+        '<path d="M3 10c0-3.771 0-5.657 1.172-6.828S7.229 2 11 2h2c3.771 0 5.657 0 6.828 1.172S21 6.229 21 10v4c0 3.771 0 5.657-1.172 6.828S16.771 22 13 22h-2c-3.771 0-5.657 0-6.828-1.172S3 17.771 3 14z"/>' +
+        '<path stroke-linecap="round" d="M8 10h8m-8 4h5"/>' +
+      '</g>' +
+    '</svg>';
+  const ICON_CLOSE =
+    '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<g fill="none" stroke="currentColor" stroke-width="1.5">' +
+        '<circle cx="12" cy="12" r="10"/>' +
+        '<path stroke-linecap="round" d="m14.5 9.5l-5 5m0-5l5 5"/>' +
+      '</g>' +
+    '</svg>';
+
   const typeSelect       = document.getElementById('f-type');
   const purchaseBlock    = document.getElementById('purchaseBlock');
   const asBlock          = document.getElementById('asBlock');
@@ -738,7 +761,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       '<div class="quote-card-head">' +
         '<span class="row-no">' + idx + '</span>' +
         '<select class="item-select q-item">' + itemOptions + '</select>' +
-        '<button type="button" class="row-del" aria-label="행 삭제"><Icon name="solar:trash-bin-trash-linear" width="16" /></button>' +
+        '<button type="button" class="row-del" aria-label="행 삭제">' + ICON_TRASH + '</button>' +
       '</div>' +
       '<div class="quote-card-body">' +
         '<div class="qc-field"><span class="qc-label">수량</span><input type="number" min="1" step="1" class="qc-input q-qty" placeholder="0" /></div>' +
@@ -796,9 +819,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const chip = document.createElement('span');
       chip.className = 'file-chip';
       chip.innerHTML =
-        '<Icon name="solar:document-linear" width="14" />' +
+        ICON_DOCUMENT +
         '<span>' + f.name + ' <span class="text-muted">(' + (f.size/1024).toFixed(1) + ' KB)</span></span>' +
-        '<button type="button" aria-label="삭제"><Icon name="solar:close-circle-linear" width="14" /></button>';
+        '<button type="button" aria-label="삭제">' + ICON_CLOSE + '</button>';
       chip.querySelector('button').addEventListener('click', () => { uploaded.splice(i, 1); refreshFileList(); });
       fileList.appendChild(chip);
     });

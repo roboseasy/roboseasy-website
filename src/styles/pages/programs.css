@@ -148,80 +148,9 @@
 }
 
 /* ================================
-   프로그램 상세 모달 (리디자인)
+   프로그램 상세 본문 (모달 → /programs/<slug> 라우트로 전환됨.
+   래퍼 제약 해제는 programs/[slug].astro의 is:global 블록에서 한다)
    ================================ */
-
-/* 모달 오버레이 */
-.program-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.program-modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* 모달 컨테이너 */
-.program-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.9);
-    width: 90%;
-    max-width: 900px;
-    max-height: 88vh;
-    background: var(--color-surface-2);
-    border-radius: 20px;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
-    z-index: 1001;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.program-modal-overlay.active .program-modal {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-/* 닫기 버튼 */
-.program-modal__close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border: none;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--text-body-sm);
-    color: var(--color-medium-gray);
-    transition: all 0.2s ease;
-    z-index: 10;
-}
-
-.program-modal__close:hover {
-    background: rgba(0, 0, 0, 0.18);
-    transform: rotate(90deg);
-}
 
 /* 컨텐츠 래퍼 */
 .program-modal__content {
@@ -537,10 +466,6 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
-.modal-kv-grid--2 {
-    grid-template-columns: repeat(2, 1fr);
-}
-
 .modal-kv {
     background: var(--color-surface-2);
     border-radius: 10px;
@@ -626,11 +551,6 @@
     border-left: 4px solid #f87171;
 }
 
-.modal-callout--info {
-    background: rgba(124, 58, 237, 0.1);
-    border-left: 4px solid var(--color-amethyst);
-}
-
 .modal-callout__icon {
     font-size: 15px;
     margin-top: 2px;
@@ -639,7 +559,6 @@
 
 .modal-callout--warning .modal-callout__icon { color: #facc15; }
 .modal-callout--danger  .modal-callout__icon { color: #f87171; }
-.modal-callout--info    .modal-callout__icon { color: var(--color-amethyst); }
 
 .modal-callout__title {
     font-size: var(--text-caption);
@@ -805,7 +724,6 @@
     .program-card__description { font-size: var(--text-caption); margin-bottom: 15px; }
     .program-card__buttons { gap: 8px; }
     .program-card__button { width: auto; justify-content: center; padding: 10px 16px; font-size: var(--text-caption); border-radius: 20px; }
-    .program-modal { width: 95%; max-height: 95vh; border-radius: 15px; }
     .program-modal__header { grid-template-columns: 1fr; }
     .program-modal__image-section { padding: 18px; }
     .program-modal__image { max-height: 130px; }
@@ -1387,7 +1305,6 @@
   box-shadow: 0 4px 12px rgba(76, 21, 148, 0.25);
 }
 
-.install-guide__step--gui .install-guide__step-num,
 .install-guide__step--terminal .install-guide__step-num {
   font-size: var(--text-caption);
 }
@@ -1607,7 +1524,6 @@
     height: 36px;
     font-size: var(--text-caption);
   }
-  .install-guide__step--gui .install-guide__step-num,
   .install-guide__step--terminal .install-guide__step-num {
     font-size: var(--text-caption-sm);
   }

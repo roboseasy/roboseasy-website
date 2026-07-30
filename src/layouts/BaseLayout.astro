@@ -15,15 +15,13 @@ interface Props {
   image?: string;
   /** body에 추가할 클래스 (페이지별 스타일 hook용) */
   bodyClass?: string;
-  /** false면 공통 헤더/푸터를 렌더하지 않음 (자체 chrome을 가진 랜딩 페이지용) */
-  chrome?: boolean;
   /** 페이지 테마 고정: 'light'면 라이트, 그 외(기본)는 다크 (shop=라이트, 나머지=다크) */
   lockTheme?: boolean | 'light';
   /** 판매 동선 페이지(/products) — 콘텐츠가 짧아도 푸터를 뷰포트 최하단에 고정 (global.css의 .has-shop-nav) */
   shopNav?: boolean;
 }
 
-const { title, description, path, image, bodyClass, chrome = true, lockTheme = false, shopNav = false } = Astro.props;
+const { title, description, path, image, bodyClass, lockTheme = false, shopNav = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="ko" data-theme={lockTheme === 'light' ? 'light' : 'dark'}>
@@ -38,8 +36,8 @@ const { title, description, path, image, bodyClass, chrome = true, lockTheme = f
     <slot name="head" />
   </head>
   <body class:list={[bodyClass, shopNav && 'has-shop-nav']}>
-    {chrome && <MainHeader />}
+    <MainHeader />
     <slot />
-    {chrome && <MainFooter />}
+    <MainFooter />
   </body>
 </html>

@@ -5,10 +5,6 @@ body {
     word-break: keep-all;
 }
 
-.mobile-br {
-    display: none;
-}
-
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -153,36 +149,6 @@ body {
     z-index: 1;
 }
 
-.banner__tags {
-    display: flex;
-    justify-content: center;
-    gap: var(--spacing-8);
-    margin-bottom: var(--spacing-32);
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards 0.1s;
-}
-
-.banner__tag {
-    font-size: var(--text-body-sm);
-    font-weight: var(--fw-medium);
-    color: var(--color-soft-amethyst);
-    padding: 6px 16px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(207, 203, 253, 0.3);
-    border-radius: var(--radius-tags);
-    backdrop-filter: blur(8px);
-    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-.banner__tag:hover {
-    background-color: var(--color-signal-violet);
-    color: var(--color-pure-white);
-    border-color: rgba(94, 81, 248, 0.8);
-    box-shadow: 0 0 0 3px rgba(94, 81, 248, 0.25), 0 0 24px rgba(94, 81, 248, 0.45);
-    transform: translateY(-2px);
-}
-
 .banner__title {
     font-family: var(--font-display);
     font-size: clamp(48px, 7vw, var(--text-display));
@@ -244,57 +210,6 @@ body {
 .banner__cta-primary:hover {
     background: var(--color-lavender);
     transform: translateY(-2px);
-}
-
-.banner__cta-secondary {
-    display: inline-flex;
-    align-items: center;
-    background-color: var(--color-lavender-mist);
-    color: var(--color-carbon);
-    border-radius: var(--radius-buttons);
-    padding: 16px 32px;
-    font-family: var(--font-display);
-    font-size: var(--text-body);
-    font-weight: var(--fw-semibold);
-    text-decoration: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.banner__cta-secondary:hover {
-    opacity: 0.85;
-    transform: translateY(-2px);
-}
-
-.banner__note {
-    display: block;
-    font-size: var(--text-caption);
-    color: var(--color-soft-amethyst);
-    margin-top: var(--spacing-16);
-    opacity: 0;
-    animation: fadeInUp 0.8s ease forwards 0.65s;
-}
-
-.banner__frame {
-    margin-top: var(--spacing-64);
-    opacity: 0;
-    animation: fadeInUp 1s ease forwards 0.7s;
-}
-
-.banner__frame-inner {
-    display: inline-block;
-    background-color: var(--color-pure-white);
-    border-radius: 20px;
-    padding: 12px;
-    box-shadow: var(--shadow-xl-2);
-    max-width: 420px;
-    width: 100%;
-}
-
-.banner__frame-image {
-    width: 100%;
-    height: auto;
-    border-radius: var(--radius-images);
-    display: block;
 }
 
 /* 판매 동선 페이지(shopNav): 콘텐츠가 짧아도 푸터를 뷰포트 최하단에 고정.
@@ -615,10 +530,6 @@ body.has-shop-nav .footer {
 
 /* Mobile */
 @media screen and (max-width: 768px) {
-    .mobile-br {
-        display: block;
-    }
-
     .header {
         padding: 0 16px;
     }
@@ -647,10 +558,6 @@ body.has-shop-nav .footer {
     .banner__ctas {
         flex-direction: column;
         align-items: center;
-    }
-
-    .banner__frame {
-        margin-top: var(--spacing-40);
     }
 
     /* Footer */
