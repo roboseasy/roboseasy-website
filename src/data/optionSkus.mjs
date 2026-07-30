@@ -1,5 +1,4 @@
-// 추가 옵션(optionSkus) 검증 규칙 — 빌드 게이트(scripts/sync-products.mjs)와
-// 개발 경고(src/data/products.ts)가 공유한다. 규칙을 한 곳에서만 관리해 두 검사가 어긋나지 않게 한다.
+// 추가 옵션(optionSkus) 검증 규칙 — 개발 경고(src/data/products.ts)가 사용한다.
 // 없는 id·자기 자신·중복을 잡는다(없는 id면 상세 페이지에서 옵션이 조용히 사라진다).
 /**
  * @param {Array<{ id: string; optionSkus?: string[] }>} products

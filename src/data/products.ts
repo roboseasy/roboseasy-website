@@ -38,7 +38,7 @@ export interface Product {
   comingSoon?: boolean;
   /**
    * 상세 페이지에 추가 옵션으로 붙일 다른 제품의 id 목록 (보통 category='addon'인 부품).
-   * 옵션도 정식 제품이라 order_items.product_sku FK가 그대로 성립하고, 단독 구매도 가능하다.
+   * 옵션도 정식 제품이라 단독 구매도 가능하다.
    */
   optionSkus?: string[];
 }
@@ -57,15 +57,8 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
 // products.json은 CMS가 쓰는 데이터 파일. JSON 배열 순서가 곧 표시 순서.
 export const products = productsData.products as Product[];
 
-/** 제품의 추가 옵션 — optionSkus가 가리키는 제품 중 판매 중(가격>0·출시됨)인 것만 */
-export const optionsOf = (product: Product): Product[] =>
-  (product.optionSkus ?? [])
-    .map((sku) => products.find((p) => p.id === sku))
-    .filter((p): p is Product => !!p && !p.comingSoon && p.price > 0);
-
 // optionSkus 오류(없는 id·자기 자신·중복)를 개발 중에 경고로 알린다 — 옵션이 조용히 사라져
-// 원인을 찾기 어려운 것을 막는다. 규칙은 빌드 게이트(sync-products)와 공유(optionSkus.mjs).
-// 배포 전 빌드 실패는 sync-products가 담당하므로 여기서는 DEV에서 경고만 한다.
+// 원인을 찾기 어려운 것을 막는다. 규칙은 optionSkus.mjs에 있다.
 if (import.meta.env.DEV) {
   for (const e of optionSkuErrors(products)) console.warn(`[products] ${e}`);
 }

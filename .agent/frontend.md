@@ -4,7 +4,6 @@ Astro 기반 프론트엔드의 구조·규칙·작업 절차. (구 architecture
 
 - 기술 스택·외부 통합: [system-architecture.md](system-architecture.md)
 - 로컬 개발·빌드·배포·CMS 운영: [operations.md](operations.md)
-- 백엔드(회원·주문·결제) 계획: [backend.md](backend.md)
 
 ## 폴더 구조
 
@@ -28,8 +27,7 @@ roboseasy-website/
 │   │   ├── programs/           # ProgramCard + 프로그램별 Detail 컴포넌트
 │   │   └── shop/               # ProductCard, BrandPlaceholder
 │   ├── pages/                  # 파일 기반 라우팅 (아래 "라우팅")
-│   │   └── api/[...path].ts    # Hono 마운트 파일 — /api/* 전체를 src/server/로 위임 (서빙 경로는 /api/v1/*)
-│   ├── server/                 # Hono 앱 본체 (app.ts, routes/, lib/) — backend.md §1
+│   │   └── api/                # SSR 엔드포인트 (contact.ts, quote-download.ts)
 │   ├── content/                # 콘텐츠 컬렉션 (config.ts에 zod 스키마)
 │   │   ├── programs/           # JSON (카드 메타데이터)
 │   │   └── docs/               # 마크다운 (lerobot-library, lerobot-so-arm, lekiwi, xlerobot)
@@ -55,11 +53,10 @@ roboseasy-website/
 | programs.astro + programs/[slug].astro | /programs, /programs/\<slug\> (getStaticPaths) |
 | products.astro + products/[id].astro | /products, /products/\<id\> (getStaticPaths) |
 | docs/[...slug].astro | /docs/\<category\>/\<slug\> (catch-all) |
-| login.astro / signup.astro | /login, /signup (라이트 테마, noindex) |
-| reset-password.astro | /reset-password (비밀번호 재설정 — 토큰 없으면 메일 요청 폼, 메일 링크로 오면 새 비밀번호 폼. Supabase Redirect URLs에 등록 필요) |
-| mypage.astro | /mypage (내 정보·비밀번호 변경·문의·탈퇴 — 로그인 필요, 클라이언트에서 401 → /login. 관리자는 /manage로 넘김) |
-| manage.astro | /manage (관리자 — role 검사. **/admin은 Sveltia CMS가 사용하므로 페이지 라우트 금지**) |
+| terms.astro / privacy.astro | /terms, /privacy (이용약관·개인정보처리방침) |
 | api/*.ts | SSR 엔드포인트 (`output: 'hybrid'` — 페이지는 정적, API만 서버 실행) |
+
+**`/admin`은 Sveltia CMS가 사용하므로 페이지 라우트로 쓰지 말 것.**
 
 옛 URL(docsify `.html` 등) 호환은 `public/_redirects`에서 Netlify가 301 처리 — [operations.md](operations.md) 참고.
 
@@ -70,7 +67,7 @@ roboseasy-website/
 - `title`, `description`, `path`, `image` props → `SeoMeta`가 canonical/OG/Twitter 절대 URL 합성
 - `chrome={false}` — 헤더/푸터 끄기 (hackathon 같은 자체 chrome 페이지)
 - `lockTheme` — 페이지 테마 고정: `'light'`면 라이트(shop 페이지), 그 외 기본 다크. `<html data-theme>`에 정적으로 반영 (런타임 토글 없음)
-- `shopNav` — true면 헤더 우측에 판매 아이콘(마이페이지·장바구니·찜) 표시. 판매 동선 페이지 전용(/products, /products/\<id\>, /login, /signup, /reset-password, /mypage). 로그인 진입점은 이 아이콘뿐 — 전역 네비에 로그인 링크 없음. 장바구니·찜은 2차 전까지 "준비 중" 토스트
+- `shopNav` — 판매 동선 페이지(/products, /products/\<id\>)용 레이아웃 플래그. `body.has-shop-nav`를 붙여 콘텐츠가 짧아도 푸터를 뷰포트 최하단에 고정 (global.css)
 - 글로벌 CSS 로드 순서: `tokens` → `reset` → `global`
 
 ## 콘텐츠 컬렉션 & 데이터
@@ -103,7 +100,7 @@ BEM 컨벤션 — `.block__element--modifier`. 페이지/도메인명 prefix로 
 
 - 페이지 인터랙션: Astro `<script>` (모듈 스코프) 우선. 옛 onclick 어트리뷰트 호환이 필요할 때만 `<script is:inline>`
 - **`<Icon>`(astro-icon)은 템플릿 전용** (세트는 [system-architecture.md](system-architecture.md) 참고) — 클라이언트 JS의 innerHTML에서는 렌더되지 않으므로 동적 마크업엔 인라인 SVG 사용 (contact.astro의 `ICON_*` 상수 참고)
-- 서버 코드: API는 `src/server/`(Hono, `/api/v1/*` — backend.md §1), 공용 로직 `src/lib/`, 데이터 `src/data/`
+- 서버 코드: API는 `src/pages/api/*.ts`, 공용 로직 `src/lib/`, 데이터 `src/data/`
 - jQuery 미사용
 
 ## Astro 컴포넌트
@@ -133,7 +130,7 @@ BEM 컨벤션 — `.block__element--modifier`. 페이지/도메인명 prefix로 
 ### 새 제품 (SHOP) 추가
 1. **권장**: `/admin`(Sveltia CMS) → "제품" 컬렉션에 항목 추가 — 저장 시 main에 바로 커밋됨 ([operations.md](operations.md)의 CMS 주의 참고)
 2. 직접 편집 시 `src/data/products.json`의 배열에 추가, 이미지는 `/img/uploads/...`
-3. `id`는 `^[a-z0-9-]{1,50}$` — **판매 연동 후에는 변경 금지** (URL·주문 FK)
+3. `id`는 `^[a-z0-9-]{1,50}$` — URL(`/products/<id>`)이 되므로 **한번 정하면 변경 금지**
 
 ### 새 docs 페이지 추가
 1. `src/content/docs/<category>/<slug>.md` 생성 — frontmatter: title, category, group, order
