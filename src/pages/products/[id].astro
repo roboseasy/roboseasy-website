@@ -3,7 +3,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BrandPlaceholder from '../../components/shop/BrandPlaceholder.astro';
 import { products, CATEGORY_LABELS, NAVER_STORE_URL } from '../../data/products';
 import type { Product } from '../../data/products';
-import { SHIPPING_FEE } from '../../data/shipping';
 import '../../styles/pages/product-detail.css';
 
 export function getStaticPaths() {
@@ -69,7 +68,7 @@ const description = summary ?? `${name} 제품 정보와 구매 안내.`;
               <h2 class="pdp__meta-title">배송정보</h2>
               <dl class="pdp__meta-list">
                 <div class="pdp__meta-row"><dt>배송 기간</dt><dd>평균 3일 이내 도착 확률 100%</dd></div>
-                <div class="pdp__meta-row"><dt>배송비</dt><dd>{SHIPPING_FEE.toLocaleString('ko-KR')}원 (전 주문 동일)</dd></div>
+                <div class="pdp__meta-row"><dt>배송비</dt><dd>3,000원 (전 주문 동일)</dd></div>
                 <div class="pdp__meta-row"><dt>배송/출고</dt><dd>로젠택배</dd></div>
               </dl>
             </section>

@@ -4,20 +4,20 @@
 
 - 프론트 구조·작업 절차: [frontend.md](frontend.md)
 - 로컬 개발·빌드·배포·CMS 운영: [operations.md](operations.md)
-- **예정된 백엔드(회원·주문·결제, Supabase + Hono)**: [backend.md](backend.md) — 시스템 다이어그램·ERD·API 명세는 그쪽이 기준
+
+> 회원·주문·결제 백엔드는 이 브랜치 범위가 아니다 — 별도 브랜치에서 관리한다.
 
 ## 시스템 구성 (현재)
 
 ```
 User ──HTTPS──▶ Netlify
                  ├─ 정적 페이지 (빌드 타임 프리렌더 ◀── GitHub main ◀── Sveltia CMS)
-                 └─ /api/v1/* — Hono 단일 앱 (Netlify Functions — output: 'hybrid')
-                      ├─ 문의·견적 ────▶ Resend (메일) / ExcelJS (견적서)
-                      └─ 회원·문의내역·관리자 ────▶ Supabase (Auth + Postgres/RLS)
+                 └─ /api/* (Netlify Functions — output: 'hybrid')
+                      └─ 문의·견적 ────▶ Resend (메일) / ExcelJS (견적서)
 ```
 
 콘텐츠(제품·뉴스·docs)는 저장소가 원본(git-based) — CMS 저장 = main 커밋 = 자동 재배포.
-백엔드 1차(회원·문의)로 `/api/v1/*`가 Hono 단일 앱으로 통합되고 Supabase(Auth+DB)가 추가됨 (backend.md §1). 2차(주문·결제)에서 토스 페이먼츠가 붙는다.
+서버 호출은 문의 메일 발송과 견적서 다운로드 두 건뿐이고, 데이터베이스는 쓰지 않는다.
 
 ## 프론트엔드
 
@@ -37,14 +37,12 @@ User ──HTTPS──▶ Netlify
 - Astro 내장 렌더러 (remark/rehype), 코드 하이라이팅은 내장 Shiki (빌드 타임)
 - docsify 시절 콜아웃은 표준 blockquote로 변환됨 (`> ℹ️`, `> ⚠️`)
 
-## 서버 / API (현재 운영분)
+## 서버 / API
 
-`/api/v1/*` 전체가 **Hono 단일 앱**(`src/server/app.ts`, `basePath('/api/v1')`)으로 서빙됨 — Astro catch-all(`src/pages/api/[...path].ts`)이 위임. 새 API는 `src/server/routes/`에 추가.
+각 엔드포인트는 `src/pages/api/` 아래 개별 Astro API 라우트다 (`export const prerender = false`).
 
-- **POST /api/v1/contact** — B2B 문의 폼. [Resend](https://resend.com/) 메일 발송(`RESEND_API_KEY`) + contacts 테이블 병행 기록(Supabase service role)
-- **POST /api/v1/quote-download** — 견적서 엑셀 생성. [ExcelJS](https://github.com/exceljs/exceljs) (로직 `src/lib/buildQuoteExcel.ts`, 템플릿 `src/excel/`, netlify.toml `included_files`로 번들 포함)
-- **GET /api/v1/health** — 모니터링용 헬스체크 (인증 불필요). 함수 생존 + DB 연결 확인 — 정상 200, 장애 503
-- 회원·문의·관리자 등 전체 API 목록: backend.md §3 / `.agent/specs/API 명세서.csv`
+- **POST /api/contact** — 문의 폼. [Resend](https://resend.com/) 메일 발송(`RESEND_API_KEY`). 답장이 문의자에게 가도록 `replyTo`에 문의자 이메일 지정
+- **POST /api/quote-download** — 견적서 엑셀 생성. [ExcelJS](https://github.com/exceljs/exceljs) (로직 `src/lib/buildQuoteExcel.ts`, 템플릿 `src/excel/`, netlify.toml `included_files`로 번들 포함)
 
 ## CMS (콘텐츠 관리)
 
@@ -52,7 +50,6 @@ User ──HTTPS──▶ Netlify
 - **백엔드**: GitHub (`roboseasy/roboseasy-website`, main) — GitHub OAuth 로그인 (Netlify OAuth 프록시 경유)
 - **워크플로**: 저장 시 main에 바로 커밋 (PR 검수 없음 — 운영 주의사항은 [operations.md](operations.md))
 - **관리 대상**: 제품(products.json), 랜딩 뉴스, 뉴스(Instagram 게시물)
-- Git 기반 백엔드만 지원 — DB 직접 관리 불가. 판매 사이트용 products DB는 빌드 시 JSON→DB 동기화 (backend.md §2)
 
 ## 호스팅 / 도메인
 
@@ -61,10 +58,9 @@ User ──HTTPS──▶ Netlify
 
 ## 외부 통합
 
-- **Resend** — 문의 메일 발송 (`/api/v1/contact`)
+- **Resend** — 문의 메일 발송 (`/api/contact`)
 - **Instagram embed** — 뉴스 페이지 (`instagram.com/embed.js`)
 - **Blogger JSON 피드** — 뉴스 페이지 Blog 탭, 빌드 시 수집
 - **YouTube RSS** — 뉴스 페이지 YouTube 탭, 빌드 시 수집
 - **GitHub + Netlify OAuth** — Sveltia CMS 인증
 - **검증 파일** — `public/google*.html`, `public/naver*.html` (사이트 소유 인증 — 삭제 금지)
-- **토스 페이먼츠** — 결제위젯 v2(`js.tosspayments.com`, `/checkout`) + 승인·취소 API(`src/server/lib/toss.ts`, `TOSS_SECRET_KEY`). 실결제는 가맹 계약 후 (backend.md §4)

@@ -7,29 +7,22 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "sync-products": "node scripts/sync-products.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/netlify": "^5.5.4",
     "@astrojs/sitemap": "^3.2.1",
-    "@supabase/supabase-js": "^2.109.0",
     "astro": "^4.16.19",
     "astro-icon": "^1.1.5",
     "exceljs": "^4.4.0",
-    "hono": "^4.12.28",
-    "resend": "^6.12.3",
-    "ws": "^8.21.0"
+    "resend": "^6.12.3"
   },
   "devDependencies": {
     "@iconify-json/fa6-brands": "^1.2.6",
     "@iconify-json/fa6-regular": "^1.2.4",
     "@iconify-json/fa6-solid": "^1.2.4",
-    "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.86",
-    "@iconify-json/solar": "^1.2.5",
-    "@types/ws": "^8.18.1",
-    "supabase": "^2.109.0"
+    "@iconify-json/solar": "^1.2.5"
   }
 }

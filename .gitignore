@@ -11,5 +11,13 @@ dist
 .vscode/*
 !.vscode/extensions.json
 
-.env
+# Environment variables
+.env*
+!.env.example
+
+# Claude settings
+.claude/settings.local.json
+
+# Supabase
 /supabase
+.agent/*.sql

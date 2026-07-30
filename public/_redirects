@@ -23,15 +23,17 @@ https://roboseasy.netlify.app/*   https://roboseasy.ai/:splat   301!
 /products/so-arm101-max           /products/a-ba-max           301
 /products/lekiwi                  /products/a-go               301
 
-# 옛 hackaton-2026 OG image (T 빠진 오타 파일명) → 통일된 철자
-/img/hackaton-2026.png            /img/hackathon-2026_img/hackathon-2026.png      301
-
 # 옛 SHOP 페이지(디자인 1안) → PRODUCTS 통합
 /shop                             /products                    301
+
+# 종료된 해커톤(2026) 페이지 → 홈. 페이지·전용 CSS·OG 이미지 모두 삭제됨.
+# 옛 OG 이미지(/img/hackaton-2026.png)는 대상 파일이 사라져 매핑을 제거했다.
+/hackathon-2026                   /                            301
+/hackathon                        /                            301
 
 # 옛 .html 진입 URL (Netlify pretty URL 사용 전 직접 링크된 경우)
 /index.html                       /                            301
 /programs.html                    /programs                    301
 /news.html                        /news                        301
 /documents.html                   /documents                   301
-/hackathon-2026.html              /hackathon-2026              301
+/hackathon-2026.html              /                            301
