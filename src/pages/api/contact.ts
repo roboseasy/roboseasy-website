@@ -24,6 +24,15 @@ interface ContactPayload {
   total?: number;
 }
 
+// 첨부 파일 제한 — contact.astro의 클라이언트 검사와 같은 기준이지만, 그쪽은 브라우저 JS라
+// 직접 POST로 우회된다. 실제 방어선은 여기다. 두 곳을 함께 고쳐야 한다.
+// zip은 일부러 제외 — 압축 안에 임의 파일을 담을 수 있어 확장자 검사가 무의미해진다.
+const MAX_TOTAL_BYTES = 5 * 1024 * 1024;
+const MAX_FILES = 5;
+const ALLOWED_EXT = ['pdf','png','jpg','jpeg','webp','gif','heic','hwp','hwpx','doc','docx','xls','xlsx'];
+// 마지막 확장자만 본다 — '이력서.pdf.exe'는 exe로 판정된다
+const extOf = (name: string): string => (/\.([^.]+)$/.exec(name)?.[1] ?? '').toLowerCase();
+
 const TYPE_LABEL: Record<string, string> = {
   purchase: '로봇 구매 문의',
   as: '로봇 AS 문의',
@@ -132,6 +141,19 @@ export const POST: APIRoute = async ({ request }) => {
   // 제외 문자에 <>"',;: 를 포함 — 이 값이 replyTo 헤더로 그대로 들어가므로 주소 위조·Resend 거부(500)를 막는다
   if (!/^[^\s@<>"',;:\\]+@[^\s@<>"',;:\\]+\.[^\s@<>"',;:\\]+$/.test(body.email)) {
     return new Response(JSON.stringify({ success: false, error: '이메일 형식이 올바르지 않습니다.' }), { status: 400 });
+  }
+
+  if (userFiles.length > MAX_FILES) {
+    return new Response(JSON.stringify({ success: false, error: `첨부 파일은 최대 ${MAX_FILES}개까지 가능합니다.` }), { status: 400 });
+  }
+
+  const badFile = userFiles.find(f => !ALLOWED_EXT.includes(extOf(f.name)));
+  if (badFile) {
+    return new Response(JSON.stringify({ success: false, error: `첨부할 수 없는 파일 형식입니다: ${badFile.name}` }), { status: 400 });
+  }
+
+  if (userFiles.reduce((sum, f) => sum + f.size, 0) > MAX_TOTAL_BYTES) {
+    return new Response(JSON.stringify({ success: false, error: '첨부 파일 총 크기가 5 MB를 초과했습니다.' }), { status: 400 });
   }
 
   const typeLabel = TYPE_LABEL[body.type] ?? body.type;

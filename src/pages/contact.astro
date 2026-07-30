@@ -620,9 +620,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <Icon name="solar:upload-linear" width="22" style="color:var(--text-muted);" />
                 <p style="margin-top:4px;font-size:0.875rem;color:var(--text-secondary);">
                   파일을 클릭하거나 드래그 앤 드롭으로 업로드하세요.
-                  <span class="text-muted">(최대 25 MB)</span>
+                  <span class="text-muted">(최대 5 MB · 5개)</span>
                 </p>
-                <input id="f-files" name="files" type="file" multiple style="display:none;" />
+                <p class="small-meta" style="margin-top:4px;">
+                  이미지 · PDF · 한글 · 워드 · 엑셀 파일만 첨부할 수 있습니다.
+                </p>
+                <input
+                  id="f-files"
+                  name="files"
+                  type="file"
+                  multiple
+                  accept=".pdf,.png,.jpg,.jpeg,.webp,.gif,.heic,.hwp,.hwpx,.doc,.docx,.xls,.xlsx"
+                  style="display:none;"
+                />
               </label>
               <div id="fileList" class="file-list"></div>
             </div>
@@ -810,7 +820,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   const fileInput = document.getElementById('f-files');
   const fileList  = document.getElementById('fileList');
   const fileDrop  = document.getElementById('fileDrop');
-  const MAX_BYTES = 25 * 1024 * 1024;
+  // input의 accept는 파일 선택 창만 걸러낸다 — 드래그 앤 드롭은 통과하므로 여기서 다시 검사한다.
+  // 서버(api/contact.ts)에도 동일 기준이 있다 — 이 검사는 우회 가능하므로 안내용이고, 실제 방어선은 서버다.
+  const MAX_BYTES   = 5 * 1024 * 1024;
+  const MAX_FILES   = 5;
+  const ALLOWED_EXT = ['pdf','png','jpg','jpeg','webp','gif','heic','hwp','hwpx','doc','docx','xls','xlsx'];
+  // 마지막 확장자만 본다 — '이력서.pdf.exe'는 exe로 판정된다
+  const extOf = name => (/\.([^.]+)$/.exec(name)?.[1] || '').toLowerCase();
   let uploaded = [];
 
   function refreshFileList() {
@@ -828,12 +844,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   function addFiles(filesLike) {
-    Array.from(filesLike).forEach(f => {
+    // 하나라도 걸리면 즉시 중단 — forEach + return이면 다음 파일이 계속 추가된다
+    for (const f of filesLike) {
+      if (uploaded.length >= MAX_FILES) {
+        alert('파일은 최대 ' + MAX_FILES + '개까지 첨부할 수 있습니다.'); break;
+      }
+      if (!ALLOWED_EXT.includes(extOf(f.name))) {
+        alert('첨부할 수 없는 형식입니다: ' + f.name + '\n허용 형식: ' + ALLOWED_EXT.join(', ')); break;
+      }
       if (uploaded.reduce((s, u) => s + u.size, 0) + f.size > MAX_BYTES) {
-        alert('총 파일 크기가 25 MB를 초과했습니다.'); return;
+        alert('총 파일 크기가 5 MB를 초과했습니다.'); break;
       }
       uploaded.push(f);
-    });
+    }
     refreshFileList();
   }
 
