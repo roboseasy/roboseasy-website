@@ -124,6 +124,10 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ success: false, error: '필수 항목이 누락되었습니다.' }), { status: 400 });
   }
 
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
+    return new Response(JSON.stringify({ success: false, error: '이메일 형식이 올바르지 않습니다.' }), { status: 400 });
+  }
+
   const typeLabel = TYPE_LABEL[body.type] ?? body.type;
   const attachments: { filename: string; content: string }[] = [];
 
@@ -149,6 +153,7 @@ export const POST: APIRoute = async ({ request }) => {
   const { error } = await resend.emails.send({
     from: getEnv('QUOTE_FROM'),
     to: getEnv('QUOTE_TO'),
+    replyTo: body.email,
     subject: `[로보시지 문의] ${typeLabel} — ${body.name}`,
     html: buildEmailHtml(body),
     attachments: [...attachments, ...userAttachments],
