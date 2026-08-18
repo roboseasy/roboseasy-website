@@ -45,8 +45,26 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.2',
+    label: 'v0.6.0 — latest · Windows 0.0.2 · Ubuntu 0.0.1',
+    // Windows YOLO/Grasp 기능을 포함한 Physical Labs Windows 배포판.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.2/physical-labs-setup_0.6.0-0.0.2_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.2/physical-labs-setup_0.6.0-0.0.2_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.2.zip',
+      // Ubuntu는 기존 0.0.1 배포판을 계속 제공한다.
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.1/physical-labs_0.6.0-0.0.1_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.1',
-    label: 'v0.6.0 (0.0.1) — latest · Windows · Ubuntu',
+    label: 'v0.6.0 (0.0.1) · Windows · Ubuntu',
     // lerobot 0.6.0 기반. Physical Labs 첫 릴리즈 (버전 라인 0.0.1 리셋).
     // 배포 저장소는 physical-labs-app-deploy (구 roboseasy-studio-deploy 에서 리네임).
     // 구 Roboseasy Studio 릴리즈들은 배포 저장소에서 삭제됨 — 목록에 남기지 않는다.
