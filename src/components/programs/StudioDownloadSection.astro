@@ -45,8 +45,26 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.5',
+    label: 'v0.6.0 — latest · Windows 0.0.5 · Ubuntu 0.0.1',
+    // Pick & Place 안전 경로와 Gripper 완전 열림 목표를 보정한 Windows 배포판.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.5/physical-labs-setup_0.6.0-0.0.5_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.5/physical-labs-setup_0.6.0-0.0.5_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.5.zip',
+      // Ubuntu는 기존 0.0.1 배포판을 계속 제공한다.
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.1/physical-labs_0.6.0-0.0.1_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.3',
-    label: 'v0.6.0 — latest · Windows 0.0.3 · Ubuntu 0.0.1',
+    label: 'v0.6.0 · Windows 0.0.3 · Ubuntu 0.0.1',
     // Teaching Control Sync 시 안전 속도·힘을 자동 적용하는 Windows 배포판.
     assets: {
       'windows.primary':
