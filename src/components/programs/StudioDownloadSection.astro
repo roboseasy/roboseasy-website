@@ -45,6 +45,24 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.7',
+    label: 'v0.6.0 — latest · Windows 0.0.7 · Ubuntu 0.0.1',
+    // Windows 학습 실행 전 공통·정책별 의존성을 검사하고 누락 항목만 설치한다.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.7/physical-labs-setup_0.6.0-0.0.7_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.7/physical-labs-setup_0.6.0-0.0.7_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.7.zip',
+      // Ubuntu는 기존 0.0.1 배포판을 계속 제공한다.
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.1/physical-labs_0.6.0-0.0.1_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.6',
     label: 'v0.6.0 — latest · Windows 0.0.6 · Ubuntu 0.0.1',
     // 로그인 화면 개편(아이디/비밀번호 + 구글) + Anaconda/Python 3.14 PC 설치 실패 복구.
