@@ -45,8 +45,27 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.8',
+    label: 'v0.6.0 — latest · Windows 0.0.8 · Ubuntu 0.0.1',
+    // 앱에서 학습한 모델이 추론 탭 로컬 모델 목록에 나타나지 않던 문제를 수정한 빌드.
+    // (스캔 경로를 학습 저장 정본 경로 ~/.PhysicalLabs/outputs/train 으로 정정)
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.8/physical-labs-setup_0.6.0-0.0.8_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.8/physical-labs-setup_0.6.0-0.0.8_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.8.zip',
+      // Ubuntu는 기존 0.0.1 배포판을 계속 제공한다.
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.1/physical-labs_0.6.0-0.0.1_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.1.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.7',
-    label: 'v0.6.0 — latest · Windows 0.0.7 · Ubuntu 0.0.1',
+    label: 'v0.6.0 · Windows 0.0.7 · Ubuntu 0.0.1',
     // lerobot[training] 미설치 시 훈련(새 학습/학습 재개) 진입을 막고 안내하며,
     // 환경 진단 카드 표기를 실제 설치 대상(lerobot[training])으로 정정한 빌드.
     assets: {
