@@ -45,8 +45,26 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.10',
+    label: 'v0.6.0 — latest · Windows 0.0.8 · Ubuntu 0.0.10',
+    // Ubuntu 0.0.10: LeKiwi 로봇 와이파이 설정(스캔·비밀번호·고정 IP·무선 전환)을 앱에서.
+    // 0.0.9 의 바퀴 키보드 주행·Motion Record/Replay 포함. Windows 는 0.0.8 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.8/physical-labs-setup_0.6.0-0.0.8_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.8/physical-labs-setup_0.6.0-0.0.8_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.8.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.10/physical-labs_0.6.0-0.0.10_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.10.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.8',
-    label: 'v0.6.0 — latest · Windows 0.0.8 · Ubuntu 0.0.1',
+    label: 'v0.6.0 · Windows 0.0.8 · Ubuntu 0.0.1',
     // 앱에서 학습한 모델이 추론 탭 로컬 모델 목록에 나타나지 않던 문제를 수정한 빌드.
     // (스캔 경로를 학습 저장 정본 경로 ~/.PhysicalLabs/outputs/train 으로 정정)
     assets: {
