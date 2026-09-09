@@ -45,8 +45,27 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.11',
+    label: 'v0.6.0 — latest · Windows 0.0.8 · Ubuntu 0.0.11',
+    // Ubuntu 0.0.11: 워크스페이스 "Yolo + Pick&Place" 추가(YOLO 모델 → 리더암 자세 준비 →
+    // Place 모션 선택 → Pick&Place 실행). ultralytics 는 앱에 동봉하지 않고 환경 준비 페이지에서 설치.
+    // 텔레오퍼레이션 탭 관절 그래프 접기. Windows 는 0.0.8 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.8/physical-labs-setup_0.6.0-0.0.8_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.8/physical-labs-setup_0.6.0-0.0.8_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.8.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.11/physical-labs_0.6.0-0.0.11_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.11.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.10',
-    label: 'v0.6.0 — latest · Windows 0.0.8 · Ubuntu 0.0.10',
+    label: 'v0.6.0 · Windows 0.0.8 · Ubuntu 0.0.10',
     // Ubuntu 0.0.10: LeKiwi 로봇 와이파이 설정(스캔·비밀번호·고정 IP·무선 전환)을 앱에서.
     // 0.0.9 의 바퀴 키보드 주행·Motion Record/Replay 포함. Windows 는 0.0.8 유지.
     assets: {
