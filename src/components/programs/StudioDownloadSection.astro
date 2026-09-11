@@ -45,8 +45,27 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.14',
+    label: 'v0.6.0 — latest · Windows 0.0.14 · Ubuntu 0.0.12',
+    // Windows 0.0.14: 엔드이펙터 Joint Control 에서 중력을 거스르는 방향의 조그가
+    // 기어들거나 멈춘 것처럼 보이던 문제 수정(로봇 속도가 '무제한' 으로 남아 조그
+    // 제어의 전제가 깨지던 것). 0.0.13 의 LeKiwi 기종 지원·Yolo+Pick&Place 포함.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.14/physical-labs-setup_0.6.0-0.0.14_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.14/physical-labs-setup_0.6.0-0.0.14_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.14.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.12/physical-labs_0.6.0-0.0.12_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.12.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.13',
-    label: 'v0.6.0 — latest · Windows 0.0.13 · Ubuntu 0.0.12',
+    label: 'v0.6.0 · Windows 0.0.13 · Ubuntu 0.0.12',
     // Windows 0.0.13: LeKiwi 기종 지원 전면 도입 — 로봇 설정(이더넷 직결/Wi-Fi + SSH 키
     // 자동 등록), 원격 팔로워 칼리브레이션, 엔드이펙터 관절 조그·화살표 바퀴 주행,
     // 텔레옵·수집·훈련·추론. 워크스페이스 "Yolo + Pick&Place" 추가(접근→Pick→복귀→Place).
