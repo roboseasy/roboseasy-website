@@ -154,6 +154,11 @@
     flex-shrink: 0;
 }
 
+/* 네이버 로고타입은 여백 없는 굵은 워드마크라 180px에서 다른 로고보다 훨씬 무겁게 보인다. */
+.client-ticker__logo[alt="네이버"] {
+    max-width: 130px;
+}
+
 /* ─── Section Conic Rotation ─── */
 @keyframes conicSpin {
     from { transform: translate(-50%, -50%) rotate(0deg); }
