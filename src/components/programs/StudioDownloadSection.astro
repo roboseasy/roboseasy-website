@@ -45,8 +45,28 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.16',
+    label: 'v0.6.0 — latest · Windows 0.0.15 · Ubuntu 0.0.16',
+    // Ubuntu 0.0.16: .deb 앱에서 워크스페이스 Yolo + Pick&Place [설치](ultralytics)와 학습 탭
+    // SmolVLA/X-VLA/GROOT 의존성 설치가 [Errno 13] 로 실패하던 문제 수정 — 관리자 소유 venv 라
+    // 쓰기 불가 시 시스템 비밀번호 창(pkexec)으로 설치. 설치 창의 "Conda env" 문구 제거,
+    // ultralytics 8.4.153 고정. Windows 는 0.0.15 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.15/physical-labs-setup_0.6.0-0.0.15_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.15/physical-labs-setup_0.6.0-0.0.15_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.15.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.16/physical-labs_0.6.0-0.0.16_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.16.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.15',
-    label: 'v0.6.0 — latest · Windows 0.0.15 · Ubuntu 0.0.12',
+    label: 'v0.6.0 · Windows 0.0.15 · Ubuntu 0.0.12',
     // Windows 0.0.15: 워크스페이스 "Yolo + Pick&Place" 환경 준비에서 [설치] 가 눌리지 않아
     // ultralytics 를 설치할 수 없던 문제 수정("Linux 에서만 지원" 안내로 막혀 있었음).
     // ultralytics 8.4.153 고정, LeKiwi SSH 확인 때 콘솔 창 깜빡임 제거. 0.0.14 내용 포함.
