@@ -45,8 +45,27 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.0.17',
+    label: 'v0.6.0 — latest · Windows 0.0.15 · Ubuntu 0.0.17',
+    // Ubuntu 0.0.17: 앱 안 라이브러리 설치 경로 재점검 — 새 학습 옵션의 GROOT 배너 [설치] 가 관리자 권한
+    // 없이 실행돼 실패하던 문제, sudo pip 로 직접 설치한 PC(혼합 소유 venv)에서 [Errno 13] 으로 실패하던
+    // 문제 수정(권한 오류 시 pkexec 로 자동 재시도). 실패 시 터미널용 sudo 명령 안내. Windows 는 0.0.15 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.15/physical-labs-setup_0.6.0-0.0.15_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.15/physical-labs-setup_0.6.0-0.0.15_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.15.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.17/physical-labs_0.6.0-0.0.17_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.17.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.16',
-    label: 'v0.6.0 — latest · Windows 0.0.15 · Ubuntu 0.0.16',
+    label: 'v0.6.0 · Windows 0.0.15 · Ubuntu 0.0.16',
     // Ubuntu 0.0.16: .deb 앱에서 워크스페이스 Yolo + Pick&Place [설치](ultralytics)와 학습 탭
     // SmolVLA/X-VLA/GROOT 의존성 설치가 [Errno 13] 로 실패하던 문제 수정 — 관리자 소유 venv 라
     // 쓰기 불가 시 시스템 비밀번호 창(pkexec)으로 설치. 설치 창의 "Conda env" 문구 제거,
