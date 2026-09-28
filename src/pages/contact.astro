@@ -1,6 +1,10 @@
 ---
 import { Icon } from 'astro-icon/components';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { loadPriceList } from '../lib/buildQuoteExcel';
+
+// 견적 품목·단가는 견적서 엑셀(src/excel/)의 '품목별 구매단가' 시트에서 빌드 타임에 읽는다
+const quoteItems = await loadPriceList();
 ---
 <BaseLayout
   title="Contact Us | 로보시지 RoboSEasy"
@@ -673,27 +677,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 </div>
 
+<script type="application/json" id="quoteItems" set:html={JSON.stringify(quoteItems).replace(/</g, '\\u003c')} />
+
 <script>
-  const ITEMS = [
-    { name: 'LeRobot SO-ARM 101 Max', price: 500000 },
-    { name: 'Top 카메라홀더 + 카메라모듈 + 셀카봉', price: 50000 },
-    { name: 'Wrist 카메라홀더 + 카메라모듈', price: 40000 },
-    { name: 'Belly 카메라홀더 + 카메라모듈', price: 40000 },
-    { name: '고급형 클램프 4pcs', price: 20000 },
-    { name: 'LeRobot SO-ARM 101 Open Gripper', price: 70000 },
-    { name: 'LeRobot SO-ARM 101 Max - 서보 모터 STS3215 (7.4v/19kg)', price: 30000 },
-    { name: 'LeRobot SO-ARM 101 Max - 서보 모터 STS3215 (12v/30kg)', price: 35000 },
-    { name: 'Dual SO-ARM (Only Bridge)', price: 230000 },
-    { name: 'Dual SO-ARM Full Set', price: 1230000 },
-    { name: 'LeRobot SO-ARM101 Max - 3D 프린팅 부품 제외', price: 440000 },
-    { name: 'LeRobot SO-ARM101 Max - 3D 프린팅 부품', price: 70000 },
-    { name: '리더암 모터 세트 (7.4v/19kg)', price: 180000 },
-    { name: '팔로워암 모터 세트 (12v/30kg)', price: 210000 },
-    { name: '모터드라이브 모듈', price: 10000 },
-    { name: '전원 어댑터', price: 10000 },
-    { name: 'USB to C 케이블', price: 2000 },
-    { name: '조립서비스', price: 90000 },
-  ];
+  const ITEMS = JSON.parse(document.getElementById('quoteItems').textContent);
 
   const fmt = n => (n || 0).toLocaleString('ko-KR');
   const pad = n => String(n).padStart(2, '0');
@@ -965,18 +952,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   async function handleExcelDownload(btn) {
     const name = document.getElementById('f-name').value.trim();
-    const { items, supplySum, vatSum } = collectQuoteItems();
+    // 단가·합계는 서버가 견적서 엑셀의 가격표로 다시 계산한다 — items에서도 품목명·수량만 쓴다
+    const { items } = collectQuoteItems();
     const payload = {
       name,
       title:     document.getElementById('f-title').value.trim() || undefined,
       email:     document.getElementById('f-email').value.trim(),
       phone:     document.getElementById('f-phone').value.trim(),
       org:       orgInput.value.trim() || undefined,
-      shipto:    document.getElementById('f-shipto').value.trim() || undefined,
       items:     items.length > 0 ? items : undefined,
-      supplySum: supplySum || undefined,
-      vatSum:    vatSum || undefined,
-      total:     (supplySum + vatSum) || undefined,
     };
     const origHTML = btn.innerHTML;
     btn.disabled = true;
