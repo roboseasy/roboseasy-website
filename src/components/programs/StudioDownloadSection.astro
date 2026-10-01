@@ -45,8 +45,27 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.1.0',
+    label: 'v0.6.0 — latest · Windows 0.0.15 · Ubuntu 0.1.0',
+    // Ubuntu 0.1.0: 기능 패키지 지연 설치 — 첫 설치는 기본 구성만(약 0.5GB · 2~3분, 예전 6.9GB), 칼리브레이션·
+    // 텔레오퍼레이션·데이터·훈련·추론 등은 그 탭을 처음 열 때 설치. 화면 비례 UI 배율, SmolVLA·X-VLA 파인튜닝
+    // 카메라 이름 자동 맞춤, LeKiwi 호스트 키 변경 앱 안 복구. Windows 는 0.0.15 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.15/physical-labs-setup_0.6.0-0.0.15_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.0.15/physical-labs-setup_0.6.0-0.0.15_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.0.15.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.0/physical-labs_0.6.0-0.1.0_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.0.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.0.17',
-    label: 'v0.6.0 — latest · Windows 0.0.15 · Ubuntu 0.0.17',
+    label: 'v0.6.0 · Windows 0.0.15 · Ubuntu 0.0.17',
     // Ubuntu 0.0.17: 앱 안 라이브러리 설치 경로 재점검 — 새 학습 옵션의 GROOT 배너 [설치] 가 관리자 권한
     // 없이 실행돼 실패하던 문제, sudo pip 로 직접 설치한 PC(혼합 소유 venv)에서 [Errno 13] 으로 실패하던
     // 문제 수정(권한 오류 시 pkexec 로 자동 재시도). 실패 시 터미널용 sudo 명령 안내. Windows 는 0.0.15 유지.
