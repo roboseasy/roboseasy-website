@@ -147,6 +147,30 @@ const panels: OSPanel[] = [
     </p>
   </div>
 
+  {/* 모든 OS 공통 사전 공지 — 탭을 열기 전에 보이도록 탭 위에 둔다. */}
+  <aside class="install-guide__tip install-guide__tip--notice" role="note">
+    <Icon name="fa6-solid:triangle-exclamation" class="install-guide__tip-icon" aria-hidden="true" />
+    <div class="install-guide__tip-body">
+      <p class="install-guide__tip-title">모델 학습 전 확인하세요 — CUDA · CUDA Toolkit 설치 필요</p>
+      <p class="install-guide__tip-text">
+        Physical Labs 로 모델을 학습(GPU 가속)하려면 NVIDIA GPU 와 함께
+        <strong>CUDA 12.8 을 지원하는 NVIDIA 드라이버(570 이상)</strong>와
+        <strong>CUDA Toolkit 12.8</strong> 이 미리 설치되어 있어야 합니다.
+        모터 셋업 · 로봇 제어 · 데이터 수집만 사용한다면 설치하지 않아도 됩니다.
+        {' '}
+        <a
+          class="install-guide__tip-link"
+          href="https://developer.nvidia.com/cuda-12-8-0-download-archive"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CUDA Toolkit 12.8 다운로드
+          <Icon name="fa6-solid:arrow-right" aria-hidden="true" />
+        </a>
+      </p>
+    </div>
+  </aside>
+
   <div class="install-guide__tabs" role="tablist" aria-label="운영체제 선택">
     {panels.map((p) => (
       <button

@@ -1422,6 +1422,18 @@
   border-radius: 9px;
 }
 
+/* 탭 위 공통 사전 공지 — 패널과 같은 폭, 경고색 */
+.install-guide__tip--notice {
+  max-width: 880px;
+  margin: 0 auto 24px;
+  background: #fff7e6;
+  border-left-color: #e8833a;
+}
+
+.install-guide__tip--notice .install-guide__tip-icon {
+  color: #e8833a;
+}
+
 .install-guide__tip-icon {
   font-size: var(--text-body-sm);
   color: #2563eb;

@@ -45,8 +45,26 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.1.2',
+    label: 'v0.6.0 — latest · Windows 0.1.1 · Ubuntu 0.1.2',
+    // Ubuntu 0.1.2: 일부 PC 에서 GPU 학습이 시작 직후 멈추던 문제(torchcodec 의 NVIDIA NPP 누락) 수정 —
+    // GPU 버전 PyTorch 설치 시 NPP 동시 설치, 환경 진단 "영상 디코더" 항목. LeKiwi 호스트 [강제 정지]. Windows 는 0.1.1 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.1/physical-labs-setup_0.6.0-0.1.1_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.1/physical-labs-setup_0.6.0-0.1.1_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.1.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.2/physical-labs_0.6.0-0.1.2_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.2.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.1.1',
-    label: 'v0.6.0 — latest · Windows 0.1.1 · Ubuntu 0.1.0',
+    label: 'v0.6.0 · Windows 0.1.1 · Ubuntu 0.1.0',
     // Windows 0.1.1: 우분투 0.1.0 동기화 — 설치는 기본 구성만(내려받기 약 0.4GB), 칼리브레이션·텔레오퍼레이션·
     // 데이터·훈련·추론은 그 탭을 처음 열 때 설치. NVIDIA GPU 면 설치 때 GPU 버전 PyTorch 를 함께 받음.
     // 화면 비례 UI 배율, SmolVLA·X-VLA 파인튜닝·LeKiwi 텔레옵 연결·칼리브레이션 호스트 키 수정. Ubuntu 는 0.1.0 유지.
