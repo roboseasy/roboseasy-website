@@ -162,12 +162,12 @@ lerobot-teleoperate \
 
 | 옵션명 | 설명 | 예시 값 |
 |--------|------|---------|
-| --robot.type | 팔로워 로봇 타입 | so101_follower |
-| --robot.port | 팔로워 USB 포트 | /dev/so101_follower |
-| --robot.id | 팔로워 이름 | follower |
-| --teleop.type | 리더 로봇 타입 | so101_leader |
-| --teleop.port | 리더 USB 포트 | /dev/so101_leader |
-| --teleop.id | 리더 이름 | leader |
+| `--robot.type` | 팔로워 로봇 타입 | `so101_follower` |
+| `--robot.port` | 팔로워 USB 포트 | `/dev/so101_follower` |
+| `--robot.id` | 팔로워 이름 | `follower` |
+| `--teleop.type` | 리더 로봇 타입 | `so101_leader` |
+| `--teleop.port` | 리더 USB 포트 | `/dev/so101_leader` |
+| `--teleop.id` | 리더 이름 | `leader` |
 
 > **팁** 💡`TIP`
 >

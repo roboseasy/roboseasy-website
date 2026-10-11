@@ -5,7 +5,7 @@ group: "Setup"
 order: 30
 ---
 
-# SO-AMR 101 조립 가이드
+# A-Ba(SO-ARM101) 조립 가이드
 
 > **정보** ℹ️ `INFO`
 >
@@ -27,7 +27,7 @@ SO-101은 6축 오픈소스 로봇 팔로, 3D 프린팅 부품과 STS3215 서보
 
 ### 2.2 LeRobot 설치
 
-- [설치 가이드](../software/installation)를 참고하여 LeRobot을 설치하세요.
+- [설치 가이드](/docs/a-ba/setup-software-installation)를 참고하여 LeRobot을 설치하세요.
 - Feetech SDK도 추가로 설치해야 합니다.
 
 **가상환경 활성화**
@@ -68,12 +68,12 @@ lerobot-find-port
 
 Leader 보드와 연결된 USB 케이블을 PC에서 뽑고 Enter를 누릅니다. 그러면 아래와 같은 결과를 확인할 수 있습니다.
 
-```bash
+```plaintext
 The port of this MotorsBus is '/dev/ttyACM0'
 Reconnect the USB cable
 ```
 
-해당 보드의 포트는 '/dev/ttyACM0'입니다.
+해당 보드의 포트는 `/dev/ttyACM0`입니다.
 
 이제 Follower 보드와 PC와 연결된 USB 케이블만 남겨두고 같은 명령어를 실행합니다.
 
@@ -83,12 +83,12 @@ lerobot-find-port
 
 Follower 보드와 연결된 USB 케이블을 PC에서 뽑고 Enter를 누릅니다. 그러면 아래와 같은 결과를 확인할 수 있습니다.
 
-```bash
+```plaintext
 The port of this MotorsBus is '/dev/ttyACM1'
 Reconnect the USB cable
 ```
 
-해당 보드의 포트는 '/dev/ttyACM1'입니다.
+해당 보드의 포트는 `/dev/ttyACM1`입니다.
 
 각 포트가 어떤 팔(Leader/Follower)에 해당하는지 구분하세요.
 
@@ -280,8 +280,8 @@ lerobot-setup-motors \
     <h3>⚡ 원터치 세팅 (추천)</h3>
     <p>모든 설정을 한 번에 자동으로 완료합니다</p>
   </a>
-  <a href="/docs/a-ba/setup-software-installation" class="card">
+  <a href="/docs/a-ba/setup-hardware-usbport" class="card">
     <h3>🔌 단계별 진행</h3>
-    <p>소프트웨어 설치부터, USB 포트와 카메라까지 하나씩 설정합니다</p>
+    <p>USB 포트와 카메라 포트를 하나씩 고정합니다</p>
   </a>
 </div>

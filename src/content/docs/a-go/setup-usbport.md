@@ -107,10 +107,10 @@ lerobot-calibrate \
     --robot.cameras='{}'
 ```
 
-호스트를 띄울 때도 `--robot.port=/dev/lekiwi` 를 추가합니다. 다음 페이지 [제어 스크립트](/docs/a-go/start-custom-scripts)에서 만드는 `start_lekiwi_host.sh` 에 이 옵션을 넣어 두면 매번 신경 쓸 필요가 없습니다.
+호스트를 띄울 때도 `--robot.port=/dev/lekiwi` 를 추가합니다. 다음 페이지 [제어 스크립트](/docs/a-go/start-custom-scripts)에서 만드는 `start_lekiwi_host.sh` 에는 이 옵션이 이미 들어 있어 매번 신경 쓸 필요가 없습니다.
 
 > **팁** 💡`TIP`
-> <br>우분투 PC에 연결하는 **리더 암**도 같은 방법으로 고정할 수 있습니다. PC에서 리더 암의 시리얼 번호를 확인해 `SYMLINK+="so101_leader"` 규칙을 만들면 `--teleop.port=/dev/so101_leader` 로 쓸 수 있습니다.
+> <br>우분투 PC에 연결하는 **리더 암**도 같은 방법으로 고정할 수 있습니다. PC에서 리더 암의 시리얼 번호를 확인해 `SYMLINK+="so101_leader"` 규칙을 만들면 `--teleop.port=/dev/so101_leader` 로 쓸 수 있습니다. 자세한 절차는 [A-Ba USB 포트 고정](/docs/a-ba/setup-hardware-usbport)과 같습니다.
 
 ---
 
@@ -122,3 +122,13 @@ lerobot-calibrate \
 | `grep '{serial}'` 결과가 비어 있음 | `udevadm info -a -n /dev/ttyACM0` 전체 출력에서 `ATTRS{serial}` 줄을 직접 찾기 |
 | 모터 보드를 교체한 뒤 별칭이 사라짐 | 보드마다 시리얼 번호가 다름. 새 보드의 번호로 규칙 수정 |
 | `Permission denied` | `dialout` 그룹 추가 후 SSH 재접속 |
+
+---
+
+## 7. 정리
+
+- `/dev/ttyACM*` 번호는 인식 순서에 따라 바뀌므로, 모터 보드의 **시리얼 번호**로 udev 별칭 `/dev/lekiwi` 를 만들어 고정합니다.
+- 카메라 규칙과 같은 파일(`/etc/udev/rules.d/99-serial.rules`)에 한 줄을 추가하고 `udevadm` 으로 다시 읽어 들입니다.
+- 이후 캘리브레이션과 호스트 명령에는 `--robot.port=/dev/lekiwi` 를 씁니다.
+
+다음 페이지 [제어 스크립트](/docs/a-go/start-custom-scripts)에서는 이 포트와 카메라 설정을 담은 호스트 실행 스크립트를 만들고, 커스텀 클라이언트로 텔레오퍼레이션합니다.

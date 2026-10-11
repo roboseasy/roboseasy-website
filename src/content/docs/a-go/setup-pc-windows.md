@@ -60,7 +60,7 @@ nvidia-smi
 
 ### 2.1. CUDA Toolkit 설치
 
-[NVIDIA CUDA Toolkit 페이지](https://developer.nvidia.com/cuda/toolkit)에서 **Download Now** 를 누릅니다.
+[NVIDIA CUDA Toolkit 페이지](https://developer.nvidia.com/cuda/toolkit)에서 **Download Now** 를 누릅니다. 그 시점의 최신 버전 다운로드 페이지가 열립니다(이 페이지의 화면은 CUDA 13.3 기준). [Ubuntu PC 세팅](/docs/a-go/setup-pc-ubuntu)과 같은 12.8 버전을 쓰려면 [CUDA Toolkit Archive](https://developer.nvidia.com/cuda-toolkit-archive)에서 **CUDA Toolkit 12.8.0** 을 고릅니다.
 
 ![](/img/a_go/setup-pc-windows-11.webp)
 
@@ -80,7 +80,11 @@ Visual Studio가 없다는 안내가 나오면 체크박스를 선택하고 **NE
 
 ![](/img/a_go/setup-pc-windows-15.webp)
 
+설치 패키지를 내려받으며 설치가 진행됩니다.
+
 ![](/img/a_go/setup-pc-windows-16.webp)
+
+**Nsight Visual Studio Edition Summary** 화면은 Visual Studio가 없어 Nsight 연동 기능만 설치되지 않았다는 안내입니다. CUDA 설치 결과와는 무관하므로 **다음** 을 누릅니다.
 
 ![](/img/a_go/setup-pc-windows-17.webp)
 
@@ -108,6 +112,9 @@ nvcc -V
 
 `Windows` → `x86_64` → `11` → `exe (local)` 을 선택하고 설치 파일을 내려받습니다.
 
+> **경고** ⚠️ `WARN`
+> <br>**Architecture는 x86_64를 선택하세요** 아래 화면은 `arm64` 가 선택된 상태이니 그대로 따라 하지 마세요. 일반 PC(인텔·AMD CPU)는 반드시 `x86_64` 를 선택하고, 초록색 바에 `Windows 11 x86_64` 가 표시되는지 확인한 뒤 내려받습니다.
+
 ![](/img/a_go/setup-pc-windows-21.webp)
 
 설치 프로그램을 실행해 라이선스 계약에 동의하고, **빠른 설치(권장)** 로 진행합니다.
@@ -122,7 +129,7 @@ nvcc -V
 
 ## 다음 단계
 
-GPU 드라이버와 CUDA 준비가 끝났습니다. Miniconda 설치, 가상환경 생성, PyTorch GPU 인식 확인은 다음 페이지에서 이어서 진행합니다.
+GPU 드라이버·CUDA·cuDNN 준비가 끝났습니다. Miniconda 설치, 가상환경 생성, PyTorch GPU 인식 확인은 아래 페이지에서 이어서 진행합니다.
 
 <div class="card-grid">
   <a href="/docs/a-go/setup-lerobot-windows" class="card">

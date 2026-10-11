@@ -8,7 +8,7 @@ order: 10
 # A-Go(LeKiwi) 소개
 
 > ℹ️ **A-Go(LeKiwi) 시작하기**
-<br>이 섹션에서는 모바일 로봇 A-Go(LeKiwi)로 LeRobot을 시작하는 방법을 PC 세팅부터 데이터 수집, 학습, 추론까지 단계별로 안내합니다.
+> <br>이 섹션에서는 모바일 로봇 A-Go(LeKiwi)로 LeRobot을 시작하는 방법을 PC 세팅부터 데이터 수집, 학습, 추론까지 단계별로 안내합니다.
 
 A-Go(LeKiwi)는 옴니휠 이동 베이스 위에 SO-ARM101 팔을 올린 오픈소스 모바일 매니퓰레이터입니다.
 <br>라즈베리파이가 모터와 카메라를 다루고, PC가 원격으로 조종하거나 학습된 정책으로 로봇을 움직입니다.
@@ -35,7 +35,7 @@ LeKiwi는 프로그램 하나가 로봇을 통째로 움직이지 않습니다. 
 ## 실습 흐름
 
 <div class="card-grid">
-  <a href="/docs/a-go/setup-lerobot-ubuntu" class="card">
+  <a href="/docs/a-go/setup-pc-ubuntu" class="card">
     <h3>💻 PC 환경 세팅</h3>
     <p>GPU 드라이버·CUDA, Miniconda, LeRobot 0.6.0 설치 (Ubuntu / Windows)</p>
   </a>
@@ -70,7 +70,9 @@ LeKiwi는 프로그램 하나가 로봇을 통째로 움직이지 않습니다. 
 | Pi 계정 | `roboseasy` | 라즈베리파이 SSH 계정 (비밀번호: 스페이스 한 번) |
 | 로봇 id · 호스트명 | `lekiwi07` | 로봇 번호 7번. 캘리브레이션·호스트·클라이언트에서 모두 같은 id를 씁니다 |
 | 로봇 고정 IP | `192.168.0.207` | 공유기 대역 + `.(200 + 로봇 번호)` |
+| 모터 보드 포트 (Pi) | `/dev/lekiwi` | 라즈베리파이에서 모터 보드에 붙인 고정 이름 ([USB 포트 고정](/docs/a-go/setup-usbport)) |
 | 리더 암 포트 | `/dev/ttyACM0` (Ubuntu), `COM22` (Windows) | `lerobot-find-port` 로 확인 |
+| 리더 암 id | `leader` | 캘리브레이션·텔레오퍼레이션·데이터 기록에서 같은 id를 씁니다 |
 | PC conda 환경 | `lerobot060` | Python 3.12 |
 | Pi 가상환경 | `~/lerobot060_venv` | Python venv |
 | Hugging Face 계정 | `HueyWoo` | 본인의 계정명으로 변경 |

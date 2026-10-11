@@ -41,6 +41,8 @@ order: 150
 
 ## 2. [Pi] 호스트 실행
 
+[데이터 기록](/docs/a-go/dataset-record)과 같은 방법으로 호스트를 띄웁니다.
+
 ```bash
 ./start_lekiwi_host.sh lekiwi07
 ```
@@ -73,6 +75,7 @@ python lekiwi-replay.py \
 윈도우에서는 다음과 같이 실행합니다.
 
 ```bash
+:: 윈도우
 conda activate lerobot060
 cd %USERPROFILE%\workspace\lekiwi
 set "HF_USER=HueyWoo"
@@ -80,6 +83,7 @@ set "TASK_NAME=lekiwi_pick_and_place"
 ```
 
 ```bash
+:: 윈도우
 python lekiwi-replay.py ^
     --robot.remote_ip=192.168.0.207 ^
     --robot.id=lekiwi07 ^
@@ -101,7 +105,7 @@ python lekiwi-replay.py ^
 
 재생되는 동안 로봇을 관찰하며 다음을 확인합니다.
 
-- **팔이 시범 데이터와 같은 궤적을 그리는가.** 다르게 움직이면 [캘리브레이션](/docs/a-go/start-calibration) 캘리브레이션이 기록 이후 바뀌었거나 데이터가 손상된 것입니다.
+- **팔이 시범 데이터와 같은 궤적을 그리는가.** 다르게 움직이면 [캘리브레이션](/docs/a-go/start-calibration) 값이 기록 이후 바뀌었거나 데이터가 손상된 것입니다.
 - **바퀴가 시범 데이터와 같은 방향으로 움직이는가.** 바퀴 속도가 빠져 있으면 스크립트가 경고를 남기고 바퀴를 멈춘 채 팔만 재생합니다.
 - **동작이 끊기거나 튀는가.** 기록 중 프레임이 빠졌을 때 나타납니다. 그 에피소드는 [데이터셋 편집](/docs/a-go/dataset-edit)에서 삭제합니다.
 

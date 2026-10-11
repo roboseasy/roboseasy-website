@@ -7,7 +7,7 @@ order: 80
 
 # LeKiwi LeRobot 라이브러리 세팅
 
-[LeRobot 설치](/docs/a-go/setup-lerobot-ubuntu)에서는 PC에 LeRobot을 설치했고, [고정 IP · 무선 연결](/docs/a-go/lekiwi-wifi-static-ip)에서는 LeKiwi의 라즈베리파이에 무선으로 접속할 수 있게 만들었습니다. 이 페이지에서는 **라즈베리파이 쪽에도 LeRobot을 설치**합니다. 로봇이 PC와 대화하려면 양쪽 모두 같은 언어를 알아야 하기 때문입니다.
+LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서는 PC에 LeRobot을 설치했고, [고정 IP · 무선 연결](/docs/a-go/lekiwi-wifi-static-ip)에서는 LeKiwi의 라즈베리파이에 무선으로 접속할 수 있게 만들었습니다. 이 페이지에서는 **라즈베리파이 쪽에도 LeRobot을 설치**합니다. 로봇이 PC와 대화하려면 양쪽 모두 같은 언어를 알아야 하기 때문입니다.
 
 > 🎯 **학습 목표**
 >
@@ -52,7 +52,7 @@ PC에서는 conda를 썼지만 라즈베리파이에서는 Python에 기본 내�
 
 - conda는 자체 패키지 저장소와 환경 관리자를 함께 설치하므로 ARM 기반 소형 보드에서는 무겁습니다.
 - 우분투 24.04에는 이미 Python 3.12가 들어 있어, 별도 Python을 설치할 이유가 없습니다.
-- venv는 표준 라이브러리의 일부라 추가 설치 없이 바로 쓸 수 있습니다.
+- venv는 Python 표준 라이브러리에 포함되어 있어 conda와 달리 Miniconda 같은 배포판을 따로 설치할 필요가 없습니다. (우분투에서 가상환경 생성이 `ensurepip is not available` 로 실패하면 아래 문제 해결 표 참고)
 
 목적은 conda와 같습니다. 시스템 Python을 건드리지 않고, 프로젝트 전용으로 격리된 패키지 공간을 만드는 것입니다. 우분투는 시스템 Python에 직접 `pip install` 하는 것을 막아 두었기 때문에 가상환경은 선택이 아니라 필수입니다.
 
@@ -96,7 +96,7 @@ LeRobot을 바로 설치하면 의존성으로 **가장 최신 PyTorch**를 끌�
 pip install 'torch==2.7.1' 'torchvision==0.22.1'
 ```
 
-용량이 수백 MB라 몇 분 걸립니다. 이것은 로봇 제어에 필요한 최소한의 PyTorch이며, 학습에 쓰는 GPU 버전이 아닙니다. 학습은 [LeRobot 설치](/docs/a-go/setup-lerobot-ubuntu)에서 세팅한 PC에서 합니다.
+용량이 수백 MB라 몇 분 걸립니다. 이것은 로봇 제어에 필요한 최소한의 PyTorch이며, 학습에 쓰는 GPU 버전이 아닙니다. 학습은 LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서 세팅한 훈련용 PC에서 합니다.
 
 > **팁** 💡`TIP`
 > <br>**왜 순서가 중요할까?** pip는 요청받은 패키지의 의존성을 풀 때 이미 설치된 것은 조건을 만족하는 한 그대로 둡니다. 순서를 바꿔 LeRobot을 먼저 설치하면 최신 PyTorch가 들어온 뒤라서, 나중에 2.7.1로 내리려면 관련 패키지를 전부 다시 맞춰야 합니다. 의존성이 복잡한 라이브러리는 이렇게 **핵심 패키지를 먼저 고정하는 것**이 정석입니다.
@@ -107,7 +107,7 @@ pip install 'torch==2.7.1' 'torchvision==0.22.1'
 pip install 'lerobot[lekiwi]==0.6.0'
 ```
 
-- `[lekiwi]` 는 [LeRobot 설치](/docs/a-go/setup-lerobot-ubuntu)에서 본 **선택적 의존성(extras)** 입니다. LeKiwi 호스트에 필요한 모터 드라이버(feetech)와 통신 라이브러리(pyzmq)가 함께 설치됩니다. ZeroMQ를 따로 설치할 필요가 없습니다.
+- `[lekiwi]` 는 LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서 본 **선택적 추가 기능(extras)** 입니다. LeKiwi 호스트에 필요한 모터 드라이버(feetech)와 통신 라이브러리(pyzmq)가 함께 설치됩니다. ZeroMQ를 따로 설치할 필요가 없습니다.
 - `==0.6.0` 은 PC와 **같은 버전**으로 맞추기 위해서입니다. 호스트와 클라이언트의 버전이 다르면 메시지 형식이 달라 통신이 깨질 수 있습니다.
 
 ---
@@ -138,7 +138,7 @@ LeKiwi 호스트는 Python 모듈로 실행합니다. 도움말이 출력되면 
 python -m lerobot.robots.lekiwi.lekiwi_host --help
 ```
 
-옵션 목록이 길게 출력되면 성공입니다. 실제로 호스트를 띄우는 것은 [캘리브레이션](/docs/a-go/start-calibration)과 [텔레오퍼레이션](/docs/a-go/start-teleoperation)에서 합니다.
+옵션 목록이 길게 출력되면 성공입니다. 호스트를 실제로 띄우는 것은 [캘리브레이션](/docs/a-go/start-calibration)으로 모터 기준 위치를 맞춘 뒤 [텔레오퍼레이션](/docs/a-go/start-teleoperation)에서 합니다.
 
 > **팁** 💡`TIP`
 > <br>가상환경을 활성화하지 않은 상태에서도 실행하고 싶다면 경로를 직접 지정하면 됩니다. 스크립트나 자동 실행 설정에서 유용합니다.
@@ -153,11 +153,12 @@ python -m lerobot.robots.lekiwi.lekiwi_host --help
 
 | 증상 | 확인할 것 |
 |---|---|
+| `ensurepip is not available` 로 가상환경 생성 실패 | `sudo apt install -y python3.12-venv` 로 설치한 뒤 `python3 -m venv ~/lerobot060_venv` 다시 실행 |
 | `externally-managed-environment` 오류 | 가상환경이 활성화되지 않은 상태. 프롬프트에 `(lerobot060_venv)` 가 있는지 확인 |
 | `No matching distribution found for torch==2.7.1` | 인터넷 연결 또는 pip 버전. `pip install -U pip` 후 재시도 |
 | 설치 중 `Killed` 로 중단 | 메모리 부족. 다른 프로그램을 종료하고 재시도하거나 스왑을 늘림 |
 | `ModuleNotFoundError: No module named 'zmq'` | `pip install 'lerobot[lekiwi]==0.6.0'` 에서 대괄호를 빼먹었는지 확인 |
-| 버전이 `0.6.0` 이 아님 | `pip install 'lerobot[lekiwi]==0.6.0' --force-reinstall` 로 재설치 |
+| 버전이 `0.6.0` 이 아님 | `pip install 'lerobot[lekiwi]==0.6.0'` 을 다시 실행 (버전을 지정했으므로 0.6.0으로 바뀜). `--force-reinstall` 은 PyTorch까지 새로 받아 4.1의 버전 고정이 풀리므로 쓰지 않음 |
 
 ---
 
@@ -168,4 +169,4 @@ python -m lerobot.robots.lekiwi.lekiwi_host --help
 - 의존성 충돌을 피하려면 **PyTorch를 먼저 고정**한 뒤 LeRobot을 설치합니다.
 - PC와 **같은 버전**(0.6.0)을 맞추고, import 와 `--help` 로 설치를 검증합니다.
 
-이제 로봇 쪽 소프트웨어가 준비되었습니다. 다음 페이지 [캘리브레이션](/docs/a-go/start-calibration)에서는 모터의 기준 위치를 맞추는 캘리브레이션을 진행합니다.
+이제 로봇 쪽 소프트웨어가 준비되었습니다. 다음 페이지 [캘리브레이션](/docs/a-go/start-calibration)에서는 모터의 기준 위치를 맞춥니다.

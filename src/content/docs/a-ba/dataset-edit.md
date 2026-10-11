@@ -9,7 +9,7 @@ order: 110
 
 데이터셋 편집 도구
 
-# 데이터셋 도구 사용하기
+## 데이터셋 도구 사용하기
 
 이 가이드는 LeRobot에서 기존 데이터셋을 수정하고 편집할 수 있는 데이터셋 도구 유틸리티를 다룹니다.
 
@@ -38,8 +38,9 @@ LeRobot은 데이터셋을 조작하기 위한 여러 유틸리티를 제공합�
 lerobot-edit-dataset --help
 
 ```
-> [!TIP] 
-> `lerobot-edit-dataset` 는 매우 민감한 명령어이기 때문에 
+
+> **팁** 💡`TIP`
+> <br>`lerobot-edit-dataset` 는 매우 민감한 명령어이기 때문에 
 > `lerobot-edit-dataset` 에서  `--push_to_hub` 기본값은 `false` 입니다.
 
 
@@ -131,11 +132,10 @@ lerobot-edit-dataset \
 
 데이터셋에서 특성을 제거합니다.
 
-```
-
+```bash
 # 카메라 특성 제거
 lerobot-edit-dataset \
-    --repo_id=${HF_USER}/${TASK_NAME}
+    --repo_id=${HF_USER}/${TASK_NAME} \
     --operation.type=remove_feature \
     --operation.feature_names="['observation.images.top']"
 

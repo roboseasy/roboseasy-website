@@ -9,9 +9,8 @@ order: 60
 
 ## 개요
 
-SO-Arm **Follower Arm** 으로 **Leader Arm**제어(teleoperation) 하기 위해서
-
-**Leader Arm** 과 **Follower Arm** 모두 Manual calibration을 진행해야 합니다.
+SO-Arm **Leader Arm**으로 **Follower Arm**을 제어(teleoperation)하기 위해서는
+**Leader Arm**과 **Follower Arm** 모두 Manual calibration을 진행해야 합니다.
 
 Calibration은 로봇 팔의 각 관절(joint)이 정확한 위치를 인식하고 매핑할 수 있도록 하는 중요한 과정입니다.
 
@@ -67,10 +66,10 @@ lerobot-calibrate \
     --teleop.port=/dev/so101_leader \
     --teleop.id=leader
 ```
-sss
+
 ### Calibration 과정
 
-1. **중간 위치 설정**
+1. **중간 위치 설정**<br>
    명령어 실행 후 다음과 같은 메시지가 표시됩니다:
 
    ```plaintext
@@ -86,7 +85,7 @@ sss
    - 모든 관절(joints)을 순차적으로 전체 범위에서 움직여보기
    - ENTER 키를 눌러 기록 중지
 
-3. **Calibration 결과**
+3. **Calibration 결과**<br>
    Calibration이 완료되면 다음과 같은 관절 위치 정보가 표시됩니다:
 
    ```plaintext
@@ -101,10 +100,10 @@ sss
    gripper         |   2019 |   2046 |   3383
    ```
 
-4. **파일 저장 확인**
+4. **파일 저장 확인**<br>
    성공적으로 완료되면 다음 메시지가 표시됩니다:
 
-   ```bash
+   ```plaintext
    Calibration saved to ~/.cache/huggingface/lerobot/calibration/teleoperators/so101_leader/leader.json
    ```
 

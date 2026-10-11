@@ -67,7 +67,6 @@ conda activate lerobot
 # 1. HuggingFace CLI 토큰으로 로그인
 hf auth login --add-to-git-credential --token YOUR_TOKEN_HERE
 
-
 # 2. 로그인 확인 및 환경 변수 설정
 hf auth whoami
 # 로그인이 성공했다면 본인의 HuggingFace 사용자명이 출력됩니다.
@@ -293,7 +292,7 @@ rm -rf ~/.cache/rerun
 ### Record 과정
 
 1. **명령어 실행**
-   명령어를 실행하면 다음과 같은 메시지가 표시됩니다:
+   <br>명령어를 실행하면 다음과 같은 메시지가 표시됩니다:
 
    ```plaintext
    Recording episode 0
@@ -311,10 +310,10 @@ rm -rf ~/.cache/rerun
    - 다음 에피소드 자동 시작
 
 4. **데이터 저장**
-   각 에피소드 완료 후 다음 위치에 저장:
+   <br>각 에피소드 완료 후 다음 위치에 저장:
 
    ```plaintext
-   ~/.cache/huggingface/datasets/${HF_USER}/${TASK_NAME}/
+   ~/.cache/huggingface/lerobot/${HF_USER}/${TASK_NAME}/
    ```
 
 > **팁** 💡`TIP`
@@ -349,13 +348,13 @@ print('Upload completed!')
 이때 단순히 CLI 명령어에서 `--dataset.num_episodes=50`으로 수정하여 실행하면 될까요? 아쉽게도 위에서 배운 CLI에서 num_episodes 값을 바꿔 실행하면 아래와 같은 오류 로그가 발생합니다. 
 
 오류 로그를 살펴보면, 이미 해당 repo_id로 데이터셋 이름이 있다고 뜹니다.
-이 오류를 해결하는 가장 단순한 방법은 로컬 경로 (`~/.cache/huggingface/lerobot/HueyWoo/pick_and_place_after_deletion`)에 저장된 기존 데이터셋을 삭제하고 처음부터 다시 50개를 수집하는 것입니다. 
+이 오류를 해결하는 가장 단순한 방법은 로컬 경로 (`~/.cache/huggingface/lerobot/HueyWoo/pick_and_place`)에 저장된 기존 데이터셋을 삭제하고 처음부터 다시 50개를 수집하는 것입니다. 
 
 하지만 지금까지 공들여 쌓은 데이터를 삭제하는 것은 매우 비효율적입니다. lerobot은 이러한 상황을 위해 기존 데이터에 이어서 새로운 에피소드를 추가할 수 있는 기능을 제공합니다. `--resume=true` 옵션을 추가하면, 아래와 같이 기존에 저장된 데이터셋 이후부터 학습 데이터를 이어서 쌓을 수 있습니다. 
 
 ### Resume 기본 사용법
 
-5개를 추가로 수집하고 싶다면:
+10개를 추가로 수집하고 싶다면:
 
 ```bash
 lerobot-record \
@@ -380,7 +379,7 @@ lerobot-record \
 ```
 
 > **경고** ⚠️ `WARN`
-> <br>**Resume 사용 시 주의사항:**
+> <br>**Resume 사용 시 주의사항**
 >
 > - `--dataset.num_episodes`는 **추가로 수집할** 에피소드 수를 입력합니다
 > - 10개를 추가 수집하려면 `--dataset.num_episodes=10`로 설정
@@ -398,7 +397,7 @@ lerobot-record \
 ### 데이터 수집 모범 사례
 
 > **팁** 💡`TIP`
-> <br>**효과적인 데이터 수집 팁:**
+> <br>**효과적인 데이터 수집 팁**
 >
 > - **일관된 환경**: 항상 동일한 조명과 배경에서 데이터 수집
 > - **정확한 집기**: 항상 일정한 부분을 집어 일관성 유지
@@ -416,7 +415,7 @@ lerobot-record \
 
 급격하게 많은 변동성을 부여할 경우 결과 도출에 방해가 될 수 있으므로 피하도록 합니다.
 
-이 중요한 주제에 대해 더 자세히 알아보고 싶다면, 무엇이 좋은 데이터셋을 만드는지에 대해 저희가 작성한 블로그 포스트를 확인하실 수 있습니다.
+이 중요한 주제에 대해 더 자세히 알아보고 싶다면, 무엇이 좋은 데이터셋을 만드는지에 대해 HuggingFace가 작성한 [블로그 포스트](https://huggingface.co/blog/lerobot-datasets#what-makes-a-good-dataset)를 확인하실 수 있습니다.
 
 ---
 

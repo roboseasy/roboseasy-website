@@ -70,7 +70,7 @@ pip install -e ".[smolvla]"
 ### 2. 데이터셋 준비
 
 act 모델 학습을 위해 수집한 데이터셋과 달리, 
-<br>` --dataset.single_task`에피소드를 명확한 자연어 명령 레이블링을 해주어야 합니다.
+<br>`--dataset.single_task` 에피소드를 명확한 자연어 명령 레이블링을 해주어야 합니다.
 
 <div class="card-grid">
   <a href="/docs/a-ba/dataset-record" class="card">
@@ -284,9 +284,7 @@ lerobot-rollout \
 
 ## 추가 리소스
 
-- [SmolVLA 논문](https://huggingface.co/papers/smolvla)
+- [SmolVLA 논문](https://huggingface.co/papers/2506.01844)
 - [HuggingFace 모델 허브](https://huggingface.co/lerobot/smolvla_base)
 - [공식 문서](https://huggingface.co/docs/lerobot/main/en/smolvla)
-- [예제 노트북](https://github.com/huggingface/notebooks/blob/main/lerobot/smolvla_examples.ipynb)
-
----
+- [예제 노트북](https://github.com/huggingface/notebooks/blob/main/lerobot/training-smolvla.ipynb)

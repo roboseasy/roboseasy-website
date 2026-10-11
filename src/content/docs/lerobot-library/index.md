@@ -26,9 +26,9 @@ order: 10
 아래 LeRobot의 리더인 Remi Cadene 의 영상을 보시면 라이브러리의 철학과 방향성을 볼 수 있습니다.
 "Democratizing" 이라는 단어에서 알 수 있듯이 저가의 오픈소스로 누구나 로봇을 만들고 VLA 를 학습하고 사용하는 것을 추구합니다.
 
-> ℹ️ **Quote**
-"LeRobot is to robotics what the Transformers library is to NLP."
-— Remi Cadene, HuggingFace
+> "LeRobot is to robotics what the Transformers library is to NLP."
+>
+> — Remi Cadene, HuggingFace
 
 <div class="video-container">
   <iframe src="https://www.youtube.com/embed/UZC9LiWXXHM" title="LeRobot by Remi Cadene" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -96,13 +96,13 @@ LeRobot의 미래는 단순한 로봇 제어 라이브러리를 넘어, **범용
 
 또한 Hugging Face는 LeRobot을 통해 오픈 로보틱스 생태계를 더욱 넓혀가고 있습니다. Pollen Robotics 인수와 함께 제시된 비전은 로보틱스를 더 **개방적이고, 접근 가능하며, 커뮤니티 중심적인 방향**으로 발전시키는 것입니다.<sup>[2]</sup> 이러한 흐름을 고려하면, 앞으로 LeRobot은 오픈소스 로봇 하드웨어, 공개 데이터셋, VLA 정책 모델, 시뮬레이션 환경, 그리고 Hub 기반 협업 구조가 결합된 **실세계 피지컬 AI의 핵심 플랫폼**으로 자리잡을 가능성이 높습니다.<sup>[2]</sup><sup>[3]</sup>
 
-> ⚠️ 앞으로 LeRobot의 발전 방향은 크게 세 가지로 정리할 수 있습니다. 
-
-첫째, 더 많은 로봇과 센서를 연결할 수 있는 **확장성**입니다.<sup>[3]</sup> 
-
-둘째, 더 큰 규모의 데이터셋과 멀티모달 학습을 감당할 수 있는 **표준화와 데이터 처리 능력**입니다.<sup>[4]</sup> 
-
-셋째, SmolVLA와 같은 정책 모델을 중심으로 실제 작업에 빠르게 적용할 수 있는 **범용성**입니다.<sup>[5]</sup> 
+> 📌 **앞으로 LeRobot의 발전 방향은 크게 세 가지로 정리할 수 있습니다.**
+>
+> 첫째, 더 많은 로봇과 센서를 연결할 수 있는 **확장성**입니다.<sup>[3]</sup>
+>
+> 둘째, 더 큰 규모의 데이터셋과 멀티모달 학습을 감당할 수 있는 **표준화와 데이터 처리 능력**입니다.<sup>[4]</sup>
+>
+> 셋째, SmolVLA와 같은 정책 모델을 중심으로 실제 작업에 빠르게 적용할 수 있는 **범용성**입니다.<sup>[5]</sup>
 
 따라서 LeRobot은 앞으로 로봇 공학에서 단순한 개발 도구를 넘어, **데이터-모델-하드웨어를 잇는 오픈형 로봇 학습 생태계의 중심 축**으로 발전할 가능성이 큽니다.<sup>[2]</sup><sup>[3]</sup>
 

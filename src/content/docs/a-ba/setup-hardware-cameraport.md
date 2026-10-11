@@ -18,7 +18,7 @@ order: 50
 ## 목적 및 개요
 
 LeRobot 텔레오퍼레이션을 진행할 때, 여러 대의 카메라가 USB 포트를 통해 PC와 연결됩니다.
-하지만 Ubuntu에서는 <br>카메라를 연결할 때마다 포트 번호(`/dev/video0`, `/dev/video2`)가 자동으로 바뀌는 경우가 있습니다.
+하지만 Ubuntu에서는 카메라를 연결할 때마다 포트 번호(`/dev/video0`, `/dev/video2`)가 자동으로 바뀌는 경우가 있습니다.
 
 이로 인해 다음과 같은 문제가 발생할 수 있습니다.
 
@@ -140,7 +140,7 @@ ls -l /dev/cam_*
 
 예시 출력:
 
-```bash
+```plaintext
 lrwxrwxrwx 1 root root 7 1월 10 15:30 /dev/cam_top -> video2
 lrwxrwxrwx 1 root root 7 1월 10 15:30 /dev/cam_wrist -> video4
 ```

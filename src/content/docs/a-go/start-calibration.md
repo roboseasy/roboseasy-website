@@ -46,6 +46,9 @@ LeKiwi의 팔에 쓰이는 서보 모터는 관절 위치를 **0부터 4095까�
 
 라즈베리파이에 SSH로 접속하고 가상환경이 활성화된 상태에서 진행합니다.
 
+> **경고** ⚠️ `WARN`
+> <br>**팔을 손으로 받쳐 주세요.** 캘리브레이션이 시작되면 팔 모터의 토크(힘)가 꺼져, 들려 있던 팔이 자기 무게로 떨어질 수 있습니다. 명령을 실행하기 전에 한 손으로 팔을 받치고 주변 물건을 치워 두세요.
+
 ### 2.1. 명령 실행
 
 ```bash
@@ -81,7 +84,7 @@ lerobot-calibrate \
 
 ### 2.3. 중간 위치에 놓기
 
-`Move robot to the middle of its range of motion and press ENTER` 메시지가 나오면 아래 사진처럼 팔을 **가동 범위의 한가운데 자세**로 만듭니다. 팔을 앞으로 곧게 뻗고 그리퍼는 정면을 향하게 한 자세입니다. 이 자세가 각도 0의 기준이 됩니다.
+`Move robot to the middle of its range of motion and press ENTER` 메시지가 나오면 아래 사진처럼 팔을 **가동 범위의 한가운데 자세**로 만듭니다. 위팔은 위로 세우고, 아래팔과 그리퍼는 앞으로 수평하게 뻗은 자세입니다. 이 자세가 각도 0의 기준이 됩니다.
 
 ![](/img/a_go/start-calibration-02.webp)
 
@@ -94,6 +97,8 @@ lerobot-calibrate \
 각 관절을 **하나씩, 천천히, 양 끝까지** 움직입니다. 어깨 회전, 어깨 들기, 팔꿈치, 손목 굽힘, 그리퍼 순서로 하면 빠뜨리지 않습니다. 손목 회전(`wrist_roll`)과 바퀴는 무한 회전 관절이라 범위 기록 대상에서 제외됩니다.
 
 ![](/img/a_go/start-calibration-03.webp)
+
+화면 캡처 과정에서 MAX 열이 `MAX6`, `34760` 처럼 깨져 보이는 부분이 있습니다. 실제 값은 0~4095 범위입니다.
 
 표의 각 열은 다음을 뜻합니다.
 
@@ -112,7 +117,7 @@ lerobot-calibrate \
 
 ## 3. [PC] SO101 리더 암 캘리브레이션
 
-리더 암은 PC에 USB로 연결합니다. [LeRobot 설치](/docs/a-go/setup-lerobot-ubuntu)에서 만든 PC의 conda 환경을 활성화한 상태에서 진행합니다.
+리더 암은 PC에 USB로 연결합니다. [LeRobot 설치 (Ubuntu)](/docs/a-go/setup-lerobot-ubuntu) 또는 [LeRobot 설치 (Windows)](/docs/a-go/setup-lerobot-windows)에서 만든 PC의 conda 환경(`lerobot060`)을 활성화한 상태에서 진행합니다.
 
 ### 3.1. 리더 암 포트 찾기
 
@@ -154,7 +159,7 @@ lerobot-calibrate ^
 
 ### 3.4. 중간 위치에 놓기
 
-리더 암도 같은 방식으로 팔을 앞으로 곧게 뻗은 중간 자세를 만들고 ENTER를 누릅니다.
+리더 암도 팔로워와 같은 중간 자세(위팔은 세우고, 아래팔과 그리퍼는 앞으로 수평)를 만들고 ENTER를 누릅니다.
 
 ![](/img/a_go/start-calibration-06.webp)
 

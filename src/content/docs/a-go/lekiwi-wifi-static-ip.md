@@ -31,7 +31,7 @@ order: 70
 | **DHCP** (공유기가 자동 배정) | 어느 공유기에나 붙는다 | 주소가 매번 바뀔 수 있다 |
 | **고정 IP** (직접 지정) | 주소가 늘 같다 | 공유기 대역이 다르면 통신 불가 |
 
-우리는 두 방식의 장점만 취합니다. **DHCP로 주소를 받은 뒤, 그 대역의 끝자리만 `200 + 로봇 번호`로 하나 더 붙이는** 것입니다. 7번 로봇은 `192.168.0.x` 네트워크에서는 `192.168.0.207`, `192.168.1.x` 네트워크에서는 `192.168.1.207` 이 됩니다. 앞부분은 장소를 따라가고 끝자리는 로봇을 따라갑니다.
+우리는 두 방식의 장점만 취합니다. **DHCP로 주소를 받은 뒤, 같은 대역에서 끝자리만 `200 + 로봇 번호`로 바꾼 주소를 하나 더 붙이는** 것입니다. 7번 로봇은 `192.168.0.x` 네트워크에서는 `192.168.0.207`, `192.168.1.x` 네트워크에서는 `192.168.1.207` 이 됩니다. 앞부분은 장소를 따라가고 끝자리는 로봇을 따라갑니다.
 
 ### 1.2. 세 가지 접속 방법
 
@@ -52,10 +52,10 @@ order: 70
 [유선 연결](/docs/a-go/lekiwi-wired-connection)과 같이 랜선으로 접속한 상태에서 시작합니다.
 
 ```bash
-ssh roboseasy@<Pi IP>     # 비밀번호: 스페이스 1번
+ssh roboseasy@<Pi IP>
 ```
 
-![](/img/a_go/lekiwi-wifi-static-ip-01.webp)
+`<Pi IP>` 에는 유선 연결에서 찾은 주소를 넣습니다. 비밀번호는 스페이스 한 번입니다.
 
 ---
 
@@ -79,7 +79,7 @@ network:
 ```
 
 - `dhcp4: true` : 주소를 직접 적지 않고 상대(PC 또는 공유기)에게 받겠다는 뜻입니다. 앞서 설명한 "앞부분은 장소를 따라간다"를 실현하는 핵심입니다.
-- `optional: true` : 케이블이 빠져 있어도 부팅을 기다리지 않게 합니다. 이 줄이 없으면 랜선 없이 켤 때 부팅이 2분가량 멈춥니다.
+- `optional: true` : 케이블이 빠져 있어도 부팅이 네트워크 연결을 기다리며 멈추지 않게 합니다. 이 줄이 없으면 랜선 없이 켤 때 부팅이 2분가량 멈춥니다.
 - `wifis` 항목이 없는 이유 : 와이파이 이름과 비밀번호는 장소마다 다르고, 이미지에 남기면 배포 시 유출됩니다. 와이파이는 별도 스크립트로 넣습니다.
 
 ---
@@ -212,7 +212,7 @@ nano ~/set_wifi.sh
 # 와이파이 설정 스크립트 (연결할 와이파이가 바뀔 때마다 다시 실행 가능)
 # - wlan0을 DHCP로 붙이고, 부팅 시 훅이 같은 서브넷의 .(200+로봇번호)를 추가함
 # 사용법: sudo ./set_wifi.sh <SSID> <비밀번호>
-#   예) sudo ./set_wifi.sh roboseasy roboseasywifi
+#   예) sudo ./set_wifi.sh MyWiFi mypassword
 set -e
 
 NETPLAN_FILE=/etc/netplan/50-cloud-init.yaml
@@ -301,10 +301,10 @@ SSH 호스트 키를 새로 만드는 과정에서 `Creating SSH2 RSA key ...` �
 sudo ~/set_wifi.sh <SSID> <PW>
 ```
 
-예를 들어 SSID가 `roboseasy`, 비밀번호가 `roboseasywifi` 인 공유기라면 다음과 같습니다.
+예를 들어 SSID가 `MyWiFi`, 비밀번호가 `mypassword` 인 공유기라면 다음과 같습니다.
 
 ```bash
-sudo ~/set_wifi.sh roboseasy roboseasywifi
+sudo ~/set_wifi.sh MyWiFi mypassword
 ```
 
 ### 3.3. [Pi] 주소 확인
@@ -315,7 +315,7 @@ sudo ~/set_wifi.sh roboseasy roboseasywifi
 iw dev wlan0 link
 ```
 
-`Connected to ... SSID: roboseasy` 가 나오면 무선 연결 성공입니다. `Not connected` 면 이름이나 비밀번호를 다시 확인합니다.
+`Connected to ... SSID: MyWiFi` 가 나오면 무선 연결 성공입니다. `Not connected` 면 이름이나 비밀번호를 다시 확인합니다.
 
 이어서 주소를 확인합니다. 와이파이 연결과 DHCP는 10~20초 걸릴 수 있으니 바로 안 보이면 잠시 후 다시 실행합니다.
 
@@ -335,18 +335,20 @@ hostname -I
 | `192.168.0.177` | wlan0, DHCP | 공유기가 준 주소. 재부팅하면 바뀔 수 있음 |
 | `192.168.0.207` | wlan0, 훅 | 로봇 번호 7로 만든 고정 주소. 앞 세 칸은 공유기를 따라감 |
 
-`ip -4 addr show wlan0` 으로 보면 두 번째 주소에는 `dynamic`, 세 번째에는 `secondary` 라는 표시가 붙어 있어 출처를 구분할 수 있습니다.
+`ip -4 addr show wlan0` 으로 보면 `192.168.0.177` 에는 `dynamic`, `192.168.0.207` 에는 `secondary` 라는 표시가 붙어 있어 출처를 구분할 수 있습니다.
+
+유선 주소는 [유선 연결](/docs/a-go/lekiwi-wired-connection)에서 본 `10.42.0.61` 과 다를 수 있습니다. 개체 초기화로 machine-id 가 새로 만들어져 PC가 라즈베리파이를 새 장치로 보고 다른 주소를 줄 수 있기 때문입니다.
 
 ---
 
 ### 3.4. [PC] 무선으로 접속하기
 
-이제 랜선을 빼고 PC를 같은 와이파이에 연결한 뒤, 세 가지 방법 중 하나로 접속합니다.
+이제 랜선을 빼고 PC를 같은 와이파이에 연결한 뒤, 아래 세 줄 중 하나를 골라 접속합니다. 위에서부터 로봇 번호 고정 IP, 이름(mDNS), DHCP 주소(매번 바뀔 수 있음)입니다.
 
 ```bash
-ssh roboseasy@192.168.0.207     # 로봇 번호 고정 IP
-ssh roboseasy@lekiwi07.local    # 이름
-ssh roboseasy@192.168.0.177     # DHCP 주소 (매번 바뀔 수 있음)
+ssh roboseasy@192.168.0.207
+ssh roboseasy@lekiwi07.local
+ssh roboseasy@192.168.0.177
 ```
 
 > **팁** 💡`TIP`
@@ -379,7 +381,7 @@ sudo reboot
 | `192.168.1.x` | 해외 제조사 공유기 기본값 | `192.168.1.207` |
 | `192.168.2.x`, `192.168.10.x` 등 | 통신사 모뎀, 관리자가 바꾼 경우 | `192.168.2.207` 등 |
 | `10.x.x.x` | 학교, 회사 전산망 | `10.x.x.207` |
-| `192.168.43.x` / `172.20.10.x` | 안드로이드 / 아이폰 핫스팟 | 아래 주의 참고 |
+| `192.168.43.x` / `172.20.10.x` | 안드로이드 / 아이폰 핫스팟 | 아래 ‘예외 상황’ 참고 |
 
 훅은 DHCP로 받은 주소에서 **마지막 한 칸만** 바꾸므로 위 어느 경우든 별도 설정이 필요 없습니다.
 
@@ -400,7 +402,7 @@ sudo reboot
 | `set_wifi.sh` 후 wlan0 에 주소가 없음 | 20초 기다린 뒤 재확인. `iw dev wlan0 link` 로 SSID 연결 여부, `rfkill list` 로 무선 차단 여부 확인 |
 | DHCP 주소는 있는데 `.207` 이 없음 | `cat /etc/kit-number` 확인 후 `sudo netplan apply` 또는 재부팅 |
 | 재부팅 후 호스트명이 원래대로 돌아감 | `/etc/cloud/cloud.cfg.d/99_preserve_hostname.cfg` 존재 여부 확인 |
-| `lekiwi07.local` 접속 불가 | 공유기 AP 격리 가능성. 고정 IP로 접속. Windows 는 최신 버전이면 mDNS 기본 지원 |
+| `lekiwi07.local` 접속 불가 | 공유기 AP 격리 가능성. 고정 IP로 접속. 윈도우는 최신 버전이면 mDNS 기본 지원 |
 
 ---
 
@@ -411,5 +413,5 @@ sudo reboot
 - `clone_init.sh` 는 로봇당 한 번, `set_wifi.sh` 는 와이파이가 바뀔 때마다 실행합니다.
 - 접속 경로는 고정 IP, `.local` 이름, DHCP 주소 세 가지이며 상황에 따라 골라 씁니다.
 
-> **정보** ℹ️ `INFO`
-> <br>📦 **배포용 이미지를 만드는 사람을 위한 메모** 이미지를 굽기 전에는 이 페이지에서 넣은 개체 정보를 다시 지워야 합니다. `/etc/kit-number` 삭제, netplan 에서 `wifis` 블록 제거, `~/.bash_history` 정리가 최소 항목입니다. 두 스크립트와 avahi-daemon 은 이미지에 남겨 둡니다.
+> 📦 **배포용 이미지를 만드는 사람을 위한 메모**
+> <br>이미지를 굽기 전에는 이 페이지에서 넣은 개체 정보를 다시 지워야 합니다. `/etc/kit-number` 삭제, netplan 에서 `wifis` 블록 제거, `~/.bash_history` 정리가 최소 항목입니다. 두 스크립트와 avahi-daemon 은 이미지에 남겨 둡니다.

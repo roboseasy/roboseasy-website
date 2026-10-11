@@ -15,7 +15,8 @@ order: 100
 ### 방법 1: 온라인 시각화
 
 **HuggingFace 웹 플랫폼 사용하기**
-`--control.push_to_hub=true` 옵션을 사용하여 데이터셋을 허브에 업로드했다면, 다음 명령어로 제공되는 저장소 ID를 복사하여 붙여넣으면 온라인에서 데이터셋을 시각화할 수 있습니다.
+
+`--dataset.push_to_hub=true` 옵션을 사용하여 데이터셋을 허브에 업로드했다면, 다음 명령어로 제공되는 저장소 ID를 복사하여 붙여넣으면 온라인에서 데이터셋을 시각화할 수 있습니다.
 
 [HuggingFace 웹 플랫폼](https://huggingface.co/spaces/lerobot/visualize_dataset)
 

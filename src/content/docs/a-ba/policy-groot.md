@@ -170,10 +170,11 @@ lerobot-train \
 
 > **팁** 💡`TIP`
 > <br>**주요 옵션**
-> <br>- `--policy.base_model_path=nvidia/GR00T-N1.7-3B`: N1.7 기반 모델
-> <br>- `--policy.embodiment_tag=new_embodiment`: SO-101 같은 신규 임베디먼트에 사용
-> <br>- `--policy.use_relative_actions=true` + `--policy.relative_exclude_joints='["gripper"]'`: 그리퍼를 제외한 상대 액션 학습
-> <br>- `--policy.use_bf16=true`: bf16으로 메모리 절약
+>
+> - `--policy.base_model_path=nvidia/GR00T-N1.7-3B`: N1.7 기반 모델
+> - `--policy.embodiment_tag=new_embodiment`: SO-101 같은 신규 임베디먼트에 사용
+> - `--policy.use_relative_actions=true` + `--policy.relative_exclude_joints='["gripper"]'`: 그리퍼를 제외한 상대 액션 학습
+> - `--policy.use_bf16=true`: bf16으로 메모리 절약
 
 ---
 
@@ -345,11 +346,11 @@ lerobot-eval \
 
 ## 추가 리소스
 
-- [GR00T 공식 페이지](https://developer.nvidia.com/project-groot)
+- [GR00T 공식 페이지](https://developer.nvidia.com/isaac/gr00t)
 - [GR00T N1.7 기반 모델 (HuggingFace)](https://huggingface.co/nvidia/GR00T-N1.7-3B)
 - [NVIDIA Isaac GR00T](https://github.com/NVIDIA/Isaac-GR00T)
 - [LeRobot GR00T 문서](https://huggingface.co/docs/lerobot/main/en/groot)
 
 ---
 
-*GR00T N1.7은 NVIDIA에서 지속적으로 개선하고 있습니다. 최신 업데이트는 [NVIDIA Project GR00T](https://developer.nvidia.com/project-groot)를 확인하세요.*
+*GR00T N1.7은 NVIDIA에서 지속적으로 개선하고 있습니다. 최신 업데이트는 [NVIDIA Project GR00T](https://developer.nvidia.com/isaac/gr00t)를 확인하세요.*

@@ -127,7 +127,7 @@ ls -l /dev/so101_*
 
 예시 출력:
 
-```bash
+```plaintext
 lrwxrwxrwx 1 root root 7 10월 11 22:35 /dev/so101_follower -> ttyACM1
 lrwxrwxrwx 1 root root 7 10월 11 22:35 /dev/so101_leader -> ttyACM0
 ```

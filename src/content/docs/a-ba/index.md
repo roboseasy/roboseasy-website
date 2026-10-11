@@ -17,7 +17,7 @@ A-Ba(SO-ARM101)은 LeRobot 생태계에서 지원하는 저가형 로봇 팔입�
   <img src="/img/documents_img/lerobot-so-arm.webp" alt="A-Ba(SO-ARM101)" width="500px">
 </div>
 
-> ⚠️ **최신 버전**
+> ✨ **최신 버전**
 <br>A-Ba(SO-ARM101)은 SO-ARM100의 차세대 버전으로,
 <br> 개선된 배선과 더 쉽게 조립할 수 있는 설계를 특징으로 합니다.
 
@@ -50,7 +50,7 @@ A-Ba(SO-ARM101)은 LeRobot 생태계에서 지원하는 저가형 로봇 팔입�
 *   3D 프린팅 파츠 (약 100,000원)
 *   **예상 비용**: 약 25만원
 
-### Follower Arm (Follower Arm)
+### Follower Arm
 
 *   [STS3215 서보 모터](https://ko.aliexpress.com/item/1005008600633508.html?spm=a2g0o.productlist.main.8.5ea35e91gdAdxU&algo_pvid=55fe67ff-1a8f-447f-86ec-92c0f6f6fe92&algo_exp_id=55fe67ff-1a8f-447f-86ec-92c0f6f6fe92-7&pdp_ext_f=%7B%22order%22%3A%22104%22%2C%22eval%22%3A%221%22%7D&pdp_npi=6%40dis%21KRW%2128900%2128900%21%21%2120.23%2120.23%21%40212a70c017566214535464313e41f0%2112000045901646487%21sea%21KR%216197971104%21X%211%210%21n_tag%3A-29919%3Bd%3Af9a7fa7%3Bm03_new_user%3A-29895&curPageLogUid=M5rDpRc7GlNc&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005008600633508%7C_p_origin_prod%3A) (중국 가격 약 25,000원 x6)
 *   [Seeed Studio Bus Servo Driver Board](https://ko.aliexpress.com/item/1005008761261144.html?spm=a2g0o.productlist.main.1.3c002c0bKqyYau&algo_pvid=0e30ad13-e669-41d2-91ef-83b72e236941&algo_exp_id=0e30ad13-e669-41d2-91ef-83b72e236941-0&pdp_ext_f=%7B%22order%22%3A%2236%22%2C%22eval%22%3A%221%22%7D&pdp_npi=6%40dis%21KRW%2122100%2122100%21%21%21110.21%21110.21%21%402141122217566215522356553e8a0f%2112000046617331344%21sea%21KR%216197971104%21X%211%210%21n_tag%3A-29919%3Bd%3Af9a7fa7%3Bm03_new_user%3A-29895&curPageLogUid=HZHLY94nd3Mf&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005008761261144%7C_p_origin_prod%3A) (중국 가격 약 10,000원)
@@ -73,7 +73,7 @@ A-Ba(SO-ARM101)은 LeRobot 생태계에서 지원하는 저가형 로봇 팔입�
 *   드라이버 보드 2개
 *   전원 공급장치
 
-**2단계**: 확장 옵션 (약 10 ~ 만원)
+**2단계**: 확장 옵션 (약 10만원 ~)
 
 *   카메라 등 추가 센서
 *   양팔로봇 브릿지
@@ -116,18 +116,22 @@ SO ARM을 시작하기 전에 다음 사항들을 확인해주세요:
 
 ## 시작 가이드
 
-A-Ba(SO-ARM101)을 처음 시작하시나요? 아래 흐름도를 따라 진행하세요:
+A-Ba(SO-ARM101)을 처음 시작하시나요? 아래 순서를 따라 진행하세요:
 
-```
-1. 조립 가이드 → 2. 설정 방법 선택 → 3. 소프트웨어 설치 → 4. Calibration
-                    ↓
-              ⚡ 원터치 세팅 (추천)
-              🔌 수동 설정 (USB + 카메라)
-```
+1. [소프트웨어 설치](/docs/a-ba/setup-software-installation)
+2. [조립 가이드](/docs/a-ba/setup-hardware-assembly)
+3. 설정 방법 선택
+   - ⚡ [원터치 세팅 (추천)](/programs)
+   - 🔌 수동 설정 ([USB](/docs/a-ba/setup-hardware-usbport) + [카메라](/docs/a-ba/setup-hardware-cameraport))
+4. [Calibration](/docs/a-ba/start-calibration)
 
 ## 다음 단계
 
 <div class="card-grid">
+  <a href="/docs/a-ba/setup-software-installation" class="card">
+    <h3>💻 소프트웨어 설치</h3>
+    <p>LeRobot 라이브러리와 가상환경을 설치합니다</p>
+  </a>
   <a href="/docs/a-ba/setup-hardware-assembly" class="card">
     <h3>🔧 조립 가이드</h3>
     <p>A-Ba(SO-ARM101) 하드웨어를 조립합니다</p>

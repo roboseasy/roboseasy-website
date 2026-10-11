@@ -8,7 +8,7 @@ order: 20
 # Ubuntu 24.04 PC 세팅 (GPU 드라이버 · CUDA)
 
 > **정보** ℹ️ `INFO`
-> <br>이 페이지는 **모델 학습을 할 GPU PC(훈련용 PC)** 에만 필요합니다. 로봇을 조작만 하는 실행용 PC라면 건너뛰고 [LeRobot 설치 (Ubuntu)](/docs/a-go/setup-lerobot-ubuntu)로 넘어가세요.
+> <br>이 페이지는 **모델 학습을 할 GPU PC(훈련용 PC)** 에만 필요합니다. 로봇을 조작만 하는 실행용 PC라면 건너뛰고 [LeRobot 설치 (Ubuntu)](/docs/a-go/setup-lerobot-ubuntu)로 넘어가세요. Windows PC라면 [Windows PC 세팅](/docs/a-go/setup-pc-windows)을 보세요.
 
 ## 1. NVIDIA 드라이버 설치
 
@@ -61,8 +61,8 @@ sudo sh cuda_12.8.0_570.86.10_linux.run
 
 1. **Continue**를 누르고 **accept**를 입력합니다.
 2. **설치 옵션 선택(Installer Item Selection):**
-   - `[X] Driver` 라고 되어 있는 부분에서 **스페이스바**를 눌러 **`Driver` (체크 해제)** 상태로 만드세요.
-   - 이미 580 드라이버가 깔려 있으므로 여기서 또 깔면 충돌이 납니다.
+   - `[X] Driver` 라고 되어 있는 부분에서 **스페이스바**를 눌러 `[ ] Driver` (체크 해제) 상태로 만드세요.
+   - 1단계에서 이미 NVIDIA 드라이버를 설치했으므로, 여기서 또 설치하면 충돌이 납니다.
 3. **Install**로 내려가서 엔터를 누릅니다.
 
 ![](/img/a_go/setup-pc-ubuntu-01.webp)
@@ -106,7 +106,9 @@ sudo apt-get update
 sudo apt-get -y install cudnn-cuda-12
 ```
 
-### 3.2. 설치 결과 확인 (DeviceQuery)
+### 3.2. GPU 동작 확인 (deviceQuery)
+
+CUDA와 함께 설치된 예제 프로그램 `deviceQuery` 로 GPU가 정상 인식되는지 확인합니다. 출력 마지막 줄에 `Result = PASS` 가 나오면 정상입니다.
 
 ```bash
 /usr/local/cuda-12.8/extras/demo_suite/deviceQuery
@@ -114,7 +116,7 @@ sudo apt-get -y install cudnn-cuda-12
 
 ## 다음 단계
 
-GPU 드라이버와 CUDA 준비가 끝났습니다. Miniconda 설치, 가상환경 생성, PyTorch GPU 인식 확인은 다음 페이지에서 이어서 진행합니다.
+GPU 드라이버·CUDA·cuDNN 준비가 끝났습니다. Miniconda 설치, 가상환경 생성, PyTorch GPU 인식 확인은 아래 페이지에서 이어서 진행합니다.
 
 <div class="card-grid">
   <a href="/docs/a-go/setup-lerobot-ubuntu" class="card">

@@ -11,16 +11,19 @@ LeKiwi 실습에는 두 종류의 PC가 등장합니다. 한 대의 PC로 두 �
 
 | 역할 | 하는 일 | 설치할 extras |
 |---|---|---|
-| **실행용 PC** | 리더 암 연결, 텔레오퍼레이션, 데이터 기록, 모델 추론 | `core_scripts,lekiwi,pynput-dep,viz,dataset` |
+| **실행용 PC** | 리더 암 연결, 텔레오퍼레이션, 데이터 기록, 모델 추론 | `core_scripts,feetech,lekiwi` |
 | **훈련용 PC** (GPU) | Hub에서 데이터셋을 받아 정책 학습 | `training` |
 
 1~3단계는 두 PC 모두 같고, 4단계에서 역할에 맞는 extras를 설치합니다.
+
+> **정보** ℹ️ `INFO`
+> <br>**Windows 명령은 명령 프롬프트(cmd) 기준입니다** 이 페이지를 비롯한 A-Go 문서의 Windows 명령은 모두 cmd 문법(`%USERPROFILE%`, `^` 줄 이음, `set "변수=값"`)으로 적혀 있습니다. PowerShell에서는 그대로 동작하지 않으니 명령 프롬프트에서 실행하세요.
 
 ## 1. Miniconda 설치
 
 ### 1.1. Miniconda 설치 파일 다운로드 및 설치
 
-참고: [https://www.anaconda.com/docs/getting-started/miniconda/install/windows-cli-install](https://www.anaconda.com/docs/getting-started/miniconda/install/windows-cli-install)
+참고: [Anaconda 공식 문서 (Windows 명령줄로 Miniconda 설치)](https://www.anaconda.com/docs/getting-started/miniconda/install/windows-cli-install)
 
 명령 프롬프트(cmd)를 열고 아래 명령어로 설치 파일을 다운로드합니다.
 
@@ -112,6 +115,9 @@ conda activate lerobot060
 
 소스에서 설치하는 방법을 권장합니다. 이후 [텔레오퍼레이션](/docs/a-go/start-teleoperation)에서 저장소 안의 예제 스크립트(`examples/lekiwi/teleoperate.py`)를 사용하기 때문입니다.
 
+> **정보** ℹ️ `INFO`
+> <br>**git이 설치되어 있지 않다면** Windows에는 `git` 이 기본으로 설치되어 있지 않습니다. `git` 명령을 찾을 수 없다는 오류가 나면 [Git for Windows](https://git-scm.com/download/win)를 설치한 뒤, 명령 프롬프트를 새로 열고 다시 실행합니다.
+
 ```bash
 cd %USERPROFILE%
 git clone --branch v0.6.0 --depth 1 https://github.com/huggingface/lerobot.git
@@ -139,11 +145,14 @@ LeRobot은 특정 기능을 위한 선택적 추가 기능(extras)을 제공합�
 
 ```bash
 :: 소스 설치한 경우 (lerobot 폴더에서)
-pip install -e ".[core_scripts,lekiwi,pynput-dep,viz,dataset]"
+pip install -e ".[core_scripts,feetech,lekiwi]"
 
 :: pip 패키지로 설치한 경우
-pip install "lerobot[core_scripts,lekiwi,pynput-dep,viz,dataset]==0.6.0"
+pip install "lerobot[core_scripts,feetech,lekiwi]==0.6.0"
 ```
+
+> **팁** 💡`TIP`
+> <br>`core_scripts` 에는 데이터셋(`dataset`)·시각화(`viz`) extras와 키보드 입력용 `pynput` 이 이미 포함되어 있습니다. 그래서 실행용 PC에서도 [Dataset Visualization](/docs/a-go/dataset-visualization)·[Edit](/docs/a-go/dataset-edit)을 추가 설치 없이 바로 할 수 있습니다.
 
 ### 4.2. 훈련용 PC
 
@@ -161,8 +170,10 @@ GPU 드라이버와 CUDA는 [Windows PC 세팅](/docs/a-go/setup-pc-windows)에�
 
 ### 5.1. PyTorch 설치
 
+3·4단계에서 LeRobot과 함께 설치된 PyTorch는 Windows에서 CPU 전용 빌드라 GPU를 쓰지 못합니다. GPU(CUDA 12.8) 빌드로 교체합니다. PyTorch가 이미 설치되어 있으므로 버전을 `+cu128` 까지 정확히 지정해야 실제로 교체됩니다. `2.11.0` 은 LeRobot 0.6.0이 지원하는 범위(2.7 이상 2.12 미만) 안의 버전입니다.
+
 ```bash
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+pip install torch==2.11.0+cu128 torchvision==0.26.0+cu128 --index-url https://download.pytorch.org/whl/cu128
 ```
 
 ### 5.2. 최종 점검
@@ -174,3 +185,14 @@ python -c "import torch; print(f'PyTorch 버전: {torch.__version__}'); print(f'
 `GPU 사용 가능 여부: True` 와 GPU 이름이 출력되면 정상입니다.
 
 ![](/img/a_go/setup-lerobot-windows-12.webp)
+
+## 다음 단계
+
+PC 준비가 끝났습니다. 이제 LeKiwi의 라즈베리파이를 PC와 연결합니다.
+
+<div class="card-grid">
+  <a href="/docs/a-go/lekiwi-wired-connection" class="card">
+    <h3>📡 유선 연결</h3>
+    <p>랜선으로 PC와 라즈베리파이를 직접 연결하고 SSH로 원격 접속</p>
+  </a>
+</div>

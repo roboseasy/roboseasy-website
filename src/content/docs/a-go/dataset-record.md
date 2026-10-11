@@ -48,7 +48,7 @@ order: 140
 
 ## 2. [Pi] 호스트 실행
 
-[제어 스크립트](/docs/a-go/start-custom-scripts)의 스크립트로 호스트를 띄웁니다. 카메라 설정이 기록 데이터의 구조를 결정하므로, 이후 이어서 기록할 때도 **같은 설정**으로 띄워야 합니다.
+[제어 스크립트](/docs/a-go/start-custom-scripts)에서 만든 `start_lekiwi_host.sh` 로 호스트를 띄웁니다. 카메라 설정이 기록 데이터의 구조를 결정하므로, 이후 이어서 기록할 때도 **같은 설정**으로 띄워야 합니다.
 
 ```bash
 ./start_lekiwi_host.sh lekiwi07
@@ -80,7 +80,7 @@ hf auth whoami
 
 ### 4.1. 환경 변수
 
-계정명과 데이터셋 이름을 환경 변수로 두면 이후 단계에서 같은 이름을 반복해서 쓰기 편합니다. 이 자료는 끝까지 이 두 값을 씁니다.
+계정명과 데이터셋 이름을 환경 변수로 두면 이후 단계에서 같은 이름을 반복해서 쓰기 편합니다. 이 가이드는 끝까지 이 두 값을 씁니다.
 
 ```bash
 # 우분투
@@ -143,7 +143,7 @@ python lekiwi-record.py ^
 | `--dataset.reset_time_s` | 에피소드 사이에 물체를 제자리에 놓는 시간(초). 이 구간은 기록되지 않습니다 |
 | `--dataset.push_to_hub` | 끝나고 Hub에 올릴지 여부. 처음에는 로컬에서 확인하기 위해 `false` |
 
-- `--robot.*` 와 `--teleop.*` 는 [제어 스크립트](/docs/a-go/start-custom-scripts)과 같습니다. 기록 스크립트는 데이터셋 폴더를 만들기 **전에** 로봇에 먼저 연결하므로, 연결에 실패하면 빈 데이터셋이 남지 않습니다.
+- `--robot.*` 와 `--teleop.*` 는 [제어 스크립트](/docs/a-go/start-custom-scripts)와 같습니다. 기록 스크립트는 데이터셋 폴더를 만들기 **전에** 로봇에 먼저 연결하므로, 연결에 실패하면 빈 데이터셋이 남지 않습니다.
 
 ### 4.3. 기록 흐름과 조작키
 
@@ -158,12 +158,12 @@ python lekiwi-record.py ^
 | `→` 또는 `N` | 에피소드 중 | 작업을 다 했으면 시간이 남아도 에피소드를 끝내고 리셋으로 |
 | `←` | 에피소드 중, 리셋 중 | 방금 에피소드를 버리고 다시 기록 |
 | `ESC` | 언제나 | 기록 전체 중단. 지금까지 저장된 에피소드는 유지 |
-| `W/S/A/D`, `Q/E`, `R/F`, `SPACE` | 에피소드 중 | [제어 스크립트](/docs/a-go/start-custom-scripts)과 같은 바퀴 조종 |
+| `W/S/A/D`, `Q/E`, `R/F`, `SPACE` | 에피소드 중 | [제어 스크립트](/docs/a-go/start-custom-scripts)와 같은 바퀴 조종 |
 
 작업이 끝나면 시간이 다 될 때까지 기다리지 말고 `→` 로 넘기는 것이 좋습니다. 가만히 있는 구간도 데이터로 남아 모델이 "멈춰 있기"를 배우기 때문입니다. 실수했다면 주저 없이 `←` 로 다시 합니다.
 
 > **팁** 💡`TIP`
-> <br>LeRobot 기본 기록 도구는 재기록이 `R`, 중단이 `Q` 인데, LeKiwi에서는 이 키들이 바퀴 조종에 쓰입니다. 그래서 커스텀 스크립트는 재기록을 `←`, 중단을 `ESC` 로 옮겼습니다.
+> <br>**R·Q 키로는 재기록·중단이 되지 않습니다** LeRobot 기본 기록 도구는 `←`·`ESC` 외에 글자 키 `R`(재기록)·`Q`(중단)도 받지만, LeKiwi에서는 이 키들이 바퀴 조종에 쓰입니다. 그래서 커스텀 스크립트는 재기록을 `←`, 중단을 `ESC` 에만 남겼습니다.
 
 ### 4.4. 결과 확인
 
@@ -212,16 +212,16 @@ python lekiwi-record.py ^
     --teleop.id=leader ^
     --dataset.repo_id=%HF_USER%/%TASK_NAME% ^
     --dataset.single_task="Pick up the cube and place it in the box" ^
-    --dataset.num_episodes=30 ^
+    --dataset.num_episodes=20 ^
     --dataset.episode_time_s=15 ^
-    --dataset.reset_time_s=3 ^
+    --dataset.reset_time_s=5 ^
     --display_data=true ^
-    --dataset.push_to_hub=true ^
-    --resume=true
+    --resume=true ^
+    --dataset.push_to_hub=true
 ```
 
 - `--dataset.num_episodes` 는 **이번에 추가할 개수**입니다. 기존 10개에 20개를 더하면 총 30개가 됩니다.
-- 기존 데이터셋과 카메라 이름, 해상도, FPS가 같아야 합니다. 호스트를 [제어 스크립트](/docs/a-go/start-custom-scripts) 스크립트로 똑같이 띄웠다면 문제없습니다.
+- 기존 데이터셋과 카메라 이름, 해상도, FPS가 같아야 합니다. 호스트를 [제어 스크립트](/docs/a-go/start-custom-scripts)의 `start_lekiwi_host.sh` 로 똑같이 띄웠다면 문제없습니다.
 - `--dataset.push_to_hub=true` 를 주면 끝난 뒤 **전체 데이터셋**이 Hub에 올라갑니다. 마지막 기록 세션에 붙이면 따로 업로드할 필요가 없습니다.
 
 ### 5.2. 처음부터 다시 시작
@@ -254,7 +254,7 @@ rmdir /s /q %USERPROFILE%\.cache\huggingface\lerobot\%HF_USER%\%TASK_NAME%
 |---|---|
 | `FileExistsError` | 5.2절. 이어서 기록하려면 `--resume=true` |
 | `--resume` 인데 폴더를 못 찾음 | 로그에 찍힌 경로 확인. 다른 곳에 있으면 `--dataset.root=/경로` |
-| `--resume` 시 feature 불일치 오류 | 호스트 카메라 설정이 지난번과 다름. [제어 스크립트](/docs/a-go/start-custom-scripts) 스크립트로 같은 설정 사용 |
+| `--resume` 시 feature 불일치 오류 | 호스트 카메라 설정이 지난번과 다름. [제어 스크립트](/docs/a-go/start-custom-scripts)의 `start_lekiwi_host.sh` 로 같은 설정 사용 |
 | 카메라 shape 경고 | [카메라 포트 고정](/docs/a-go/setup-cameraport) 별칭과 해상도 확인. 기본 설정은 실제 프레임에 맞춰 자동 보정됨 |
 | 에피소드 저장이 오래 걸림 | 실시간 인코딩이 꺼진 경우. `--dataset.streaming_encoding=true` 가 기본 |
 | 업로드 실패 | `hf auth whoami` 확인. 토큰 권한이 Write인지 확인 |

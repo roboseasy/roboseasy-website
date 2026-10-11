@@ -22,14 +22,16 @@ LeRobot 설치 전에 Python 3.12과 Git이 설치되어 있는지 확인하세�
 - **CUDA 지원 GPU** (학습 시에 없으면 너무 느림…)
 - **USB 가 많은 컴퓨터** (카메라, 로봇 모두 USB 인데 허브 통하면 프레임 밀리는 문제 많음)
 
-> ℹ️ **필자의 추천 시스템 구성**<br>
-**입문자**: Macbook 또는 리눅스 노트북으로 시작하셔도 됩니다. 학습은 클라우드 GPU를 빌려서 하시면 됩니다.<br>
-**본격파**: 안정적으로 시도하시려면 다음 사양의 데스크탑을 추천합니다:
-- NVIDIA GPU 최소 30시리즈 이상 (ex. 3070)
-- USB 포트 4개 이상 (허브 사용 시 프레임 드롭 주의)
-- Jetson 도 좋음
+> ℹ️ **필자의 추천 시스템 구성**
+>
+> **입문자**: Macbook 또는 리눅스 노트북으로 시작하셔도 됩니다. 학습은 클라우드 GPU를 빌려서 하시면 됩니다.<br>
+> **본격파**: 안정적으로 시도하시려면 다음 사양의 데스크탑을 추천합니다:
+>
+> - NVIDIA GPU 최소 30시리즈 이상 (ex. 3070)
+> - USB 포트 4개 이상 (허브 사용 시 프레임 드롭 주의)
+> - Jetson 도 좋음
 
-## 2.1 라이브러리 설치하기
+## 라이브러리 설치하기
 
 다음 3가지 방법 중 하나를 선택하여 가상환경을 준비합니다.
 
@@ -71,7 +73,6 @@ echo $(uname)
 echo $(uname -m)
 ```
 
----
 | 변수 | 의미 | 대표적인 실제 값 |
 |--|--| -- |
 | `$(uname)` | 운영체제(OS)의 이름 | Linux(리눅스/우분투 등), Darwin (macOS)  |
@@ -102,7 +103,7 @@ conda install ffmpeg -c conda-forge
 
 ```
 
-> 💡`TIP` 일반적으로 이 명령은 `libsvtav1 encoder`를 사용하여 컴파일된 `ffmpeg 7.x` 버전을 해당 플랫폼에 설치합니다. `libsvtav1`이 지원되지 않는 경우 (`ffmpeg - encoders` 명령으로 지원되는 인코더 목록을 확인하세요), 다음 방법을 시도해 볼 수 있습니다:
+> 💡`TIP` 일반적으로 이 명령은 `libsvtav1 encoder`를 사용하여 컴파일된 `ffmpeg 7.x` 버전을 해당 플랫폼에 설치합니다. `libsvtav1`이 지원되지 않는 경우 (`ffmpeg -encoders` 명령으로 지원되는 인코더 목록을 확인하세요), 다음 방법을 시도해 볼 수 있습니다:
 > 
 > -   _[모든 플랫폼]_ Explicitly install `ffmpeg 7.X` using:
 > 
@@ -288,8 +289,8 @@ PyPI를 통해 라이브러리를 설치할 때, 특정 버전만 설치하고 �
 ```bash
 
 pip install lerobot==0.6.0 
-# uv 가상환경인 경우 # 
-uv pip install lerobot==0.6.0
+# uv 가상환경인 경우
+# uv pip install lerobot==0.6.0
 
 ```
 
@@ -401,6 +402,10 @@ ffmpeg -version
 ## 다음 단계
 
 <div class="card-grid">
+  <a href="/docs/a-ba/setup-hardware-assembly" class="card">
+    <h3>🔧 조립 가이드</h3>
+    <p>A-Ba(SO-ARM101) 하드웨어를 조립합니다</p>
+  </a>
   <a href="/docs/a-ba/setup-hardware-usbport" class="card">
     <h3>🔌 USB 포트 고정</h3>
     <p>USB 포트 한 번의 설정으로 계속 사용 가능하게 합니다</p>

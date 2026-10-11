@@ -46,7 +46,7 @@ LeRobot에는 `lerobot-teleoperate` 라는 명령줄 도구가 있어 SO-ARM 같
 
 ### 1.3. 커스텀 저장소
 
-두 문제를 함께 해결한 스크립트 모음을 저장소에서 받습니다. 예제와 같은 구조를 유지하면서 설정을 전부 인자로 뺐고, 리더 암과 키보드를 함께 다룹니다.
+두 문제를 함께 해결한 스크립트 모음을 저장소에서 받습니다(PC에서 실행). 예제와 같은 구조를 유지하면서 설정을 전부 인자로 뺐고, 리더 암과 키보드를 함께 다룹니다.
 
 ```bash
 # 우분투
@@ -70,10 +70,11 @@ cd lekiwi
 | `lekiwi-teleoperate.py` | 기록 없이 조작만 | 이 페이지 |
 | `lekiwi-record.py` | 조작하면서 데이터셋 기록 | [데이터 기록](/docs/a-go/dataset-record) |
 | `lekiwi-replay.py` | 기록한 에피소드를 로봇에서 재생 | [데이터 재생](/docs/a-go/dataset-replay) |
-| `lekiwi-inference.py` | 학습된 정책으로 자율 실행 | [ACT 추론](/docs/a-go/inference-act) |
+| `lekiwi-rollout.py` | 학습된 정책으로 자율 실행. `--duration_s` 로 시간 제한 (실험·디버깅용) | [ACT 추론](/docs/a-go/inference-act) |
+| `lekiwi-inference.py` | 학습된 정책으로 자율 실행. ESC로 멈출 때까지 계속 (시연용) | [ACT 추론](/docs/a-go/inference-act), [SmolVLA 추론](/docs/a-go/inference-smolvla) |
 | `lekiwi-evaluate.py` | 정책 성공률 측정 | [ACT 추론](/docs/a-go/inference-act) |
 
-다섯 스크립트는 `--robot.*`, `--teleop.*`, `--display_data` 같은 **인자 이름을 공유**합니다. 이 페이지에서 익힌 인자를 이후 단계에서 그대로 씁니다.
+모든 스크립트는 `--robot.*`(로봇 접속), `--display_data` 같은 **인자 이름을 공유**하고, 리더 암을 쓰는 `lekiwi-teleoperate.py`·`lekiwi-record.py` 는 `--teleop.*` 도 공유합니다. 이 페이지에서 익힌 인자를 이후 단계에서 그대로 씁니다.
 
 ---
 
@@ -81,11 +82,14 @@ cd lekiwi
 
 ### 2.1. 왜 스크립트로 묶는가
 
-[카메라 포트 고정](/docs/a-go/setup-cameraport)에서 완성한 호스트 명령은 카메라 설정 때문에 일곱 줄이 넘습니다. 라즈베리파이에 접속할 때마다 이것을 입력하는 것은 번거롭고 오타가 나기 쉽습니다. 게다가 호스트는 시작할 때 "기존 캘리브레이션을 쓸까요?"라고 묻는데, 나중에 자동 실행으로 돌릴 때 이 질문에 답할 사람이 없으면 오류로 죽습니다. 이런 것들을 셸 스크립트 하나에 담습니다.
+[카메라 포트 고정](/docs/a-go/setup-cameraport)에서 완성한 호스트 명령은 카메라 설정 때문에 일곱 줄이 넘습니다. 라즈베리파이에 접속할 때마다 이것을 입력하는 것은 번거롭고 오타가 나기 쉽습니다. 게다가 호스트는 모터에 기록된 캘리브레이션 값이 파일과 다르면 시작할 때 "기존 캘리브레이션을 쓸까요?"라고 묻는데, 나중에 자동 실행으로 돌릴 때 이 질문에 답할 사람이 없으면 오류로 죽습니다. 이런 것들을 셸 스크립트 하나에 담습니다.
 
 ### 2.2. 스크립트 작성
 
 라즈베리파이에 SSH로 접속해 홈 폴더에 만듭니다.
+
+> **팁** 💡`TIP`
+> <br>**킷에 이미 들어 있을 수 있습니다.** `ls ~/start_lekiwi_host.sh` 로 먼저 확인합니다. 파일이 있으면 `cp ~/start_lekiwi_host.sh ~/start_lekiwi_host.sh.bak` 으로 백업한 뒤, 아래 내용과 비교해 `ROBOT_ID` 기본값, `--robot.port`, 카메라 경로를 고칩니다. 없으면 아래처럼 새로 만듭니다.
 
 ```bash
 nano ~/start_lekiwi_host.sh
@@ -108,7 +112,8 @@ fi
 
 # 카메라는 MJPG 강제 — 기본값(YUYV)은 두 카메라 동시 스트림이
 # Pi USB 대역폭을 초과해 wrist 카메라가 타임아웃 난다 (실측)
-# CAMERAS_CONFIG='{front: {type: opencv, index_or_path: /dev/video0, fps: 30, width: 640, height: 480, rotation: 0, fourcc: MJPG}, wrist: {type: opencv, index_or_path: /dev/video2, fps: 30, width: 480, height: 640, rotation: -90, fourcc: MJPG}}'
+# (아래 주석 줄은 손목 카메라를 세로로 달았을 때의 예시)
+# CAMERAS_CONFIG='{front: {type: opencv, index_or_path: /dev/cam_front, fps: 30, width: 640, height: 480, rotation: 0, fourcc: MJPG}, wrist: {type: opencv, index_or_path: /dev/cam_wrist, fps: 30, width: 480, height: 640, rotation: -90, fourcc: MJPG}}'
 CAMERAS_CONFIG='{front: {type: opencv, index_or_path: /dev/cam_front, fps: 30, width: 640, height: 480, rotation: 0, fourcc: MJPG}, wrist: {type: opencv, index_or_path: /dev/cam_wrist, fps: 30, width: 640, height: 480, rotation: 0, fourcc: MJPG}}'
 
 echo "[lekiwi] starting host: id=$ROBOT_ID run_time=${RUN_TIME_SEC}s"
@@ -154,7 +159,9 @@ chmod +x ~/start_lekiwi_host.sh
 
 ![](/img/a_go/start-custom-scripts-01.webp)
 
-[텔레오퍼레이션](/docs/a-go/start-teleoperation)과 같은 대기 화면이 나오면 정상입니다. 이 창은 그대로 두고 PC로 넘어갑니다. 이후 [데이터 기록](/docs/a-go/dataset-record), [데이터 재생](/docs/a-go/dataset-replay), [ACT 추론](/docs/a-go/inference-act)에서 "호스트 실행"은 모두 이 한 줄을 뜻합니다.
+예시 화면은 호스트를 직접 실행했을 때의 화면(id `lekiwi01`)입니다. 스크립트로 실행하면 맨 앞에 `[lekiwi] starting host: id=lekiwi07 run_time=14400s` 같은 안내 줄이 먼저 찍힙니다.
+
+[텔레오퍼레이션](/docs/a-go/start-teleoperation)과 같은 대기 화면이 나오면 정상입니다. 이 창은 그대로 두고 PC로 넘어갑니다. 이후 [데이터 기록](/docs/a-go/dataset-record), [데이터 재생](/docs/a-go/dataset-replay), [ACT 추론](/docs/a-go/inference-act), [SmolVLA 추론](/docs/a-go/inference-smolvla)에서 "호스트 실행"은 모두 이 한 줄을 뜻합니다.
 
 ---
 
@@ -165,11 +172,19 @@ chmod +x ~/start_lekiwi_host.sh
 PC의 conda 환경을 활성화하고 저장소 폴더로 이동한 뒤 실행합니다. [텔레오퍼레이션](/docs/a-go/start-teleoperation)에서 코드에 적었던 값들이 그대로 인자가 되었습니다.
 
 ```bash
+# 우분투
 conda activate lerobot060
 cd ~/workspace/lekiwi
 ```
 
 ```bash
+:: 윈도우
+conda activate lerobot060
+cd %USERPROFILE%\workspace\lekiwi
+```
+
+```bash
+# 우분투
 python lekiwi-teleoperate.py \
     --robot.remote_ip=192.168.0.207 \
     --robot.id=lekiwi07 \
@@ -206,11 +221,14 @@ python lekiwi-teleoperate.py ^
 
 리더 암은 그대로 따라 움직이고, 바퀴는 키보드로 조종합니다.
 
-| 키 | 동작 | 키 | 동작 |
-|---|---|---|---|
-| `W` / `S` | 전진 / 후진 | `Q` / `E` | 제자리 왼쪽 / 오른쪽 회전 |
-| `A` / `D` | 왼쪽 / 오른쪽 이동 | `R` / `F` | 속도 단계 올리기 / 내리기 |
-| `SPACE` | 바퀴 정지 | `ESC` | 종료 |
+| 키 | 동작 |
+|---|---|
+| `W` / `S` | 전진 / 후진 |
+| `A` / `D` | 왼쪽 / 오른쪽 이동 |
+| `Q` / `E` | 제자리 왼쪽 / 오른쪽 회전 |
+| `R` / `F` | 속도 단계 올리기 / 내리기 |
+| `SPACE` | 바퀴 정지 |
+| `ESC` | 종료 |
 
 [텔레오퍼레이션](/docs/a-go/start-teleoperation) 예제에서는 회전이 `Z` / `X` 였는데 커스텀 스크립트는 손이 닿기 쉬운 `Q` / `E` 로 옮겼습니다. 속도 키는 누르고 있으면 순식간에 최대나 최소로 튀기 때문에 0.4초에 한 단계씩만 바뀌도록 되어 있습니다.
 
@@ -232,7 +250,7 @@ python lekiwi-teleoperate.py ^
 
 ![](/img/a_go/start-custom-scripts-02.webp)
 
-[텔레오퍼레이션](/docs/a-go/start-teleoperation)과 같은 화면입니다. 정면과 손목 카메라, 관측과 행동 그래프가 보이고 리더 암을 움직이면 팔이 따라옵니다. 시작할 때 실제로 들어온 카메라 이름과 해상도가 로그에 한 번 찍히는데, [카메라 포트 고정](/docs/a-go/setup-cameraport)에서 정한 `front`, `wrist` 와 `480×640×3` 형태인지 확인해 두면 [데이터 기록](/docs/a-go/dataset-record)에서 기록할 데이터의 구조를 미리 아는 셈입니다.
+[텔레오퍼레이션](/docs/a-go/start-teleoperation)과 같은 화면입니다. 정면과 손목 카메라, 관측과 행동 그래프가 보이고 리더 암을 움직이면 팔이 따라옵니다. 시작할 때 실제로 들어온 카메라 이름과 해상도가 로그에 한 번 찍히는데, [카메라 포트 고정](/docs/a-go/setup-cameraport)에서 정한 `front`, `wrist` 와 `480×640×3`(높이×너비×채널) 형태인지 확인해 두면 [데이터 기록](/docs/a-go/dataset-record)에서 기록할 데이터의 구조를 미리 아는 셈입니다.
 
 ---
 
@@ -245,15 +263,15 @@ python lekiwi-teleoperate.py ^
 | 호스트 시작 직후 `EOFError` | 스크립트 마지막의 `<<< ''` 누락 |
 | 클라이언트 연결 timeout | 호스트가 떠 있는지, `--robot.remote_ip` 가 맞는지, PC와 Pi가 같은 와이파이인지 |
 | 바퀴가 키에 반응하지 않음 | 시작 로그의 입력 방식 확인. 터미널 방식이면 터미널 창을 클릭. `--base_control=terminal` 로 강제 가능 |
-| 팔이 안 따라옴 | `--teleop.port` 확인, 리더 암 전원, [캘리브레이션](/docs/a-go/start-calibration) 캘리브레이션 id |
-| `No module named 'zmq'` | [LeRobot 설치](/docs/a-go/setup-lerobot-ubuntu)에서 `lerobot[lekiwi]` extra 설치 여부 |
+| 팔이 안 따라옴 | `--teleop.port` 확인, 리더 암 전원, `--teleop.id` 가 [캘리브레이션](/docs/a-go/start-calibration)에서 쓴 리더 암 id(`leader`)와 같은지 확인 |
+| `No module named 'zmq'` | [LeRobot 설치 (Ubuntu)](/docs/a-go/setup-lerobot-ubuntu) / [LeRobot 설치 (Windows)](/docs/a-go/setup-lerobot-windows)에서 `lekiwi` extra 설치 여부 |
 
 ---
 
 ## 5. 정리
 
 - LeRobot 예제는 설정이 코드에 박혀 있고, 기본 명령줄 도구는 조종 장치 두 개가 필요한 LeKiwi를 지원하지 않습니다.
-- 커스텀 저장소의 스크립트는 설정을 **인자**로 받고, 이 페이지부터 [ACT 추론](/docs/a-go/inference-act)까지 같은 인자 체계를 씁니다.
+- 커스텀 저장소의 스크립트는 설정을 **인자**로 받고, 이 페이지부터 [SmolVLA 추론](/docs/a-go/inference-smolvla)까지 같은 인자 체계를 씁니다.
 - 호스트는 `./start_lekiwi_host.sh <로봇 id>` 한 줄로 띄우며, 스크립트가 가상환경과 카메라 설정, 캘리브레이션 질문을 대신 처리합니다.
 - 바퀴 조종은 환경에 맞는 입력 방식이 자동 선택되므로 Wayland에서도 동작합니다.
 

@@ -21,11 +21,12 @@ ACT는 복잡한 로봇 조작 작업을 위한 혁신적인 모방 학습 알�
 > - **A-Ba(SO-ARM101) 성공 사례 다수**: 저가의 하드웨어에서도 간단한 작업이 완수된 사례가 많음
 
 > ℹ️ **필자 의견**
-<br>**ACT 모델을 사용해본 개인적인 경험을 공유합니다**
-<br>- Pre-Trained 모델이 아니라 바닥부터 학습해서 보통 사용합니다.
-<br>- 아주 작고 효율적이라서 간단한 Task를 학습하고 구동할 수 있습니다.
-<br>- 꽤 잘 되는데… **Overfit이 심합니다**. 조명이나 물체 등 환경이 변하면 안 되는 경우가 많습니다.
-<br>- 그래도 처음 시작하기엔 아주 좋은 모델입니다! 👍
+> <br>**ACT 모델을 사용해본 개인적인 경험을 공유합니다**
+>
+> - Pre-Trained 모델이 아니라 바닥부터 학습해서 보통 사용합니다.
+> - 아주 작고 효율적이라서 간단한 Task를 학습하고 구동할 수 있습니다.
+> - 꽤 잘 되는데… **Overfit이 심합니다**. 조명이나 물체 등 환경이 변하면 안 되는 경우가 많습니다.
+> - 그래도 처음 시작하기엔 아주 좋은 모델입니다! 👍
 
 > **팁** 💡`TIP`
 > <br>**Jupyter Notebook 예제**
@@ -259,6 +260,4 @@ lerobot-rollout \
 - [Stanford ALOHA 프로젝트](https://tonyzhaozh.github.io/aloha/)
 - [구현 세부사항](https://github.com/tonyzhaozh/act)
 - [LeRobot ACT 예제](https://github.com/huggingface/notebooks/blob/main/lerobot/training-act.ipynb)
-
----
 

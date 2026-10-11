@@ -122,7 +122,7 @@ pip install "lerobot[core_scripts,feetech,lekiwi]==0.6.0"
 ```
 
 > **팁** 💡`TIP`
-> <br>[Dataset Visualization](/docs/a-go/dataset-visualization)·[Edit](/docs/a-go/dataset-edit)까지 실행용 PC에서 하려면 `viz`, `dataset` extras도 함께 설치해 두면 편합니다. 예: `pip install -e ".[core_scripts,feetech,lekiwi,viz,dataset]"`
+> <br>`core_scripts` 에는 데이터셋(`dataset`)·시각화(`viz`) extras와 키보드 입력용 `pynput` 이 이미 포함되어 있습니다. 그래서 실행용 PC에서도 [Dataset Visualization](/docs/a-go/dataset-visualization)·[Edit](/docs/a-go/dataset-edit)을 추가 설치 없이 바로 할 수 있습니다.
 
 ### 4.2. 훈련용 PC
 
@@ -140,8 +140,10 @@ GPU 드라이버와 CUDA는 [Ubuntu PC 세팅](/docs/a-go/setup-pc-ubuntu)에서
 
 ### 5.1. PyTorch 설치
 
+3·4단계에서 LeRobot과 함께 설치된 PyTorch를 GPU(CUDA 12.8) 빌드로 교체합니다. PyTorch가 이미 설치되어 있으므로 버전을 `+cu128` 까지 정확히 지정해야 실제로 교체됩니다. `2.11.0` 은 LeRobot 0.6.0이 지원하는 범위(2.7 이상 2.12 미만) 안의 버전입니다.
+
 ```bash
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+pip install torch==2.11.0+cu128 torchvision==0.26.0+cu128 --index-url https://download.pytorch.org/whl/cu128
 ```
 
 ### 5.2. 최종 점검
@@ -150,6 +152,21 @@ pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
 python -c "import torch; print(f'PyTorch 버전: {torch.__version__}'); print(f'GPU 사용 가능 여부: {torch.cuda.is_available()}'); print(f'사용 중인 GPU: {torch.cuda.get_device_name(0)}')"
 ```
 
-`GPU 사용 가능 여부: True` 와 GPU 이름이 출력되면 정상입니다.
+`GPU 사용 가능 여부: True` 와 GPU 이름이 출력되면 정상입니다. 출력 예시는 다음과 같습니다(GPU 이름은 PC마다 다릅니다).
 
-![](/img/a_go/setup-lerobot-ubuntu-01.webp)
+```text
+PyTorch 버전: 2.11.0+cu128
+GPU 사용 가능 여부: True
+사용 중인 GPU: NVIDIA GeForce RTX 5070 Ti Laptop GPU
+```
+
+## 다음 단계
+
+PC 준비가 끝났습니다. 이제 LeKiwi의 라즈베리파이를 PC와 연결합니다. 사이드바의 바로 다음 페이지는 Windows용 설치 안내이므로, Ubuntu PC라면 건너뛰고 아래 페이지로 이동합니다.
+
+<div class="card-grid">
+  <a href="/docs/a-go/lekiwi-wired-connection" class="card">
+    <h3>📡 유선 연결</h3>
+    <p>랜선으로 PC와 라즈베리파이를 직접 연결하고 SSH로 원격 접속</p>
+  </a>
+</div>
