@@ -368,3 +368,41 @@
   .docs-content h2 { font-size: 20px; }
   .docs-content h3 { font-size: 17px; }
 }
+
+/* ===========================
+   Card grid (문서 안 <div class="card-grid"> 링크 카드)
+   =========================== */
+.docs-content .card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 16px 0 24px;
+}
+
+.docs-content .card-grid .card {
+  display: block;
+  padding: 14px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.docs-content .card-grid .card:hover {
+  border-color: var(--color-amethyst);
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
+}
+
+.docs-content .card-grid .card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.docs-content .card-grid .card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6b7280;
+}
