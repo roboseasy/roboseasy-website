@@ -2,11 +2,11 @@
 import { Icon } from 'astro-icon/components';
 // /programs 페이지 상단 "Download Physical Labs" 섹션.
 // (구 RoboSEasy Studio — 2026-07 에 Physical Labs 로 제품명 변경)
-// VSCode 다운로드 페이지와 동일한 3-OS 컬럼 레이아웃.
+// 3-OS 컬럼 레이아웃 — OS 아이콘 + 메인 다운로드 버튼만 노출 (variant 칩 없음).
 //
 // 데이터 구조:
 //   versions: 릴리스별 자산(URL) 매핑. 각 자산은 'os.label.variant' 형태의 키로 식별
-//   columns: 시각 구조 (OS → 메인 버튼 + variant chip 매트릭스). 각 슬롯은 assetKey만 보유
+//   columns: 시각 구조 (OS → 메인 버튼). 각 버튼은 assetKey만 보유
 //
 // 새 릴리스 추가 시 versions 배열에 entry 한 줄만 추가하면 selector 자동 노출.
 
@@ -15,17 +15,6 @@ interface Version {
   label: string;       // dropdown 표시 텍스트 (예: "v0.5.1 (0.0.1) — latest")
   /** 자산 키('os.label.variant')에 대한 다운로드 URL. 없으면 '#'로 폴백 */
   assets: Record<string, string>;
-}
-
-interface VariantLink {
-  l: string;
-  /** versions[*].assets에서 이 칩의 URL을 찾는 키 */
-  k: string;
-}
-
-interface VariantRow {
-  label: string;
-  variants: VariantLink[];
 }
 
 interface PrimaryButton {
@@ -40,7 +29,6 @@ interface OSColumn {
   iconName: string;
   iconAlt: string;
   buttons: PrimaryButton[];
-  rows: VariantRow[];
 }
 
 const versions: Version[] = [
@@ -397,82 +385,19 @@ const columns: OSColumn[] = [
     iconName: 'simple-icons:windows',
     iconAlt: 'Windows',
     buttons: [{ primary: 'Windows', secondary: 'Windows 10, 11', k: 'windows.primary' }],
-    rows: [
-      {
-        label: 'User Installer',
-        variants: [
-          { l: 'x64', k: 'windows.user-installer.x64' },
-          { l: 'Arm64', k: 'windows.user-installer.arm64' },
-        ],
-      },
-      {
-        label: 'System Installer',
-        variants: [
-          { l: 'x64', k: 'windows.system-installer.x64' },
-          { l: 'Arm64', k: 'windows.system-installer.arm64' },
-        ],
-      },
-      {
-        label: '.zip',
-        variants: [
-          { l: 'x64', k: 'windows.zip.x64' },
-          { l: 'Arm64', k: 'windows.zip.arm64' },
-        ],
-      },
-    ],
   },
   {
     key: 'linux',
     iconName: 'simple-icons:linux',
     iconAlt: 'Linux',
-    // 사용자 요청으로 .rpm 메인 버튼 제거. variant row 'rpm'은 향후 빌드 대비 유지.
+    // 사용자 요청으로 .rpm 메인 버튼 제거.
     buttons: [{ primary: '.deb', secondary: 'Debian, Ubuntu', k: 'linux.deb.x64' }],
-    rows: [
-      {
-        label: '.deb',
-        variants: [
-          { l: 'x64', k: 'linux.deb.x64' },
-          { l: 'Arm32', k: 'linux.deb.arm32' },
-          { l: 'Arm64', k: 'linux.deb.arm64' },
-        ],
-      },
-      {
-        label: '.rpm',
-        variants: [
-          { l: 'x64', k: 'linux.rpm.x64' },
-          { l: 'Arm32', k: 'linux.rpm.arm32' },
-          { l: 'Arm64', k: 'linux.rpm.arm64' },
-        ],
-      },
-      {
-        label: '.tar.gz',
-        variants: [
-          { l: 'x64', k: 'linux.tar.gz.x64' },
-          { l: 'Arm32', k: 'linux.tar.gz.arm32' },
-          { l: 'Arm64', k: 'linux.tar.gz.arm64' },
-        ],
-      },
-      {
-        label: 'Snap',
-        variants: [{ l: 'Snap Store', k: 'linux.snap' }],
-      },
-    ],
   },
   {
     key: 'mac',
     iconName: 'simple-icons:apple',
     iconAlt: 'macOS',
     buttons: [{ primary: 'Mac', secondary: 'macOS 12.0+', k: 'mac.dmg.universal' }],
-    rows: [
-      {
-        label: '.dmg',
-        variants: [
-          { l: 'Intel chip', k: 'mac.dmg.intel' },
-          { l: 'Apple silicon', k: 'mac.dmg.silicon' },
-          { l: 'Universal', k: 'mac.dmg.universal' },
-        ],
-      },
-    ],
   },
 ];
 
@@ -521,19 +446,6 @@ const versionAssetsJson = JSON.stringify(
               <span class="studio-download__btn-primary">{btn.primary}</span>
               <span class="studio-download__btn-secondary">{btn.secondary}</span>
             </a>
-          ))}
-        </div>
-
-        <div class="studio-download__rows">
-          {col.rows.map((row) => (
-            <div class="studio-download__row">
-              <span class="studio-download__row-label">{row.label}</span>
-              <span class="studio-download__row-variants">
-                {row.variants.map((v) => (
-                  <a class="studio-download__chip" href={hrefFor(v.k)} data-asset-key={v.k}>{v.l}</a>
-                ))}
-              </span>
-            </div>
           ))}
         </div>
       </div>
