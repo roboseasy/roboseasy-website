@@ -9,8 +9,7 @@ order: 160
 
 [데이터 재생](/docs/a-go/dataset-replay)의 재생으로 데이터셋을 모두 확인하는 것은 확실하지만 느립니다. 에피소드 50개를 전부 로봇으로 돌려 보기는 어렵습니다. 이 페이지에서는 로봇 없이 **화면에서** 데이터셋을 확인합니다. 카메라 영상과 관절 값이 시간에 따라 어떻게 변했는지 보면서 이상한 에피소드를 빠르게 골라내는 것이 목적이며, 여기서 찾은 에피소드 번호를 **[데이터셋 편집](/docs/a-go/dataset-edit)**에서 삭제에 씁니다.
 
-> **정보** ℹ️ `INFO`
-> <br>🎯 **학습 목표**
+> 🎯 **학습 목표**
 >
 > - Hub에 올린 데이터셋을 브라우저에서, 로컬 데이터셋을 Rerun에서 확인할 수 있다.
 > - 시각화 화면에서 잘못된 에피소드를 판별하는 기준을 설명할 수 있다.
@@ -29,7 +28,7 @@ https://huggingface.co/spaces/lerobot/visualize_dataset
 
 ![](/img/a_go/dataset-visualization-01.webp)
 
-자신의 계정 페이지에서 데이터셋 이름(`roboseasy/lekiwi_pick_and_place` 형식)을 복사해 입력란에 붙여 넣고 **Go** 를 누릅니다.
+자신의 계정 페이지에서 데이터셋 이름(`HueyWoo/lekiwi_pick_and_place` 형식)을 복사해 입력란에 붙여 넣고 **Go** 를 누릅니다.
 
 ![](/img/a_go/dataset-visualization-02.webp)
 
@@ -48,13 +47,13 @@ https://huggingface.co/spaces/lerobot/visualize_dataset
 ```bash
 # 우분투
 conda activate lerobot060
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
 ```bash
 :: 윈도우
-set "HF_USER=roboseasy"
+set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
 ```
 

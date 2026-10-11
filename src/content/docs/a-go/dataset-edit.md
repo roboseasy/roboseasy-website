@@ -9,8 +9,7 @@ order: 170
 
 [데이터 기록](/docs/a-go/dataset-record)에서 기록하고 [데이터 시각화](/docs/a-go/dataset-visualization)에서 시각화해 본 데이터셋은 그대로 학습에 쓰기에 완벽하지 않은 경우가 많습니다. 실수한 에피소드가 섞여 있거나, 여러 날에 걸쳐 모은 데이터를 합쳐야 하거나, 학습용과 검증용을 나눠야 합니다. 이 페이지에서는 LeRobot의 데이터셋 편집 도구로 이런 작업을 처리하고, 완성된 데이터셋을 Hugging Face Hub에 올립니다.
 
-> **정보** ℹ️ `INFO`
-> <br>🎯 **학습 목표**
+> 🎯 **학습 목표**
 >
 > - 데이터셋을 편집하기 전에 정보를 확인하고, 원본을 보존하는 방식으로 편집할 수 있다.
 > - 에피소드 삭제, 분할, 병합, 특성 제거를 목적에 맞게 골라 쓸 수 있다.
@@ -44,13 +43,13 @@ order: 170
 
 ```bash
 # 우분투
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
 ```bash
 :: 윈도우
-set "HF_USER=roboseasy"
+set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
 ```
 

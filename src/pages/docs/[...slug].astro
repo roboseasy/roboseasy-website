@@ -107,4 +107,37 @@ const seoDesc = entry.data.description ?? hero.description;
       link.addEventListener('click', () => sidebar.classList.remove('is-open'));
     });
   }
+
+  // 코드 블록 복사 버튼 (래퍼 div.code-block 은 src/lib/rehype-docs.mjs 가 만든다)
+  document.querySelectorAll('.docs-content .code-block').forEach((block) => {
+    const code = block.querySelector('pre code');
+    if (!code) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'code-copy';
+    btn.textContent = '복사';
+    btn.setAttribute('aria-label', '코드 복사');
+    btn.addEventListener('click', async () => {
+      const text = code.innerText.replace(/\n$/, '');
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      btn.textContent = '복사됨 ✓';
+      btn.classList.add('is-copied');
+      setTimeout(() => {
+        btn.textContent = '복사';
+        btn.classList.remove('is-copied');
+      }, 1500);
+    });
+    block.appendChild(btn);
+  });
 </script>

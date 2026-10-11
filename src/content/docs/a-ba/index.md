@@ -128,7 +128,7 @@ A-Ba(SO-ARM101)을 처음 시작하시나요? 아래 흐름도를 따라 진행�
 ## 다음 단계
 
 <div class="card-grid">
-  <a href="#/hardware-assembly" class="card">
+  <a href="/docs/a-ba/setup-hardware-assembly" class="card">
     <h3>🔧 조립 가이드</h3>
     <p>A-Ba(SO-ARM101) 하드웨어를 조립합니다</p>
   </a>

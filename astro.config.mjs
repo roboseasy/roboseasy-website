@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import netlify from '@astrojs/netlify';
 import icon from 'astro-icon';
+import rehypeDocs from './src/lib/rehype-docs.mjs';
 
 // 부품·액세서리(category='addon')는 카탈로그에 노출하지 않는 제품 — 검색 결과에도 뜨지 않도록
 // sitemap에서 뺀다. 페이지 자체는 남아 단독 구매 링크로는 동작한다(상세 페이지는 noindex).
@@ -14,5 +15,9 @@ export default defineConfig({
   site: 'https://roboseasy.ai',
   output: 'hybrid',
   adapter: netlify(),
+  markdown: {
+    // 문서(src/content/docs) 콜아웃·표·코드 블록 렌더링 보정 — src/lib/rehype-docs.mjs
+    rehypePlugins: [rehypeDocs],
+  },
   integrations: [sitemap({ filter: (page) => !addonPaths.has(new URL(page).pathname) }), icon()],
 });

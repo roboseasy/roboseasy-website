@@ -9,8 +9,7 @@ order: 150
 
 [데이터 기록](/docs/a-go/dataset-record)에서 기록한 데이터가 정말 로봇을 움직일 수 있는 형태로 저장되었는지 확인하는 가장 직접적인 방법은 **그 행동을 로봇에 다시 보내 보는 것**입니다. 리더 암 없이 데이터셋의 행동만으로 로봇이 시범과 같은 동작을 재현하면, 기록도 로봇도 정상입니다. 학습에 들어가기 전의 점검 단계입니다.
 
-> **정보** ℹ️ `INFO`
-> <br>🎯 **학습 목표**
+> 🎯 **학습 목표**
 >
 > - 재생이 데이터셋의 어떤 값을 어떻게 로봇에 보내는지 설명할 수 있다.
 > - 안전 절차를 지키며 에피소드를 재생하고 기록 상태를 판단할 수 있다.
@@ -58,7 +57,7 @@ order: 150
 # 우분투
 conda activate lerobot060
 cd ~/workspace/lekiwi
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
@@ -76,7 +75,7 @@ python lekiwi-replay.py \
 ```bash
 conda activate lerobot060
 cd %USERPROFILE%\workspace\lekiwi
-set "HF_USER=roboseasy"
+set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
 ```
 

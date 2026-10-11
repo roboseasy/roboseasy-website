@@ -80,7 +80,7 @@ ACT는 Stanford에서 개발한 알고리즘으로, 다음과 같은 핵심 혁�
 Record & Replay 페이지를 참고하여 데이터셋을 수집하세요.
 
 <div class="card-grid">
-  <a href="#/software-record-replay" class="card">
+  <a href="/docs/a-ba/dataset-record" class="card">
     <h3>📹 Record & Replay</h3>
     <p>ACT 모델을 훈련시키기 위해 데이터셋을 수집합니다</p>
   </a>
@@ -104,7 +104,7 @@ conda activate lerobot
 ```
 
 ```bash
-export HF_USER="roboseasy" 
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place" 
 export TASK_DESCRIPTION="Pick a ball and place"
 ```
@@ -184,7 +184,7 @@ v0.6.0부터 학습된 정책의 평가·실행은 `lerobot-record`가 아니라
 이때 훈련 데이터셋과 평가 데이터셋을 구분하기 위해 `--dataset.repo_id`에 `eval_` 접두사를 붙이는 것을 권장합니다.
 
 ```bash
-export HF_USER="roboseasy"
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place"
 export TASK_DESCRIPTION="Pick a ball and place"
 ```

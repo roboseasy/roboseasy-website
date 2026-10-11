@@ -28,7 +28,7 @@ conda activate lerobot
 
 ```bash
 
-export HF_USER="roboseasy" 
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place" 
 export TASK_DESCRIPTION="Pick a ball and place"
 
@@ -64,15 +64,15 @@ lerobot-replay \
 Record & Replay 설정이 완료되었다면, 이제 Policy 모델을 학습하고 실행해보세요:
 
 <div class="card-grid">
-  <a href="#/policy-act" class="card">
+  <a href="/docs/a-ba/policy-act" class="card">
     <h3>🤖 ACT</h3>
     <p>Action Chunking Transformer 모델을 <br>학습합니다</p>
   </a>
-  <a href="#/policy-smolvla" class="card">
+  <a href="/docs/a-ba/policy-smolvla" class="card">
     <h3>🧠 SmolVLA</h3>
     <p>Vision-Language-Action <br>모델을 학습합니다</p>
   </a>
-  <a href="#/policy-groot" class="card">
+  <a href="/docs/a-ba/policy-groot" class="card">
     <h3>🚀 GR00T N1.7</h3>
     <p>NVIDIA의 대규모 기반 <br>모델을 활용합니다</p>
   </a>

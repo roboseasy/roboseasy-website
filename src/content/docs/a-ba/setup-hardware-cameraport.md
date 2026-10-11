@@ -169,7 +169,7 @@ lrwxrwxrwx 1 root root 7 1월 10 15:30 /dev/cam_wrist -> video4
 ## 다음 단계
 
 <div class="card-grid">
-  <a href="#/software-calibration" class="card">
+  <a href="/docs/a-ba/start-calibration" class="card">
     <h3>⚙️ Calibration</h3>
     <p>로봇을 보정하고 사용 준비를 완료합니다</p>
   </a>

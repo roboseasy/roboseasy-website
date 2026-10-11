@@ -9,8 +9,7 @@ order: 140
 
 지금까지는 로봇을 움직이는 방법을 익혔습니다. 이 페이지부터는 로봇이 **스스로** 움직이게 만들기 위한 재료, 즉 학습 데이터를 만듭니다. 방법은 단순합니다. [제어 스크립트](/docs/a-go/start-custom-scripts)의 텔레오퍼레이션을 그대로 하되, 그동안 오간 관측과 행동을 파일로 저장하는 것입니다. 이렇게 사람의 시범을 기록해 학습시키는 방식을 **모방 학습(imitation learning)** 이라고 합니다.
 
-> **정보** ℹ️ `INFO`
-> <br>🎯 **학습 목표**
+> 🎯 **학습 목표**
 >
 > - 에피소드가 무엇이고 데이터셋에 어떤 정보가 어떤 구조로 저장되는지 설명할 수 있다.
 > - 기록 명령의 시간 설정과 조작키를 이해하고 실제 시범 데이터를 기록할 수 있다.
@@ -87,7 +86,7 @@ hf auth whoami
 # 우분투
 conda activate lerobot060
 cd ~/workspace/lekiwi
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
@@ -95,7 +94,7 @@ export TASK_NAME="lekiwi_pick_and_place"
 :: 윈도우
 conda activate lerobot060
 cd %USERPROFILE%\workspace\lekiwi
-set "HF_USER=roboseasy"
+set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
 ```
 
@@ -171,7 +170,7 @@ python lekiwi-record.py ^
 기록이 끝나면 데이터셋 위치가 로그에 출력됩니다.
 
 ```text
-~/.cache/huggingface/lerobot/roboseasy/lekiwi_pick_and_place/
+~/.cache/huggingface/lerobot/HueyWoo/lekiwi_pick_and_place/
 ├── meta/      에피소드 수, 특성 구조, 통계
 ├── data/      관절 상태와 행동 (parquet)
 └── videos/    카메라 영상 (mp4)
@@ -230,7 +229,7 @@ python lekiwi-record.py ^
 같은 이름으로 `--resume` 없이 다시 실행하면 이미 폴더가 있다는 오류가 납니다.
 
 ```text
-FileExistsError: [Errno 17] File exists: '~/.cache/huggingface/lerobot/roboseasy/lekiwi_pick_and_place'
+FileExistsError: [Errno 17] File exists: '~/.cache/huggingface/lerobot/HueyWoo/lekiwi_pick_and_place'
 ```
 
 기존 기록을 버리고 새로 시작하려면 폴더를 지웁니다. 지우기 전에 정말 버려도 되는지 확인하세요.

@@ -21,7 +21,7 @@ SmolVLA는 **언어 조건부** 정책이라 `--task` 문장이 학습 때와 �
 ```bash
 python -c "
 from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
-m = LeRobotDatasetMetadata('roboseasy/lekiwi_pick_and_place')
+m = LeRobotDatasetMetadata('HueyWoo/lekiwi_pick_and_place')
 print(list(m.tasks.index))
 "
 ```
@@ -71,7 +71,7 @@ PC에서 conda 환경을 활성화하고 환경 변수를 정합니다.
 ```bash
 conda activate lerobot060
 cd ~/workspace/lekiwi
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 

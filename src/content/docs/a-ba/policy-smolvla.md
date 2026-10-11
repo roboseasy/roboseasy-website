@@ -73,7 +73,7 @@ act 모델 학습을 위해 수집한 데이터셋과 달리,
 <br>` --dataset.single_task`에피소드를 명확한 자연어 명령 레이블링을 해주어야 합니다.
 
 <div class="card-grid">
-  <a href="#/dataset-record" class="card">
+  <a href="/docs/a-ba/dataset-record" class="card">
     <h3>📹 Record & Replay</h3>
     <p>SmolVLA 모델을 훈련시키기 위해 데이터셋을 수집합니다</p>
   </a>
@@ -97,7 +97,7 @@ hf auth login
 다음은 학습할 모델에 대한 환경 변수를 설정해주어야 합니다:
 
 ```bash
-export HF_USER="roboseasy" 
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place" 
 export TASK_DESCRIPTION="Pick a ball and place"
 ```
@@ -165,7 +165,7 @@ v0.6.0부터 학습된 정책의 평가·실행은 `lerobot-record`가 아니라
 이때 훈련 데이터셋과 평가 데이터셋을 구분하기 위해 `--dataset.repo_id`에 `eval_` 접두사를 붙이는 것을 권장합니다.
 
 ```bash
-export HF_USER="roboseasy"
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place"
 export TASK_DESCRIPTION="Pick a ball and place"
 ```

@@ -401,7 +401,7 @@ ffmpeg -version
 ## 다음 단계
 
 <div class="card-grid">
-  <a href="#/hardware-usbport" class="card">
+  <a href="/docs/a-ba/setup-hardware-usbport" class="card">
     <h3>🔌 USB 포트 고정</h3>
     <p>USB 포트 한 번의 설정으로 계속 사용 가능하게 합니다</p>
   </a>

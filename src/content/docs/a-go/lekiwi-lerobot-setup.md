@@ -9,8 +9,7 @@ order: 80
 
 [LeRobot 설치](/docs/a-go/setup-lerobot-ubuntu)에서는 PC에 LeRobot을 설치했고, [고정 IP · 무선 연결](/docs/a-go/lekiwi-wifi-static-ip)에서는 LeKiwi의 라즈베리파이에 무선으로 접속할 수 있게 만들었습니다. 이 페이지에서는 **라즈베리파이 쪽에도 LeRobot을 설치**합니다. 로봇이 PC와 대화하려면 양쪽 모두 같은 언어를 알아야 하기 때문입니다.
 
-> **정보** ℹ️ `INFO`
-> <br>🎯 **학습 목표**
+> 🎯 **학습 목표**
 >
 > - LeKiwi가 호스트와 클라이언트로 나뉘어 동작하는 구조를 설명할 수 있다.
 > - 라즈베리파이에 Python 가상환경을 만들고 활성화할 수 있다.

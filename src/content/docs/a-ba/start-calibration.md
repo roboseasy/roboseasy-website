@@ -175,7 +175,7 @@ Calibration 결과가 만족스럽지 않다면 동일한 명령어로 다시 �
 ## 다음 단계
 
 <div class="card-grid">
-  <a href="#/software-teleoperation" class="card">
+  <a href="/docs/a-ba/start-teleoperation" class="card">
     <h3>🎮 Teleoperation</h3>
     <p>Leader Arm으로 Follower Arm을 제어해봅니다</p>
   </a>

@@ -42,7 +42,7 @@ order: 70
 ### 캘리브레이션
 
 리더/팔로워 모두 캘리브레이션을 반드시 진행해야 합니다.
-<br>자세한 방법은 [A-Ba(SO-ARM101) 캘리브레이션 가이드](#/software-calibration) 참고.
+<br>자세한 방법은 [A-Ba(SO-ARM101) 캘리브레이션 가이드](/docs/a-ba/start-calibration) 참고.
 
 ---
 
@@ -214,7 +214,7 @@ lerobot-teleoperate \
 Teleoperation을 완료하였다면, 다음 단계로 진행하세요:
 
 <div class="card-grid">
-  <a href="#/software-record-replay" class="card">
+  <a href="/docs/a-ba/dataset-record" class="card">
     <h3>📹 Record & Replay</h3>
     <p>VLA 모델을 훈련시키기 위해 데이터셋을 수집합니다</p>
   </a>

@@ -73,5 +73,5 @@ LeKiwi는 프로그램 하나가 로봇을 통째로 움직이지 않습니다. 
 | 리더 암 포트 | `/dev/ttyACM0` (Ubuntu), `COM22` (Windows) | `lerobot-find-port` 로 확인 |
 | PC conda 환경 | `lerobot060` | Python 3.12 |
 | Pi 가상환경 | `~/lerobot060_venv` | Python venv |
-| Hugging Face 계정 | `roboseasy` | 본인의 계정명으로 변경 |
+| Hugging Face 계정 | `HueyWoo` | 본인의 계정명으로 변경 |
 | 데이터셋 이름 | `lekiwi_pick_and_place` | 작업에 맞게 변경 |

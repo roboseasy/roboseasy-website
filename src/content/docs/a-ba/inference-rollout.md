@@ -84,7 +84,7 @@ source lerobot/bin/activate
 데이터셋 수집 때 사용한 환경 변수를 그대로 씁니다.
 
 ```bash
-export HF_USER="roboseasy"
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place"
 export TASK_DESCRIPTION="Grab the green cube and place it in circle"
 ```

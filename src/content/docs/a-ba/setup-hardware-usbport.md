@@ -140,11 +140,11 @@ lrwxrwxrwx 1 root root 7 10월 11 22:35 /dev/so101_leader -> ttyACM0
 ## 다음 단계
 
 <div class="card-grid">
-  <a href="#/hardware-camera" class="card">
+  <a href="/docs/a-ba/setup-hardware-cameraport" class="card">
     <h3>📷 카메라 포트 고정 (선택)</h3>
     <p>카메라가 있다면 카메라 포트도 고정하세요</p>
   </a>
-  <a href="#/software-calibration" class="card">
+  <a href="/docs/a-ba/start-calibration" class="card">
     <h3>⚙️ Calibration</h3>
     <p>카메라가 없다면 바로 캘리브레이션으로 넘어갑니다</p>
   </a>

@@ -19,8 +19,7 @@ order: 180
 
 이 페이지에서는 LeRobot이 기본으로 제공하는 정책 중 가장 먼저 추천되는 **ACT** 를 학습시킵니다.
 
-> **정보** ℹ️ `INFO`
-> <br>🎯 **학습 목표**
+> 🎯 **학습 목표**
 >
 > - ACT가 어떤 입력을 받아 어떤 출력을 내는지, LeKiwi 데이터셋과 어떻게 대응되는지 설명할 수 있다.
 > - 훈련용 GPU PC에서 Hub의 데이터셋을 내려받아 학습을 실행하고, 중단된 학습을 재개할 수 있다.
@@ -86,7 +85,7 @@ hf auth whoami
 [데이터 기록](/docs/a-go/dataset-record)부터 써 온 이름을 그대로 씁니다. [데이터셋 편집](/docs/a-go/dataset-edit)에서 에피소드를 삭제한 데이터셋으로 학습하려면 `TASK_NAME` 뒤에 `_after_delete` 처럼 편집 결과 이름을 붙입니다.
 
 ```bash
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 export TASK_DESCRIPTION="Pick up the cube and place it in the box"
 ```

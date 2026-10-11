@@ -39,7 +39,7 @@ conda activate lerobot
 
 ```bash
 
-export HF_USER="roboseasy" 
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place" 
 export TASK_DESCRIPTION="Pick a ball and place"
 ```
@@ -54,7 +54,7 @@ lerobot-dataset-viz \
 ```
 
 -   `--root`를 생략하면 HuggingFace 캐시 폴더(`~/.cache/huggingface/`)에서 데이터를 찾고, 없으면 Hub에서 다운로드합니다.
--   `--root ./roboseasy/pick_and_place`를 지정하면 해당 로컬 경로에서 직접 데이터를 로드합니다.
+-   `--root ./HueyWoo/pick_and_place`를 지정하면 해당 로컬 경로에서 직접 데이터를 로드합니다.
 -   `--mode local`은 기본값이라 생략해도 동일합니다. (`distant`로 설정하면 웹 브라우저로 볼 수 있음)
 
 실행되면 도구가 `rerun.io`를 열고 선택한 에피소드의 카메라 스트림, 로봇 상태 및 행동을 표시합니다.

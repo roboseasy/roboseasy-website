@@ -184,7 +184,7 @@ conda activate lerobot
 데이터셋이 자동으로 업로드 됩니다.
 
 ```bash
-export HF_USER="roboseasy" 
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place" 
 export TASK_DESCRIPTION="Pick a ball and place"
 ```
@@ -349,7 +349,7 @@ print('Upload completed!')
 이때 단순히 CLI 명령어에서 `--dataset.num_episodes=50`으로 수정하여 실행하면 될까요? 아쉽게도 위에서 배운 CLI에서 num_episodes 값을 바꿔 실행하면 아래와 같은 오류 로그가 발생합니다. 
 
 오류 로그를 살펴보면, 이미 해당 repo_id로 데이터셋 이름이 있다고 뜹니다.
-이 오류를 해결하는 가장 단순한 방법은 로컬 경로 (`~/.cache/huggingface/lerobot/roboseasy/pick_and_place_after_deletion`)에 저장된 기존 데이터셋을 삭제하고 처음부터 다시 50개를 수집하는 것입니다. 
+이 오류를 해결하는 가장 단순한 방법은 로컬 경로 (`~/.cache/huggingface/lerobot/HueyWoo/pick_and_place_after_deletion`)에 저장된 기존 데이터셋을 삭제하고 처음부터 다시 50개를 수집하는 것입니다. 
 
 하지만 지금까지 공들여 쌓은 데이터를 삭제하는 것은 매우 비효율적입니다. lerobot은 이러한 상황을 위해 기존 데이터에 이어서 새로운 에피소드를 추가할 수 있는 기능을 제공합니다. `--resume=true` 옵션을 추가하면, 아래와 같이 기존에 저장된 데이터셋 이후부터 학습 데이터를 이어서 쌓을 수 있습니다. 
 
@@ -450,15 +450,15 @@ rm -rf ~/.cache/huggingface/lerobot/
 Record & Replay 설정이 완료되었다면, 이제 Policy 모델을 학습하고 실행해보세요:
 
 <div class="card-grid">
-  <a href="#/policy-act" class="card">
+  <a href="/docs/a-ba/policy-act" class="card">
     <h3>🤖 ACT</h3>
     <p>Action Chunking Transformer 모델을 <br>학습합니다</p>
   </a>
-  <a href="#/policy-smolvla" class="card">
+  <a href="/docs/a-ba/policy-smolvla" class="card">
     <h3>🧠 SmolVLA</h3>
     <p>Vision-Language-Action <br>모델을 학습합니다</p>
   </a>
-  <a href="#/policy-groot" class="card">
+  <a href="/docs/a-ba/policy-groot" class="card">
     <h3>🚀 GR00T N1.7</h3>
     <p>NVIDIA의 대규모 기반 <br>모델을 활용합니다</p>
   </a>

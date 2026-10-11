@@ -56,7 +56,7 @@ conda activate lerobot
 
 ```bash
 
-export HF_USER="roboseasy" 
+export HF_USER="HueyWoo"
 export TASK_NAME="pick_and_place" 
 export TASK_DESCRIPTION="Pick a ball and place"
 ```

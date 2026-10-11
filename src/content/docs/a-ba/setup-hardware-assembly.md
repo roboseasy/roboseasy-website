@@ -276,11 +276,11 @@ lerobot-setup-motors \
 조립이 완료되었다면, 다음 중 하나를 선택하여 진행하세요:
 
 <div class="card-grid">
-  <a href="#/quick-setup" class="card">
+  <a href="/programs" class="card">
     <h3>⚡ 원터치 세팅 (추천)</h3>
     <p>모든 설정을 한 번에 자동으로 완료합니다</p>
   </a>
-  <a href="#/software-installation" class="card">
+  <a href="/docs/a-ba/setup-software-installation" class="card">
     <h3>🔌 단계별 진행</h3>
     <p>소프트웨어 설치부터, USB 포트와 카메라까지 하나씩 설정합니다</p>
   </a>

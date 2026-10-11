@@ -64,7 +64,7 @@ hf auth whoami         # 확인
 ```bash
 python -c "
 from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
-m = LeRobotDatasetMetadata('roboseasy/lekiwi_pick_and_place')
+m = LeRobotDatasetMetadata('HueyWoo/lekiwi_pick_and_place')
 print('에피소드 수 :', m.total_episodes)
 print('프레임 수   :', m.total_frames)
 print('FPS        :', m.fps)
@@ -73,7 +73,7 @@ for k, v in m.features.items():
 "
 ```
 
-50 에피소드를 기록한 `lekiwi_pick_and_place` 데이터셋의 출력 예시:
+`HueyWoo/lekiwi_pick_and_place`의 실제 출력:
 
 ```text
 에피소드 수 : 50
@@ -95,7 +95,7 @@ FPS        : 30
 # 차원별 이름 확인
 python -c "
 from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
-m = LeRobotDatasetMetadata('roboseasy/lekiwi_pick_and_place')
+m = LeRobotDatasetMetadata('HueyWoo/lekiwi_pick_and_place')
 print(m.features['action']['names'])
 "
 ```
@@ -114,7 +114,7 @@ print(m.features['action']['names'])
 ## 3. 학습 명령어 (최종본)
 
 ```bash
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 
 lerobot-train \

@@ -9,8 +9,7 @@ order: 200
 
 [ACT 학습](/docs/a-go/train-act)에서 학습한 모델을 이제 로봇에 올립니다. 리더 암을 잡은 사람 대신 **정책이 관측을 보고 행동을 결정**하고, LeKiwi가 그 행동을 실행합니다. 이 페이지은 이 과정을 실행용 PC에서 돌리고, 정책이 얼마나 잘 하는지 성공률로 측정하는 방법까지 다룹니다.
 
-> **정보** ℹ️ `INFO`
-> <br>🎯 **학습 목표**
+> 🎯 **학습 목표**
 >
 > - 추론 루프가 텔레오퍼레이션 루프와 어떻게 같고 어떻게 다른지 설명할 수 있다.
 > - Hub 또는 로컬 체크포인트의 모델로 LeKiwi를 자율 실행하고 안전하게 멈출 수 있다.
@@ -77,14 +76,14 @@ hf auth whoami
 
 ```bash
 # 우분투
-export HF_USER="roboseasy"        # 본인의 Hugging Face 계정명으로 변경
+export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 export TASK_DESCRIPTION="Pick up the cube and place it in the box"
 ```
 
 ```bash
 :: 윈도우
-set "HF_USER=roboseasy"
+set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
 set "TASK_DESCRIPTION=Pick up the cube and place it in the box"
 ```
