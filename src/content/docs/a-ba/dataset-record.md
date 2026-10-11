@@ -296,7 +296,6 @@ rm -rf ~/.cache/rerun
 
    ```plaintext
    Recording episode 0
-   Press 'q' to quit early, 'r' to rerecord episode
    ```
 
 2. **데이터 수집 수행**
@@ -313,11 +312,13 @@ rm -rf ~/.cache/rerun
    <br>각 에피소드 완료 후 다음 위치에 저장:
 
    ```plaintext
-   ~/.cache/huggingface/lerobot/${HF_USER}/${TASK_NAME}/
+   ~/.cache/huggingface/lerobot/${HF_USER}/${TASK_NAME}_YYYYMMDD_HHMMSS/
    ```
 
+   v0.6.0의 `lerobot-record`는 새 데이터셋을 만들 때마다 `repo_id` 뒤에 기록 시작 시각(`_YYYYMMDD_HHMMSS`)을 자동으로 붙입니다. (예: `HueyWoo/pick_and_place_20261011_153000`) Hub 업로드와 이후 Replay·학습에서 쓰는 `repo_id`도 이 전체 이름입니다.
+
 > **팁** 💡`TIP`
-> <br>**효과적인 데이터 수집 팁**
+> <br>**기록할 때 기억할 점**
 >
 > - 작업을 천천히, 부드럽게 수행하세요
 > - 실패한 시도도 포함하여 다양성을 확보하세요
@@ -328,12 +329,14 @@ rm -rf ~/.cache/rerun
 
 로컬에서 작업 완료 후 선택적으로 HuggingFace Hub에 업로드할 수 있습니다:
 
+기록한 데이터셋은 `~/.cache/huggingface/lerobot/${HF_USER}/${TASK_NAME}_YYYYMMDD_HHMMSS` 에 있습니다. 아래 `_20261011_153000` 부분은 `ls ~/.cache/huggingface/lerobot/${HF_USER}/` 로 확인한 실제 이름으로 바꾸세요:
+
 ```bash
 # Python을 사용한 수동 업로드
 python -c "
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
-dataset = LeRobotDataset('local_dataset/so101_pick_place', root='./my_datasets')
-dataset.push_to_hub('${HF_USER}/so101_pick_place', private=False)
+dataset = LeRobotDataset('${HF_USER}/${TASK_NAME}_20261011_153000')
+dataset.push_to_hub(private=False)
 print('Upload completed!')
 "
 ```
@@ -345,16 +348,15 @@ print('Upload completed!')
 위 과정을 통해 10개의 에피소드를 수행하며, 데이터셋을 성공적으로 구축하셨을 겁니다. 
 어느 정도 감을 잡으셨다면, 이제 해당 Task의 데이터셋을 총 50개까지 늘려보겠습니다.
 
-이때 단순히 CLI 명령어에서 `--dataset.num_episodes=50`으로 수정하여 실행하면 될까요? 아쉽게도 위에서 배운 CLI에서 num_episodes 값을 바꿔 실행하면 아래와 같은 오류 로그가 발생합니다. 
+이때 단순히 CLI 명령어에서 `--dataset.num_episodes=50`으로 수정하여 실행하면 될까요? 아쉽게도 v0.6.0의 `lerobot-record`는 `--resume` 없이 실행할 때마다 이름 뒤에 시각이 붙은 **새 데이터셋**을 따로 만듭니다. 기존 데이터셋에 이어서 쌓이지 않습니다.
 
-오류 로그를 살펴보면, 이미 해당 repo_id로 데이터셋 이름이 있다고 뜹니다.
-이 오류를 해결하는 가장 단순한 방법은 로컬 경로 (`~/.cache/huggingface/lerobot/HueyWoo/pick_and_place`)에 저장된 기존 데이터셋을 삭제하고 처음부터 다시 50개를 수집하는 것입니다. 
+하나의 데이터셋에 50개를 모으는 가장 단순한 방법은 로컬 경로 (`~/.cache/huggingface/lerobot/HueyWoo/pick_and_place_YYYYMMDD_HHMMSS`)에 저장된 기존 데이터셋을 삭제하고 처음부터 다시 50개를 수집하는 것입니다. 
 
 하지만 지금까지 공들여 쌓은 데이터를 삭제하는 것은 매우 비효율적입니다. lerobot은 이러한 상황을 위해 기존 데이터에 이어서 새로운 에피소드를 추가할 수 있는 기능을 제공합니다. `--resume=true` 옵션을 추가하면, 아래와 같이 기존에 저장된 데이터셋 이후부터 학습 데이터를 이어서 쌓을 수 있습니다. 
 
 ### Resume 기본 사용법
 
-10개를 추가로 수집하고 싶다면:
+10개를 추가로 수집하고 싶다면, 이어서 쌓을 데이터셋의 전체 이름(시각 포함)을 `--dataset.repo_id`에, 그 로컬 폴더를 `--dataset.root`에 지정합니다. 아래 `_20261011_153000` 부분은 `ls ~/.cache/huggingface/lerobot/${HF_USER}/`로 확인한 실제 이름으로 바꾸세요:
 
 ```bash
 lerobot-record \
@@ -369,7 +371,8 @@ lerobot-record \
         wrist: {type: opencv, index_or_path: /dev/cam_wrist, width: 640, height: 480, fps: 25},
     }' \
     --dataset.single_task=${TASK_NAME} \
-    --dataset.repo_id=${HF_USER}/${TASK_NAME} \
+    --dataset.repo_id=${HF_USER}/${TASK_NAME}_20261011_153000 \
+    --dataset.root=$HOME/.cache/huggingface/lerobot/${HF_USER}/${TASK_NAME}_20261011_153000 \
     --dataset.num_episodes=10 \
     --dataset.episode_time_s=15 \
     --dataset.reset_time_s=3 \
@@ -383,6 +386,7 @@ lerobot-record \
 >
 > - `--dataset.num_episodes`는 **추가로 수집할** 에피소드 수를 입력합니다
 > - 10개를 추가 수집하려면 `--dataset.num_episodes=10`로 설정
+> - `--resume=true`에는 기존 데이터셋 폴더를 가리키는 `--dataset.root`가 **필수**입니다 (없으면 `resume() requires an explicit 'root' directory` 오류)
 > - 모든 다른 설정(카메라, 태스크 등)은 기존과 동일하게 유지해야 합니다
 
 ### 키보드 단축키
@@ -427,14 +431,14 @@ lerobot-record \
 다음과 같은 오류가 발생할 때:
 
 ```plaintext
-FileExistsError: [Errno 17] File exists: '/home/sw/.cache/huggingface/lerobot/swp4065/grab_sock'
+FileExistsError: [Errno 17] File exists: '/home/user/.cache/huggingface/lerobot/HueyWoo/pick_and_place_20261011_153000'
 ```
 
 **해결 방법:**
 
 ```bash
 # 캐시 디렉토리에서 해당 데이터셋 폴더 삭제
-rm -rf ~/.cache/huggingface/lerobot/${HF_USER}/grab_sock
+rm -rf ~/.cache/huggingface/lerobot/${HF_USER}/${TASK_NAME}_20261011_153000
 
 # 또는 전체 캐시 정리
 rm -rf ~/.cache/huggingface/lerobot/

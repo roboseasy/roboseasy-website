@@ -3,6 +3,7 @@ title: "LeRobot 설치 (Windows)"
 category: "a-go"
 group: "PC 환경 세팅"
 order: 50
+prev: "setup-pc-windows"
 ---
 
 # [Windows] LeRobot 라이브러리 환경 세팅

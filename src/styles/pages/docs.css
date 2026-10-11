@@ -84,6 +84,7 @@
   border-radius: 12px;
   padding: 48px 56px;
   min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .docs-content h1,
@@ -103,6 +104,13 @@
   border-bottom: 2px solid var(--color-amethyst);
 }
 
+.docs-content h1:not(:first-child) {
+  font-size: 26px;
+  margin-top: 48px;
+  padding-bottom: 8px;
+  border-bottom-width: 1px;
+}
+
 .docs-content h2 {
   font-size: 24px;
   font-weight: var(--fw-bold);
@@ -119,6 +127,24 @@
   font-size: 17px;
   font-weight: var(--fw-semibold);
   margin: 20px 0 8px;
+}
+
+.docs-content strong,
+.docs-content b {
+  font-weight: var(--fw-bold);
+}
+
+.docs-content em,
+.docs-content i {
+  font-style: italic;
+}
+
+.docs-content sup {
+  font-size: 0.72em;
+  line-height: 0;
+  vertical-align: super;
+  margin-left: 1px;
+  color: #64748b;
 }
 
 .docs-content p {
@@ -183,6 +209,81 @@
   border: 1px solid #e2e8f0;
 }
 
+.docs-content td img,
+.docs-content th img {
+  margin: 0 auto;
+}
+
+.docs-content a.img-link {
+  display: block;
+  cursor: zoom-in;
+  text-decoration: none;
+}
+
+.docs-content a.img-link:hover img {
+  border-color: #c4b5fd;
+}
+
+/* 동영상 — YouTube iframe(height="400" 속성)·video 를 16:9 로 */
+.docs-content iframe,
+.docs-content video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 16px 0 24px;
+  border: 0;
+  border-radius: 8px;
+  background: #0f172a;
+}
+
+.docs-content iframe {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.docs-content .video-container {
+  margin: 16px 0 24px;
+}
+
+.docs-content .video-container iframe {
+  margin: 0;
+}
+
+/* 접이식 (details/summary) */
+.docs-content details {
+  margin: 12px 0;
+  padding: 0 18px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.docs-content details + details {
+  margin-top: 8px;
+}
+
+.docs-content summary {
+  padding: 12px 0;
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.5;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.docs-content summary::marker {
+  color: #8b5cf6;
+}
+
+.docs-content details[open] > summary {
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.docs-content details > :last-child {
+  margin-bottom: 16px;
+}
+
 .docs-content hr {
   border: none;
   border-top: 1px solid #e2e8f0;
@@ -198,7 +299,15 @@
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.88em;
-  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* 짧은 인라인 코드(옵션·경로 조각)는 '--' 뒤 등에서 끊기지 않게 — rehype-docs.mjs 가 .cw 를 붙인다 */
+.docs-content code.cw,
+.docs-content code .cw {
+  white-space: nowrap;
 }
 
 .docs-content pre {
@@ -216,6 +325,13 @@
   background: none;
   color: inherit;
   padding: 0;
+  font-size: inherit;
+}
+
+.docs-content pre {
+  tab-size: 4;
+  scrollbar-width: thin;
+  scrollbar-color: #57606a transparent;
 }
 
 /* 코드 블록 래퍼 — Ubuntu/Windows 라벨 바 + 복사 버튼 (rehype-docs.mjs · [...slug].astro) */
@@ -233,7 +349,7 @@
   align-items: center;
   height: 34px;
   padding: 0 16px;
-  background: #1b1f23;
+  background: #161b22;
   color: #c4b5fd;
   font-size: 12px;
   font-weight: var(--fw-semibold);
@@ -249,18 +365,22 @@
 
 .docs-content .code-copy {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  padding: 3px 10px;
+  top: 5px;
+  right: 8px;
+  padding: 2px 10px;
   font-size: 12px;
-  line-height: 20px;
+  line-height: 18px;
   color: #d1d5db;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #21262d;
+  border: 1px solid #30363d;
   border-radius: 6px;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.docs-content .code-block:not(.code-block--labeled) .code-copy {
+  box-shadow: -12px 0 10px -2px #0d1117;
 }
 
 .docs-content .code-block:hover .code-copy,
@@ -270,7 +390,7 @@
 }
 
 .docs-content .code-copy:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: #30363d;
   color: #ffffff;
 }
 
@@ -282,6 +402,11 @@
 @media (hover: none) {
   .docs-content .code-copy {
     opacity: 1;
+  }
+
+  /* 터치 기기는 버튼이 늘 보이므로 라벨 없는 블록 위쪽에 버튼 자리를 비운다 */
+  .docs-content .code-block:not(.code-block--labeled) > pre {
+    padding-top: 38px;
   }
 }
 
@@ -410,6 +535,7 @@
   border-collapse: collapse;
   margin: 16px 0 24px;
   font-size: 14px;
+  background: #ffffff;
 }
 
 .docs-content .table-wrap > table {
@@ -422,10 +548,13 @@
   border: 1px solid #e2e8f0;
   text-align: left;
   color: #374151;
+  line-height: 1.6;
+  vertical-align: top;
+  overflow-wrap: normal; /* keep-all 단어를 쉼표 앞에서 강제로 끊지 않게 */
 }
 
 .docs-content th {
-  background: #f8fafc;
+  background: #f1f5f9;
   font-weight: var(--fw-semibold);
   color: #0f172a;
 }
@@ -443,8 +572,8 @@
 }
 
 .docs-pager__link {
-  flex: 0 0 auto;
-  max-width: 196px;
+  flex: 0 1 auto;
+  max-width: calc(50% - 8px);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -547,10 +676,41 @@
 }
 
 @media screen and (max-width: 768px) {
-  .docs-content {
-    padding: 24px 16px;
-    border-radius: 8px;
+  .docs-layout {
+    padding: 0 0 48px;
   }
+
+  .docs-content {
+    padding: 24px 16px 32px;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .docs-content pre {
+    font-size: 13px;
+    padding: 14px 16px;
+  }
+
+  .docs-pager {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .docs-pager > span:empty {
+    display: none;
+  }
+
+  .docs-pager__link {
+    max-width: none;
+  }
+
+  /* 첫 열에 긴 옵션이 든 표(예: RTC 옵션)는 설명 열이 너무 좁아지지 않게 */
+  .docs-content table:has(td:first-child > code:not(.cw)) td:last-child {
+    min-width: 12em;
+  }
+
+  .docs-content h4 { font-size: 15px; }
+  .docs-content h1:not(:first-child) { font-size: 22px; }
 
   .docs-content th,
   .docs-content td {
@@ -572,7 +732,7 @@
    =========================== */
 .docs-content .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
   margin: 16px 0 24px;
 }

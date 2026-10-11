@@ -3,14 +3,15 @@ title: "SmolVLA 추론"
 category: "a-go"
 group: "Inference"
 order: 210
+prev: "train-smolvla"
 ---
 
 # Model Inference (SmolVLA)
 
 [SmolVLA 학습](/docs/a-go/train-smolvla)에서 파인튜닝한 정책으로 LeKiwi를 자율 실행합니다. SmolVLA는 ACT보다 무겁고 **언어 조건부** 정책이라 추론 방식에 신경 쓸 부분이 몇 가지 더 있습니다. 기본 흐름(호스트 실행 → PC에서 추론)은 [ACT 추론](/docs/a-go/inference-act)과 같으니 먼저 읽어 두는 것을 권합니다.
 
-> **정보** ℹ️ `INFO`
-> <br>**v0.5.1까지는 `lerobot-record`로 추론을 돌렸지만, 0.6.0부터는 `lerobot-rollout`을 씁니다.** (`docs/source/cheat-sheet.mdx`에 명시되어 있습니다.) 이 페이지는 커스텀 스크립트(`lekiwi-inference.py`)와 `lerobot-rollout` 두 가지를 모두 다룹니다.
+> **경고** ⚠️ `WARN`
+> <br>**LeKiwi에서는 3.1절의 `lekiwi-inference.py` 로 실행하세요.** LeRobot 0.6.0의 표준 추론 명령은 `lerobot-rollout` 이지만(v0.5.1까지는 `lerobot-record`), 그대로는 LeKiwi에 쓸 수 없습니다. `lekiwi_client` 를 불러오지 않아 `--robot.type=lekiwi_client` 를 인식하지 못하고, 정책에 넘기는 관측과 행동에서 바퀴 속도 채널(`x.vel`, `y.vel`, `theta.vel`)을 빼 버려 9차원 LeKiwi 정책과 맞지 않습니다. 3.2절부터 나오는 `lerobot-rollout`·RTC 명령은 LeRobot 표준 도구와 RTC 개념을 이해하기 위한 참고용입니다.
 
 ---
 
@@ -19,11 +20,17 @@ order: 210
 SmolVLA는 **언어 조건부** 정책이라 `--task` 문장이 학습 때와 달라지면 동작이 달라집니다. 먼저 데이터셋에 기록된 문장을 확인하세요.
 
 ```bash
+# 우분투
 python -c "
 from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
 m = LeRobotDatasetMetadata('HueyWoo/lekiwi_pick_and_place')
 print(list(m.tasks.index))
 "
+```
+
+```bat
+:: 윈도우
+python -c "from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata; m = LeRobotDatasetMetadata('HueyWoo/lekiwi_pick_and_place'); print(list(m.tasks.index))"
 ```
 
 ```text
@@ -36,25 +43,24 @@ print(list(m.tasks.index))
 
 RTC를 제대로 쓰려면 **추론이 어디서 도는지** 먼저 알아야 합니다.
 
-```text
-┌─────────────────────────┐          ZMQ           ┌───────────────────────┐
-│  PC (GPU, 클라이언트)     │  cmd  : 포트 5555  →   │  LeKiwi (Raspberry Pi) │
-│                         │  obs  : 포트 5556  ←   │                       │
-│  lerobot-rollout        │                        │  lekiwi_host          │
-│  └ SmolVLA 추론 ★       │                        │  └ 모터 + 카메라        │
-└─────────────────────────┘                        └───────────────────────┘
-```
+| 위치 | 실행하는 프로그램 | 하는 일 |
+|---|---|---|
+| PC (GPU, 클라이언트) | `lekiwi-inference.py` | SmolVLA 추론 ★ |
+| LeKiwi (Raspberry Pi) | `lekiwi_host` | 모터 제어 + 카메라 |
+
+둘은 ZMQ로 통신합니다. PC는 포트 5555로 행동 명령(`cmd`)을 보내고, Pi는 포트 5556으로 관측(`obs`)을 보냅니다.
 
 **추론은 Pi가 아니라 PC에서 돕니다.** Pi는 관측을 보내고 명령을 받는 ZMQ 서버(`robots/lekiwi/lekiwi_host.py`)일 뿐입니다. 따라서 실행 순서는 항상 같습니다.
 
-```bash
-# ① 라즈베리파이에서 먼저 호스트 실행 (제어 스크립트 페이지에서 만든 스크립트)
-./start_lekiwi_host.sh lekiwi07
+① 라즈베리파이에서 호스트를 먼저 띄웁니다. [제어 스크립트](/docs/a-go/start-custom-scripts)에서 만든 스크립트입니다.
 
-# ② 그 다음 PC에서 추론 실행 (3~4절)
+```bash
+./start_lekiwi_host.sh lekiwi07
 ```
 
-그래서 LeKiwi의 제어 루프 지연은 두 가지가 겹칩니다.
+② 그다음 PC에서 추론을 실행합니다(3.1절).
+
+추론이 PC에서 돌기 때문에 LeKiwi의 제어 루프 지연은 두 가지가 겹칩니다.
 
 ```text
 총 지연 = 정책 추론 시간 + ZMQ 네트워크 왕복 시간
@@ -69,17 +75,27 @@ RTC를 제대로 쓰려면 **추론이 어디서 도는지** 먼저 알아야 �
 PC에서 conda 환경을 활성화하고 환경 변수를 정합니다.
 
 ```bash
+# 우분투
 conda activate lerobot060
 cd ~/workspace/lekiwi
 export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
-### 3.1. 커스텀 스크립트로 실행 (권장 시작점)
+```bat
+:: 윈도우
+conda activate lerobot060
+cd %USERPROFILE%\workspace\lekiwi
+set "HF_USER=HueyWoo"
+set "TASK_NAME=lekiwi_pick_and_place"
+```
+
+### 3.1. 커스텀 스크립트로 실행 (LeKiwi 권장)
 
 [ACT 추론](/docs/a-go/inference-act)에서 쓴 `lekiwi-inference.py` 를 그대로 씁니다. 사전 검사, 바퀴 속도 제한, `SPACE` 일시정지, `ESC` 시 시작 자세 복귀 같은 안전 장치가 그대로 적용됩니다. 학습 때와 같은 `--rename_map` 을 넘깁니다.
 
 ```bash
+# 우분투
 python lekiwi-inference.py \
   --robot.remote_ip=192.168.0.207 \
   --robot.id=lekiwi07 \
@@ -90,9 +106,21 @@ python lekiwi-inference.py \
   --rename_map='{"observation.images.front": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}'
 ```
 
-조작키(`SPACE`/`ESC`/`Ctrl + C`)와 안전 수칙은 [ACT 추론](/docs/a-go/inference-act)과 같습니다.
+```bat
+:: 윈도우
+python lekiwi-inference.py ^
+  --robot.remote_ip=192.168.0.207 ^
+  --robot.id=lekiwi07 ^
+  --policy.path=%HF_USER%/%TASK_NAME%_smolvla ^
+  --task="Pick up the cube and place it in the box" ^
+  --base_speed_scale=0.3 ^
+  --display_data=true ^
+  --rename_map="{\"observation.images.front\": \"observation.images.camera1\", \"observation.images.wrist\": \"observation.images.camera2\"}"
+```
 
-### 3.2. `lerobot-rollout` 으로 실행 (sync 추론)
+같은 PC에서 학습했다면 `--policy.path` 에 Hub 이름 대신 로컬 체크포인트 경로(`outputs/train/smolvla_lekiwi/<TASK_NAME>/checkpoints/last/pretrained_model`)를 넣어도 됩니다. 조작키(`SPACE`/`ESC`/`Ctrl + C`)와 안전 수칙은 [ACT 추론](/docs/a-go/inference-act)과 같습니다.
+
+### 3.2. `lerobot-rollout` 으로 실행 (참고)
 
 LeRobot 0.6.0의 표준 추론 명령입니다. `--inference.type` 을 생략하면 동기(sync) 방식으로, 추론이 끝날 때까지 로봇이 다음 행동을 기다립니다.
 
@@ -112,17 +140,11 @@ lerobot-rollout \
 > **경고** ⚠️ `WARN`
 > <br>**`--robot.remote_ip`는 필수입니다.** `LeKiwiClientConfig`에 기본값이 없는 필드라 빠뜨리면 실행되지 않습니다. [고정 IP · 무선 연결](/docs/a-go/lekiwi-wifi-static-ip)에서 만든 Pi의 IP를 넣으세요.
 
-로컬 체크포인트를 쓰려면 경로만 바꿉니다.
-
-```bash
---policy.path=outputs/train/smolvla_lekiwi/${TASK_NAME}/checkpoints/last/pretrained_model
-```
-
 ---
 
-## 4. RTC 적용 — LeKiwi 권장 명령어 ⭐
+## 4. RTC 적용 (참고)
 
-**RTC(Real-Time Chunking)** 는 액션 청크 생성을 **인페인팅 문제**로 다룹니다. 이전 청크의 남은 부분(`prev_chunk_left_over`)을 prefix로 고정한 채 다음 청크를 생성해서, **추론이 진행되는 동안에도 로봇이 끊김 없이 이전 청크를 계속 실행**합니다.
+**RTC**(Real-Time Chunking)는 액션 청크 생성을 **인페인팅 문제**로 다룹니다. 이전 청크의 남은 부분(`prev_chunk_left_over`)을 prefix로 고정한 채 다음 청크를 생성해서, **추론이 진행되는 동안에도 로봇이 끊김 없이 이전 청크를 계속 실행**합니다.
 
 ```bash
 lerobot-rollout \
@@ -151,7 +173,7 @@ lerobot-rollout \
 | `--inference.rtc.execution_horizon` | `10` | 한 청크에서 실제로 실행할 스텝 수. **가장 중요한 튜닝 값** |
 | `--inference.rtc.max_guidance_weight` | `10.0` | prefix 일관성 강제 강도. 클수록 이전 청크에 강하게 붙음 |
 | `--inference.rtc.prefix_attention_schedule` | `LINEAR` | `ZEROS` / `ONES` / `LINEAR` / `EXP` |
-| `--inference.rtc.enabled` | `true` |  |
+| `--inference.rtc.enabled` | `true` | RTC 사용 여부 |
 | `--inference.rtc.debug` | `false` | 디노이징 과정 기록 (디버깅용) |
 | `--inference.queue_threshold` | `30` | 액션 큐 임계값 |
 
@@ -169,7 +191,7 @@ SmolVLA는 `chunk_size=50`으로 청크를 뽑습니다. 그중 몇 스텝을 �
 | 기본 (Wi-Fi + 중급 GPU) | `10 ~ 16` | 0.6.0 예제 기본값 근처 |
 | 추론 느림 / Wi-Fi 불안정 | `20 ~ 25` | 끊김 방지 우선. 대신 반응이 둔해짐 |
 
-**튜닝 절차**: `10`으로 시작 → 로봇이 멈칫거리면 5씩 올리기 → 너무 둔하게 반응하면 내리기. `nvidia-smi`로 추론 시간을 같이 보면 판단이 쉽습니다.
+**튜닝 절차**: `10`으로 시작 → 로봇이 멈칫거리면 5씩 올리기 → 너무 둔하게 반응하면 내리기. `nvidia-smi`로 GPU 사용률을 같이 보면 판단이 쉽습니다.
 
 ### RTC가 학습 없이도 켜지는 이유
 
@@ -184,7 +206,8 @@ if is_rtc:
 
 **즉 이미 학습을 마친 체크포인트도 재학습 없이 그대로 RTC로 돌릴 수 있습니다.**
 
-> 참고: RTC는 `predict_action_chunk` 경로에서만 동작합니다. `modeling_smolvla.py:335`에 `select_action`과 함께 쓰지 못한다는 assert가 있습니다.
+> **정보** ℹ️ `INFO`
+> <br>**RTC는 `predict_action_chunk` 경로에서만 동작합니다.** `modeling_smolvla.py:335`에 `select_action`과 함께 쓰지 못한다는 assert가 있습니다. 3.1절의 `lekiwi-inference.py` 는 `select_action` 으로 추론하므로 RTC 없이 동기 방식으로 돕니다.
 
 ---
 
@@ -192,13 +215,13 @@ if is_rtc:
 
 1. **카메라 구성이 데이터 수집 때와 동일**해야 합니다 (개수, 이름, 해상도, 배치 위치). LeKiwi는 Pi 쪽 호스트 설정이 기준입니다.
 2. **`--task` 문장**은 데이터셋 태스크 문장과 같아야 합니다 (1절).
-3. 카메라 이름 매핑은 학습 때 쓴 `rename_map`과 일치해야 합니다. (학습 시 지정한 rename은 preprocessor에 저장되므로 같은 체크포인트를 쓰면 자동 적용됩니다.)
+3. 카메라 이름 매핑은 학습 때 쓴 `rename_map`과 일치해야 합니다. 학습 시 지정한 rename은 preprocessor에 저장되지만, 추론 명령에 준 `--rename_map` 이 그 값을 덮어쓰므로(생략하면 빈 매핑) 추론할 때도 같은 `--rename_map` 을 넘깁니다.
 4. **Pi에서 호스트를 먼저 띄운 뒤** PC에서 추론을 실행하세요.
 5. 처음 돌리는 모델은 바퀴 속도를 낮추고(`--base_speed_scale=0.3`), 로봇 주변을 비운 상태에서 시작합니다.
 
 ---
 
-## 6. `--strategy.type` 선택
+## 6. `--strategy.type` 선택 (참고)
 
 | 값 | 동작 |
 |---|---|
@@ -208,7 +231,7 @@ if is_rtc:
 | `highlight` | 링 버퍼 + 키 입력(`s` 저장 / `h` 푸시)으로 구간 저장 |
 | `dagger` | 사람 개입 교정 (DAgger / RaC) — 추가 데이터 수집에 유용 |
 
-예: RTC로 돌리면서 실패 구간만 사람이 교정해 데이터를 더 모으기
+예: RTC로 돌리면서 실패 구간만 사람이 교정해 데이터를 더 모으기 (`lerobot-rollout` 이 기록하는 데이터셋 이름은 `rollout_` 으로 시작해야 합니다)
 
 ```bash
 lerobot-rollout \
@@ -225,7 +248,7 @@ lerobot-rollout \
   --teleop.type=so101_leader \
   --teleop.port=/dev/ttyACM0 \
   --teleop.id=leader \
-  --dataset.repo_id=${HF_USER}/${TASK_NAME}_dagger \
+  --dataset.repo_id=${HF_USER}/rollout_${TASK_NAME}_dagger \
   --dataset.single_task="Pick up the cube and place it in the box"
 ```
 
@@ -233,9 +256,11 @@ lerobot-rollout \
 
 ## 7. 실습 과제
 
+1·2번은 `lerobot-rollout` 을 쓰는 과제라 LeRobot 0.6.0 그대로는 LeKiwi에서 실행되지 않습니다(페이지 맨 위 경고 참고). LeKiwi에서 바로 할 수 있는 것은 3번입니다.
+
 1. `--inference.type=sync`와 `--inference.type=rtc`로 각각 로봇을 돌려 움직임의 끊김 정도를 비교하기 (같은 체크포인트, 같은 태스크 문장으로)
 2. `--inference.rtc.execution_horizon`을 5 / 10 / 20으로 바꿔가며 반응성과 부드러움의 트레이드오프 체감하기
-3. 5k / 10k / 20k 체크포인트를 각각 로봇에 올려 성공률 비교하기 ([ACT 추론](/docs/a-go/inference-act)의 `lekiwi-evaluate.py` 활용)
+3. 5k / 10k / 20k 체크포인트를 각각 로봇에 올려 성공률 비교하기 ([ACT 추론](/docs/a-go/inference-act)의 `lekiwi-evaluate.py` 활용. 학습 때와 같은 `--rename_map` 을 함께 넘깁니다)
 
 ---
 

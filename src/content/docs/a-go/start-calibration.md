@@ -98,7 +98,7 @@ lerobot-calibrate \
 
 ![](/img/a_go/start-calibration-03.webp)
 
-화면 캡처 과정에서 MAX 열이 `MAX6`, `34760` 처럼 깨져 보이는 부분이 있습니다. 실제 값은 0~4095 범위입니다.
+이 표는 같은 자리에 덮어쓰며 갱신되기 때문에 앞서 찍힌 글자가 남아, MAX 열이 `MAX6`, `34760` 처럼 깨져 보이는 부분이 있습니다. 실제 값은 0~4095 범위입니다.
 
 표의 각 열은 다음을 뜻합니다.
 
@@ -141,7 +141,7 @@ lerobot-calibrate \
     --teleop.id=leader
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-calibrate ^
     --teleop.type=so101_leader ^

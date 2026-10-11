@@ -56,11 +56,11 @@ echo $(uname -m)
 | `$(uname -m)` | CPU 아키텍처 (하드웨어) | `x86_64` (인텔/AMD 64비트), `arm64` (애플 실리콘 M1/M2), `aarch64` (라즈베리 파이/제슨)  |
 
 #### 환경 셋업 
-Python 3.10으로 conda를 이용해서 가상환경을 생성합니다.
+Python 3.12로 conda를 이용해서 가상환경을 생성합니다.
 
 ```bash
 
-conda create -n lerobot python=3.13 -y
+conda create -n lerobot python=3.12 -y
 
 ```
 
@@ -80,7 +80,7 @@ conda install ffmpeg -c conda-forge
 
 ```
 
-> 💡`TIP` 일반적으로 이 명령은 `libsvtav1 encoder`를 사용하여 컴파일된 `ffmpeg 7.x` 버전을 해당 플랫폼에 설치합니다. `libsvtav1`이 지원되지 않는 경우 (`ffmpeg - encoders` 명령으로 지원되는 인코더 목록을 확인하세요), 다음 방법을 시도해 볼 수 있습니다:
+> 💡`TIP` 일반적으로 이 명령은 `libsvtav1 encoder`를 사용하여 컴파일된 `ffmpeg 7.x` 버전을 해당 플랫폼에 설치합니다. `libsvtav1`이 지원되지 않는 경우 (`ffmpeg -encoders` 명령으로 지원되는 인코더 목록을 확인하세요), 다음 방법을 시도해 볼 수 있습니다:
 > 
 > -   _[모든 플랫폼]_ Explicitly install `ffmpeg 7.X` using:
 > 
@@ -102,7 +102,6 @@ uv는 Rust로 작성된 초고속 Python 패키지 관리자로, pip보다 10-10
 # uv 설치 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-
 # 설치 확인
 uv --version
 
@@ -110,20 +109,16 @@ uv --version
 
 
 #### 환경 셋업 
-Python 3.10으로 uv를 이용해서 가상환경을 생성합니다.
+Python 3.12로 uv를 이용해서 가상환경을 생성합니다.
 
 ```bash
-
-uv venv lerobot --python 3.13
-
+uv venv ~/lerobot-env --python 3.12
 ```
 
-그다음, conda 환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다.
+그다음, 가상환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다.
 
 ```bash
-
-source lerobot/bin/activate
-
+source ~/lerobot-env/bin/activate
 ```
 
 이어서 `ffmpeg` 를 해당 환경에 설치합니다.
@@ -141,20 +136,16 @@ sudo apt install ffmpeg
 venv는 Python 표준 라이브러리로, 별도의 설치 없이 가상환경을 생성하고 관리할 수 있습니다.
 
 #### 환경 셋업 
-Python 3.10으로 venv를 이용해서 가상환경을 생성합니다.
+Python 3.12로 venv를 이용해서 가상환경을 생성합니다.
 
 ```bash
-
-python3.10 -m venv lerobot
-
+python3.12 -m venv ~/lerobot-env
 ```
 
 그다음, 가상환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다.
 
 ```bash
-
-source lerobot/bin/activate
-
+source ~/lerobot-env/bin/activate
 ```
 
 이어서 `ffmpeg` 를 해당 환경에 설치합니다.

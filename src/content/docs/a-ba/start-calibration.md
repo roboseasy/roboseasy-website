@@ -104,7 +104,7 @@ lerobot-calibrate \
    성공적으로 완료되면 다음 메시지가 표시됩니다:
 
    ```plaintext
-   Calibration saved to ~/.cache/huggingface/lerobot/calibration/teleoperators/so101_leader/leader.json
+   Calibration saved to ~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/leader.json
    ```
 
 ---
@@ -140,8 +140,8 @@ Follower Arm의 Calibration 과정은 Leader Arm과 동일합니다:
 
 Calibration이 완료되면 다음 위치에 파일이 저장됩니다:
 
-- **Leader Arm**: `~/.cache/huggingface/lerobot/calibration/teleoperators/so101_leader/leader.json`
-- **Follower Arm**: `~/.cache/huggingface/lerobot/calibration/robots/so101_follower/follower.json`
+- **Leader Arm**: `~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/leader.json`
+- **Follower Arm**: `~/.cache/huggingface/lerobot/calibration/robots/so_follower/follower.json`
 
 ### 파일 구성
 

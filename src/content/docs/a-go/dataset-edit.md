@@ -48,14 +48,14 @@ export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
-```bash
+```bat
 :: 윈도우
 conda activate lerobot060
 set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
 ```
 
-편집 도구에 필요한 `dataset` 의존성은 LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서 넣은 `core_scripts`(실행용 PC)와 `training`(훈련용 PC) extras에 이미 들어 있어 따로 설치하지 않아도 됩니다. 실행할 때 `No module named 'datasets'` 오류가 나면 LeRobot을 설치한 방식에 맞는 명령 하나만 실행합니다.
+편집 도구에 필요한 `dataset` 의존성은 LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서 넣은 `core_scripts`(실행용 PC)와 `training`(훈련용 PC) extras에 이미 들어 있어 따로 설치하지 않아도 됩니다. 실행할 때 `'datasets' is required but not installed` 오류가 나면 LeRobot을 설치한 방식에 맞는 명령 하나만 실행합니다.
 
 소스 설치한 경우 (`lerobot` 폴더에서):
 
@@ -89,7 +89,7 @@ lerobot-edit-dataset \
     --operation.show_features=true
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -121,7 +121,7 @@ lerobot-edit-dataset \
     --operation.episode_indices="[0, 2, 5]"
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -160,7 +160,7 @@ lerobot-edit-dataset \
     --operation.splits='{"train": 0.7, "val": 0.2, "test": 0.1}'
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -185,7 +185,7 @@ lerobot-edit-dataset \
     --operation.splits='{"task1": [0, 1, 2, 3], "task2": [4, 5]}'
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -209,7 +209,7 @@ lerobot-edit-dataset \
     --operation.repo_ids="['${HF_USER}/${TASK_NAME}_train', '${HF_USER}/${TASK_NAME}_val']"
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --new_repo_id=%HF_USER%/%TASK_NAME%_merged ^
@@ -240,7 +240,7 @@ lerobot-edit-dataset \
     --operation.feature_names="['observation.images.wrist']"
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -266,7 +266,7 @@ lerobot-edit-dataset \
     --operation.new_task="Pick up the cube and place it in the box"
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -284,7 +284,7 @@ lerobot-edit-dataset \
     --operation.episode_tasks='{"0": "Task A", "1": "Task B"}'
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -312,7 +312,7 @@ lerobot-edit-dataset \
     --push_to_hub=true
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-edit-dataset ^
     --repo_id=%HF_USER%/%TASK_NAME% ^
@@ -331,7 +331,7 @@ lerobot-edit-dataset ^
 python -c "from lerobot.datasets.lerobot_dataset import LeRobotDataset; LeRobotDataset('${HF_USER}/${TASK_NAME}').push_to_hub()"
 ```
 
-```bash
+```bat
 :: 윈도우
 python -c "from lerobot.datasets.lerobot_dataset import LeRobotDataset; LeRobotDataset('%HF_USER%/%TASK_NAME%').push_to_hub()"
 ```
@@ -353,7 +353,7 @@ https://huggingface.co/datasets/<HF_USER>/<데이터셋 이름>
 
 | 증상 | 확인할 것 |
 |---|---|
-| `No module named 'datasets'` 또는 `pyarrow` 오류 | `pip install "lerobot[dataset]==0.6.0"` (소스 설치는 1.2절 참고) |
+| `'datasets' is required but not installed` 또는 `pyarrow` 오류 | `pip install "lerobot[dataset]==0.6.0"` (소스 설치는 1.2절 참고) |
 | 데이터셋을 찾지 못함 | `ls ~/.cache/huggingface/lerobot/${HF_USER}/` 로 로컬 이름 확인. 환경 변수 오타 |
 | 병합 시 특성 불일치 오류 | `info` 로 두 데이터셋의 특성 비교. 카메라 이름, 해상도, FPS |
 | 분할 하나가 만들어지지 않음 (`has no episodes, skipping` 경고) | 에피소드 수 대비 비율이 너무 작아 0개가 됨. 비율을 키우거나 인덱스 지정 방식으로 변경 |

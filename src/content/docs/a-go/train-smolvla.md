@@ -3,14 +3,16 @@ title: "SmolVLA 학습"
 category: "a-go"
 group: "Training"
 order: 190
+prev: "inference-act"
+next: "inference-smolvla"
 ---
 
 # SmolVLA 파인튜닝
 
-LeKiwi로 수집한 데이터셋에 `lerobot/smolvla_base`를 파인튜닝하는 과정을 단계별로 익힙니다. 실습 중 실제로 마주치는 오류와 그 원인을 소스코드 수준에서 함께 다룹니다. 학습은 [ACT 학습](/docs/a-go/train-act)과 마찬가지로 **훈련용 GPU PC**에서 진행합니다.
+LeKiwi로 수집한 데이터셋으로 `lerobot/smolvla_base`를 파인튜닝하는 과정을 단계별로 익힙니다. 실습 중 실제로 마주치는 오류와 그 원인을 소스코드 수준에서 함께 다룹니다. 학습은 [ACT 학습](/docs/a-go/train-act)과 마찬가지로 **훈련용 GPU PC**에서 진행합니다.
 
 > **정보** ℹ️ `INFO`
-> <br>이 페이지는 **LeRobot v0.6.0** 기준입니다. 데이터셋은 [Dataset Record](/docs/a-go/dataset-record)에서 기록하고 Hub에 올린 것을 사용합니다.
+> <br>이 페이지는 **LeRobot v0.6.0** 기준입니다. 데이터셋은 [데이터 기록](/docs/a-go/dataset-record)에서 기록하고 Hub에 올린 것을 사용하며, 명령은 훈련용 PC의 Ubuntu 터미널(bash) 기준입니다.
 
 ---
 
@@ -34,21 +36,23 @@ LeKiwi로 수집한 데이터셋에 `lerobot/smolvla_base`를 파인튜닝하는
 
 ## 2. 사전 준비
 
-### 2-1. 설치
+### 2.1. 설치
 
-훈련용 PC의 conda 환경(`lerobot060`)에서 설치합니다. 추론할 실행용 PC에도 같은 extra가 필요합니다.
+훈련용 PC의 conda 환경(`lerobot060`)에서 설치합니다. 추론할 실행용 PC에도 같은 extra가 필요합니다. LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서 고른 방식(소스 설치 또는 pip 패키지)에 맞는 `pip` 명령 하나만 실행합니다.
 
 ```bash
 conda activate lerobot060
-cd ~/lerobot
-pip install -e ".[smolvla]"    # 소스 설치인 경우
-# 또는
+
+# 소스 설치한 경우 (~/lerobot 폴더에서)
+pip install -e ".[smolvla]"
+
+# pip 패키지로 설치한 경우
 pip install "lerobot[smolvla]==0.6.0"
 ```
 
 `smolvla` extra에는 `transformers`, `num2words`, `accelerate` 등 VLM 백본에 필요한 패키지가 들어있습니다. 이 extra 없이 실행하면 import 에러가 납니다.
 
-### 2-2. Hugging Face 로그인
+### 2.2. Hugging Face 로그인
 
 학습 결과를 Hub에 올리려면(`--policy.push_to_hub=true`) 토큰이 필요합니다.
 
@@ -57,7 +61,7 @@ hf auth login          # write 권한 토큰 입력
 hf auth whoami         # 확인
 ```
 
-### 2-3. 데이터셋 카메라 키 확인 ⭐ 가장 중요
+### 2.3. 데이터셋 카메라 키 확인 ⭐ 가장 중요
 
 학습을 시작하기 **전에** 반드시 내 데이터셋의 관측(observation) 키 이름을 확인하세요. 3절의 `rename_map`을 정하는 근거가 됩니다.
 
@@ -107,11 +111,11 @@ print(m.features['action']['names'])
 ```
 
 > **팁** 💡`TIP`
-> <br>**9차원인데 `smolvla_base`는 6차원으로 학습됐는데 괜찮나요?** 괜찮습니다. 5-1절에서 설명합니다.
+> <br>**`smolvla_base`는 6차원으로 학습됐는데, 9차원 데이터셋으로 파인튜닝해도 되나요?** 네, 됩니다. 이유는 5.1절에서 설명합니다.
 
 ---
 
-## 3. 학습 명령어 (최종본)
+## 3. 학습 명령어
 
 ```bash
 export HF_USER="HueyWoo"
@@ -135,7 +139,7 @@ lerobot-train \
 ```
 
 > **경고** ⚠️ `WARN`
-> <br>`--rename_map`의 JSON은 **반드시 작은따옴표로 감싸고 한 줄로** 작성하세요. 줄바꿈이 들어가면 셸이 다른 인자로 쪼개서 파싱 에러가 납니다.
+> <br>`--rename_map`의 JSON은 **반드시 작은따옴표로 감싸** 하나의 인자로 넘기세요. 따옴표가 빠지면 셸이 JSON 안의 공백에서 인자를 쪼개 파싱 에러가 납니다. 한 줄로 쓰면 가장 실수가 적습니다.
 
 ### 인자 해설
 
@@ -147,9 +151,9 @@ lerobot-train \
 | `--policy.repo_id` | Hub 업로드 대상 repo | `--policy.push_to_hub=true`일 때 필수 |
 | `--policy.device` | `cuda` / `mps` / `cpu` | 사용 불가한 값이면 자동으로 대체 장치로 전환됨 |
 | `--steps` | 총 학습 스텝(에폭 아님) | 20k는 소규모 데이터셋용. 데이터가 많으면 50k~100k |
-| `--batch_size` | 배치 크기 | OOM 나면 8 → 4로 낮추기 |
+| `--batch_size` | 배치 크기 | OOM이 나면 16 → 8 → 4 순으로 낮추기 |
 | `--num_workers` | DataLoader 워커 수 | 비디오 디코딩이 병목. CPU 코어 수의 절반 정도 |
-| `--save_freq` | 체크포인트 저장 주기(스텝) | 20k 학습에 5k면 총 4개 + 마지막 |
+| `--save_freq` | 체크포인트 저장 주기(스텝) | 20k 학습에 5k면 5k·10k·15k·20k 4개가 저장되고 `last` 는 20k를 가리킴 |
 | `--wandb.enable` | Weights & Biases 로깅 | `true`로 켜면 loss 곡선을 웹에서 확인 가능 (권장) |
 
 ---
@@ -185,7 +189,8 @@ if not (policy_subset_of_dataset or dataset_subset_of_policy):
 
 `rename_map`으로 `front→camera1`, `wrist→camera2`를 적용하면 `{camera1, camera2} ⊆ {camera1, camera2, camera3}` 이 되어 통과합니다.
 
-> 참고: `src/lerobot/policies/factory.py`에서 `rename_map`이 비어있지 않으면 이 검증 자체를 건너뜁니다. 즉 rename_map을 쓰면 이름은 사용자 책임입니다.
+> **정보** ℹ️ `INFO`
+> <br>**`rename_map`을 쓰면 이 검증을 건너뜁니다.** `src/lerobot/policies/factory.py`는 `rename_map`이 비어 있지 않으면 위 검증을 하지 않으므로, 매핑 결과가 맞는지는 직접 확인해야 합니다.
 
 ### 카메라가 2개뿐이어도 되는 이유
 
@@ -215,13 +220,13 @@ for num_empty_cameras in range(len(missing_img_keys)):
 | `wrist` (손목 뷰) | `camera2` | 보조 시점 |
 
 > **팁** 💡`TIP`
-> <br>**정답이 하나로 정해진 것은 아닙니다.** 중요한 것은 **학습과 추론에서 동일한 매핑을 쓰는 것**입니다. 학습 때 `front→camera1`로 했는데 추론 때 `wrist→camera1`로 하면 정책이 전혀 다른 그림을 보게 됩니다. (학습 시 지정한 rename은 preprocessor에 함께 저장되므로, 같은 체크포인트를 그대로 불러 쓰면 자동 적용됩니다.)
+> <br>**정답이 하나로 정해진 것은 아닙니다.** 중요한 것은 **학습과 추론에서 동일한 매핑을 쓰는 것**입니다. 학습 때 `front→camera1`로 했는데 추론 때 `wrist→camera1`로 하면 정책이 전혀 다른 그림을 보게 됩니다. 학습 시 지정한 rename은 preprocessor에 함께 저장되지만, `lekiwi-inference.py` 와 `lerobot-rollout` 은 명령에 준 `--rename_map` 으로 이 값을 덮어씁니다(생략하면 빈 매핑으로 덮임). 그러니 추론할 때도 학습 때와 같은 `--rename_map` 을 넘기세요.
 
 ---
 
 ## 5. 차원·설정 이해하기
 
-### 5-1. state/action 차원이 달라도 되는 이유
+### 5.1. state/action 차원이 달라도 되는 이유
 
 학습 로그 맨 위에 찍히는 config를 보면 이렇게 나옵니다.
 
@@ -231,7 +236,7 @@ for num_empty_cameras in range(len(missing_img_keys)):
 'output_features': {'action': {'shape': [6], ...}},
 ```
 
-내 데이터셋은 9차원인데 6차원이라고 나와서 당황할 수 있는데, **이 로그는** **`make_policy()`가 호출되기 전(`lerobot_train.py`의 config 출력 시점)의 사전학습 config를 그대로 찍은 것**입니다. 실제 정책 생성 시 두 가지가 일어납니다.
+내 데이터셋은 9차원인데 6차원으로 나와 당황할 수 있습니다. 하지만 **이 로그는 `make_policy()`가 호출되기 전(`lerobot_train.py`의 config 출력 시점)의 사전학습 config를 그대로 찍은 것**입니다. 실제 정책 생성 시 두 가지가 일어납니다.
 
 **① output_features는 데이터셋 기준으로 항상 덮어써집니다** — `policies/factory.py`:
 
@@ -258,7 +263,7 @@ def prepare_action(self, batch):
 
 > 단, `input_features`의 `observation.state` shape는 사전학습 값(6)이 그대로 남습니다. 정규화(normalizer)는 feature shape가 아니라 **데이터셋 stats 텐서**를 기준으로 동작하므로 실제 학습에는 문제가 없습니다.
 
-### 5-2. 파인튜닝 기본 설정
+### 5.2. 파인튜닝 기본 설정
 
 `SmolVLAConfig`의 파인튜닝 관련 기본값입니다. 대부분 **그대로 두는 것이 좋습니다.**
 
@@ -280,7 +285,7 @@ scheduler_decay_lr:      2.5e-6
 
 - `--use_policy_training_preset=true`(기본값)이면 위 값이 자동 적용됩니다. 개별 조정은 `--policy.optimizer_lr=5e-5` 처럼 할 수 있습니다.
 
-### 5-3. 자주 만지는 하이퍼파라미터
+### 5.3. 자주 만지는 하이퍼파라미터
 
 ```bash
 --policy.freeze_vision_encoder=false   # 데이터가 충분히 많을 때 비전까지 학습 (VRAM ↑)
@@ -300,6 +305,8 @@ scheduler_decay_lr:      2.5e-6
 lerobot-train: error: unrecognized arguments: --dtype=bfloat16
 ```
 
+`--policy.path` 로 정책을 불러오면 `--policy.*` 인자는 앞의 `policy.` 를 뗀 채 정책 설정으로 넘어가므로, 오류 메시지에는 `--dtype=bfloat16` 으로 찍힙니다.
+
 **원인**: `dtype` 필드는 모든 정책에 있는 게 아닙니다. `pi0`, `pi05`, `pi0_fast`, `eo1`, `xvla`, `lingbot_va`에만 있고 **`smolvla`에는 없습니다.**
 
 `src/lerobot/scripts/lerobot_train.py`:
@@ -318,7 +325,8 @@ accelerate launch --mixed_precision=bf16 $(which lerobot-train) \
   ...  # 나머지 동일
 ```
 
-> 주의: `--policy.use_amp=true`는 **파싱은 되지만 학습 스크립트에서 사용되지 않습니다.** 이 플래그는 `lerobot_eval.py`에서만 쓰입니다. 학습에서 AMP를 쓰려면 위 방법을 쓰세요.
+> **경고** ⚠️ `WARN`
+> <br>**`--policy.use_amp=true` 로는 학습에 AMP가 켜지지 않습니다.** 이 플래그는 파싱은 되지만 학습 스크립트(`lerobot_train.py`)에서는 쓰이지 않고, 평가·추론 코드(`lerobot_eval.py`, `lerobot-rollout` 의 sync 추론)에서만 쓰입니다. 학습에서 AMP(혼합정밀)를 쓰려면 위의 `accelerate launch` 방법을 쓰세요.
 
 ---
 
@@ -328,8 +336,8 @@ accelerate launch --mixed_precision=bf16 $(which lerobot-train) \
 
 체크리스트:
 
-1. 2-3절 명령으로 데이터셋의 실제 카메라 키를 확인했는가?
-2. rename_map JSON이 한 줄이고 작은따옴표로 감싸졌는가?
+1. 2.3절 명령으로 데이터셋의 실제 카메라 키를 확인했는가?
+2. `rename_map` JSON을 작은따옴표로 감싸 한 줄로 넘겼는가?
 3. 매핑 결과가 `camera1`, `camera2`, `camera3` 중 일부인가?
 
 ---
@@ -344,11 +352,9 @@ FileExistsError: Output directory outputs/train/... already exists and resume is
 
 **해결** — 셋 중 하나:
 
-```bash
-rm -rf outputs/train/smolvla_lekiwi/${TASK_NAME}   # ① 지우고 새로 학습
---output_dir=outputs/train/smolvla_lekiwi/run2     # ② 다른 경로 사용
---resume=true                                       # ③ 이어서 학습 (7절 참고)
-```
+1. 지우고 새로 학습: `rm -rf outputs/train/smolvla_lekiwi/${TASK_NAME}`
+2. 다른 경로 사용: `--output_dir=outputs/train/smolvla_lekiwi/run2`
+3. 이어서 학습: 7절처럼 `--config_path` 와 `--resume=true` 로 재개
 
 ---
 
@@ -386,15 +392,16 @@ outputs/train/smolvla_lekiwi/lekiwi_pick_and_place/
 
 ### 이어서 학습
 
-- `--config_path`로 체크포인트를 가리키고 `--resume=true`를 붙입니다.
+`--config_path`로 체크포인트의 `train_config.json` 을 가리키고 `--resume=true`를 붙입니다. `pretrained_model` 폴더까지만 주면 LeRobot이 체크포인트 위치를 한 단계 위로 잘못 잡아 재개에 실패하므로, 파일 이름까지 적습니다.
 
 ```bash
 # 로컬 체크포인트에서 재개
 lerobot-train \
-  --config_path=outputs/train/smolvla_lekiwi/${TASK_NAME}/checkpoints/last/pretrained_model \
+  --config_path=outputs/train/smolvla_lekiwi/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
   --resume=true
 
 # Hub repo에서 재개 (최신 체크포인트를 자동으로 내려받음)
+# 학습할 때 --save_checkpoint_to_hub=true 로 체크포인트를 Hub에 올려 둔 경우에만 가능
 lerobot-train --config_path=${HF_USER}/${TASK_NAME}_smolvla --resume=true
 ```
 
@@ -402,11 +409,9 @@ lerobot-train --config_path=${HF_USER}/${TASK_NAME}_smolvla --resume=true
 
 ---
 
----
-
 ## 8. 0.6.0 데이터로딩 개선 — 무엇이 자동이고 무엇이 수동인가
 
-0.6.0 릴리스 노트는 "비디오 데이터셋 학습이 최대 2배 빨라졌다"고 말합니다. **교육 목적상 중요한 것은 어느 것이 기본으로 켜져 있고 어느 것이 직접 켜야 하는지**입니다.
+0.6.0 릴리스 노트는 "비디오 데이터셋 학습이 최대 2배 빨라졌다"고 말합니다. **중요한 것은 어느 것이 기본으로 켜져 있고 어느 것을 직접 켜야 하는지**입니다.
 
 | 개선 사항 | 기본 동작 | 근거 |
 |---|---|---|
@@ -442,7 +447,7 @@ lerobot-train \
   --persistent_workers=true
 ```
 
-> 앞선 학습 로그를 다시 보면 `'return_uint8': False`, `'persistent_workers': True`로 찍혀 있습니다. 설정이 실제로 어떻게 들어갔는지는 항상 이 config 덤프로 확인하세요.
+> 학습을 시작하면 터미널 맨 위에 찍히는 config 덤프에 기본값 `'return_uint8': False`, `'persistent_workers': True` 가 그대로 보입니다. 설정이 실제로 어떻게 들어갔는지는 항상 이 config 덤프로 확인하세요.
 
 **효과 판단법**: 9절의 wandb 지표에서 `dataloading_s`가 `update_s`보다 크면 데이터로딩 병목입니다. 이때 `--dataset.return_uint8=true`와 `--num_workers` 증가가 듣습니다. 반대로 `update_s`가 훨씬 크면 GPU 병목이라 이 옵션으로는 거의 달라지지 않습니다.
 
@@ -454,14 +459,14 @@ lerobot-train \
 
 | 지표 | 정상 패턴 |
 |---|---|
-| `loss` | 초반 급락 후 완만한 하강. 1k 스텝 부근까지는 warmup이라 불안정해도 정상 |
-| `lr` | 0 → 1e-4 (1k 스텝 warmup) → cosine으로 2.5e-6까지 감소 |
+| `loss` | 초반 급락 후 완만한 하강. 초반 warmup 구간은 불안정해도 정상 |
+| `lr` | 0 → 1e-4 (warmup) → cosine으로 2.5e-6까지 감소. `--steps` 가 `scheduler_decay_steps`(30k)보다 작으면 warmup·decay 길이가 같은 비율로 자동으로 줄어듦 (20k 학습이면 warmup 약 670스텝, 20k 스텝에서 2.5e-6 도달) |
 | `grad_norm` | 10 근처에서 clipping. 계속 10에 붙어있으면 lr을 낮춰볼 것 |
 | `dataloading_s` | 이 값이 `update_s`보다 크면 데이터 로딩 병목 → `--num_workers` 증가 |
 
 **현실적인 기준**: loss 숫자보다 **실제 로봇에서의 성공률**이 진짜 지표입니다. 5k / 10k / 20k 체크포인트를 각각 로봇에 올려 비교해 보세요. 소규모 데이터셋에서는 20k보다 10k가 더 나은 경우도 흔합니다(과적합).
 
-### 데이터 양과 스텝 수 감
+### 데이터 양에 따른 스텝 수
 
 이번 실습 데이터셋은 **50 에피소드 / 11,386 프레임**입니다. batch_size 16 기준으로 20,000 스텝이면 약 320,000 샘플 = 전체 데이터를 **약 28회 반복**하는 셈입니다.
 
@@ -477,7 +482,7 @@ lerobot-train \
 
 ## 10. 실습 과제
 
-1. 2-3절 스크립트로 자기 데이터셋의 카메라 키를 출력하고, 알맞은 `rename_map`을 직접 작성해 보기
+1. 2.3절 스크립트로 자기 데이터셋의 카메라 키를 출력하고, 알맞은 `rename_map`을 직접 작성해 보기
 2. 일부러 `--rename_map`을 빼고 실행해서 오류 ②를 재현하고, 에러 메시지를 읽어 보기
 3. `--steps=1000 --save_freq=500`으로 짧게 돌려 체크포인트 디렉터리 구조 확인하기
 4. `--resume=true`로 이어 학습이 되는지 확인하기
@@ -491,19 +496,20 @@ lerobot-train \
 ```bash
 # 데이터셋 정보 확인 (에피소드 수, feature 키, 태스크 문장)
 python -c "from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata as M; \
-           m=M('HF_USER/DATASET'); print(m.total_episodes, list(m.features), list(m.tasks.index))"
+           m=M('${HF_USER}/${TASK_NAME}'); print(m.total_episodes, list(m.features), list(m.tasks.index))"
 
 # 사용 가능한 정책 인자 전체 보기
 lerobot-train --policy.path=lerobot/smolvla_base --help
 
-# 학습 (핵심 4개 인자)
+# 학습 (핵심 인자)
 lerobot-train --policy.path=lerobot/smolvla_base \
-              --dataset.repo_id=HF_USER/DATASET \
-              --rename_map='{"observation.images.front": "observation.images.camera1"}' \
-              --output_dir=outputs/train/my_run
+              --dataset.repo_id=${HF_USER}/${TASK_NAME} \
+              --rename_map='{"observation.images.front": "observation.images.camera1", "observation.images.wrist": "observation.images.camera2"}' \
+              --policy.repo_id=${HF_USER}/${TASK_NAME}_smolvla \
+              --output_dir=outputs/train/smolvla_lekiwi/${TASK_NAME}
 
 # 재개
-lerobot-train --config_path=outputs/train/my_run/checkpoints/last/pretrained_model --resume=true
+lerobot-train --config_path=outputs/train/smolvla_lekiwi/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json --resume=true
 ```
 
 ### 관련 소스 파일
@@ -524,8 +530,12 @@ lerobot-train --config_path=outputs/train/my_run/checkpoints/last/pretrained_mod
 ## 다음 단계
 
 <div class="card-grid">
+  <a href="/docs/a-go/inference-act" class="card">
+    <h3>🧭 ACT 추론</h3>
+    <p>추론의 기본 흐름 · 조작키 · 안전 수칙 · 성공률 평가. SmolVLA 추론 전에 먼저 읽어 두세요</p>
+  </a>
   <a href="/docs/a-go/inference-smolvla" class="card">
     <h3>🤖 SmolVLA 추론</h3>
-    <p>학습한 SmolVLA 정책으로 LeKiwi를 자율 실행합니다 (lerobot-rollout · RTC)</p>
+    <p>파인튜닝한 SmolVLA 정책으로 LeKiwi를 자율 실행 · RTC 개념</p>
   </a>
 </div>

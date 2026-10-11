@@ -33,10 +33,11 @@ SO-101은 6축 오픈소스 로봇 팔로, 3D 프린팅 부품과 STS3215 서보
 **가상환경 활성화**
 
 ```bash
-cd lerobot
+cd ~/lerobot
 
-# 가상환경 활성화
-source .venv/bin/activate
+# 가상환경 활성화 (설치 가이드에서 만든 환경)
+conda activate lerobot
+# uv 또는 venv 로 만들었다면: source ~/lerobot-env/bin/activate
 ```
 
 **Feetech SDK 설치**

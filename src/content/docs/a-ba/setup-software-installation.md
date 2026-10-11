@@ -134,17 +134,13 @@ uv --version
 Python 3.12으로 uv를 이용해서 가상환경을 생성합니다:
 
 ```bash
-
-uv venv lerobot --python 3.12
-
+uv venv ~/lerobot-env --python 3.12
 ```
 
 그다음, 가상환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다:
 
 ```bash
-
-source lerobot/bin/activate
-
+source ~/lerobot-env/bin/activate
 ```
 
 이어서 `ffmpeg` 를 해당 환경에 설치합니다:
@@ -165,17 +161,13 @@ venv는 Python 표준 라이브러리로, 별도의 설치 없이 가상환경�
 Python 3.12으로 venv를 이용해서 가상환경을 생성합니다:
 
 ```bash
-
-python3.12 -m venv lerobot
-
+python3.12 -m venv ~/lerobot-env
 ```
 
 그다음, 가상환경을 활성화합니다. 이후 lerobot 구동 시에는 항상 이 환경에 진입한 상태여야 합니다:
 
 ```bash
-
-source lerobot/bin/activate
-
+source ~/lerobot-env/bin/activate
 ```
 
 이어서 `ffmpeg` 를 해당 환경에 설치합니다:
@@ -251,18 +243,15 @@ pip show lerobot | grep -i version
 특정 버전(예: `v0.5.1`)을 설치하고 싶다면, clone 시 `--branch` 옵션으로 해당 버전의 태그를 지정할 수 있습니다:
 
 ```bash
-git clone --branch v0.6.0 --depth 1 https://github.com/huggingface/lerobot.git 
-
+git clone --branch v0.5.1 --depth 1 https://github.com/huggingface/lerobot.git
 cd lerobot
 ```
 
 또는 이미 clone한 repository에서 특정 버전 태그로 checkout할 수도 있습니다:
 
 ```bash
-cd lerobot 
-
-git fetch --tags 
-
+cd lerobot
+git fetch --tags
 git checkout v0.5.1
 ```
 
@@ -364,7 +353,7 @@ pip install lerobot[xvla]
 
 LeRobot이 제대로 설치되지 않았습니다. 다음을 확인하세요:
 
-- 가상환경이 활성화되었는지 확인 (`source .venv/bin/activate`)
+- 가상환경이 활성화되었는지 확인 (`conda activate lerobot` 또는 `source ~/lerobot-env/bin/activate`)
 - `uv pip install -e .` 명령을 lerobot 폴더 내에서 실행했는지 확인
 
 </details>

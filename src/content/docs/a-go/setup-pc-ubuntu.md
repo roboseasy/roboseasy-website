@@ -3,6 +3,7 @@ title: "Ubuntu PC 세팅"
 category: "a-go"
 group: "PC 환경 세팅"
 order: 20
+next: "setup-lerobot-ubuntu"
 ---
 
 # Ubuntu 24.04 PC 세팅 (GPU 드라이버 · CUDA)
@@ -61,7 +62,7 @@ sudo sh cuda_12.8.0_570.86.10_linux.run
 
 1. **Continue**를 누르고 **accept**를 입력합니다.
 2. **설치 옵션 선택(Installer Item Selection):**
-   - `[X] Driver` 라고 되어 있는 부분에서 **스페이스바**를 눌러 `[ ] Driver` (체크 해제) 상태로 만드세요.
+   - `[X] Driver` 라고 되어 있는 부분에서 **스페이스바**(또는 화면 하단 안내대로 `Enter`)를 눌러 `[ ] Driver` (체크 해제) 상태로 만드세요.
    - 1단계에서 이미 NVIDIA 드라이버를 설치했으므로, 여기서 또 설치하면 충돌이 납니다.
 3. **Install**로 내려가서 엔터를 누릅니다.
 

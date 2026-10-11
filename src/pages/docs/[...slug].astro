@@ -57,8 +57,16 @@ const siblings = (await getCollection('docs', ({ data }) => data.category === ca
   (a, b) => a.data.order - b.data.order
 );
 const idx = siblings.findIndex((e) => e.id === entry.id);
-const prev = idx > 0 ? siblings[idx - 1] : null;
-const next = idx < siblings.length - 1 ? siblings[idx + 1] : null;
+// frontmatter 의 prev/next(같은 카테고리 slug)가 있으면 order 순서 대신 그 문서로 잇는다
+// (카테고리 소개 문서는 'index' 로 적는다 — Astro 는 index.md 의 slug 에서 '/index' 를 떼므로 둘 다 비교)
+const bySlug = (slug?: string) =>
+  slug
+    ? siblings.find((e) =>
+        slug === 'index' ? e.slug === category || e.slug === `${category}/index` : e.slug === `${category}/${slug}`
+      ) ?? null
+    : null;
+const prev = bySlug(entry.data.prev) ?? (idx > 0 ? siblings[idx - 1] : null);
+const next = bySlug(entry.data.next) ?? (idx < siblings.length - 1 ? siblings[idx + 1] : null);
 
 function pagerHref(e: CollectionEntry<'docs'>): string {
   return `/docs/${entrySlugToParam(e.slug)}`;
@@ -74,6 +82,7 @@ const seoDesc = entry.data.description ?? hero.description;
     <article class="docs-content">
       <Content />
 
+      {(prev || next) && (
       <nav class="docs-pager" aria-label="문서 페이지 네비게이션">
         {prev ? (
           <a class="docs-pager__link docs-pager__link--prev" href={pagerHref(prev)}>
@@ -88,6 +97,7 @@ const seoDesc = entry.data.description ?? hero.description;
           </a>
         ) : <span></span>}
       </nav>
+      )}
     </article>
   </div>
 

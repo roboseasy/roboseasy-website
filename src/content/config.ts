@@ -31,6 +31,12 @@ const docs = defineCollection({
     order: z.number(),
     /** SEO description (선택) */
     description: z.string().optional(),
+    /**
+     * 이전/다음 버튼이 가리킬 같은 카테고리 문서 slug (선택, 예: 'setup-lerobot-ubuntu', 'index').
+     * 기본은 order 순서. Ubuntu/Windows 처럼 갈래가 나뉜 문서에서 같은 갈래로 잇고 싶을 때 쓴다.
+     */
+    prev: z.string().optional(),
+    next: z.string().optional(),
   }),
 });
 

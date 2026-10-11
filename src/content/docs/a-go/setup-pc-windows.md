@@ -3,6 +3,8 @@ title: "Windows PC 세팅"
 category: "a-go"
 group: "PC 환경 세팅"
 order: 30
+prev: "index"
+next: "setup-lerobot-windows"
 ---
 
 # Windows 11 PC 세팅 (GPU 드라이버 · CUDA)
@@ -80,7 +82,7 @@ Visual Studio가 없다는 안내가 나오면 체크박스를 선택하고 **NE
 
 ![](/img/a_go/setup-pc-windows-15.webp)
 
-설치 패키지를 내려받으며 설치가 진행됩니다.
+설치가 진행됩니다(`exe (network)` 설치 파일은 이 단계에서 설치 패키지를 내려받습니다).
 
 ![](/img/a_go/setup-pc-windows-16.webp)
 

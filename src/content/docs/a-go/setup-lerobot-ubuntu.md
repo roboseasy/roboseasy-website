@@ -3,6 +3,8 @@ title: "LeRobot 설치 (Ubuntu)"
 category: "a-go"
 group: "PC 환경 세팅"
 order: 40
+prev: "setup-pc-ubuntu"
+next: "lekiwi-wired-connection"
 ---
 
 # [Ubuntu] LeRobot 라이브러리 환경 세팅

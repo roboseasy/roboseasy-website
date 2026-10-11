@@ -49,7 +49,7 @@ export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
-```bash
+```bat
 :: 윈도우
 conda activate lerobot060
 set "HF_USER=HueyWoo"
@@ -66,7 +66,7 @@ lerobot-dataset-viz \
     --display-compressed-images
 ```
 
-```bash
+```bat
 :: 윈도우
 lerobot-dataset-viz ^
     --repo-id=%HF_USER%/%TASK_NAME% ^

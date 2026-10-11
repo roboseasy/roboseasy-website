@@ -45,7 +45,7 @@ LeKiwi는 프로그램 하나가 로봇을 통째로 움직이지 않습니다. 
   </a>
   <a href="/docs/a-go/start-calibration" class="card">
     <h3>🎮 Start</h3>
-    <p>캘리브레이션, 텔레오퍼레이션, 카메라·USB 포트 고정, 제어 스크립트</p>
+    <p>캘리브레이션, 텔레오퍼레이션, 카메라와 USB 포트 고정, 제어 스크립트</p>
   </a>
   <a href="/docs/a-go/dataset-record" class="card">
     <h3>📹 Dataset</h3>

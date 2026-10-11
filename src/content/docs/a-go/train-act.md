@@ -3,11 +3,12 @@ title: "ACT 학습"
 category: "a-go"
 group: "Training"
 order: 180
+next: "inference-act"
 ---
 
 # ACT 학습 (Hub 데이터셋 다운로드 & Training)
 
-[데이터 기록](/docs/a-go/dataset-record)에서 기록하고 [데이터셋 편집](/docs/a-go/dataset-edit)에서 정리해 Hub에 올린 데이터셋으로, 이제 **정책(policy)** 을 학습시킵니다. 정책은 카메라 영상과 관절 상태를 입력받아 다음 행동을 내놓는 신경망이며, 학습이 끝나면 사람이 리더 암을 잡지 않아도 로봇이 스스로 작업을 수행합니다.
+[데이터 기록](/docs/a-go/dataset-record)에서 기록하고 [데이터셋 편집](/docs/a-go/dataset-edit)에서 정리해 Hub에 올린 데이터셋으로, 이제 **정책**(policy)을 학습시킵니다. 정책은 카메라 영상과 관절 상태를 입력받아 다음 행동을 내놓는 신경망이며, 학습이 끝나면 사람이 리더 암을 잡지 않아도 로봇이 스스로 작업을 수행합니다.
 
 이 페이지는 **로봇을 조작하던 PC가 아닌 별도의 GPU PC에서 학습한다**는 것을 전제로 합니다. 데이터는 실행용 PC에서 기록해 Hub에 올렸고, 훈련용 PC는 그것을 Hub에서 내려받아 학습한 뒤 결과 모델을 다시 Hub에 올립니다. 실행용 PC는 그 모델을 받아 [ACT 추론](/docs/a-go/inference-act)에서 로봇을 움직입니다. Hub가 두 PC 사이의 전달 통로입니다.
 
@@ -17,7 +18,7 @@ order: 180
 | **ACT 학습 (이 페이지)** | **훈련용 GPU PC** | 데이터셋 다운로드, ACT 학습, 모델 Hub 업로드 |
 | [ACT 추론](/docs/a-go/inference-act) | 실행용 PC | 모델 다운로드, LeKiwi에서 모델 추론 |
 
-이 페이지에서는 LeRobot이 기본으로 제공하는 정책 중 가장 먼저 추천되는 **ACT** 를 학습시킵니다.
+이 페이지에서는 LeRobot이 기본으로 제공하는 정책 중 가장 먼저 추천되는 **ACT**를 학습시킵니다.
 
 > 🎯 **학습 목표**
 >
@@ -47,7 +48,7 @@ ACT는 트랜스포머 기반이며 세 부분으로 이루어집니다[1].
 2. **트랜스포머 인코더.** 카메라 특징, 관절 상태, 학습된 잠재 변수를 종합합니다.
 3. **트랜스포머 디코더.** cross-attention으로 앞으로 수행할 행동 시퀀스를 한 번에 생성합니다.
 
-**Action Chunking** 은 행동을 한 스텝씩이 아니라 여러 스텝 묶음(chunk)으로 예측한다는 뜻입니다. 기본 설정은 100스텝, 즉 30 FPS 데이터셋에서 약 3초 분량의 행동을 한 번에 내놓습니다. 매 스텝 판단하는 방식보다 동작이 부드럽고 일관됩니다.
+**Action Chunking**은 행동을 한 스텝씩이 아니라 여러 스텝 묶음(chunk)으로 예측한다는 뜻입니다. 기본 설정은 100스텝, 즉 30 FPS 데이터셋에서 약 3초 분량의 행동을 한 번에 내놓습니다. 매 스텝 판단하는 방식보다 동작이 부드럽고 일관됩니다.
 
 ### 1.3. LeKiwi 데이터셋과의 대응
 
@@ -65,7 +66,7 @@ SO-ARM 단독 데이터셋은 6차원이지만 LeKiwi는 이동 베이스가 포
 
 ## 2. [훈련용 PC] 데이터셋 내려받기
 
-여기서부터는 [LeRobot 설치](/docs/a-go/setup-lerobot-ubuntu)에서 `lerobot[training]` 을 설치하고 GPU 인식을 확인한 **훈련용 PC** 에서 진행합니다. 실행용 PC에서 하던 터미널을 그대로 쓰는 것이 아니라, 훈련용 PC에 접속해 conda 환경을 활성화한 새 터미널입니다.
+여기서부터는 LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서 `lerobot[training]` 을 설치하고 GPU 인식을 확인한 **훈련용 PC**에서 진행합니다. 실행용 PC에서 하던 터미널을 그대로 쓰는 것이 아니라, 훈련용 PC에 접속해 conda 환경을 활성화한 새 터미널입니다. 훈련용 PC의 명령은 Ubuntu 터미널(bash) 기준입니다.
 
 ```bash
 conda activate lerobot060
@@ -76,7 +77,7 @@ conda activate lerobot060
 훈련용 PC는 아직 Hub에 로그인되어 있지 않습니다. 데이터셋을 받고 학습 결과를 올리기 위해 [데이터 기록](/docs/a-go/dataset-record)과 **같은 계정**으로 로그인합니다. 토큰은 [데이터 기록](/docs/a-go/dataset-record)에서 만든 것을 그대로 쓰면 됩니다.
 
 ```bash
-hf auth login --token <hf_토큰>
+hf auth login --token <hf_복사한토큰>
 hf auth whoami
 ```
 
@@ -90,7 +91,7 @@ export TASK_NAME="lekiwi_pick_and_place"
 export TASK_DESCRIPTION="Pick up the cube and place it in the box"
 ```
 
-`TASK_DESCRIPTION` 은 [데이터 기록](/docs/a-go/dataset-record) 기록 명령의 `--dataset.single_task` 와 같은 문장이어야 합니다. ACT 자체는 언어 입력을 쓰지 않지만 [ACT 추론](/docs/a-go/inference-act)의 추론 스크립트가 이 문장을 데이터셋의 작업 설명과 맞춰 보기 때문입니다.
+`TASK_DESCRIPTION` 은 [데이터 기록](/docs/a-go/dataset-record) 기록 명령의 `--dataset.single_task` 와 같은 문장으로 둡니다. ACT는 언어 입력을 쓰지 않아 학습에는 쓰이지 않지만, [ACT 추론](/docs/a-go/inference-act)에서 추론 스크립트의 `--task` 로 이 문장을 넘깁니다.
 
 ### 2.3. 데이터셋 내려받기
 
@@ -129,7 +130,7 @@ lerobot-train \
   --policy.device=cuda \
   --job_name=${TASK_NAME} \
   --output_dir=outputs/train/act_lekiwi/${TASK_NAME} \
-  --steps=100_000 \
+  --steps=50_000 \
   --save_checkpoint=true \
   --save_freq=10_000 \
   --batch_size=8 \
@@ -196,18 +197,26 @@ lerobot-train \
 https://huggingface.co/<HF_USER>/<TASK_NAME>_act
 ```
 
-업로드 없이 학습을 끝냈거나 특정 체크포인트를 올리고 싶다면 Python으로 직접 올립니다.
+업로드 없이 학습을 끝냈거나 특정 체크포인트를 올리고 싶다면 체크포인트의 `pretrained_model` 폴더를 통째로 올립니다. 이 폴더에는 모델 가중치와 함께 추론에 필요한 전처리·후처리 파일(`policy_preprocessor*`, `policy_postprocessor*`, 정규화 통계 포함)이 들어 있어, 하나라도 빠지면 실행용 PC에서 모델을 불러오지 못합니다.
 
 ```bash
-python -c "from lerobot.policies.act.modeling_act import ACTPolicy; ACTPolicy.from_pretrained('outputs/train/act_lekiwi/${TASK_NAME}/checkpoints/last/pretrained_model').push_to_hub('${HF_USER}/${TASK_NAME}_act')"
+hf upload ${HF_USER}/${TASK_NAME}_act outputs/train/act_lekiwi/${TASK_NAME}/checkpoints/last/pretrained_model
 ```
+
+`last` 대신 `030000` 처럼 스텝 번호를 넣으면 그 체크포인트가 올라갑니다.
 
 ### 4.2. [실행용 PC] 모델 내려받기
 
 로봇을 움직이는 실행용 PC는 훈련용 PC와 다른 컴퓨터인 경우가 많습니다. [ACT 추론](/docs/a-go/inference-act)의 추론 스크립트는 `--policy.path` 에 Hub 이름을 주면 자동으로 받으므로 별도 작업이 없습니다. 미리 받아 두려면 다음 명령을 씁니다.
 
 ```bash
+# 우분투
 hf download ${HF_USER}/${TASK_NAME}_act
+```
+
+```bat
+:: 윈도우
+hf download %HF_USER%/%TASK_NAME%_act
 ```
 
 훈련용 PC와 실행용 PC가 같은 컴퓨터라면 Hub를 거치지 않고 체크포인트 경로를 그대로 쓰면 됩니다.

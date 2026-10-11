@@ -40,8 +40,6 @@ A-Ba(SO-ARM101)은 LeRobot 생태계에서 지원하는 저가형 로봇 팔입�
 
 ## 💰 비용 분석
 
-### A-Ba(SO-ARM101) 시스템
-
 ### Leader Arm
 
 *   [STS3215 서보 모터](https://ko.aliexpress.com/item/1005008600633508.html?spm=a2g0o.productlist.main.8.5ea35e91gdAdxU&algo_pvid=55fe67ff-1a8f-447f-86ec-92c0f6f6fe92&algo_exp_id=55fe67ff-1a8f-447f-86ec-92c0f6f6fe92-7&pdp_ext_f=%7B%22order%22%3A%22104%22%2C%22eval%22%3A%221%22%7D&pdp_npi=6%40dis%21KRW%2128900%2128900%21%21%2120.23%2120.23%21%40212a70c017566214535464313e41f0%2112000045901646487%21sea%21KR%216197971104%21X%211%210%21n_tag%3A-29919%3Bd%3Af9a7fa7%3Bm03_new_user%3A-29895&curPageLogUid=M5rDpRc7GlNc&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005008600633508%7C_p_origin_prod%3A) (중국 가격 약 25,000원 x6)
@@ -111,7 +109,7 @@ A-Ba(SO-ARM101)은 LeRobot 생태계에서 지원하는 저가형 로봇 팔입�
 SO ARM을 시작하기 전에 다음 사항들을 확인해주세요:
 
 1.  **하드웨어 준비**: A-Ba(SO-ARM101) 키트
-2.  **소프트웨어 환경**: Python 3.8+ 및 필수 라이브러리
+2.  **소프트웨어 환경**: Python 3.12+ 및 필수 라이브러리
 3.  **기본 지식**: 로봇공학 및 머신러닝 기초
 
 ## 시작 가이드
@@ -139,4 +137,4 @@ A-Ba(SO-ARM101)을 처음 시작하시나요? 아래 순서를 따라 진행하�
 </div>
 
 > **실습 준비**
-> <br>모든 단계를 순서대로 따라하시면 A-Ba(SO-ARM101) Max를 이용한 LeRobot 실습을 성공적으로 진행할 수 있습니다!
+> <br>모든 단계를 순서대로 따라하시면 A-Ba(SO-ARM101)을 이용한 LeRobot 실습을 성공적으로 진행할 수 있습니다!

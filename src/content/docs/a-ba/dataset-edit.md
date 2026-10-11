@@ -119,7 +119,7 @@ lerobot-edit-dataset \
 ```bash
 # 학습 및 검증 분할을 다시 하나의 데이터셋으로 병합
 lerobot-edit-dataset \
-    --repo_id=${HF_USER}/${TASK_NAME}_merged \
+    --new_repo_id=${HF_USER}/${TASK_NAME}_merged \
     --operation.type=merge \
     --operation.repo_ids="['${HF_USER}/${TASK_NAME}_train', '${HF_USER}/${TASK_NAME}_val']"
 

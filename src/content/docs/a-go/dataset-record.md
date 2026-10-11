@@ -80,7 +80,7 @@ hf auth whoami
 
 ### 4.1. 환경 변수
 
-계정명과 데이터셋 이름을 환경 변수로 두면 이후 단계에서 같은 이름을 반복해서 쓰기 편합니다. 이 가이드는 끝까지 이 두 값을 씁니다.
+계정명과 데이터셋 이름을 환경 변수로 두면 이후 단계에서 같은 이름을 반복해서 쓰기 편합니다. 이 가이드는 끝까지 이 두 값을 씁니다. 예시의 `HueyWoo` 는 `hf auth whoami` 에 나온 **본인의 계정명**으로 바꿔 입력합니다. 다른 사람의 계정명으로는 Hub에 업로드할 수 없습니다.
 
 ```bash
 # 우분투
@@ -90,7 +90,7 @@ export HF_USER="HueyWoo"
 export TASK_NAME="lekiwi_pick_and_place"
 ```
 
-```bash
+```bat
 :: 윈도우
 conda activate lerobot060
 cd %USERPROFILE%\workspace\lekiwi
@@ -118,7 +118,7 @@ python lekiwi-record.py \
     --dataset.push_to_hub=false
 ```
 
-```bash
+```bat
 :: 윈도우
 python lekiwi-record.py ^
     --robot.remote_ip=192.168.0.207 ^
@@ -203,7 +203,7 @@ python lekiwi-record.py \
     --dataset.push_to_hub=true
 ```
 
-```bash
+```bat
 :: 윈도우
 python lekiwi-record.py ^
     --robot.remote_ip=192.168.0.207 ^
@@ -239,7 +239,7 @@ FileExistsError: [Errno 17] File exists: '~/.cache/huggingface/lerobot/HueyWoo/l
 rm -rf ~/.cache/huggingface/lerobot/${HF_USER}/${TASK_NAME}
 ```
 
-```bash
+```bat
 :: 윈도우
 rmdir /s /q %USERPROFILE%\.cache\huggingface\lerobot\%HF_USER%\%TASK_NAME%
 ```

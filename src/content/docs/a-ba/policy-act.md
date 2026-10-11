@@ -150,7 +150,7 @@ lerobot-train \
 ```bash
 # 학습 재개
 lerobot-train \
-  --config_path=outputs/train/so101/act/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
+  --config_path=outputs/train/act_so101/${TASK_NAME}/checkpoints/last/pretrained_model/train_config.json \
   --resume=true
 ```
 

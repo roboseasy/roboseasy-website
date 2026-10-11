@@ -50,7 +50,7 @@ export TASK_DESCRIPTION="Pick a ball and place"
 lerobot-dataset-viz \
     --repo-id=${HF_USER}/${TASK_NAME} \
     --episode-index=0 \
-    --display-compressed-images=true
+    --display-compressed-images
     
 ```
 

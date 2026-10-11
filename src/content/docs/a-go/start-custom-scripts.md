@@ -46,22 +46,22 @@ LeRobot에는 `lerobot-teleoperate` 라는 명령줄 도구가 있어 SO-ARM 같
 
 ### 1.3. 커스텀 저장소
 
-두 문제를 함께 해결한 스크립트 모음을 저장소에서 받습니다(PC에서 실행). 예제와 같은 구조를 유지하면서 설정을 전부 인자로 뺐고, 리더 암과 키보드를 함께 다룹니다.
+두 문제를 함께 해결한 스크립트 모음을 저장소에서 받습니다(PC에서 실행). 예제와 같은 구조를 유지하면서 설정을 전부 인자로 뺐고, 리더 암과 키보드를 함께 다룹니다. 스크립트는 저장소의 `feature/lerobot` 브랜치에 있으므로 `-b feature/lerobot` 을 붙여 받습니다.
 
 ```bash
 # 우분투
 mkdir -p ~/workspace
 cd ~/workspace
-git clone https://github.com/roboseasy/lekiwi.git
+git clone -b feature/lerobot https://github.com/roboseasy/lekiwi.git
 cd lekiwi
 ```
 
-```bash
+```bat
 :: 윈도우
 cd %USERPROFILE%
 mkdir workspace
 cd workspace
-git clone https://github.com/roboseasy/lekiwi.git
+git clone -b feature/lerobot https://github.com/roboseasy/lekiwi.git
 cd lekiwi
 ```
 
@@ -177,7 +177,7 @@ conda activate lerobot060
 cd ~/workspace/lekiwi
 ```
 
-```bash
+```bat
 :: 윈도우
 conda activate lerobot060
 cd %USERPROFILE%\workspace\lekiwi
@@ -194,7 +194,7 @@ python lekiwi-teleoperate.py \
     --display_data=true
 ```
 
-```bash
+```bat
 :: 윈도우
 python lekiwi-teleoperate.py ^
     --robot.remote_ip=192.168.0.207 ^

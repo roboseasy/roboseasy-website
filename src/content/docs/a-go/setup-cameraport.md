@@ -83,7 +83,7 @@ cd ~/lerobot
 python examples/lekiwi/teleoperate.py
 ```
 
-```bash
+```bat
 :: 윈도우
 cd %USERPROFILE%\lerobot
 python examples\lekiwi\teleoperate.py
@@ -203,7 +203,7 @@ cd ~/lerobot
 python examples/lekiwi/teleoperate.py
 ```
 
-```bash
+```bat
 :: 윈도우
 cd %USERPROFILE%\lerobot
 python examples\lekiwi\teleoperate.py

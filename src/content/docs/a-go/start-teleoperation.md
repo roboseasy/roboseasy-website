@@ -113,7 +113,7 @@ cd ~/lerobot
 nano examples/lekiwi/teleoperate.py
 ```
 
-```bash
+```bat
 :: 윈도우 (메모장으로 열기)
 cd %USERPROFILE%\lerobot
 notepad examples\lekiwi\teleoperate.py
@@ -121,7 +121,7 @@ notepad examples\lekiwi\teleoperate.py
 
 ![](/img/a_go/start-teleoperation-02.webp)
 
-처음 열면 위 화면처럼 다른 IP와 id가 적혀 있습니다. `robot_config` 와 `teleop_arm_config` 두 줄을 내 로봇에 맞게 아래처럼 고칩니다.
+위 화면은 다른 로봇(`lekiwi01`)에 맞춰 고쳐 둔 파일이고, 처음 받은 파일에는 LeRobot 기본 예시값(`remote_ip="172.18.134.136"`, `id="my_lekiwi"`, 리더 암 `id="my_awesome_leader_arm"` 등)이 적혀 있습니다. 어느 쪽이든 `robot_config` 와 `teleop_arm_config` 두 줄을 내 로봇에 맞게 아래처럼 고칩니다.
 
 ```python
 robot_config = LeKiwiClientConfig(remote_ip="192.168.0.207", id="lekiwi07")
@@ -153,7 +153,7 @@ cd ~/lerobot
 python examples/lekiwi/teleoperate.py
 ```
 
-```bash
+```bat
 :: 윈도우
 cd %USERPROFILE%\lerobot
 python examples\lekiwi\teleoperate.py

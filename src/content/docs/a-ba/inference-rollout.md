@@ -34,7 +34,7 @@ lerobot-rollout
                             sync · rtc
 ```
 
-이 두 축은 자유롭게 조합됩니다. 예를 들어 "기록 없이 굴려보되(base) 지연을 숨기고 싶다(rtc)"면 `--strategy.type=base --inference.type=rtc`가 되고, "사람이 교정하며 데이터를 모으되(dagger) 평범하게 추론한다(sync)"면 `--strategy.type=dagger --inference.type=sync`가 됩니다.
+이 두 축은 자유롭게 조합됩니다. 예를 들어 “기록 없이 굴려보되(base) 지연을 숨기고 싶다(rtc)”면 `--strategy.type=base --inference.type=rtc`가 되고, “사람이 교정하며 데이터를 모으되(dagger) 평범하게 추론한다(sync)”면 `--strategy.type=dagger --inference.type=sync`가 됩니다.
 
 ### 다섯 가지 실행 전략 한눈에 보기
 

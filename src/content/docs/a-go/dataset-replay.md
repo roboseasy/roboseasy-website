@@ -74,7 +74,7 @@ python lekiwi-replay.py \
 
 윈도우에서는 다음과 같이 실행합니다.
 
-```bash
+```bat
 :: 윈도우
 conda activate lerobot060
 cd %USERPROFILE%\workspace\lekiwi
@@ -82,7 +82,7 @@ set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
 ```
 
-```bash
+```bat
 :: 윈도우
 python lekiwi-replay.py ^
     --robot.remote_ip=192.168.0.207 ^

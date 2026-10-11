@@ -8,6 +8,9 @@
 // 3) 이미지 — loading="lazy" · decoding="async".
 // 4) 코드 블록 — div.code-block 으로 감싸고(복사 버튼 자리), 첫 줄이 `# 우분투` / `:: 윈도우`
 //    주석이면 그 줄을 지우고 Ubuntu / Windows 라벨 바를 붙인다.
+// 5) 이미지 — 원본 크기로 여는 링크로 감싼다 (모바일에서 터미널 캡처를 확대해 보기 위함).
+// 6) 인라인 코드 줄바꿈 — 짧은 코드는 통째로 class="cw"(nowrap). 긴 코드는 `--옵션=` 머리만 nowrap 으로
+//    묶고 '/' 뒤에 <wbr> 를 넣어, '--' 뒤나 단어 중간이 아니라 공백·경로 구분자에서만 줄이 바뀌게 한다.
 
 const LABELS = {
   팁: 'tip',
@@ -39,6 +42,10 @@ const EMOJI = [
 
 const DEFAULT_ICON = { tip: '💡', warn: '⚠️', info: 'ℹ️', success: '✨', goal: '🎯', note: '📝' };
 const TAG_RE = /^(TIP|WARN|WARNING|INFO|SUCCESS|NOTE|DANGER|CAUTION)$/i;
+// `> 참고: 본문` / `> 주의: 본문` 처럼 굵게 없이 접두어만 붙인 인용문
+const PREFIX_RE = /^\s*(팁|참고|주의|경고|정보|중요|노트|메모)\s*[:：]\s*/;
+// 짧은 인라인 코드 기준 (이보다 길면 줄바꿈 허용) — 36자 ≈ 286px, 모바일 본문 폭 안
+const SHORT_CODE = 36;
 const OS_LABEL = [
   [/^\s*(#|::|REM)\s*(우분투|ubuntu)(\s.*)?$/i, 'Ubuntu'],
   [/^\s*(#|::|REM)\s*(윈도우|windows)(\s.*)?$/i, 'Windows'],
@@ -81,6 +88,20 @@ function trimLeading(children) {
   if (children.length && children[0].type === 'text') {
     children[0] = { ...children[0], value: children[0].value.replace(/^\s+/, '') };
     if (!children[0].value) children.shift();
+  }
+}
+
+// 제목 끝의 ':' / '：' 제거 (예: **Resume 사용 시 주의사항:** → 'Resume 사용 시 주의사항')
+function stripTrailingColon(nodes) {
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const n = nodes[i];
+    if (n.type === 'text') {
+      const v = n.value.replace(/\s*[:：]\s*$/, '');
+      if (v !== n.value) nodes[i] = { ...n, value: v };
+      if (v.trim()) return;
+    } else {
+      return;
+    }
   }
 }
 
@@ -129,6 +150,13 @@ function transformCallout(bq) {
       title = kids.shift().children;
       trimLeading(kids);
     }
+  } else if (head && head.type === 'text' && PREFIX_RE.test(head.value)) {
+    // `> 참고: 본문` → 접두어를 제목으로
+    const m = head.value.match(PREFIX_RE);
+    kind = LABELS[m[1]];
+    title = [{ type: 'text', value: m[1] }];
+    kids[0] = { ...head, value: head.value.slice(m[0].length) };
+    trimLeading(kids);
   } else if (isEl(head, 'strong')) {
     // `**실습 준비**` + 줄바꿈 → 제목 있는 노트
     const after = kids.slice(1).find((n) => !(n.type === 'text' && n.value === ''));
@@ -142,6 +170,7 @@ function transformCallout(bq) {
   }
 
   icon = icon || DEFAULT_ICON[kind];
+  if (title) stripTrailingColon(title);
   if (!title) {
     const label = Object.keys(LABELS).find((k) => LABELS[k] === kind);
     title = [{ type: 'text', value: kind === 'goal' ? '학습 목표' : label || '' }];
@@ -198,6 +227,30 @@ function transformCodeBlock(pre, parent, index) {
   parent.children[index] = wrapper;
 }
 
+// 긴 인라인 코드 쪼개기 (텍스트는 그대로 — 복사 결과 동일)
+function splitLongCode(node) {
+  const out = [];
+  for (const part of textOf(node).split(/(\s+)/)) {
+    if (!part) continue;
+    if (/^\s+$/.test(part)) {
+      out.push({ type: 'text', value: part });
+      continue;
+    }
+    let rest = part;
+    const head = rest.match(/^--?[\w.-]+=?/);
+    if (head) {
+      out.push(el('span', 'cw', [{ type: 'text', value: head[0] }]));
+      rest = rest.slice(head[0].length);
+    }
+    rest.split(/(?<=\/)/).forEach((seg, i) => {
+      if (!seg) return;
+      if (i > 0 || (head && out.length)) out.push(el('wbr', null, []));
+      out.push({ type: 'text', value: seg });
+    });
+  }
+  node.children = out;
+}
+
 function walk(node, visit) {
   if (!node.children) return;
   for (let i = 0; i < node.children.length; i++) {
@@ -222,6 +275,24 @@ export default function rehypeDocs() {
         return 'skip';
       } else if (node.tagName === 'img') {
         node.properties = { loading: 'lazy', decoding: 'async', ...node.properties };
+        if (!isEl(parent, 'a') && node.properties.src) {
+          parent.children[index] = el('a', 'img-link', [node], {
+            href: node.properties.src,
+            target: '_blank',
+            rel: 'noopener',
+            title: '원본 크기로 보기',
+          });
+          return 'skip';
+        }
+      } else if (node.tagName === 'code') {
+        // pre 안의 code 는 'pre' 분기에서 skip 하므로 여기는 인라인 코드만 온다
+        if (textOf(node).length <= SHORT_CODE) {
+          const cls = node.properties && node.properties.className ? [].concat(node.properties.className) : [];
+          node.properties = { ...(node.properties || {}), className: [...cls, 'cw'] };
+        } else {
+          splitLongCode(node);
+        }
+        return 'skip';
       } else if (node.tagName === 'pre') {
         transformCodeBlock(node, parent, index);
         return 'skip';

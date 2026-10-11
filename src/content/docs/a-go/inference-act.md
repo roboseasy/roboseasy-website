@@ -3,11 +3,13 @@ title: "ACT 추론"
 category: "a-go"
 group: "Inference"
 order: 200
+prev: "train-act"
+next: "train-smolvla"
 ---
 
 # Model Inference (ACT)
 
-[ACT 학습](/docs/a-go/train-act)에서 학습한 모델을 이제 로봇에 올립니다. 리더 암을 잡은 사람 대신 **정책이 관측을 보고 행동을 결정**하고, LeKiwi가 그 행동을 실행합니다. 이 페이지은 이 과정을 실행용 PC에서 돌리고, 정책이 얼마나 잘 하는지 성공률로 측정하는 방법까지 다룹니다.
+[ACT 학습](/docs/a-go/train-act)에서 학습한 모델을 이제 로봇에 올립니다. 리더 암을 잡은 사람 대신 **정책이 관측을 보고 행동을 결정**하고, LeKiwi가 그 행동을 실행합니다. 이 페이지는 이 과정을 실행용 PC에서 돌리고, 정책이 얼마나 잘 하는지 성공률로 측정하는 방법까지 다룹니다.
 
 > 🎯 **학습 목표**
 >
@@ -19,9 +21,9 @@ order: 200
 
 ## 1. 추론이란
 
-[텔레오퍼레이션](/docs/a-go/start-teleoperation)의 텔레오퍼레이션 루프를 떠올려 보세요. 초당 30번, PC가 관측을 받고 행동을 보냈습니다. 그때 행동을 만든 것은 리더 암을 쥔 사람의 손이었습니다. 추론은 그 자리에 **정책**을 넣은 것입니다. 나머지 구조는 같습니다.
+[텔레오퍼레이션](/docs/a-go/start-teleoperation)에서 돌린 제어 루프를 떠올려 보세요. 초당 30번, PC가 관측을 받고 행동을 보냈습니다. 그때 행동을 만든 것은 리더 암을 쥔 사람의 손이었습니다. 추론은 그 자리에 **정책**을 넣은 것입니다. 나머지 구조는 같습니다.
 
-|  | 텔레오퍼레이션 ([텔레오퍼레이션](/docs/a-go/start-teleoperation)) | 추론 (이 페이지) |
+|  | [텔레오퍼레이션](/docs/a-go/start-teleoperation) | 추론 (이 페이지) |
 |---|---|---|
 | 관측 | 카메라 2개 + 관절 상태 9차원 | 같음 |
 | 행동을 만드는 주체 | 사람 (리더 암 + 키보드) | 정책 (ACT) |
@@ -32,13 +34,12 @@ ACT는 [ACT 학습](/docs/a-go/train-act)에서 본 대로 행동을 100스텝 �
 
 ### 1.1. 왜 전용 스크립트를 쓰는가
 
-LeRobot의 기본 기록 명령으로도 추론을 돌릴 수는 있지만 LeKiwi에는 맞지 않는 점이 있습니다.
+LeRobot 0.6.0의 표준 추론 명령은 `lerobot-rollout` 이지만(v0.5.1까지는 `lerobot-record`), LeKiwi에는 그대로 쓸 수 없습니다.
 
-- 에피소드 시간이 지나면 팔이 마지막 자세에서 멈춰 버려 연속 시연이 안 됩니다.
-- 실행할 때마다 평가용 데이터셋이 저장되어 매번 지워야 합니다.
-- 끝날 때 로봇을 안전한 자세로 되돌리는 절차가 없습니다.
+- `lekiwi_client` 를 불러오지 않아 `--robot.type=lekiwi_client` 를 인식하지 못합니다.
+- 정책에 넘기는 관측과 행동에 팔 관절 위치(`.pos`)만 남기고 바퀴 속도(`x.vel`, `y.vel`, `theta.vel`)를 빼 버려, 9차원 LeKiwi 정책과 채널 수가 맞지 않고 바퀴도 움직이지 않습니다.
 
-그래서 [제어 스크립트](/docs/a-go/start-custom-scripts)에서 받은 커스텀 저장소의 스크립트를 씁니다. 세 가지가 있고 목적에 따라 고릅니다.
+그래서 [제어 스크립트](/docs/a-go/start-custom-scripts)에서 받은 커스텀 저장소의 스크립트를 씁니다. 9채널 행동을 그대로 쓰면서 사전 검사, 바퀴 속도 제한, 일시정지, 시작 자세 복귀 같은 안전 장치를 더했습니다. 추론에 쓰는 스크립트는 세 가지이고 목적에 따라 고릅니다.
 
 | 스크립트 | 언제 끝나는가 | 끝난 뒤 | 용도 |
 |---|---|---|---|
@@ -64,7 +65,7 @@ hf auth login --token <hf_복사한토큰>
 hf auth whoami
 ```
 
-```bash
+```bat
 :: 윈도우
 conda activate lerobot060
 cd %USERPROFILE%\workspace\lekiwi
@@ -81,7 +82,7 @@ export TASK_NAME="lekiwi_pick_and_place"
 export TASK_DESCRIPTION="Pick up the cube and place it in the box"
 ```
 
-```bash
+```bat
 :: 윈도우
 set "HF_USER=HueyWoo"
 set "TASK_NAME=lekiwi_pick_and_place"
@@ -132,7 +133,7 @@ python lekiwi-inference.py \
     --display_data=true
 ```
 
-```bash
+```bat
 :: 윈도우
 python lekiwi-inference.py ^
     --robot.remote_ip=192.168.0.207 ^
@@ -155,7 +156,7 @@ python lekiwi-inference.py ^
 
 ### 4.2. 실행 중 일어나는 일
 
-스크립트는 로봇을 움직이기 전에 **사전 검사**를 합니다. 정책이 기대하는 행동 차원이 LeKiwi의 9채널과 맞는지, 관측 상태 차원이 맞는지, 정책이 기대하는 카메라 이름이 로봇이 주는 이름과 같은지 확인하고, 하나라도 다르면 움직이지 않고 멈춥니다. 6차원 정책이라면 팔만 학습한 것이니 [ACT 학습](/docs/a-go/train-act)으로 돌아가 다시 학습해야 합니다.
+스크립트는 로봇을 움직이기 전에 **사전 검사**를 합니다. 정책이 기대하는 행동 차원이 LeKiwi의 9채널과 맞는지, 정책이 기대하는 카메라 이름이 로봇이 주는 이름과 같은지 확인하고, 다르면 움직이지 않고 멈춥니다. 행동이 6차원인 정책이라면 팔만 학습한 것이니 [ACT 학습](/docs/a-go/train-act)으로 돌아가 다시 학습해야 합니다. 관측 상태 차원이 다를 때는 경고만 출력하고 계속합니다. 사전학습 모델을 파인튜닝한 정책(예: SmolVLA)은 config에 사전학습 때의 상태 차원이 남아 있을 수 있기 때문입니다.
 
 검사를 통과하면 연결 직후의 팔 자세를 **시작 자세**로 기억해 두고, 준비 시간 동안 첫 목표 자세로 천천히 이동한 뒤 30 FPS 루프에 들어갑니다. Rerun 창에서 [텔레오퍼레이션](/docs/a-go/start-teleoperation)과 같은 화면이 보이고, 이번에는 `action` 그래프가 사람이 아니라 정책이 만든 값입니다.
 
@@ -187,16 +188,16 @@ python lekiwi-evaluate.py \
     --eval.reset_time_s=10
 ```
 
-```bash
+```bat
 :: 윈도우
 python lekiwi-evaluate.py ^
-   --robot.remote_ip=192.168.0.207 ^
-   --robot.id=lekiwi07 ^
-   --policy.path=%HF_USER%/%TASK_NAME%_act ^
-   --task="%TASK_DESCRIPTION%" ^
-   --eval.n_episodes=10 ^
-   --eval.episode_time_s=30 ^
-   --eval.reset_time_s=10
+    --robot.remote_ip=192.168.0.207 ^
+    --robot.id=lekiwi07 ^
+    --policy.path=%HF_USER%/%TASK_NAME%_act ^
+    --task="%TASK_DESCRIPTION%" ^
+    --eval.n_episodes=10 ^
+    --eval.episode_time_s=30 ^
+    --eval.reset_time_s=10
 ```
 
 | 옵션 | 의미 |
@@ -225,12 +226,35 @@ python lekiwi-evaluate.py ^
 평균 추론 18.1 ms | 평균 루프 29.8 Hz
 ```
 
-**체크포인트 비교**는 같은 조건으로 두 번 돌려 성공률을 나란히 놓는 것입니다.
+**체크포인트 비교**는 같은 조건으로 두 번 돌려 성공률을 나란히 놓는 것입니다. 위 평가 명령에서 `--policy.path` 를 비교할 체크포인트 경로로 바꾸고, 리포트를 구분할 `--eval.tag` 를 붙입니다. 3만 스텝 체크포인트라면 다음과 같습니다.
 
 ```bash
-python lekiwi-evaluate.py --policy.path=outputs/train/act_lekiwi/${TASK_NAME}/checkpoints/030000/pretrained_model --eval.tag=step030k ...
-python lekiwi-evaluate.py --policy.path=outputs/train/act_lekiwi/${TASK_NAME}/checkpoints/050000/pretrained_model --eval.tag=step050k ...
+# 우분투
+python lekiwi-evaluate.py \
+    --robot.remote_ip=192.168.0.207 \
+    --robot.id=lekiwi07 \
+    --policy.path=outputs/train/act_lekiwi/${TASK_NAME}/checkpoints/030000/pretrained_model \
+    --task="${TASK_DESCRIPTION}" \
+    --eval.n_episodes=10 \
+    --eval.episode_time_s=30 \
+    --eval.reset_time_s=10 \
+    --eval.tag=step030k
 ```
+
+```bat
+:: 윈도우
+python lekiwi-evaluate.py ^
+    --robot.remote_ip=192.168.0.207 ^
+    --robot.id=lekiwi07 ^
+    --policy.path=outputs/train/act_lekiwi/%TASK_NAME%/checkpoints/030000/pretrained_model ^
+    --task="%TASK_DESCRIPTION%" ^
+    --eval.n_episodes=10 ^
+    --eval.episode_time_s=30 ^
+    --eval.reset_time_s=10 ^
+    --eval.tag=step030k
+```
+
+같은 명령에서 `030000` 을 `050000` 으로, `step030k` 를 `step050k` 로 바꿔 한 번 더 실행하고 두 리포트의 성공률을 비교합니다. 중간 체크포인트는 Hub에 올라가지 않고 학습한 PC에만 있으므로, 훈련용 PC가 따로 있다면 비교할 `pretrained_model` 폴더를 실행용 PC로 옮긴 뒤 그 경로를 `--policy.path` 에 넣습니다.
 
 [ACT 학습](/docs/a-go/train-act)에서 말한 대로 스텝이 많은 쪽이 항상 좋지는 않습니다. 데이터가 적을 때는 중간 체크포인트가 더 안정적인 경우도 있으니 숫자로 확인하고 고릅니다.
 
@@ -258,7 +282,7 @@ python lekiwi-evaluate.py --policy.path=outputs/train/act_lekiwi/${TASK_NAME}/ch
 | 사전 검사에서 행동 차원 불일치 | 6차원이면 팔만 학습된 모델. [ACT 학습](/docs/a-go/train-act)에서 LeKiwi 데이터셋으로 다시 학습 |
 | 카메라 키 불일치 | 호스트의 카메라 이름이 `front`, `wrist` 인지 확인. 다른 이름의 데이터셋으로 학습했다면 `--rename_map='{"observation.images.front": "observation.images.<학습때이름>"}'` |
 | 모델을 찾지 못함 | `hf auth whoami` 로 로그인 확인. `--policy.path` 오타. 로컬 경로면 `pretrained_model` 폴더까지 지정 |
-| 연결 대기 후 timeout | Pi 호스트가 떠 있는지, IP와 같은 와이파이인지. [텔레오퍼레이션](/docs/a-go/start-teleoperation) 문제 해결 참고 |
+| 연결 대기 후 timeout | Pi 호스트가 떠 있는지, `--robot.remote_ip` 가 맞는지, PC와 Pi가 같은 와이파이에 있는지. [텔레오퍼레이션](/docs/a-go/start-teleoperation) 문제 해결 참고 |
 | 루프가 30 Hz에 못 미침 | `--device=cuda` 확인. CPU만 있으면 Rerun을 끄고(`--display_data=false`) 재시도 |
 | 로봇이 엉뚱하게 움직임 | 물체 위치, 조명, 카메라 각도가 학습 데이터와 다른지 확인. 데이터 수가 적으면 [데이터 기록](/docs/a-go/dataset-record)에서 에피소드 추가 |
 | 팔이 시작 자세로 안 돌아옴 | 오류 또는 `Ctrl + C` 로 끝난 경우 정상. `ESC` 로 끝내면 복귀 |

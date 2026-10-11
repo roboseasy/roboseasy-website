@@ -337,7 +337,7 @@ hostname -I
 
 `ip -4 addr show wlan0` 으로 보면 `192.168.0.177` 에는 `dynamic`, `192.168.0.207` 에는 `secondary` 라는 표시가 붙어 있어 출처를 구분할 수 있습니다.
 
-유선 주소는 [유선 연결](/docs/a-go/lekiwi-wired-connection)에서 본 `10.42.0.61` 과 다를 수 있습니다. 개체 초기화로 machine-id 가 새로 만들어져 PC가 라즈베리파이를 새 장치로 보고 다른 주소를 줄 수 있기 때문입니다.
+유선 주소는 [유선 연결](/docs/a-go/lekiwi-wired-connection)에서 본 `10.42.0.61` 과 다를 수 있습니다. 이 주소는 PC가 DHCP로 그때그때 빌려주는 것이라 고정되어 있지 않고, 개체 초기화로 machine-id 가 바뀌면 PC가 라즈베리파이를 새 장치로 보고 다른 주소를 주기도 합니다.
 
 ---
 
