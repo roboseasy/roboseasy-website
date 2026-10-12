@@ -155,4 +155,4 @@ BEM 컨벤션 — `.block__element--modifier`. 페이지/도메인명 prefix로 
 ### 메타 태그 / OG
 페이지마다 손볼 필요 없음 — BaseLayout props(`title`, `description`, `path`, `image`)로 전달하면 `SeoMeta`가 `astro.config.mjs`의 `site`와 합성.
 
-기본 OG 이미지: **`/img/common_img/banner.png`** — og:image는 **PNG를 유지한다**. webp는 카카오톡 PC 등 일부 스크래퍼가 읽지 못해 공유 미리보기가 깨지고, og 전용이라 용량 이득도 없다 (`SeoMeta.astro`의 주석 참고). 사이트 본문 이미지의 webp 원칙과는 별개다.
+기본 OG 이미지: **`/img/common_img/og-image.png`** (1200×630, 홈 히어로를 문의 버튼·고객사 티커 없이 캡처한 것 — 히어로 디자인이 바뀌면 다시 만든다) — og:image는 **PNG를 유지한다**. webp는 카카오톡 PC 등 일부 스크래퍼가 읽지 못해 공유 미리보기가 깨지고, og 전용이라 용량 이득도 없다 (`SeoMeta.astro`의 주석 참고). 사이트 본문 이미지의 webp 원칙과는 별개다.

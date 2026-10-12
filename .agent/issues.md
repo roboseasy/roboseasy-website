@@ -4,7 +4,7 @@
 
 ## 주의사항 (건드릴 때 알아야 할 것)
 
-- **OG 이미지는 PNG 유지** — `SeoMeta.astro`의 기본 og:image는 `/img/common_img/banner.png`다. webp로 바꾸면 카카오톡 PC 등 일부 스크래퍼가 읽지 못해 공유 미리보기가 깨진다. og 전용이라 용량 이득도 없다. 사이트 본문 이미지의 webp 원칙과 혼동하지 말 것 ([frontend.md](frontend.md) "메타 태그 / OG")
+- **OG 이미지는 PNG 유지** — `SeoMeta.astro`의 기본 og:image는 `/img/common_img/og-image.png`다. webp로 바꾸면 카카오톡 PC 등 일부 스크래퍼가 읽지 못해 공유 미리보기가 깨진다. og 전용이라 용량 이득도 없다. 사이트 본문 이미지의 webp 원칙과 혼동하지 말 것 ([frontend.md](frontend.md) "메타 태그 / OG")
 - **`.env`와 실제 필요 키가 어긋나 있다** — 코드가 쓰는 키는 `RESEND_API_KEY`·`QUOTE_FROM`·`QUOTE_TO` 세 개뿐인데(`api/contact.ts`) 로컬 `.env`에는 없어서 `npm run dev`에서 문의 폼 전송이 조용히 실패한다. 반대로 `.env`에 남아 있는 Supabase·토스 키 5개는 이 브랜치에서 참조하는 코드가 0건이다(회원·주문·결제는 별도 브랜치 범위). 쓰지 않는 시크릿은 지우는 쪽이 안전하다
 - **약관·개인정보처리방침이 이 브랜치에 없는 기능을 고지한다** — `src/content/legal/`의 두 문서가 회원가입·주문·결제·마이페이지·탈퇴를 전제로 작성되어 있고 Supabase·토스페이먼츠를 수탁자로 명시한다. 실제로 이 브랜치엔 DB·인증·결제 코드가 없고 서버 호출은 문의 메일·견적서 두 건뿐이다. 백엔드 릴리스를 앞둔 선행 작성이라면 의도된 것이지만, 그 전까지는 고지와 실제가 어긋난 상태다
 
