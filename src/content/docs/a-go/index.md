@@ -39,9 +39,9 @@ LeKiwi는 프로그램 하나가 로봇을 통째로 움직이지 않습니다. 
     <h3>💻 PC 환경 세팅</h3>
     <p>GPU 드라이버·CUDA, Miniconda, LeRobot 0.6.0 설치 (Ubuntu / Windows)</p>
   </a>
-  <a href="/docs/a-go/lekiwi-wired-connection" class="card">
+  <a href="/docs/a-go/lekiwi-sd-card" class="card">
     <h3>📡 LeKiwi 세팅</h3>
-    <p>유선 연결 → 고정 IP·무선 연결 → 라즈베리파이에 LeRobot 설치</p>
+    <p>microSD 카드 굽기 → 유선 연결 → 고정 IP·무선 연결 → 라즈베리파이에 LeRobot 설치</p>
   </a>
   <a href="/docs/a-go/start-calibration" class="card">
     <h3>🎮 Start</h3>

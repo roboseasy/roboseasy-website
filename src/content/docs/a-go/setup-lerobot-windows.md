@@ -189,11 +189,11 @@ python -c "import torch; print(f'PyTorch 버전: {torch.__version__}'); print(f'
 
 ## 다음 단계
 
-PC 준비가 끝났습니다. 이제 LeKiwi의 라즈베리파이를 PC와 연결합니다.
+PC 준비가 끝났습니다. 이제 LeKiwi의 라즈베리파이에 넣을 microSD 카드를 만듭니다.
 
 <div class="card-grid">
-  <a href="/docs/a-go/lekiwi-wired-connection" class="card">
-    <h3>📡 유선 연결</h3>
-    <p>랜선으로 PC와 라즈베리파이를 직접 연결하고 SSH로 원격 접속</p>
+  <a href="/docs/a-go/lekiwi-sd-card" class="card">
+    <h3>💾 SD 카드 굽기</h3>
+    <p>LeKiwi용 microSD 카드 이미지를 내려받아 굽고, 라즈베리파이에 꽂기</p>
   </a>
 </div>

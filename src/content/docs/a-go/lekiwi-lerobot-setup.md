@@ -9,6 +9,9 @@ order: 80
 
 LeRobot 설치([Ubuntu](/docs/a-go/setup-lerobot-ubuntu) · [Windows](/docs/a-go/setup-lerobot-windows))에서는 PC에 LeRobot을 설치했고, [고정 IP · 무선 연결](/docs/a-go/lekiwi-wifi-static-ip)에서는 LeKiwi의 라즈베리파이에 무선으로 접속할 수 있게 만들었습니다. 이 페이지에서는 **라즈베리파이 쪽에도 LeRobot을 설치**합니다. 로봇이 PC와 대화하려면 양쪽 모두 같은 언어를 알아야 하기 때문입니다.
 
+> ℹ️ **SD 카드 이미지로 만든 카드라면 이미 설치되어 있습니다**
+> <br>[SD 카드 굽기](/docs/a-go/lekiwi-sd-card)의 이미지에는 이 페이지에서 만드는 가상환경(`~/lerobot060_venv`)과 LeRobot 0.6.0이 이미 들어 있습니다. 설치 과정(3~4절)은 건너뛰고 5절의 설치 검증만 실행해 봐도 됩니다.
+
 > 🎯 **학습 목표**
 >
 > - LeKiwi가 호스트와 클라이언트로 나뉘어 동작하는 구조를 설명할 수 있다.
