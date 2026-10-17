@@ -33,8 +33,25 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.1.6',
+    label: 'v0.6.0 — latest · Windows 0.1.5 · Ubuntu 0.1.6',
+    // Ubuntu 0.1.6: SO-102(로보시지 7축) 지원 + 칼리브레이션 시작 실패 수정. Windows 는 0.1.5 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.5/physical-labs-setup_0.6.0-0.1.5_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.5/physical-labs-setup_0.6.0-0.1.5_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.5.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.6/physical-labs_0.6.0-0.1.6_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.6.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.1.5',
-    label: 'v0.6.0 — latest · Windows 0.1.5 · Ubuntu 0.1.0',
+    label: 'v0.6.0 · Windows 0.1.5 · Ubuntu 0.1.0',
     // Windows 0.1.5: NVIDIA GPU 가 있는데 PyTorch 가 CPU 버전이면 훈련 탭 > 환경 진단의 [GPU 버전 PyTorch 설치] 로
     // 앱 안에서 바로 GPU(CUDA 12.8) 버전으로 교체 (내려받기 약 2.8GB) — 예전엔 "설치 프로그램을 다시 실행" 안내만 나왔다.
     // 0.1.4 의 화면 배율 % 선택 · LeKiwi 윈도우 세팅 가이드 포함. Ubuntu 는 0.1.0 유지.
