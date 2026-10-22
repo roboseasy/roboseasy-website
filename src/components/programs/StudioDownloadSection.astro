@@ -33,8 +33,25 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.1.7',
+    label: 'v0.6.0 — latest · Windows 0.1.7 · Ubuntu 0.1.6',
+    // Windows 0.1.7 배포. Ubuntu 는 기존 0.1.6 배포판을 계속 제공한다.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.7/physical-labs-setup_0.6.0-0.1.7_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.7/physical-labs-setup_0.6.0-0.1.7_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.7.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.6/physical-labs_0.6.0-0.1.6_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.6.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.1.6',
-    label: 'v0.6.0 — latest · Windows 0.1.5 · Ubuntu 0.1.6',
+    label: 'v0.6.0 · Windows 0.1.5 · Ubuntu 0.1.6',
     // Ubuntu 0.1.6: SO-102(로보시지 7축) 지원 + 칼리브레이션 시작 실패 수정. Windows 는 0.1.5 유지.
     assets: {
       'windows.primary':
