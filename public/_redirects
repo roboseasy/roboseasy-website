@@ -19,6 +19,24 @@ https://roboseasy.netlify.app/*   https://roboseasy.ai/:splat   301!
 /docs/lekiwi                      /docs/a-go                   301
 /docs/lekiwi/*                    /docs/a-go/:splat            301
 
+# A-Go(LeKiwi) 설명서를 ROS 2 로봇 기준으로 새로 쓰며 지운 문서 (2026-10-27) — 가장 가까운 새 문서로.
+# 옛 /docs/lekiwi/<slug> 는 위 :splat 으로 여기에 온 뒤 한 번 더 넘어간다.
+/docs/a-go/setup-pc-ubuntu        /docs/physical-labs/training        301
+/docs/a-go/setup-pc-windows       /docs/physical-labs/install         301
+/docs/a-go/setup-lerobot-ubuntu   /docs/a-go/pc-agent                 301
+/docs/a-go/setup-lerobot-windows  /docs/a-go/pc-agent                 301
+/docs/a-go/lekiwi-lerobot-setup   /docs/a-go/lekiwi-sd-card           301
+/docs/a-go/setup-usbport          /docs/a-go/developer                301
+/docs/a-go/start-custom-scripts   /docs/a-go/developer                301
+/docs/a-go/dataset-record         /docs/a-go/physical-labs-workflow   301
+/docs/a-go/dataset-replay         /docs/a-go/physical-labs-workflow   301
+/docs/a-go/dataset-visualization  /docs/physical-labs/datasets        301
+/docs/a-go/dataset-edit           /docs/physical-labs/datasets        301
+/docs/a-go/train-act              /docs/physical-labs/training        301
+/docs/a-go/train-smolvla          /docs/physical-labs/training        301
+/docs/a-go/inference-act          /docs/physical-labs/inference       301
+/docs/a-go/inference-smolvla      /docs/physical-labs/inference       301
+
 # 제품 sku 변경(so-arm101-max→a-ba-max / lekiwi→a-go)에 따른 제품 상세 URL 이전
 /products/so-arm101-max           /products/a-ba-max           301
 /products/lekiwi                  /products/a-go               301

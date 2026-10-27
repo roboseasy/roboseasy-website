@@ -24,7 +24,7 @@ const docs = defineCollection({
     /** 페이지 제목 (사이드바·hero에서 사용) */
     title: z.string(),
     /** 카테고리 — URL 첫 segment와 일치 (/docs/<category>/...) */
-    category: z.enum(['lerobot-library', 'a-ba', 'a-go', 'dual-a-ba']),
+    category: z.enum(['lerobot-library', 'a-ba', 'a-go', 'dual-a-ba', 'physical-labs']),
     /** 사이드바 그룹 라벨 (예: 'Setup', 'Dataset') */
     group: z.string(),
     /** 카테고리 내 표시 순서 (오름차순) */

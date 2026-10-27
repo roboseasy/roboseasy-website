@@ -30,7 +30,7 @@ roboseasy-website/
 │   │   └── api/                # SSR 엔드포인트 (contact.ts, quote-download.ts)
 │   ├── content/                # 콘텐츠 컬렉션 (config.ts에 zod 스키마)
 │   │   ├── programs/           # JSON (카드 메타데이터)
-│   │   └── docs/               # 마크다운 (lerobot-library, a-ba, a-go, dual-a-ba)
+│   │   └── docs/               # 마크다운 (lerobot-library, a-ba, a-go, dual-a-ba, physical-labs)
 │   ├── data/                   # 컬렉션 외 정적 데이터 (products.json·ts, news.json, landing-news.json)
 │   ├── lib/                    # 공용 서버 로직 (buildQuoteExcel.ts)
 │   ├── excel/                  # 견적서 엑셀 템플릿
@@ -148,9 +148,11 @@ BEM 컨벤션 — `.block__element--modifier`. 페이지/도메인명 prefix로 
 3. 이미지는 `/img/...` 절대경로(webp 권장), 콜아웃은 `> ℹ️ **정보**:` / `> ⚠️ **주의**:` blockquote
 
 ### 새 docs 카테고리 추가
-1. `src/content/config.ts`의 `category` enum에 추가
-2. `src/pages/docs/[...slug].astro`의 `heroByCategory` 매핑에 heading/description 추가
-3. `src/content/docs/<category>/index.md` 작성 (+ 필요 시 `documents.astro`에 카드)
+1. `src/content/config.ts`의 `category` enum에 추가 (빠뜨리면 빌드 실패)
+2. `src/pages/docs/[...slug].astro`의 `Category` 타입과 `heroByCategory` 매핑에 heading/description 추가 (heroByCategory 를 빠뜨리면 빌드 실패)
+3. `src/components/docs/Sidebar.astro` Props 의 `category` 타입에 추가 (빌드는 타입을 검사하지 않으므로 손으로 맞춘다)
+4. `src/content/docs/<category>/index.md` 작성, 그림은 `public/img/<category 밑줄형>/` (예: `a_go/`, `physical_labs/`)
+5. 보이게 하려면 `documents.astro` 카드 · 메타 설명, `MainFooter.astro` 의 Documents 링크
 
 ### 메타 태그 / OG
 페이지마다 손볼 필요 없음 — BaseLayout props(`title`, `description`, `path`, `image`)로 전달하면 `SeoMeta`가 `astro.config.mjs`의 `site`와 합성.

@@ -13,7 +13,7 @@ Node 20 LTS가 필요합니다. (시스템에 nvm이 있다면 `nvm use`로 자�
 npm install        # 의존성 설치 (최초 1회)
 npm run dev        # http://localhost:4321 에서 핫 리로드
 npm run build      # dist/ 정적 빌드
-npm run preview    # 프로덕션 번들 미리보기
+# npm run preview 는 이 설정(output: 'hybrid' + netlify 어댑터)에서 지원되지 않는다 — npm run dev 또는 빌드 뒤 dist/ 를 정적 서빙
 ```
 
 ## 프로젝트 구조

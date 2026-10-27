@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/pages/documents.css';
 
 const title = 'Documentation - RoboSEasy | 로보시지';
-const description = '제품별 상세 문서를 확인하세요. LeRobot Library, A-Ba(SO-ARM101), Dual A-Ba(Dual SO-ARM), A-Go(LeKiwi) 문서 제공';
+const description = '제품별 상세 문서를 확인하세요. Physical Labs, LeRobot Library, A-Ba(SO-ARM101), Dual A-Ba(Dual SO-ARM), A-Go(LeKiwi) 문서 제공';
 ---
 <BaseLayout title={title} description={description} path="/documents">
   <section class="page-intro">
@@ -15,6 +15,20 @@ const description = '제품별 상세 문서를 확인하세요. LeRobot Library
 
   <section class="documents">
     <div class="docs-grid">
+      <div class="doc-card">
+        <a href="/docs/physical-labs" class="doc-card__image-wrap">
+          <img class="doc-card__image" src="/img/documents_img/physical-labs.webp" alt="Physical Labs" />
+        </a>
+        <div class="doc-card__body">
+          <h3 class="doc-card__title">Physical Labs</h3>
+          <p class="doc-card__description">
+            로봇 학습 · 제어 통합 데스크톱 앱 Physical Labs 사용 설명서.<br />
+            모터 셋업부터 텔레오퍼레이션 · 데이터 수집 · 훈련 · 추론까지 안내합니다.
+          </p>
+          <a href="/docs/physical-labs" class="doc-card__button">더 알아보기</a>
+        </div>
+      </div>
+
       <div class="doc-card">
         <a href="/docs/lerobot-library" class="doc-card__image-wrap">
           <img class="doc-card__image" src="/img/documents_img/lerobot-library.webp" alt="LeRobot Library" />
@@ -64,8 +78,8 @@ const description = '제품별 상세 문서를 확인하세요. LeRobot Library
         <div class="doc-card__body">
           <h3 class="doc-card__title">A-Go(LeKiwi)</h3>
           <p class="doc-card__description">
-            모바일 로봇 플랫폼 A-Go(LeKiwi) 개발 가이드.<br />
-            자율주행 및 비전 인식 기능 구현 방법을 안내합니다.
+            ROS 2 모바일 로봇 A-Go(LeKiwi) 사용 설명서.<br />
+            웹 대시보드 · 지도 작성 · 자율 주행 · Physical Labs 연동을 안내합니다.
           </p>
           <a href="/docs/a-go" class="doc-card__button">더 알아보기</a>
         </div>

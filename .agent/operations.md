@@ -8,7 +8,7 @@
 npm install            # 의존성 설치 (최초 1회)
 npm run dev            # http://localhost:4321 — 수정 시 자동 리로드
 npm run build          # dist/ 생성 (정적 페이지 + SSR Functions)
-npm run preview        # 프로덕션 번들 미리보기
+# npm run preview 는 이 설정(output: 'hybrid' + netlify 어댑터)에서 지원되지 않는다 — npm run dev 또는 빌드 뒤 dist/ 를 정적 서빙
 ```
 
 - **Node 20 LTS** 필요 (`.nvmrc`) — nvm 있으면 `nvm use`. 시스템 Node 18.20.8+면 Astro 4가 동작은 하지만 Netlify 빌드는 Node 20

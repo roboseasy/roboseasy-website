@@ -16,7 +16,7 @@
 ## TODO
 
 ### 콘텐츠
-- [ ] A-Go(LeKiwi), Dual A-Ba(Dual SO-ARM) docs 실제 콘텐츠 작성 — 현재 `index.md` 하나뿐이고 "준비 중" placeholder
+- [ ] Dual A-Ba(Dual SO-ARM) docs 실제 콘텐츠 작성 — 현재 `index.md` 하나뿐이고 "준비 중" placeholder (A-Go(LeKiwi) 는 2026-10-27 ROS 2 로봇 기준으로 새로 씀, Physical Labs 설명서 범주 추가)
 
 ### 기능
 - [ ] 커스텀 404 페이지(`src/pages/404.astro`) 추가 — 현재 Netlify 기본 404 노출

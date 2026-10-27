@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/docs/Sidebar.astro';
 import '../../styles/pages/docs.css';
 
-type Category = 'lerobot-library' | 'a-ba' | 'a-go' | 'dual-a-ba';
+type Category = 'lerobot-library' | 'a-ba' | 'a-go' | 'dual-a-ba' | 'physical-labs';
 
 const heroByCategory: Record<Category, { heading: string; description: string }> = {
   'lerobot-library': {
@@ -17,11 +17,15 @@ const heroByCategory: Record<Category, { heading: string; description: string }>
   },
   'a-go': {
     heading: 'A-Go(LeKiwi)',
-    description: 'A-Go(LeKiwi) 모바일 로봇 플랫폼 개발 가이드',
+    description: 'A-Go(LeKiwi) 모바일 로봇 사용 설명서 — SD 카드 · 네트워크 · 웹 대시보드 · Physical Labs · ROS 2 개발',
   },
   'dual-a-ba': {
     heading: 'Dual A-Ba(Dual SO-ARM)',
     description: 'Dual A-Ba(Dual SO-ARM) 확장형 로봇 플랫폼 활용 가이드',
+  },
+  'physical-labs': {
+    heading: 'Physical Labs',
+    description: 'Physical Labs 앱 사용 설명서 — 설치부터 모터 셋업 · 로봇 설정 · 텔레오퍼레이션 · 데이터 수집 · 훈련 · 추론까지',
   },
 };
 
