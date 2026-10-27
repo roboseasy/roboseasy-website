@@ -33,8 +33,25 @@ interface OSColumn {
 
 const versions: Version[] = [
   {
+    tag: 'v0.6.0-0.1.9',
+    label: 'v0.6.0 — latest · Windows 0.1.7 · Ubuntu 0.1.9',
+    // Ubuntu 0.1.9: 데이터 수집 'HuggingFace Hub 에 업로드' 를 '아니오' 로 골라도 올라가던 문제 수정. Windows 는 0.1.7 유지.
+    assets: {
+      'windows.primary':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.7/physical-labs-setup_0.6.0-0.1.7_win64.exe',
+      'windows.user-installer.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.7/physical-labs-setup_0.6.0-0.1.7_win64.exe',
+      'windows.zip.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.7.zip',
+      'linux.deb.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.9/physical-labs_0.6.0-0.1.9_amd64.deb',
+      'linux.tar.gz.x64':
+        'https://github.com/roboseasy/physical-labs-app-deploy/archive/refs/tags/v0.6.0-0.1.9.tar.gz',
+    },
+  },
+  {
     tag: 'v0.6.0-0.1.8',
-    label: 'v0.6.0 — latest · Windows 0.1.7 · Ubuntu 0.1.8',
+    label: 'v0.6.0 · Windows 0.1.7 · Ubuntu 0.1.8',
     // Ubuntu 0.1.8: ROS 2 로 바뀐 새 LeKiwi 로봇 지원. Windows 는 0.1.7 유지.
     assets: {
       'windows.primary':
