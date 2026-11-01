@@ -60,7 +60,7 @@ description: "수집한 데이터로 ACT · SmolVLA 등 정책을 학습하는 �
 | **Hugging Face 토큰** (선택) | 학습 결과를 Hub 에 올릴 때만 필요합니다. [설정](/docs/physical-labs/settings) › **일반** › **API 키** 의 **HuggingFace Access Token** 에 저장합니다 |
 
 > **정보** ℹ️ `INFO`
-> <br>**Windows 판(0.1.7)은 조금 다릅니다** 이 문서는 Ubuntu 판 0.1.9 기준입니다. Windows 판도 훈련 탭의 흐름은 같지만 일부 화면과 명령 미리보기가 다를 수 있습니다. 확인된 차이는 두 가지입니다. Windows 설치 프로그램은 NVIDIA GPU 와 570 이상의 드라이버를 찾으면 처음부터 GPU 버전 PyTorch 를 설치합니다. 또 앱이 사용자 폴더(`%LOCALAPPDATA%\Programs\PhysicalLabs`)에 설치되므로 라이브러리를 설치할 때 관리자 비밀번호를 묻지 않습니다.
+> <br>**Windows 판(0.1.7)은 조금 다릅니다** 이 문서는 Ubuntu 판 0.2.0 기준입니다. Windows 판도 훈련 탭의 흐름은 같지만 일부 화면과 명령 미리보기가 다를 수 있습니다. 확인된 차이는 두 가지입니다. Windows 설치 프로그램은 NVIDIA GPU 와 570 이상의 드라이버를 찾으면 처음부터 GPU 버전 PyTorch 를 설치합니다. 또 앱이 사용자 폴더(`%LOCALAPPDATA%\Programs\PhysicalLabs`)에 설치되므로 라이브러리를 설치할 때 관리자 비밀번호를 묻지 않습니다.
 
 ---
 

@@ -185,7 +185,7 @@ description: "A-Go(LeKiwi) 팔로워 팔과 리더암을 웹 화면 또는 Physi
 
 ## 4. [앱] 팔로워 보정 — Physical Labs
 
-Physical Labs **Ubuntu 판 0.1.8 이상** (최신 0.1.9) 에서 됩니다. 앱에 로봇을 추가하고 **연결 확인** 으로 ROS 2 로봇으로 알아본 상태여야 합니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup)). **칼리브레이션** 탭을 처음 열면 로봇 제어 패키지 설치 카드가 뜰 수 있습니다 ([기능 패키지 설치](/docs/physical-labs/feature-packs)).
+Physical Labs **Ubuntu 판 0.1.8 이상** (최신 0.2.0) 에서 됩니다. 앱에 로봇을 추가하고 **연결 확인** 으로 ROS 2 로봇으로 알아본 상태여야 합니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup)). **칼리브레이션** 탭을 처음 열면 로봇 제어 패키지 설치 카드가 뜰 수 있습니다 ([기능 패키지 설치](/docs/physical-labs/feature-packs)).
 
 ### 4.1. 칼리브레이션 탭 열기
 

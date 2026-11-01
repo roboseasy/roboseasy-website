@@ -36,7 +36,7 @@ A-Go(LeKiwi)를 앱에 연결했다면([Physical Labs 연결](/docs/a-go/physica
 
 ### 1.2. 시작 전에
 
-- 앱에 로봇을 저장하고 **연결 확인** 까지 마쳤습니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup)). 앱은 Ubuntu 판 0.1.9 기준입니다.
+- 앱에 로봇을 저장하고 **연결 확인** 까지 마쳤습니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup)). 앱은 Ubuntu 판 0.2.0 기준입니다.
 - 리더암(SO-101)이 노트북에 꽂혀 있고 전원이 들어와 있습니다. 추론에는 필요 없습니다.
 - 탭을 처음 열면 기능 패키지 설치 카드가 뜰 수 있습니다. 인터넷이 될 때 설치해 둡니다 ([기능 패키지 설치](/docs/physical-labs/feature-packs)).
 - 노트북을 로봇 AP(인터넷 없음)에 붙여 쓸 거라면, 인터넷이 될 때 앱을 먼저 켜 두고 와이파이를 바꿉니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup) 1.3절).

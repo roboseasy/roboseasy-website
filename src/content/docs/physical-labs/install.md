@@ -11,7 +11,7 @@ description: "Physical Labs 를 Ubuntu · Windows 에 설치하고 처음 켜서
 Ubuntu 에서는 `.deb` 파일 하나로 Physical Labs 를 설치합니다. 설치할 때는 로그인 · 모터 셋업 · 로봇 설정에 필요한 **기본 구성**만 들어가고, 칼리브레이션 · 데이터 · 훈련 같은 기능은 그 기능을 처음 열 때 앱 안에서 설치합니다. 이 페이지에서는 Ubuntu 에 설치하고, 처음 켜서 구글 로그인과 약관 동의를 마치고 홈 화면이 뜰 때까지를 안내합니다. Windows 설치는 7절에 짧게 정리했습니다.
 
 > **정보** ℹ️ `INFO`
-> <br>**이 문서는 Ubuntu 판 0.1.9 기준입니다** Windows 판은 0.1.7 이 최신이고, 새 A-Go(LeKiwi)(ROS 2 로봇) · SO-102 · USB 포트 고정을 지원하지 않습니다. 이 기능들을 쓰려면 Ubuntu PC 를 준비하세요.
+> <br>**이 문서는 Ubuntu 판 0.2.0 기준입니다** Windows 판은 0.1.7 이 최신이고, 새 A-Go(LeKiwi)(ROS 2 로봇) · SO-102 · USB 포트 고정을 지원하지 않습니다. 이 기능들을 쓰려면 Ubuntu PC 를 준비하세요.
 
 > 🎯 **학습 목표**
 >
@@ -42,14 +42,14 @@ NVIDIA GPU 는 설치에 필요하지 않습니다. 훈련을 GPU 로 하려면 
 
 ### 2.1. 설치 파일 내려받기
 
-[프로그램 페이지](/programs) 맨 위 **Download Physical Labs** 에서 **Version** 이 `v0.6.0 — latest · Windows 0.1.7 · Ubuntu 0.1.9` 인지 확인하고 **.deb** 버튼을 누릅니다. `physical-labs_0.6.0-0.1.9_amd64.deb` (약 31MB) 가 다운로드 폴더에 저장됩니다.
+[프로그램 페이지](/programs) 맨 위 **Download Physical Labs** 에서 **Version** 이 `v0.6.0 — latest · Windows 0.1.7 · Ubuntu 0.2.0` 인지 확인하고 **.deb** 버튼을 누릅니다. `physical-labs_0.6.0-0.2.0_amd64.deb` (약 31MB) 가 다운로드 폴더에 저장됩니다.
 
 터미널에서 바로 받아도 됩니다.
 
 ```bash
 # 우분투
 cd "$(xdg-user-dir DOWNLOAD)"
-wget https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.1.9/physical-labs_0.6.0-0.1.9_amd64.deb
+wget https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.6.0-0.2.0/physical-labs_0.6.0-0.2.0_amd64.deb
 ```
 
 `xdg-user-dir DOWNLOAD` 는 다운로드 폴더의 위치를 찾아 줍니다. 한국어로 설치한 Ubuntu 에서는 이 폴더가 `~/Downloads` 가 아니라 `~/다운로드` 입니다.
@@ -61,7 +61,7 @@ wget https://github.com/roboseasy/physical-labs-app-deploy/releases/download/v0.
 ```bash
 # 우분투
 cd "$(xdg-user-dir DOWNLOAD)"
-sudo apt install ./physical-labs_0.6.0-0.1.9_amd64.deb
+sudo apt install ./physical-labs_0.6.0-0.2.0_amd64.deb
 ```
 
 - 비밀번호를 물으면 이 PC 에 로그인할 때 쓰는 비밀번호를 입력합니다. 입력하는 동안 화면에는 아무것도 보이지 않습니다.
@@ -237,10 +237,10 @@ sudo apt install ./physical-labs_<새 버전>_amd64.deb
 
 ```bash
 # 우분투
-sudo apt install --reinstall ./physical-labs_0.6.0-0.1.9_amd64.deb
+sudo apt install --reinstall ./physical-labs_0.6.0-0.2.0_amd64.deb
 ```
 
-앱 화면에는 버전이 나오지 않습니다. 설치된 버전은 터미널에서 확인합니다. `0.1.9` 처럼 앱 버전이 나옵니다.
+앱 화면에는 버전이 나오지 않습니다. 설치된 버전은 터미널에서 확인합니다. `0.2.0` 처럼 앱 버전이 나옵니다.
 
 ```bash
 # 우분투
@@ -316,7 +316,7 @@ cat /opt/physical-labs/VERSION
 
 ## 9. 정리
 
-- Ubuntu 24.04 에서 `sudo apt install ./physical-labs_0.6.0-0.1.9_amd64.deb` 로 설치합니다. `dpkg -i` 는 쓰지 않습니다.
+- Ubuntu 24.04 에서 `sudo apt install ./physical-labs_0.6.0-0.2.0_amd64.deb` 로 설치합니다. `dpkg -i` 는 쓰지 않습니다.
 - 설치에는 **기본 구성**(로그인 · 모터 셋업 · 로봇 설정, CPU 버전 PyTorch)만 들어가고 2~3분 걸립니다. 나머지 기능은 앱에서 처음 열 때 설치합니다.
 - 설치가 계정을 `dialout` 그룹에 넣으므로 **한 번 로그아웃했다가 다시 로그인**합니다.
 - 처음 켜면 **시작하기** → 브라우저에서 구글 로그인(5분 안에) → 약관 동의 → 홈 화면 순서입니다.

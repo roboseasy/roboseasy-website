@@ -395,7 +395,7 @@ Physical Labs 앱의 텔레오퍼레이션 · 데이터 수집 · 추론은 로�
 - 지도 작성 · 자율 주행은 웹 화면에서 합니다. 앱으로 텔레오퍼레이션 · 데이터 수집을 하는 흐름은 [Physical Labs 연결](/docs/a-go/physical-labs-setup)과 [데이터 · 학습 · 추론](/docs/a-go/physical-labs-workflow)에 있습니다.
 
 > **정보** ℹ️ `INFO`
-> <br>**Physical Labs 로 새 A-Go 를 쓰려면 Ubuntu 판이 필요합니다** Ubuntu 판 0.1.8 이상(최신 0.1.9)이 새 A-Go(ROS 2)를 지원합니다. Windows 판(최신 0.1.7)은 지원하지 않습니다. 웹 화면은 브라우저만 있으면 되므로 Windows 노트북에서도 열 수 있습니다.
+> <br>**Physical Labs 로 새 A-Go 를 쓰려면 Ubuntu 판이 필요합니다** Ubuntu 판 0.1.8 이상(최신 0.2.0)이 새 A-Go(ROS 2)를 지원합니다. Windows 판(최신 0.1.7)은 지원하지 않습니다. 웹 화면은 브라우저만 있으면 되므로 Windows 노트북에서도 열 수 있습니다.
 
 ---
 

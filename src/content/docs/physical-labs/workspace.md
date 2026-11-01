@@ -54,7 +54,7 @@ description: "워크스페이스(YOLO + Pick&Place) 소개와 지원 범위"
 새 A-Go 에서도 텔레오퍼레이션 · 칼리브레이션 · 데이터 수집은 됩니다. 새 A-Go 를 앱으로 쓰는 방법은 [Physical Labs 연결](/docs/a-go/physical-labs-setup)에 있습니다.
 
 > **정보** ℹ️ `INFO`
-> <br>**Windows 판** 이 문서는 Ubuntu 판(0.1.9) 기준입니다. Windows 판(최신 0.1.7)은 새 A-Go 를 지원하지 않으며, 워크스페이스의 화면과 설치 과정이 이 문서와 다를 수 있습니다.
+> <br>**Windows 판** 이 문서는 Ubuntu 판(0.2.0) 기준입니다. Windows 판(최신 0.1.7)은 새 A-Go 를 지원하지 않으며, 워크스페이스의 화면과 설치 과정이 이 문서와 다를 수 있습니다.
 
 ---
 

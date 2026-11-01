@@ -114,7 +114,7 @@ PC 의 프로그램은 와이파이나 랜선으로 로봇의 두 입구에 붙�
 | 길 | 이런 분께 | PC 준비 | 할 수 있는 것 |
 |---|---|---|---|
 | **웹 화면만** | 설치 없이 로봇을 바로 움직여 보고 싶을 때 | 브라우저 | 상태 보기, 로봇 켜기 · 끄기, 키보드 · 화면 패드로 바퀴 조작, 팔(팔로워) 보정, 지도 작성 · 자율 주행, 센서 · 로그, 네트워크 설정 |
-| **Physical Labs** | 시범을 보여 데이터를 모으고 학습 · 추론하고 싶을 때 | Ubuntu 24.04 노트북, Physical Labs(.deb) 0.1.9, SO-101 리더암 | 리더암 + 키보드 텔레오퍼레이션, 데이터 수집, 훈련, 추론, 팔 보정 |
+| **Physical Labs** | 시범을 보여 데이터를 모으고 학습 · 추론하고 싶을 때 | Ubuntu 24.04 노트북, Physical Labs(.deb) 0.2.0, SO-101 리더암 | 리더암 + 키보드 텔레오퍼레이션, 데이터 수집, 훈련, 추론, 팔 보정 |
 | **개발자 (ROS 2)** | 로봇 코드를 읽고 고치거나 ROS 2 로 직접 다루고 싶을 때 | SSH, (선택) PC 의 ROS 2 Jazzy · RViz | 노드 · 토픽 다루기, 코드 고쳐 로봇에 올리기 |
 
 ### 3.1. 웹 화면만 쓰기
@@ -128,7 +128,7 @@ Physical Labs 는 로봇 설정부터 데이터 수집 · 훈련 · 추론까지
 앱 자체의 설명은 [Physical Labs 소개](/docs/physical-labs)와 [설치와 첫 실행](/docs/physical-labs/install)에, A-Go 를 붙이는 방법은 [Physical Labs 연결](/docs/a-go/physical-labs-setup)에 있습니다.
 
 > **정보** ℹ️ `INFO`
-> <br>**새 A-Go 는 Physical Labs Ubuntu(.deb) 판에서 쓸 수 있습니다** 이 설명서는 Ubuntu(.deb) 0.1.9 기준입니다. Windows 판(최신 0.1.7)은 새 A-Go(ROS 2) 연결을 지원하지 않습니다. Windows 에서는 브라우저로 웹 화면을 쓸 수 있지만, PC 에이전트도 Linux 전용이라 리더암으로 팔을 움직이려면 Linux(Ubuntu) 노트북이 필요합니다. 앱은 [다운로드 페이지](/programs)에서 받습니다.
+> <br>**새 A-Go 는 Physical Labs Ubuntu(.deb) 판에서 쓸 수 있습니다** 이 설명서는 Ubuntu(.deb) 0.2.0 기준입니다. Windows 판(최신 0.1.7)은 새 A-Go(ROS 2) 연결을 지원하지 않습니다. Windows 에서는 브라우저로 웹 화면을 쓸 수 있지만, PC 에이전트도 Linux 전용이라 리더암으로 팔을 움직이려면 Linux(Ubuntu) 노트북이 필요합니다. 앱은 [다운로드 페이지](/programs)에서 받습니다.
 
 > **팁** 💡`TIP`
 > <br>**Physical Labs 는 켤 때 인터넷이 필요합니다** 앱이 시작할 때 구글 로그인을 확인하기 때문입니다. 노트북을 로봇의 AP(인터넷 없음)에 붙일 때는 인터넷이 될 때 앱을 먼저 켜 둔 뒤 와이파이를 바꾸세요. 켜 둔 앱은 그대로 계속 쓸 수 있습니다. 자세한 순서는 [Physical Labs 연결](/docs/a-go/physical-labs-setup)에 있습니다.
@@ -196,7 +196,7 @@ Physical Labs 는 로봇 설정부터 데이터 수집 · 훈련 · 추론까지
 | 리더암 보정 이름 | `leader` | 노트북에 꽂는 SO-101 리더암의 보정 이름. 이 설명서는 `leader` 를 씁니다 |
 | PC 에이전트 conda 환경 | `lerobot060` | Python 3.12, `lerobot[feetech]==0.6.0` |
 | Hugging Face 계정 | `HueyWoo` | 본인 계정 이름으로 바꿉니다 |
-| Physical Labs | Ubuntu(.deb) 0.1.9 | 파일 `physical-labs_0.6.0-0.1.9_amd64.deb` |
+| Physical Labs | Ubuntu(.deb) 0.2.0 | 파일 `physical-labs_0.6.0-0.2.0_amd64.deb` |
 | SD 카드 이미지 | `lekiwi1027.img.gz` | Ubuntu 24.04.4 · ROS 2 Jazzy · Raspberry Pi 4 용 |
 
 ---
@@ -205,7 +205,7 @@ Physical Labs 는 로봇 설정부터 데이터 수집 · 훈련 · 추론까지
 
 - A-Go(LeKiwi)는 옴니휠 베이스 + SO-101 팔 + 전방 · 손목 카메라 + 라이다 · IMU 를 라즈베리파이 4 가 ROS 2 로 다루는 모바일 로봇입니다.
 - 로봇을 켜면 게이트웨이(웹 화면, 포트 8080)가 저절로 뜨고, 모터 · 센서를 쓰는 로봇 기능은 **로봇 켜기**로 따로 켭니다.
-- 웹 화면은 브라우저만으로 바퀴 조작 · 팔로워 보정 · 지도 작성 · 자율 주행을(리더암은 PC 에이전트와 함께), Physical Labs(Ubuntu 0.1.9)는 텔레오퍼레이션 · 데이터 수집 · 훈련 · 추론을 맡습니다.
+- 웹 화면은 브라우저만으로 바퀴 조작 · 팔로워 보정 · 지도 작성 · 자율 주행을(리더암은 PC 에이전트와 함께), Physical Labs(Ubuntu 0.2.0)는 텔레오퍼레이션 · 데이터 수집 · 훈련 · 추론을 맡습니다.
 - 로봇을 움직이는 것은 한 번에 한 화면뿐이고, 비상 정지는 팔의 힘도 뺍니다.
 
 처음 시작한다면 카드부터 준비합니다. 받은 로봇에 카드가 이미 꽂혀 있다면 처음 접속하기로 바로 갑니다.
