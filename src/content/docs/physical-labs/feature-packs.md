@@ -63,7 +63,7 @@ Physical Labs 는 처음 설치할 때 로그인 · 모터 셋업 · 로봇 설�
 - **데이터셋 창고** 의 목록은 설치 없이도 볼 수 있습니다. 데이터셋을 열거나 고칠 때 설치 창이 뜹니다.
 - 워크스페이스의 물체 인식(YOLO) 라이브러리는 기능 패키지와 별도로, 워크스페이스의 환경 준비 화면에서 이어서 설치합니다 ([워크스페이스](/docs/physical-labs/workspace)).
 - 훈련 탭에서 일부 모델(예: SmolVLA)을 고르면 그 모델에 필요한 라이브러리를 그 자리에서 따로 설치합니다 ([훈련](/docs/physical-labs/training)).
-- 패키지를 설치해도 기종에 따라 아직 쓸 수 없는 기능이 있습니다. 엔드이펙터는 SO-102 · 새 A-Go(LeKiwi)에서, 워크스페이스는 SO-101 · SO-102 · 새 A-Go 에서 쓸 수 없습니다 ([엔드이펙터](/docs/physical-labs/end-effector) · [워크스페이스](/docs/physical-labs/workspace)).
+- 패키지를 설치해도 기종에 따라 아직 쓸 수 없는 기능이 있습니다. 엔드이펙터는 SO-102 에서, 워크스페이스는 SO-101 · SO-102 · 새 A-Go 에서 쓸 수 없습니다 ([엔드이펙터](/docs/physical-labs/end-effector) · [워크스페이스](/docs/physical-labs/workspace)).
 
 ---
 

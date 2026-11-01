@@ -334,14 +334,12 @@ A-Go(LeKiwi)를 쓰다 막혔을 때 보는 페이지입니다. 증상을 상황
 | `로봇의 데이터 노드(lekiwi_zmq_host)가 응답하지 않습니다. [로봇 끄기] 뒤 다시 켜 보세요.` | 그 말대로 **■ 로봇 끄기** → **▶ 로봇 켜기** |
 | `로봇의 데이터 포트(5556)가 열려 있지 않습니다. 로봇 이미지에 lekiwi_zmq_host 가 있어야 합니다.` | 로봇 기능이 켜져 있는데 이 글이 나오면 데이터 노드가 없는 예전 이미지의 카드입니다. 지금 이미지(`lekiwi1027`)로 다시 굽습니다 (11.2절) |
 | 팔로워 보정 · 관측 관련 글 | 7.1절 |
-| 엔드이펙터 탭 · 워크스페이스가 `이 로봇(ROS2 LeKiwi)에서는 아직 지원하지 않습니다. 텔레옵 · 캘리브레이션 · 데이터 수집은 됩니다.` | 새 A-Go 에서는 엔드이펙터 탭 연결과 워크스페이스(Yolo + Pick&Place)를 아직 쓸 수 없습니다 |
+| 워크스페이스가 `이 로봇(ROS2 LeKiwi)에서는 아직 지원하지 않습니다. 텔레옵 · 캘리브레이션 · 데이터 수집은 됩니다.` | 새 A-Go 에서는 워크스페이스(Yolo + Pick&Place)를 아직 쓸 수 없습니다. 엔드이펙터 탭에 이 글이 보이면 0.2.0 재배포(2026-11-01 오후) 전 판입니다 — `sudo apt install --reinstall ./physical-labs_0.6.0-0.2.0_amd64.deb` |
 | 앱이 리더암 포트를 열지 못한다 | 한 리더암은 한 프로그램만 씁니다. 같은 노트북에서 PC 에이전트가 돌고 있으면 그 터미널에서 `Ctrl+C` 로 끕니다 |
 | 로봇 AP 에 붙어 수집했더니 Hugging Face 업로드를 건너뛰었다 | AP 에는 인터넷이 없습니다. 데이터셋은 PC 에 남아 있으니 인터넷이 될 때 올립니다 ([데이터 수집](/docs/physical-labs/data-record)) |
 | 앱이 웰컴(로그인) 화면에서 넘어가지 않는다 | 인터넷이 없을 때 켰습니다. 위 경고대로 인터넷이 되는 와이파이에서 켭니다 |
 
-![Physical Labs 엔드이펙터 탭 윗줄 — 이 로봇(ROS2 LeKiwi)에서는 아직 지원하지 않습니다 라는 글이 보인다](/img/a_go/app-lekiwi-eef-unsupported.webp)
-
-*새 A-Go 를 고른 엔드이펙터 탭입니다. 텔레오퍼레이션 · 칼리브레이션 · 데이터 수집은 됩니다. 앱으로 쓰는 순서는 [Physical Labs 연결](/docs/a-go/physical-labs-setup)과 [데이터 · 학습 · 추론](/docs/a-go/physical-labs-workflow)에 있습니다.*
+*앱으로 쓰는 순서는 [Physical Labs 연결](/docs/a-go/physical-labs-setup)과 [데이터 · 학습 · 추론](/docs/a-go/physical-labs-workflow)에 있습니다.*
 
 ---
 
