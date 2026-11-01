@@ -96,7 +96,7 @@ description: "Physical Labs 앱 소개 — 지원 로봇, 할 수 있는 일, �
 | 5 | [데이터셋 창고](/docs/physical-labs/datasets) | 사이드바 **데이터셋 창고** | 데이터셋을 재생 · 편집 · 병합하고, Hugging Face Hub 에 올리거나(공개 저장소로 올라갑니다) 내려받습니다. |
 | 6 | [훈련](/docs/physical-labs/training) | **훈련** 탭 | 모은 데이터셋으로 **ACT** · **SmolVLA** · **X-VLA** · **NVIDIA GROOT** 모델을 학습합니다. |
 | 7 | [추론](/docs/physical-labs/inference) | **추론** 탭 | 학습한 모델이 로봇 팔을 스스로 움직입니다. |
-| + | [워크스페이스](/docs/physical-labs/workspace) | 사이드바 **워크스페이스** | **Yolo + Pick&Place** — 카메라로 물체를 찾아 LeKiwi 가 집어 옮깁니다. LeKiwi 전용이고, 새 A-Go(ROS 2 로봇)에서는 아직 지원하지 않습니다. |
+| + | [워크스페이스](/docs/physical-labs/workspace) | 사이드바 **워크스페이스** | **Yolo + Pick&Place** — 카메라로 물체를 찾아 LeKiwi 가 집어 옮깁니다. LeKiwi 전용입니다. 새 A-Go(ROS 2 로봇)는 0.2.0(2026-11-01 재배포)부터 열립니다 (이동 구간은 실물 재조정 중). |
 
 ![SO-101 로봇 a-ba 의 작업 화면 — 위쪽에 로봇 설정부터 추론까지 탭 7개가 있다](/img/physical_labs/robot-settings.webp)
 
@@ -188,7 +188,7 @@ macOS 판은 아직 준비 중입니다.
 ## 7. 정리
 
 - **Physical Labs** 는 모터 셋업부터 추론까지 한 창에서 하는 무료 로봇 앱입니다 (예전 이름 RoboSEasy Studio).
-- 고를 수 있는 기종은 **SO-101** · **SO-102** · **Lekiwi** 입니다. SO-102 는 엔드이펙터 탭이 잠겨 있고, 새 A-Go(ROS 2 로봇)에서는 워크스페이스가 아직 동작하지 않습니다.
+- 고를 수 있는 기종은 **SO-101** · **SO-102** · **Lekiwi** 입니다. SO-102 는 엔드이펙터 탭이 잠겨 있습니다.
 - 작업 순서는 **모터 셋업 → 로봇 설정 → 칼리브레이션 → 텔레오퍼레이션 · 엔드이펙터 → 데이터 수집 → 훈련 → 추론** 입니다.
 - 이 설명서는 **Ubuntu 0.2.0** 기준입니다. Windows 판(0.1.7)과 다른 점은 4.2절에 있습니다.
 - 앱은 **켤 때마다 인터넷**이 필요합니다. GPU 는 학습을 빠르게 하는 데 쓰고, 모터 셋업 · 조작 · 데이터 수집에는 필요 없습니다.
