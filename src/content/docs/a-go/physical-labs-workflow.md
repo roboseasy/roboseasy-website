@@ -36,7 +36,7 @@ A-Go(LeKiwi)를 앱에 연결했다면([Physical Labs 연결](/docs/a-go/physica
 
 ### 1.2. 시작 전에
 
-- 앱에 로봇을 저장하고 **연결 확인** 까지 마쳤습니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup)). 앱은 Ubuntu 판 0.2.0 기준입니다.
+- 앱에 로봇을 저장하고 **연결 확인** 까지 마쳤습니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup)). 앱은 Ubuntu 판 0.2.1 기준입니다.
 - 리더암(SO-101)이 노트북에 꽂혀 있고 전원이 들어와 있습니다. 추론에는 필요 없습니다.
 - 탭을 처음 열면 기능 패키지 설치 카드가 뜰 수 있습니다. 인터넷이 될 때 설치해 둡니다 ([기능 패키지 설치](/docs/physical-labs/feature-packs)).
 - 노트북을 로봇 AP(인터넷 없음)에 붙여 쓸 거라면, 인터넷이 될 때 앱을 먼저 켜 두고 와이파이를 바꿉니다 ([Physical Labs 연결](/docs/a-go/physical-labs-setup) 1.3절).
@@ -355,7 +355,7 @@ A-Go(LeKiwi)를 앱에 연결했다면([Physical Labs 연결](/docs/a-go/physica
 | `정책과 로봇이 맞지 않습니다` | 다른 기종 데이터셋으로 학습한 정책입니다. A-Go 데이터셋(`lekiwi_client`)으로 학습합니다 |
 | 수집이 끝났는데 Hub 에 없다 | `아니오` 를 골랐거나 인터넷이 없었습니다 (4.3 · 4.4절). **데이터셋 업로드** 로 올립니다 |
 | 끌 때 창 `로봇 끄기` 가 뜬다 | 접은 자세가 없어 팔을 접지 못했습니다. 팔을 받치고 **팔 힘 빼고 끄기** 를 누른 뒤, 다음에는 접은 자세를 저장해 둡니다 (2.2절) |
-| 엔드이펙터 · 워크스페이스에 `이 로봇(ROS2 LeKiwi)에서는 아직 지원하지 않습니다.` | 0.2.0 재배포(2026-11-01 저녁) 전 판입니다 — `sudo apt install --reinstall ./physical-labs_0.6.0-0.2.0_amd64.deb` |
+| 엔드이펙터 · 워크스페이스에 `이 로봇(ROS2 LeKiwi)에서는 아직 지원하지 않습니다.` | 0.2.0 재배포(2026-11-01 저녁) 전 판입니다 — `sudo apt install --reinstall ./physical-labs_0.6.0-0.2.1_amd64.deb` |
 
 앱 연결 자체의 문제는 [Physical Labs 연결](/docs/a-go/physical-labs-setup) 11절, 그 밖은 [문제 해결](/docs/a-go/troubleshooting)에 있습니다.
 

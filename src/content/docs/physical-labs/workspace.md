@@ -54,7 +54,7 @@ description: "워크스페이스(YOLO + Pick&Place) 소개와 지원 범위"
 새 A-Go 를 앱으로 쓰는 방법은 [Physical Labs 연결](/docs/a-go/physical-labs-setup)에 있습니다.
 
 > **정보** ℹ️ `INFO`
-> <br>**Windows 판** 이 문서는 Ubuntu 판(0.2.0) 기준입니다. Windows 판(최신 0.1.7)은 새 A-Go 를 지원하지 않으며, 워크스페이스의 화면과 설치 과정이 이 문서와 다를 수 있습니다.
+> <br>**Windows 판** 이 문서는 Ubuntu 판(0.2.1) 기준입니다. Windows 판(최신 0.1.7)은 새 A-Go 를 지원하지 않으며, 워크스페이스의 화면과 설치 과정이 이 문서와 다를 수 있습니다.
 
 ---
 
@@ -140,7 +140,7 @@ description: "워크스페이스(YOLO + Pick&Place) 소개와 지원 범위"
 
 | 증상 | 확인할 것 |
 |---|---|
-| 상태 줄에 `이 로봇(ROS2 LeKiwi)에서는 아직 지원하지 않습니다.` | 0.2.0 재배포(2026-11-01 저녁) 전 판입니다 — `sudo apt install --reinstall ./physical-labs_0.6.0-0.2.0_amd64.deb` |
+| 상태 줄에 `이 로봇(ROS2 LeKiwi)에서는 아직 지원하지 않습니다.` | 0.2.0 재배포(2026-11-01 저녁) 전 판입니다 — `sudo apt install --reinstall ./physical-labs_0.6.0-0.2.1_amd64.deb` |
 | 상태 줄에 `선택한 로봇 중 LeKiwi 가 없습니다.` | **← 로봇 선택** 으로 돌아가 LeKiwi 를 고릅니다. |
 | **다음 → 로봇 선택** 이 꺼져 있다 | 표에 `✖ 누락` 이 남았는지 봅니다. **설치** 를 누르고, 버튼이 **다시 시작** 이면 앱을 다시 시작합니다. |
 | `ultralytics 가 설치되어 있지 않습니다. 환경 준비 페이지에서 설치하세요.` | **환경 준비** 에서 **설치** 를 다시 합니다. |
